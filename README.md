@@ -9,6 +9,13 @@ The server provides connections to many devices and uses passport to make sure t
 The device I will be using is the NodeMcu Module with ESP8266 WiFi on board.
 
 ##The basics for the node server
+###Requrements
+You will need to install the following if you haven't already.
++ [MongoDb](https://www.mongodb.com) To store user- and device information
++ [Node.js](https://nodejs.org/en/) To run the Node server
+
+
+
 ### Setting up the node server
 ```shell
 npm install

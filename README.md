@@ -17,12 +17,6 @@ node app
 ```shell
 grunt
 ```
-![Alt text](http://www.guttih.com/cutenews.2.0/uploads/diagram_ardos.png "Optional Title")
-
-![alt tag](http://www.guttih.com/cutenews.2.0/uploads/diagram_ardos.png)
-
-
-![Alt text](/docs/images/diagram_ardos.png ?raw=true "Optional Title")
-
+<img src="/docs/images/diagram_ardos.png" width="500" alt="image of ">
 
 

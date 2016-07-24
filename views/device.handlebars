@@ -1,0 +1,31 @@
+<p>Server was started at <span id="serverStarted">Not time set</span> </p>
+<p>Server has been running for <span id="serverRunning">Not time set</span> </p>
+
+<button id="btnGetDevices" type="button" class="btn btn-success">Get devices</button>
+ {{#if success_msg}}
+	<div class="alert alert-success">{{success_msg}}</div>
+{{/if}}
+
+
+<!--Move this to a new register device file-->
+<form method="post" action="/devices/register">
+	<div class="form-group">
+	<label>Name</label>
+	<input type="text" class="form-control" placeholder="Name" name="name">
+	</div>
+	<div class="form-group">
+	<label>url</label>
+	<input type="text" class="form-control" placeholder="url" name="url">
+	</div>
+	<button type="submit" class="btn btn-default">Submit</button>
+</form>
+
+<div class="form-group col-md-6">
+		<div class="form-group col-md-4">
+			<label for="devicelist" class="control-label">Your devices</label>
+			<select id="devicelist" class="form-control" name="devicelist"></select>
+		</div>
+		<div class="form-group col-md-2">
+		<button id="btnSetStarted" type="button" class="btn btn-info">Get running time</button>
+		</div>
+</div>

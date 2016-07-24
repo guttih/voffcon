@@ -1,5 +1,5 @@
 # ardos
-A System for controlling your devices and appliances from anywere.  It is made up from two components.  A node server and A device web server.
+A System for controlling devices and appliances from anywere.  It is made up from two components.  A node server and A device web server.
 
 ##The node server
 Is a server created with node.js.  This server can be accessable from where ever you want.  It uses the  [Passport](http://passportjs.org/docs) authentication middleware to keep your devices from being controlled by everyone. 

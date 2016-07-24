@@ -13,7 +13,6 @@ You will need to install the following if you haven't already.
 + [Node.js](https://nodejs.org/en/) To run the Node server
 
 
-
 ### Setting up the node server
 ```shell
 npm install
@@ -31,14 +30,14 @@ This application is a server intended to run on a computer where it can access e
 
   <img src="/docs/images/diagram_ardos.png" width="500" alt="Overnew image of the whole system ">
   
-###The device web server
-
 ##Devices
 ###The Esp8266 module
-Is the NodeMcu Module with ESP8266 WiFi on board.  It is a small and cheap device which allows you to control real world devices and appliances via a WiFi connection.
-I created a web server which needs to be uploaded to this device.  This webserver will only allow request to it, if the request comes from a client which is on the same subnet.  In fact the webserver will check for the first 3 numbers in the calling ipaddress and if they match the deivces ipaddress numbers then the caller will be considered save and his requests will be acted upon.
+Is the NodeMcu Module with ESP8266 WiFi on board.  It is a small and cheap device which allows you to control real world devices and appliances via a WiFi connection.  A device web server needs to be uploaded to this device so the Node server and the Device can comunicate. 
 #####
 <img src="/docs/images/esp8266.png" width="200" alt="The esp8266 module">
 
 ###The arduino module
 has not been tested or implemented yet
+
+##The device web server
+The webserver will only allow request to it, if the request comes from a client which is on the same subnet. In fact the webserver will check for the first 3 numbers in the calling ipaddress and if they match the deivces ipaddress numbers then the caller will be considered save and his requests will be acted upon.

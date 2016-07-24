@@ -1,13 +1,15 @@
 # ardos
-A System for controlling your devices using arduino or esp8266.
+A System for controlling your devices and appliances from anywere.
 
 ###The Esp8266 module
-I a small and cheap device which allows you to control a real live devices and appliances.
-####
+Is a small and cheap device which allows you to control a real world devices and appliances with a WiFi connection.
+I created a web server which needs to be uploaded to this device.  This webserver will only allow request to it if the request comes from a client which is on the same subnet.  In fact the webserver will check for the fist 3 numbers in the calling ipaddress and if they match the deivces ipaddress numbers then the caller will be considered save and his requests will be acted upon.
+#####
 <img src="/docs/images/esp8266.png" width="200" alt="The esp8266 module">
 
-This node application is a web server which can connect to many esp2866 web servers.
-Esp2866 web server is connected to a router using WiFi. this modlue is able to control devices in the real world taking commands from a server running on the same subnet.  
+###The arduino module
+has not been tested or implemented yet
+
 
 The server provides connections to many devices and uses passport to make sure that the user is authenticated before he is able to give commands to the wifi servers.
 

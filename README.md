@@ -3,10 +3,10 @@ A System for controlling devices and appliances from anywere.  It is made up fro
 
 ##The node server
 Is a server created with node.js.  This server creates webpages which can be viewed in a web browser like Google Chrome, Microsoft Edge and Internet Explorer. If you portforward the server out to the internet you will be able to accsess your devices from anywhere.  It uses the  [Passport](http://passportjs.org/docs) authentication middleware to keep your devices from being controlled by everyone. 
-The server provides connections to many devices and uses passport to make sure that the user is authenticated before he is able to give commands to the wifi servers.
+The server provides connections to many devices and uses passport to make sure that the user is authenticated before he is able to give commands to web servers running on the devices.
 
 ##The basics for the node server
-###requirements
+###requirements:
 You will need to install the following if you haven't already.
 + [MongoDb](https://www.mongodb.com) To store user- and device information
 + [Node.js](https://nodejs.org/en/) To run the Node server
@@ -27,11 +27,12 @@ grunt
 ###Overview
 This application is a server intended to run on a computer where it can access esp8266 devices running a special server program which was developed for this server in mind.
 
-  <img src="/docs/images/diagram_ardos.png" width="500" alt="Overnew image of the whole system ">
+  <img src="/docs/images/diagram_ardos.png" width="500" alt="Overnew image of the whole system">
   
 ##Devices
 ###The Esp8266 module
 Is the NodeMcu Module with ESP8266 WiFi on board.  It is a small and cheap device which allows you to control real world devices and appliances via a WiFi connection.  A device web server needs to be uploaded to this device so the Node server and the Device can comunicate. 
+
 #####
 <img src="/docs/images/esp8266.png" width="200" alt="The esp8266 module">
 
@@ -45,7 +46,7 @@ The webserver will only allow request to it, if the request comes from a client 
 Possible commands:
 - /pins
   - __get__ Get status of all pins
-  - __post__ Change the value of a pin, that is turn off or on or set a pins value from 0 - 1023
+  - __post__ Change the value of a pin, that is, turn off or on or set a pins value from 0 - 1023
 - /whitelist
    - __get__ Get all whitlisted ip addresses
   - __post__ 
@@ -59,6 +60,5 @@ Possible commands:
   - __get__ whitelists the first caller to the device.  (todo: this is a sequrity risk, should be removed after development)
 - /pinout
   - __get__ returns the pin mappings of the device.  That is f.example "D0" on the device is mapped to the pin number 16.
-
 
 

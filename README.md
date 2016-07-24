@@ -17,6 +17,8 @@ node app
 ```shell
 grunt
 ```
-<img src="/docs/images/diagram_ardos.png" width="500" alt="image of ">
+###Overview
+This 
+<center> <img src="/docs/images/diagram_ardos.png" width="500" alt="Overnew image of the whole system "> </center>
 
 

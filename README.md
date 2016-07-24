@@ -22,4 +22,7 @@ grunt
 ![alt tag](http://www.guttih.com/cutenews.2.0/uploads/diagram_ardos.png)
 
 
+![Alt text](/docs/images/diagram_ardos.png ?raw=true "Optional Title")
+
+
 

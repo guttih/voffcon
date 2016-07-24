@@ -48,7 +48,7 @@ Possible commands
   - __get__ Get status of all pins
   - __post__ Change the value of a pin, that is turn off or on or set a pins value from 0 - 1023
 - /whitelist
--   - __get__ Get all whitlisted ip addresses
+   - __get__ Get all whitlisted ip addresses
   - __post__ 
     - __add__ whitelist a new ip address.
     - __remove__ remove a ip address from the whitelist

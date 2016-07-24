@@ -45,9 +45,19 @@ The webserver will only allow request to it, if the request comes from a client 
 
 Possible commands
 - /pins
+  - __get__ Get status of all pins
+  - __post__ Change the value of a pin, that is turn off or on or set a pins value from 0 - 1023
 - /whitelist
+-   - __get__ Get all whitlisted ip addresses
+  - __post__ 
+    - __add__ whitelist a new ip address.
+    - __remove__ remove a ip address from the whitelist
 - /started
+    - __get__ Get when the server was turned on
 - /status
+    - __get__ Get the status of the pins, whitelist and when the server was started, all in one request.  (good for beginning of a page)
 - /setup
+  - __get__ whitelists the first caller to the device.  (todo: this is a sequrity risk, should be removed after development)
 - /pinout
+  -__get__ returns the pin mappings of the device.  That is f.example "D0" on the device is mapped to the pin number 16.
 

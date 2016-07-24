@@ -1,5 +1,8 @@
 # ardos
-A System for controlling your devices and appliances from anywere.
+A System for controlling your devices and appliances from anywere.  It is made up from two components.  A node server and A device web server.
+
+##The node server
+Is a server created with node.js.  This server can be accessable from where ever you want.  It uses the  [Passport link](http://passportjs.org/docs) authentication middleware to keep your devices from being controlled by everyone. 
 
 ###The Esp8266 module
 Is a small and cheap device which allows you to control a real world devices and appliances with a WiFi connection.

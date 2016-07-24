@@ -22,7 +22,8 @@
     "mongoose": "*",
     "passport": "*",
     "passport-http": "*",
-    "passport-local": "*"
+    "passport-local": "*",
+    "request": "^2.74.0"
   },
   "devDependencies": {
     "grunt": "^1.0.1",

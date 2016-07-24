@@ -5,12 +5,14 @@ A System for controlling your devices and appliances from anywere.  It is made u
 Is a server created with node.js.  This server can be accessable from where ever you want.  It uses the  [Passport link](http://passportjs.org/docs) authentication middleware to keep your devices from being controlled by everyone. 
 
 ###The Esp8266 module
+---------------------
 Is a small and cheap device which allows you to control a real world devices and appliances with a WiFi connection.
 I created a web server which needs to be uploaded to this device.  This webserver will only allow request to it if the request comes from a client which is on the same subnet.  In fact the webserver will check for the fist 3 numbers in the calling ipaddress and if they match the deivces ipaddress numbers then the caller will be considered save and his requests will be acted upon.
 #####
 <img src="/docs/images/esp8266.png" width="200" alt="The esp8266 module">
 
 ###The arduino module
+---------------------
 has not been tested or implemented yet
 
 

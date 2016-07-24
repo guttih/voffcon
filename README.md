@@ -2,7 +2,7 @@
 A System for controlling your devices and appliances from anywere.  It is made up from two components.  A node server and A device web server.
 
 ##The node server
-Is a server created with node.js.  This server can be accessable from where ever you want.  It uses the  [Passport link](http://passportjs.org/docs) authentication middleware to keep your devices from being controlled by everyone. 
+Is a server created with node.js.  This server can be accessable from where ever you want.  It uses the  [Passport](http://passportjs.org/docs) authentication middleware to keep your devices from being controlled by everyone. 
 
 The server provides connections to many devices and uses passport to make sure that the user is authenticated before he is able to give commands to the wifi servers.
 

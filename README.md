@@ -29,15 +29,16 @@ node app
 grunt
 ```
 ###Overview
-This app is intended to run on a local computer where it can access esp8266 devices running a special server program which was developed for this app in mind.  
+This application is a server intended to run on a computer where it can access esp8266 devices running a special server program which was developed for this server in mind.
+
   <img src="/docs/images/diagram_ardos.png" width="500" alt="Overnew image of the whole system ">
   
 ###The device web server
 
 ##Devices
 ###The Esp8266 module
-Is a small and cheap device which allows you to control a real world devices and appliances with a WiFi connection.
-I created a web server which needs to be uploaded to this device.  This webserver will only allow request to it if the request comes from a client which is on the same subnet.  In fact the webserver will check for the fist 3 numbers in the calling ipaddress and if they match the deivces ipaddress numbers then the caller will be considered save and his requests will be acted upon.
+Is a small and cheap device which allows you to control real world devices and appliances via a WiFi connection.
+I created a web server which needs to be uploaded to this device.  This webserver will only allow request to it, if the request comes from a client which is on the same subnet.  In fact the webserver will check for the first 3 numbers in the calling ipaddress and if they match the deivces ipaddress numbers then the caller will be considered save and his requests will be acted upon.
 #####
 <img src="/docs/images/esp8266.png" width="200" alt="The esp8266 module">
 

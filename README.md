@@ -6,10 +6,8 @@ Is a server created with node.js.  This server can be accessable from where ever
 
 The server provides connections to many devices and uses passport to make sure that the user is authenticated before he is able to give commands to the wifi servers.
 
-The device I will be using is the NodeMcu Module with ESP8266 WiFi on board.
-
 ##The basics for the node server
-###Requrements
+###requirements
 You will need to install the following if you haven't already.
 + [MongoDb](https://www.mongodb.com) To store user- and device information
 + [Node.js](https://nodejs.org/en/) To run the Node server
@@ -37,7 +35,7 @@ This application is a server intended to run on a computer where it can access e
 
 ##Devices
 ###The Esp8266 module
-Is a small and cheap device which allows you to control real world devices and appliances via a WiFi connection.
+Is the NodeMcu Module with ESP8266 WiFi on board.  It is a small and cheap device which allows you to control real world devices and appliances via a WiFi connection.
 I created a web server which needs to be uploaded to this device.  This webserver will only allow request to it, if the request comes from a client which is on the same subnet.  In fact the webserver will check for the first 3 numbers in the calling ipaddress and if they match the deivces ipaddress numbers then the caller will be considered save and his requests will be acted upon.
 #####
 <img src="/docs/images/esp8266.png" width="200" alt="The esp8266 module">

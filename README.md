@@ -40,4 +40,14 @@ Is the NodeMcu Module with ESP8266 WiFi on board.  It is a small and cheap devic
 has not been tested or implemented yet
 
 ##The device web server
+This program needs to be uploaded on the device you want to control from the node server.
 The webserver will only allow request to it, if the request comes from a client which is on the same subnet. In fact the webserver will check for the first 3 numbers in the calling ipaddress and if they match the deivces ipaddress numbers then the caller will be considered save and his requests will be acted upon.
+
+Possible commands
+- /pins
+- /whitelist
+- /started
+- /status
+- /setup
+- /pinout
+

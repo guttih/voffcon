@@ -13,6 +13,9 @@ var DeviceSchema = mongoose.Schema({
 	name: {
 		type: String
 	},
+	description: {
+		type: String
+	},
 
 	 users: [{ObjectId}]
 });

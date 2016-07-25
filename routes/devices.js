@@ -4,6 +4,7 @@ var request = require('request');
 var lib = require('../utils/glib');
 
 var Device = require('../models/device');
+var Card = require('../models/card');
 var config = lib.getConfig();
 
 //Hér á að búa til module fyrir queries á devices
@@ -152,6 +153,32 @@ router.get('/list', lib.authenticateRequest, function(req, res){
 		}
 		res.json(arr);
 	});
+
+	//todo: create a card for testing
+	var data = {
+		name: "Test data",
+		sub:{
+			"val":10,
+			"valname":"name of the value",
+			arr:["This is a string one", "this is string two"]
+		}
+	};
+/*
+	var newCard = new Card({
+			name: "test-card",
+			description:"This card is created for testing porpouses",
+			data:data,
+			owners:[],
+			users:[]
+			
+		});
+		newCard.owners.push(req.user._id);
+		Card.createCard(newCard, function(err, newCard){
+			if(err) {throw err;}
+			console.log("created a new Card");
+			console.log(newCard);
+		});
+*/
 	
 });
 module.exports = router;

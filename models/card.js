@@ -6,12 +6,9 @@ var ObjectId = Schema.ObjectId;
 
 // Card Schema
 var CardSchema = mongoose.Schema({
-	url: {
+	name: {
 		type: String,
 		index:true
-	},
-	name: {
-		type: String
 	},
 	description: {
 		type: String

@@ -19,6 +19,28 @@ var CardSchema = mongoose.Schema({
 	 users: [{ObjectId}]
 });
 
+/*
+var newCard = {
+
+	name:"test card",
+	description::"information about the card",
+	owners: [],
+	 users: [],
+	elements: [	{
+						id:"aLongNumberWichIsTheIdOfTheElement",
+						
+						values:[
+									{pinNumber:5},
+									{pinValue:0},
+									{pinValue:'100px'},
+									{top:'10px'},
+									{left:'100px'}
+								]
+					}
+	]
+}
+*/
+
 var Card = module.exports = mongoose.model('Card', CardSchema);
 
 /*

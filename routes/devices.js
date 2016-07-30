@@ -179,6 +179,8 @@ router.get('/list', lib.authenticateRequest, function(req, res){
 			console.log(newCard);
 		});
 */
+
+
 	
 });
 module.exports = router;

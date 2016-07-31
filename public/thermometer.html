@@ -9,14 +9,14 @@
 	<body onload="onLoad()">
 		
 	<p>Hér eru template geymd</p>
-	<div id="templates" style="display:block;">
-		<div id="thermo" style="position: relative; left: -200px;">
+	<div id="templates" style="position:relative;background:cyan;height:0px">
+		<div id="thermo" style="position: relative; ">
 			<svg width="80"  height="180" class="control">
 			<defs>
-			<radialGradient id="bulbGradient" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
-			<stop offset="0%" style="stop-color: rgb(230, 200, 200);"></stop>
-			<stop offset="90%" style="stop-color: rgb(230, 0, 0);"></stop>
-			</radialGradient>
+				<radialGradient id="bulbGradient" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+				<stop offset="0%" style="stop-color: rgb(230, 200, 200);"></stop>
+				<stop offset="90%" style="stop-color: rgb(230, 0, 0);"></stop>
+				</radialGradient>
 			</defs>
 				<circle r="10.75" cx="40" cy="15.75" style="fill: rgb(255, 255, 255); stroke: rgb(153, 153, 153); stroke-width: 1px;"></circle>
 				<rect x="29.25" y="15.75" height="139.25" width="21.5" style="shape-rendering: crispEdges; fill: rgb(255, 255, 255); stroke: rgb(153, 153, 153); stroke-width: 1px;"></rect>
@@ -24,75 +24,29 @@
 				<!--StartOf the glass-->
 				<circle r="20" cx="40" cy="155" style="fill: rgb(255, 255, 255); stroke: rgb(153, 153, 153); stroke-width: 1px;"></circle>
 				<rect x="29.75" y="15.75" height="139.25" width="20.5" style="shape-rendering: crispEdges; fill: rgb(255, 255, 255); stroke: none;"></rect>
-				<!--endOf   the glass-->
-
-				<!--scale-->
-				<!--
-					Step 0.1 ;  max size = 140  ; top: 15
-					100% = ((1 - 1.0) * 140) + 15 = 15
-					90% = ((1 - 0.9) * 140) + 15 = 29
-					80% = ((1 - 0.8) * 140) + 15 = 43
-					70% = ((1 - 0.7) * 140) + 15 = 57
-					60% = ((1 - 0.6) * 140) + 15 = 71
-					50% = ((1 - 0.5) * 140) + 15 = 85
-					40% = ((1 - 0.4) * 140) + 15 = 99
-					30% = ((1 - 0.3) * 140) + 15 = 113
-					20% = ((1 - 0.2) * 140) + 15 = 127
-					10% = ((1 - 0.1) * 140) + 15 = 141
-					0% = ((1 - 0.0) * 140) + 15 = 155
-
-				-->
-				<!--
-				<text x="16" y="155" dy=".32em" style="text-anchor: end; fill: rgb(119, 119, 119); font-size: 10px;">0</text>
-				<line x1="18" y1="155" x2="20" y2="155" style="stroke:rgb(153,153,153);stroke-width:1.5" ></line>
-
-				<text x="18" y="141" dy=".32em" style="text-anchor: end; fill: rgb(119, 119, 119); font-size: 10px;">10</text>
-				<line x1="20" y1="141" x2="24" y2="141" style="stroke:rgb(153,153,153);stroke-width:1.5" ></line>
-
-				<text x="18" y="127" dy=".32em" style="text-anchor: end; fill: rgb(119, 119, 119); font-size: 10px;">20</text>
-				<line x1="20" y1="127" x2="27" y2="127" style="stroke:rgb(153,153,153);stroke-width:1.5" ></line>
-
-				<text x="18" y="113" dy=".32em" style="text-anchor: end; fill: rgb(119, 119, 119); font-size: 10px;">30</text>
-				<line x1="20" y1="113" x2="27" y2="113" style="stroke:rgb(153,153,153);stroke-width:1.5" ></line>
-
-				<text x="18" y="99" dy=".32em" style="text-anchor: end; fill: rgb(119, 119, 119); font-size: 10px;">40</text>
-				<line x1="20" y1="99" x2="27" y2="99" style="stroke:rgb(153,153,153);stroke-width:1.5" ></line>
-				
-				<text x="18" y="85" dy=".32em" style="text-anchor: end; fill: rgb(119, 119, 119); font-size: 10px;">50</text>
-				<line x1="20" y1="85" x2="27" y2="85" style="stroke:rgb(153,153,153);stroke-width:1.5" ></line>
-
-				<text x="18" y="71" dy=".32em" style="text-anchor: end; fill: rgb(119, 119, 119); font-size: 10px;">60</text>
-				<line x1="20" y1="71" x2="27" y2="71" style="stroke:rgb(153,153,153);stroke-width:1.5" ></line>
-
-				<text x="18" y="57" dy=".32em" style="text-anchor: end; fill: rgb(119, 119, 119); font-size: 10px;">70</text>
-				<line x1="20" y1="57" x2="27" y2="57" style="stroke:rgb(153,153,153);stroke-width:1.5" ></line>
-
-				<text x="18" y="43" dy=".32em" style="text-anchor: end; fill: rgb(119, 119, 119); font-size: 10px;">80</text>
-				<line x1="20" y1="43" x2="27" y2="43" style="stroke:rgb(153,153,153);stroke-width:1.5" ></line>
-
-				<text x="18" y="29" dy=".32em" style="text-anchor: end; fill: rgb(119, 119, 119); font-size: 10px;">90</text>
-				<line x1="20" y1="29" x2="27" y2="29" style="stroke:rgb(153,153,153);stroke-width:1.5" ></line>
-
-				<text x="18" y="15" dy=".32em" style="text-anchor: end; fill: rgb(119, 119, 119); font-size: 10px;">100</text>
-				<line x1="20" y1="15" x2="27" y2="15" style="stroke:rgb(153,153,153);stroke-width:1.5" ></line>
-		-->		
-				
-				<!--This is the value 
-					when meter is 100% then line y=15 and height=140
-					top = 15 ; maxheight = 140  VALFACT = percentage / 100
-					formula for height = maxheight - ( maxheight*(1 - VALFACT) )
-					formula for y      = maxheight * ( 1 - VALFACT ) + top
-					calculation for 30% is 	VALFACT = 30/10 = 0.3 ;  y = 140 * ( 1 - 0.3) + top ; height = 140 - ( 140 * (1 - 0.3) ) 
-				-->
 				<rect id="theometer-rect" class="control" x="34.25" y="113" width="11.5" height="42" style="shape-rendering: crispEdges; fill: rgb(230, 0, 0);fill-opacity:0.6"></rect>
 				<!--<circle r="14" cx="40" cy="155" style="fill: url(&quot;#bulbGradient&quot;); stroke: rgb(230, 0, 0); stroke-width: 2px;"></circle>-->
 				<circle class="thermoCircle" r="14" cx="40" cy="155" style="fill: url(&quot;#bulbGradient&quot;); stroke: rgb(230, 0, 0); stroke-width: 2px;"></circle>
-				
-				<text class="text-value" x="50" y="148" dy="1em" style="text-anchor: end; fill: rgb(255, 255, 100); font-size: 10px;">0°</text>
+				<text class="text-value" x="50" y="148" dy="1em" style="text-anchor: end; fill: yellow; font-size: 10px;">0°</text>
 			</svg>
-		</div>
+		</div> <!--thermo-->
+
+		<div id="switch" style="position: relative; left: 220px;">
+			<svg width="180"  height="180" class="control">
+				<circle r="40" cx="41" cy="41" style="fill:#ffffff; stroke: #cccccc; stroke-width: 1px;"></circle>
+				<circle r="40" cx="90" cy="41" style="fill:#ffffff; stroke: #cccccc; stroke-width: 1px;"></circle>
+				<rect x="41" y="1" width="49" height="80" style="shape-rendering: crispEdges; fill: #ffffff;"></rect>
+				<line x1="41" y1="1" x2="90" y2="1" style="stroke:#cccccc;stroke-width:1" />
+				<line x1="41" y1="81" x2="90" y2="81" style="stroke:#cccccc;stroke-width:1" />
+				<!--off-->
+				<circle r="38" cx="41" cy="41" style="fill:#eeeeee; stroke: #cccccc; stroke-width: 1px;"></circle>
+				<!--on-->
+				<!--<circle r="38" cx="90" cy="41" style="fill:#11cc11; stroke: #11cc44; stroke-width: 1px;"></circle>-->
+				
+			</svg>
+		</div> <!--switch-->
 	</div> <!--templates-->
-	<div id="controls">
+	<div id="controls" style="position:relative">
 	</div>
 	<script src="js/thermometer.js"></script>
 	</body>

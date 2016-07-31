@@ -30,6 +30,14 @@ class ControlElement {
 	setLeft(left) {this.left = left;}
 	setTop(top) {this.top = top;}
 	setName(name) {this.name = name;}
+
+	scale($element, scaleValue){
+		// for chrome and edge
+		$element.animate({ 'zoom': scaleValue }, 0);
+		// for firefox
+		$element.css("-moz-transform","scale("+scaleValue+")");
+		$element.css("-moz-transform-origin","0 0"); 
+	}
 }
 
 class PinView extends ControlElement {
@@ -43,36 +51,63 @@ class PinView extends ControlElement {
 		else {
 			this.setHigestValue(100);
 		}
-		
 	}
 	logString()	{return super.logString() + ' pinNumber: ' + this.pinNumber + ' pinValue:' + this.pinValue + ' higestValue:' + this.higestValue;}
 	log() 		{	console.log(this.logString());	}
+	
 	setPinNumber(pinNumber)	{this.pinNumber = pinNumber;}
 	setPinValue(pinValue)	{this.pinValue = pinValue;}
 	setHigestValue(higestValue)	{this.higestValue = higestValue;}
 
 	getPinNumber()			{return this.pinNumber;}
 	getPinValue()			{return this.pinValue;}
-	getHigestValue()			{return this.higestValue;}
-	
-	scaleValue(){return ( 100 * this.getPinValue() ) / this.getHigestValue();}
+	getHigestValue()		{return this.higestValue;}
+	getSvg()				{ return $('#'+super.getId()+' > svg');}
 
+	scaleValue(){return ( 100 * this.getPinValue() ) / this.getHigestValue();}
+	
+		/*innerHtml : you can skip this if you don't need any innerHTML on your element*/
+	makeSVG(tag, attrs, innerHtml) {
+			var el= document.createElementNS('http://www.w3.org/2000/svg', tag);
+			for (var k in attrs){
+				el.setAttribute(k, attrs[k]);
+			}
+			
+			if (innerHtml !== undefined){
+				el.innerHTML = innerHtml;
+			}
+			return el;
+	}
 }
 
 
-//make copy element and give it the element ID+pinNumber
+/*	if we call the pin value on the device devicePinValue.
+		and we want to be able to set that value directly with the setValue function
+		then you can use the setPinValueRatio function to make the setValue function 
+		always map the  devicePinValue to the meter value.
+
+		Example: If the devicePinValue is 1023 and it reprisents the 30° on the meter
+		then you can set the correct value on the meter by calling:
+				meter.setPinValueRatio(30/1023);
+				or more general example:
+					var meter = new ThermoPin(0, 0, 1, 0, 30);
+					meter.setPinValueRatio(meter.getHigestValue()/1023);
+					meter.setValue(1023);  //this will put the control to 30°
+	*/
 class ThermoPin extends PinView {
-	constructor(name, left, top, pinNumber, pinValue, highestValue){
-		super(name, left, top, pinNumber, pinValue, highestValue);
+	constructor(left, top, pinNumber, pinValue, highestValue){
+		super('thermo', left, top, pinNumber, pinValue, highestValue);
 		this.maxheight = 140;
 		this.yStart = 15;
 		this.setPinValueRatio(1);
 		this.setValue(super.getPinValue());
 	}
+
+	getRect(){ return $('#' + super.getId() + '> svg > .control');}
+	getText(){ return $('#' + super.getId() + '> svg > .text-value');}
 	
 	setBarHeight(value,rect){
-		//set the height of the bar
-		/*
+		/*  set the height of the bar
 			This is the value 
 					when meter is 100% then line y=15 and height=140
 					yStart = 15 ; maxheight = 140  VALFACT = percentage / 10
@@ -90,53 +125,35 @@ class ThermoPin extends PinView {
 		
 		
 	}
-	scale(scaleValue){
-		//todo: make the selector for rect and text
-		//relative to svg.  that is class like
-		//var svg = $('#' + super.getId() + '> svg');
-		var s = scaleValue;
-		/*var str = 	"zoom: "+s+";"                     +
-					"-moz-transform: scale("+s+");"    +
-					"-moz-transform-origin: 0 0;"      +
-					"-o-transform: scale("+s+");"      +
-					"-o-transform-origin: 0 0;"        +
-					"-webkit-transform: scale("+s+");" +
-					"-webkit-transform-origin: 0 0;"   +
+	active(bSetActive){
+		var color = '#cccccc'
+		var textColor = '#cccccc'
+		if (bSetActive === true){
+			color = '#E60000';
+			textColor = 'yellow';
+				
+		}
+		console.log("color");console.log(color);
 
-					"transform: scale("+s+");"         + 
-					"transform-origin: 0 0;"  
-		console.log(str);
-		*/
-		// for chrome and edge
-		var $svg = $('#'+super.getId()+' > svg');
-		$svg.animate({ 'zoom': scaleValue }, 0);
-		// for firefox
-		$svg.css("-moz-transform","scale("+s+")");
-		$svg.css("-moz-transform-origin","0 0"); 
-		
+		this.getRect().css({ fill: color });
+		this.getText().css({ fill: textColor });
+	}
+	//scales an jqery element
+
+	scale(scaleValue){
+		super.scale(super.getSvg(), scaleValue);
 	}
 	setValue(value){
 		//todo: make the selector for rect and text
 		//relative to svg.  that is class like
 		super.setPinValue(value*this.pinValueRatio);
-		var textNumber = $('#' + super.getId() + '> svg > .text-value');
+		var textNumber = this.getText();
 		textNumber.text(Math.round(super.getPinValue()*10)/10+'°');
-		var rect = $('#' + super.getId() + '> svg > .control');
+		var rect = this.getRect();
 		this.setBarHeight(super.scaleValue(),rect);
 		
 	}
-/*innerHtml : you can skip this if you don't need any innerHTML on your element*/
-	makeSVG(tag, attrs, innerHtml) {
-			var el= document.createElementNS('http://www.w3.org/2000/svg', tag);
-			for (var k in attrs){
-				el.setAttribute(k, attrs[k]);
-			}
-			
-			if (innerHtml !== undefined){
-				el.innerHTML = innerHtml;
-			}
-			return el;
-	}
+
 	addTicks(count){
 		var stepNum = this.getHigestValue() / count;
 		var num,i,y;
@@ -164,11 +181,11 @@ class ThermoPin extends PinView {
 		var x1 = 20, x2 = 27;
 		if (first !== undefined && first === true){x1 = 18; x2=20;}
 
-		var ElText= this.makeSVG(
+		var ElText= super.makeSVG(
 			'text', 
 			{x: x1-2, y: y, dy:'.32em', style: 'text-anchor: end; fill: rgb(119, 119, 119); font-size: 10px'});
 
-		var line= this.makeSVG(
+		var line= super.makeSVG(
 			'line', 
 			{x1:x1, y1:y, x2:x2, y2:y, style: 'stroke:rgb(153,153,153);stroke-width:1.5x'});
 		
@@ -185,25 +202,54 @@ class ThermoPin extends PinView {
 
 }//class
 
+class SwitchPin extends PinView {
+	constructor(left, top, pinNumber, pinValue){
+		super('switch', left, top, pinNumber, pinValue, 1);
+
+		this.setValue(super.getPinValue());
+	}
+
+	getRect(){ return $('#' + super.getId() + '> svg > .control');}
+	getText(){ return $('#' + super.getId() + '> svg > .text-value');}
+	
+	active(bSetActive){
+		var color = '#cccccc'
+		var textColor = '#cccccc'
+		if (bSetActive === true){
+			color = '#E60000';
+			textColor = 'yellow';
+				
+		}
+		console.log("color");console.log(color);
+
+		this.getRect().css({ fill: color });
+		this.getText().css({ fill: textColor });
+	}
+	//scales an jqery element
+
+	scale(scaleValue){
+		super.scale(super.getSvg(), scaleValue);
+	}
+	setValue(value){
+		//todo: make the selector for rect and text
+		//relative to svg.  that is class like
+	}
+	
+
+}//class
+
 function onLoad(){
 
-	var meter = new ThermoPin('thermo', 0, -180, 1, 0, 30);
+	var meter = new ThermoPin(0, 0, 1, 0, 30);
 	meter.addTicks(4);
 	
-	/* if we call the pin value on the device devicePinValue.
-		and we want to be able to set that value directly with the setValue function
-		then you can use the setPinValueRatio function to make the setValue function always map the  devicePinValue to the meter value
-	Example: If the devicePinValue is 1023 and it reprisents the 30° on the meter
-	then you can set the correct value on the meter by calling:
-			meter.setPinValueRatio(30/1023);
-			or more general example:
-				var meter = new ThermoPin('thermo', 0, -180, 1, 0, 30);
-				meter.setPinValueRatio(meter.getHigestValue()/1023);
-				meter.setValue(1023);  //this will put the control to 30°
-	*/
 	meter.setPinValueRatio(meter.getHigestValue()/1023);
 	meter.setValue(700);
 	meter.scale(1.3);
+	//displays values as they are inactive.
+	var switch1 = new SwitchPin(0, 0, 1, 0, 30);
+
+
 }
 
 

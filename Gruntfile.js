@@ -1,7 +1,7 @@
 module.exports = function(grunt) {
   // Project configuration.
   grunt.initConfig({
-	  jsPublicDir: 'public/js/',
+	  jsPublicDir: 'public/js/**/',
 	  jsModels: 'models/',
 		jsRoutes: 'routes/',
 		jsUtils: 'utils/',

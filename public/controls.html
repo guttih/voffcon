@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Testing controls</title> 
+		<meta charset="UTF-8">
+		<link href="css/style.css" rel="stylesheet">
+		<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+	</head>
+	<body onload="onLoad()">
+		
+	
+	<div id="templates" style="position:relative;top:-800px;background:blue">
+	<p>Hér eru template geymd</p>
+		<div id="thermopin" class="thermopin" style="position:absolute">
+			<svg width="80"  height="176" class="control">
+			<defs>
+				<radialGradient id="bulbGradient" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+				<stop offset="0%" style="stop-color: rgb(230, 200, 200);"></stop>
+				<stop offset="90%" style="stop-color: rgb(230, 0, 0);"></stop>
+				</radialGradient>
+			</defs>
+				<circle r="10.75" cx="40" cy="15.75" style="fill: rgb(255, 255, 255); stroke: rgb(153, 153, 153); stroke-width: 1px;"></circle>
+				<rect x="29.25" y="15.75" height="139.25" width="21.5" style="shape-rendering: crispEdges; fill: rgb(255, 255, 255); stroke: rgb(153, 153, 153); stroke-width: 1px;"></rect>
+				<circle r="10.25" cx="40" cy="15.75" style="fill: rgb(255, 255, 255); stroke: none;"></circle><!--white to hide glass rectangle-->
+				<!--StartOf the glass-->
+				<circle r="20" cx="40" cy="155" style="fill: rgb(255, 255, 255); stroke: rgb(153, 153, 153); stroke-width: 1px;"></circle>
+				<rect x="29.75" y="15.75" height="139.25" width="20.5" style="shape-rendering: crispEdges; fill: rgb(255, 255, 255); stroke: none;"></rect>
+				<rect id="theometer-rect" class="control" x="34.25" y="113" width="11.5" height="42" style="shape-rendering: crispEdges; fill: rgb(230, 0, 0);fill-opacity:0.6"></rect>
+
+				<circle class="thermoCircle" r="14" cx="40" cy="155" style="fill: url(&quot;#bulbGradient&quot;); stroke: rgb(230, 0, 0); stroke-width: 2px;"></circle>
+				<text class="text-value" x="50" y="148" dy="1em" style="text-anchor: end; fill: yellow; font-size: 10px;">0°</text>
+			</svg>
+		</div> <!--thermo-->
+
+		<div id="switchpin" class="switchpin" style="position:absolute">
+			<svg width="131"  height="82" class="control">
+				<circle class="knob-background" r="40" cx="41" cy="41" style="fill:#ffffff; stroke: #bbbbbb; stroke-width: 1px;"></circle>
+				<circle class="knob-background" r="40" cx="90" cy="41" style="fill:#ffffff; stroke: #bbbbbb; stroke-width: 1px;"></circle>
+				<rect class="knob-background" x="41" y="1" width="49" height="80" style="shape-rendering: crispEdges; fill: #ffffff;"></rect>
+				<line x1="41" y1="1" x2="90" y2="1" style="stroke:#bbbbbb;stroke-width:1" />
+				<line x1="41" y1="81" x2="90" y2="81" style="stroke:#bbbbbb;stroke-width:1" />
+				<circle class="knob" r="37" cx="41" cy="41" style="fill:#bbbbbb; stroke: #bbbbbb; stroke-width: 1px;"></circle>
+			</svg>
+		</div> <!--switch-->
+
+
+		<div  id="diodepin" class="dodepin light" style="position:absolute;display: inline-block;width:25px;height:33px">
+					<div class="light-top" style="opacity: 1;position: relative;left: 2px;width: 20px;height: 30px;background-color: red;border-top-left-radius: 45%;border-top-right-radius: 45%;border-width: 2px;"></div>
+					<div class="light-bottom" style="opacity: 1;position: relative;width: 24px;height: 5px;left: 0px;top: -4px;background-color: red;border-top-left-radius: 2px;border-top-right-radius: 2px;border-bottom-left-radius: 3px;border-bottom-right-radius: 3px;"></div>
+					<p class="pinvalue" style="position: relative;top: -41px;font-size: 12px;-webkit-transform: rotate(270deg);-moz-transform: rotate(270deg);-ms-transform: rotate(270deg);-o-transform: rotate(270deg);transform: rotate(270deg);color: blue;display: block;-webkit-margin-before: 1em;-webkit-margin-after: 1em;-webkit-margin-start: 0px;-webkit-margin-end: 0px;">1023</p>
+					<p class="pinnumber hint--top hint--info" data-hint="pin number" style="position: relative;top: -30px;left: 5px;color: green;margin: 0 0 10px;display: block;">0</p>
+		</div>
+		<div id="sliderpin" class="sliderpin" style="position:absolute">
+			<input class="sliderinput" type ="range" min ="0" max="255" step ="1" value ="0">
+		</div>
+	</div> <!--templates-->
+	<div id="controls" style="position:relative;">
+	</div>
+	
+	<script src="js/controls/control-elements.js"></script>
+	<script src="js/controls/sliderpin.js"></script>
+	<script src="js/controls/switchpin.js"></script>
+	<script src="js/controls/diodepin.js"></script>	
+	<script src="js/controls/thermopin.js"></script>
+	<script src="js/controls/pin.js"></script>
+	<script src="js/controls/test.js"></script>
+	</body>
+</html>

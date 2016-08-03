@@ -1,9 +1,13 @@
 class DiodePin extends PinView {
-	constructor(left, top, pinNumber, pinValue, highestValue){
+	constructor(left, top, pinObject, highestValue){
+		var pinNumber = pinObject.getNumber();
+		var pinValue  = pinObject.getValue();
+		
 		super('diodepin', left, top, pinNumber, pinValue, highestValue);
 
 		this.setPinValueRatio(1);
 		this.setValue(super.getPinValue());
+		pinObject.addControl(this);
 	}
 
 	getLight(){ return $('#' + super.getId() + '> .light');}

@@ -1,11 +1,14 @@
 class SliderPin extends PinView {
-	constructor(left, top, pinNumber, pinValue, highestValue){
+	constructor(left, top, pinObject, highestValue){
+		var pinNumber = pinObject.getNumber();
+		var pinValue  = pinObject.getValue();
 		super('sliderpin', left, top, pinNumber, pinValue, highestValue);
 
 		this.setPinValueRatio(1);
 		this.setValue(super.getPinValue());
 		this.registerClick();
 		this.getSlider().attr('max', highestValue);
+		pinObject.addControl(this);
 	}
 
 	getSlider(){ return $('#' + super.getId()+ ' > input');}

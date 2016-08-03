@@ -19,17 +19,19 @@ http://www.2ality.com/2015/02/es6-classes-final.html */
 					meter.setValue(1023);  //this will put the control to 30°
 	*/
 class ThermoPin extends PinView {
-	constructor(left, top, pinNumber, pinValue, highestValue){
+	constructor(left, top, pinObject, highestValue){
+		var pinNumber = pinObject.getNumber();
+		var pinValue  = pinObject.getValue();
 		super('thermopin', left, top, pinNumber, pinValue, highestValue);
 		this.maxheight = 140;
 		this.yStart = 15;
 		this.setPinValueRatio(1);
 		this.setValue(super.getPinValue());
+		pinObject.addControl(this);
 	}
 
 	getRect(){ return $('#' + super.getId() + '> svg > .control');}
 	getText(){ return $('#' + super.getId() + '> svg > .text-value');}
-	getRect(){ return $('#' + super.getId() + '> svg > .control');}
 	
 	setBarHeight(value,rect){
 		/*  set the height of the bar
@@ -51,8 +53,8 @@ class ThermoPin extends PinView {
 		
 	}
 	active(bPowerOn){
-		var color = '#cccccc'
-		var textColor = '#cccccc'
+		var color = '#cccccc',
+		    textColor = '#cccccc';
 		if (bPowerOn === true){
 			color = '#E60000';
 			textColor = 'yellow';
@@ -70,6 +72,7 @@ class ThermoPin extends PinView {
 	setValue(value){
 		//todo: make the selector for rect and text
 		//relative to svg.  that is class like
+		this.active(true);
 		super.setPinValue(value*this.pinValueRatio);
 		var textNumber = this.getText();
 		textNumber.text(Math.round(super.getPinValue()*10)/10+'°');

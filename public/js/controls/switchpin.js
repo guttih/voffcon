@@ -1,8 +1,11 @@
 class SwitchPin extends PinView {
-	constructor(left, top, pinNumber, pinValue){
-		super('switchpin', left, top, pinNumber, pinValue, 1);
+	constructor(left, top, pinObject, highestValue){
+		var pinNumber = pinObject.getNumber();
+		var pinValue  = pinObject.getValue();
+		super('switchpin', left, top, pinNumber, pinValue, highestValue);
 
 		this.setValue(super.getPinValue());
+		pinObject.addControl(this);
 	}
 
 	getKnob(){ return $('#' + super.getId() + '> svg > .knob');}
@@ -26,16 +29,7 @@ class SwitchPin extends PinView {
 		this.getKnobBackground().css({	fill:Backfill});
 	}
 	
-	isKnobOn(){
-		var cx = this.getKnob().attr("cx");
-		var bRet = (cx == 90);
-		console.log(bRet); 
-		return bRet;
-		 
-	}
-	log(){
-		console.log("thssignsdfisdfsidfdsi");
-	}
+	//change state of the UI.  Move button circle and change it's color
 	power(bSwitchOn){
 		var fill = '#bbbbbb',
 			Backfill = '#ffffff',
@@ -48,18 +42,18 @@ class SwitchPin extends PinView {
 			cx = 90;
 		}
 
-		this.getKnob().css({	fill:fill,
-								stroke: stroke});
+		this.getKnob().css({	fill:fill,	stroke: stroke});
 		this.getKnob().attr("cx",cx);
 		this.getKnobBackground().css({	fill:Backfill});
 	}
-	//scales an jqery element
 
+	//scales an jqery element
 	scale(scaleValue){
 		super.scale(super.getSvg(), scaleValue);
 	}
 	
 	setValue(value){
+		console.log("switchpin::setValue value="+value);
 		super.setPinValue(value);
 		if (super.getPinValue() > 0){
 			this.power(true);
@@ -68,13 +62,15 @@ class SwitchPin extends PinView {
 			this.power(false);
 		}
 		
-		//todo: make the selector for rect and text
-		//relative to svg.  that is class like
 	}
 	//register the function to be called when the switchpin ojbect is clicked
 	onClick(inData){
 		var pSwitch = inData.data.that;
-		pSwitch.setValue(!pSwitch.getPinValue());
+		var val = 0;
+		if (pSwitch.getPinValue() === 0){
+			val = pSwitch.getHigestValue();
+		}
+		pSwitch.setValue(val);
 		inData.data.callback(pSwitch.getPinValue());
 	}
 	registerClick(callback){
@@ -83,4 +79,3 @@ class SwitchPin extends PinView {
 	}
 
 }//class
-

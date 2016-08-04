@@ -1,14 +1,18 @@
-class SliderPin extends PinView {
+class SliderCtrl extends PinControl {
 	constructor(left, top, pinObject, highestValue){
 		var pinNumber = pinObject.getNumber();
 		var pinValue  = pinObject.getValue();
-		super('sliderpin', left, top, pinNumber, pinValue, highestValue);
+		if (highestValue === undefined){
+			highestValue = pinObject.getHigestValue();
+		}
+		super('sliderctrl', left, top, pinNumber, pinValue, highestValue);
 
 		this.setPinValueRatio(1);
 		this.setValue(super.getPinValue());
 		this.registerClick();
 		this.getSlider().attr('max', highestValue);
 		pinObject.addControl(this);
+		this.pinObject = pinObject;
 	}
 
 	getSlider(){ return $('#' + super.getId()+ ' > input');}
@@ -24,14 +28,8 @@ class SliderPin extends PinView {
 
 	}
 	
-	//scales an jqery element
-	scale(scaleValue){
-		super.scale(super.getLight(), scaleValue);
-	}
-	
 	setValue(value){
 		super.setPinValue(value*this.pinValueRatio);
-		console.log("SliderPin setting value:"+super.getPinValue());
 		this.getSlider().val(super.getPinValue());
 	}
 		setPinValueRatio(ratio){
@@ -39,16 +37,15 @@ class SliderPin extends PinView {
 	}
 	onClick(inData){
 		var pObj = inData.data.that;
-		//pSwitch.setValue(!pSwitch.getPinValue());
-		//inData.data.callback(pSwitch.getPinValue());
 			pObj.setPinValue(pObj.getSlider().val());
 		if (inData.data.callback !== undefined){
-			callback(pObj.getPinValue());
+			inData.data.callback(pObj);
 		}
 	}
+
+	
 	registerClick(callback){
-		var that = this;
-		var obj = {that:that};
+		var obj = {that:this};
 		if (callback !== undefined){
 			obj['callback'] = callback;
 		}

@@ -1,21 +1,27 @@
 "use strict";
 class Pin { 
-	constructor(number, value) {
+	constructor(number, value, host, higestValue) {
 		this.controls = [];
 		this.number = number;
 		this.value = value;
+		this.host = host;
+		this.higestValue = higestValue;
 	}
 	addControl(control){
 		this.controls.push(control);
-	}
-	log(){
-		console.log(this);
 	}
 	getNumber(){
 		return this.number;
 	}
 	getValue(){
 		return this.value;
+	}
+	getHigestValue(){
+		return this.higestValue;
+	}
+	//attaches a pin control to this pin
+	attach(obj){
+		controls.push(obj);
 	}
 	/*
 	This functon will set a new value to this pin and update all connected controls*/
@@ -27,10 +33,24 @@ class Pin {
 		}
 	}
 	active(bActive){
+		
 		for(var i = 0; i<this.controls.length;i++){
 			this.controls[i].active(bActive);
 		}
 	}
+	scale(value){
+		
+		for(var i = 0; i<this.controls.length;i++){
+			this.controls[i].scale(value);
+		}
+	}
+	rotate(degrees){
+		
+		for(var i = 0; i<this.controls.length;i++){
+			this.controls[i].rotate(degrees);
+		}
+	}
+
 	registerClicks(callback){
 		for(var i = 0; i<this.controls.length;i++){
 			if (this.controls[i].registerClick !== undefined){

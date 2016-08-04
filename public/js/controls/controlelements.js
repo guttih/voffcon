@@ -19,6 +19,7 @@ class ControlElement {
 		$("#"+this.getId()).css({top: top, left: left});
 		
 	}
+	getNameExtender() 	{return this.nameExtender;}
 	getId() 	{return this.name + this.nameExtender;}
 	logString()	{ return '(' + this.left + ',' + this.top + ') name:' +  this.name+ ' id:' +  this.getId();}
 	log() 		{		console.log(this.logString()) ;	}
@@ -31,16 +32,25 @@ class ControlElement {
 	setTop(top) {this.top = top;}
 	setName(name) {this.name = name;}
 
-	scale($element, scaleValue){
+	scale(scaleValue){
 		// for chrome and edge
+		var $element = $('#' + this.getId());
 		$element.animate({ 'zoom': scaleValue }, 0);
 		// for firefox
 		$element.css("-moz-transform","scale("+scaleValue+")");
 		$element.css("-moz-transform-origin","0 0"); 
 	}
+	rotate(degrees){
+		// for chrome and edge
+		var $element = $('#' + this.getId());
+		$element.css({'-webkit-transform' : 'rotate('+ degrees +'deg)',
+                 '-moz-transform' : 'rotate('+ degrees +'deg)',
+                 '-ms-transform' : 'rotate('+ degrees +'deg)',
+                 'transform' : 'rotate('+ degrees +'deg)'});
+	}
 }
 
-class PinView extends ControlElement {
+class PinControl extends ControlElement {
 	constructor(name, left, top, pinNumber, pinValue, highestValue){
 		super(name, pinNumber, left, top);
 		this.pinNumber = pinNumber;

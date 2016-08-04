@@ -18,14 +18,19 @@ http://www.2ality.com/2015/02/es6-classes-final.html */
 					meter.setPinValueRatio(meter.getHigestValue()/1023);
 					meter.setValue(1023);  //this will put the control to 30°
 	*/
-class ThermoPin extends PinView {
+class ThermoCtrl extends PinControl {
 	constructor(left, top, pinObject, highestValue){
-		var pinNumber = pinObject.getNumber();
-		var pinValue  = pinObject.getValue();
-		super('thermopin', left, top, pinNumber, pinValue, highestValue);
+		var pinNumber       = pinObject.getNumber();
+		var pinValue        = pinObject.getValue();
+		if (highestValue === undefined){
+			highestValue = pinObject.getHigestValue();
+		}
+		super('thermoctrl', left, top, pinNumber, pinValue, highestValue);
 		this.maxheight = 140;
 		this.yStart = 15;
-		this.setPinValueRatio(1);
+		var ratio = 1;
+		var ratio = highestValue / pinObject.getHigestValue();
+		this.setPinValueRatio(ratio);
 		this.setValue(super.getPinValue());
 		pinObject.addControl(this);
 	}
@@ -64,11 +69,7 @@ class ThermoPin extends PinView {
 		this.getRect().css({ fill: color });
 		this.getText().css({ fill: textColor });
 	}
-	//scales an jqery element
 
-	scale(scaleValue){
-		super.scale(super.getSvg(), scaleValue);
-	}
 	setValue(value){
 		//todo: make the selector for rect and text
 		//relative to svg.  that is class like

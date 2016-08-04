@@ -1,11 +1,15 @@
-class SwitchPin extends PinView {
+class SwitchCtrl extends PinControl {
 	constructor(left, top, pinObject, highestValue){
 		var pinNumber = pinObject.getNumber();
 		var pinValue  = pinObject.getValue();
-		super('switchpin', left, top, pinNumber, pinValue, highestValue);
+		if (highestValue === undefined){
+			highestValue = pinObject.getHigestValue();
+		}
+		super('switchctrl', left, top, pinNumber, pinValue, highestValue);
 
 		this.setValue(super.getPinValue());
 		pinObject.addControl(this);
+		this.pinObject = pinObject;
 	}
 
 	getKnob(){ return $('#' + super.getId() + '> svg > .knob');}
@@ -47,13 +51,8 @@ class SwitchPin extends PinView {
 		this.getKnobBackground().css({	fill:Backfill});
 	}
 
-	//scales an jqery element
-	scale(scaleValue){
-		super.scale(super.getSvg(), scaleValue);
-	}
 	
 	setValue(value){
-		console.log("switchpin::setValue value="+value);
 		super.setPinValue(value);
 		if (super.getPinValue() > 0){
 			this.power(true);
@@ -71,11 +70,15 @@ class SwitchPin extends PinView {
 			val = pSwitch.getHigestValue();
 		}
 		pSwitch.setValue(val);
-		inData.data.callback(pSwitch.getPinValue());
+		inData.data.callback(pSwitch);
 	}
 	registerClick(callback){
-		var that = this;
-		this.getKnob().on( "click", {that:that, callback: callback}, this.onClick );
+		var obj = {that:this};
+		if (callback !== undefined){
+			obj['callback'] = callback;
+		}
+		this.getKnob().on( "click", obj, this.onClick );
+		
 	}
 
 }//class

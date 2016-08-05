@@ -32,9 +32,18 @@ class ControlElement {
 	setTop(top) {this.top = top;}
 	setName(name) {this.name = name;}
 
-	scale(scaleValue){
+	scale($el, scaleValue){
+		var $element;
+		if (scaleValue === undefined){
+			//element is not suppled;
+			scaleValue = $el;
+			$element = $('#' + this.getId());
+		}
+		else{
+			 $element =  $el;
+		}
 		// for chrome and edge
-		var $element = $('#' + this.getId());
+		
 		$element.animate({ 'zoom': scaleValue }, 0);
 		// for firefox
 		$element.css("-moz-transform","scale("+scaleValue+")");

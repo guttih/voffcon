@@ -50,6 +50,9 @@ class SwitchCtrl extends PinControl {
 		this.getKnob().attr("cx",cx);
 		this.getKnobBackground().css({	fill:Backfill});
 	}
+	scale(value){
+		super.scale($('#' + super.getId() + '> svg'), value);
+	}
 
 	
 	setValue(value){

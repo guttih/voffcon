@@ -12,8 +12,9 @@ function onClickCAllback(obj){
 }
 
 function onLoad(){
-	pin1    = new Pin(1, 999, 1023);
-	pin2    = new Pin(2, 444, 1023);
+	var host = 'http://192.168.1.151:5100';
+	pin1    = new Pin(1, 999, host, 1023);
+	pin2    = new Pin(2, 444, host, 1023);
 	
 	text1   = new TextCtrl(540,3,pin1);
 	diode1  = new DiodeCtrl(100,0,pin1);

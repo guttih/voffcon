@@ -1,7 +1,7 @@
 module.exports = function(grunt) {
   // Project configuration.
   grunt.initConfig({
-	  jsPublicDir: 'public/js/**/',
+	  jsDir: 'public/js/**/',
 	  jsModels: 'models/',
 		jsRoutes: 'routes/',
 		jsUtils: 'utils/',
@@ -9,11 +9,12 @@ module.exports = function(grunt) {
   jshint: {
     all: ['Gruntfile.js', 
 		'./*.js', 
-		'<%=jsPublicDir%>*.js',
+		'<%=jsDir%>*.js',
 		'<%=jsModels%>*.js',
 		'<%=jsRoutes%>*.js',
 		'<%=jsUtils%>*.js',
-		'!<%=jsPublicDir%>bootstrap.js',
+		'!<%=jsDir%>bootstrap.js',
+		'!<%=jsDir%>jquery-3.1.0.min.js',
 		 
 		'test/**/*.js'],
 		options: {
@@ -55,7 +56,7 @@ module.exports = function(grunt) {
   }
 },
 watch: {
-				files: ['./*.js',	'<%=jsPublicDir%>*.js', '<%=jsModels%>*.js', 
+				files: ['./*.js',	'<%=jsDir%>*.js', '<%=jsModels%>*.js', 
 													'<%=jsRoutes%>*.js', 		'<%=jsUtils%>*.js'],
 				tasks: ['jshint'],
 				options: {

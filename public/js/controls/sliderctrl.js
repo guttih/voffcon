@@ -46,6 +46,9 @@ class SliderCtrl extends PinControl {
 	scale(value){
 		super.scale(this.getSlider(), value);
 	}
+	rotate(degrees){
+		super.rotate(this.getSlider(), degrees);
+	}
 	
 	registerClick(callback){
 		var obj = {that:this};

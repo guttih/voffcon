@@ -49,7 +49,13 @@ class ControlElement {
 		$element.css("-moz-transform","scale("+scaleValue+")");
 		$element.css("-moz-transform-origin","0 0"); 
 	}
-	rotate(degrees){
+	rotate($el, degrees){
+		var $element;
+		if (degrees === undefined){
+			//element is not suppled;
+			degrees = $el;
+			$element = $('#' + this.getId());
+		}
 		// for chrome and edge
 		var $element = $('#' + this.getId());
 		$element.css({'-webkit-transform' : 'rotate('+ degrees +'deg)',

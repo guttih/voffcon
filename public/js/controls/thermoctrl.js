@@ -28,7 +28,6 @@ class ThermoCtrl extends PinControl {
 		super('thermoctrl', left, top, pinNumber, pinValue, highestValue);
 		this.maxheight = 140;
 		this.yStart = 15;
-		var ratio = 1;
 		var ratio = highestValue / pinObject.getHigestValue();
 		this.setPinValueRatio(ratio);
 		this.setValue(super.getPinValue());
@@ -56,6 +55,12 @@ class ThermoCtrl extends PinControl {
 		rect.attr('height',height);
 		
 		
+	}
+	scale(value){
+		super.scale($('#' + super.getId() + '> svg'), value);
+	}
+	rotate(degrees){
+		super.rotate($('#' + super.getId() + '> svg'), degrees);
 	}
 	active(bPowerOn){
 		var color = '#cccccc',

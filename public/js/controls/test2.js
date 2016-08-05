@@ -36,8 +36,9 @@ class Pins {
 		
 		for(var i = 0; i < this.pins.length; i++){
 			pin = this.pins[i];
-			if(pin.getNumber() == number)
-			return pin;
+			if(pin.getNumber() == number){
+				return pin;
+			}
 		}
 		return null;
 	}

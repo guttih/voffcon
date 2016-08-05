@@ -15,6 +15,12 @@ class TextCtrl extends PinControl {
 	}
 
 	getText(){ return $('#' + super.getId() + '> p');}	
+	scale(value){
+		super.scale(this.getText(), value);
+	}
+	rotate(degrees){
+		super.rotate(this.getText(), degrees);
+	}
 	
 	//if bActivate == false then the pin gecomes grayed show that it is inactivated
 	active(bActivate){

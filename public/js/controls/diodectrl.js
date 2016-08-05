@@ -18,7 +18,12 @@ class DiodeCtrl extends PinControl {
 	getLighBottom(){ return $('#' + super.getId() + '> .light-bottom');}
 	getText(){ return $('#' + super.getId() + '> .pinvalue');}
 	
-	
+	scale(value){
+		super.scale(this.getLight(), value);
+	}
+	rotate(degrees){
+		super.rotate(this.getLight(), degrees);
+	}
 	//if bActivate == false then the pin gecomes grayed show that it is inactivated
 	active(bActivate){
 		

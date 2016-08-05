@@ -6,11 +6,11 @@ class SliderCtrl extends PinControl {
 			highestValue = pinObject.getHigestValue();
 		}
 		super('sliderctrl', left, top, pinNumber, pinValue, highestValue);
-
+		this.getSlider().attr('max', highestValue);
 		this.setPinValueRatio(1);
 		this.setValue(super.getPinValue());
 		this.registerClick();
-		this.getSlider().attr('max', highestValue);
+		
 		pinObject.addControl(this);
 		this.pinObject = pinObject;
 	}

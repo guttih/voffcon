@@ -7,6 +7,7 @@ class Pin {
 		this.host = host;
 		this.higestValue = higestValue;
 	}
+	//adds or attaches a pin control to this pin
 	addControl(control){
 		this.controls.push(control);
 	}
@@ -18,10 +19,6 @@ class Pin {
 	}
 	getHigestValue(){
 		return this.higestValue;
-	}
-	//attaches a pin control to this pin
-	attach(obj){
-		controls.push(obj);
 	}
 	/*
 	This functon will set a new value to this pin and update all connected controls*/

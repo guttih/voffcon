@@ -31,13 +31,14 @@ class ControlElement {
 	setLeft(left) {this.left = left;}
 	setTop(top) {this.top = top;}
 	setName(name) {this.name = name;}
-
+	isFirefox(){return (window.navigator.userAgent.toLowerCase().indexOf('firefox') > -1);}
 	scale($el, scaleValue){
 		var $element;
 		if (scaleValue === undefined){
 			//element is not suppled;
 			scaleValue = $el;
 			$element = $('#' + this.getId());
+			console.log("stuff1");
 		}
 		else{
 			 $element =  $el;
@@ -55,14 +56,17 @@ class ControlElement {
 			//element is not suppled;
 			degrees = $el;
 			$element = $('#' + this.getId());
+			console.log("stuff2");
 		}
-		// for chrome and edge
-		var $element = $('#' + this.getId());
+		else{
+			 $element =  $el;
+		}
 		$element.css({'-webkit-transform' : 'rotate('+ degrees +'deg)',
                  '-moz-transform' : 'rotate('+ degrees +'deg)',
                  '-ms-transform' : 'rotate('+ degrees +'deg)',
                  'transform' : 'rotate('+ degrees +'deg)'});
 	}
+	destroyElement() {$('#' + super.getId()).remove();}
 }
 
 class PinControl extends ControlElement {

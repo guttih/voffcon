@@ -37,7 +37,14 @@ module.exports = function(grunt) {
 					$:       false,
 					io:      false,
 					window: false,
-					document: false
+					document: false,
+					PinControl:false,
+					TextCtrl:false,
+					DiodeCtrl:false,
+					ThermoCtrl:false,
+					SliderCtrl:false,
+					SwitchCtrl:false,
+					Pin:false
 					
 				}
 		}

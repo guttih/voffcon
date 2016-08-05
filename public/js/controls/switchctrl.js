@@ -54,6 +54,7 @@ class SwitchCtrl extends PinControl {
 		super.scale($('#' + super.getId() + '> svg'), value);
 	}
 	rotate(degrees){
+
 		super.rotate($('#' + super.getId() + '> svg'), degrees);
 	}
 

@@ -47,7 +47,8 @@ class SliderCtrl extends PinControl {
 		super.scale(this.getSlider(), value);
 	}
 	rotate(degrees){
-		super.rotate(this.getSlider(), degrees);
+		//firefox cannot rotated the scaled slider but it can rotate the parent element
+		super.rotate($('#' + super.getId()), degrees);
 	}
 	
 	registerClick(callback){

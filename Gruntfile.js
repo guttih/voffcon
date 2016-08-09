@@ -38,6 +38,7 @@ module.exports = function(grunt) {
 					io:      false,
 					window: false,
 					document: false,
+					ControlElement:false,
 					PinControl:false,
 					TextCtrl:false,
 					DiodeCtrl:false,

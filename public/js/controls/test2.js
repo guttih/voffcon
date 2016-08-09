@@ -34,12 +34,10 @@ function fetchPinValues(){
 		updateView(data.pins);
 	})
 	.fail(function(data){
-		console.log("error");
-		alert("error");
+		console.log("fetchPinValues::fail");
 	})
 	.always(function(data){
-		console.log("always");
-		alert("always");
+		console.log("fetchPinValues::always");
 	});
 }
 
@@ -48,15 +46,16 @@ var controls;
 var d ,t,s;
 
 var setupAppPins = function setupAppPins(){
-	var pin, d,s, i=0, offset=0;
+	var pin, d,s, i=0, offsetX=0, baseX=40, offsetY=0;
 	if (pins.isFirefox()){
-		offset=43;
+		offsetX=43;
+		offsetY=-23;
 	}
 	for(var x = 0; x < pins.pins.length; x++) {
 		
 		pin = pins.pins[x];
-		d = new DiodeCtrl(i,0,pin);
-		s = new SliderCtrl(i-(32+offset), 75, pin);
+		d = new DiodeCtrl(baseX+i,0,pin);
+		s = new SliderCtrl(baseX+i-(32+offsetX), 75+offsetY, pin);
 		i = i + 25;
 		s.rotate(270);
 		s.scale(0.7);
@@ -69,6 +68,7 @@ var failSetup = function failSetup(data){
 	console.log(data);
 };
 function onLoad(){
+	var svg = new svgCtrl('backImage', 25,-20, 400, 300);
 	controls = [];
 	var maxValue = 1024;
 	pins = new Pins('http://192.168.1.151:5100', 1023);
@@ -77,16 +77,9 @@ function onLoad(){
 	//IP tala er ekki sú sama fyrir alla pinna
 	//þannig að ef það eru 2 device þá þarf 2 pins object.
 	//þarf þá ekki pins Objectið að heita Device?
-	
 	pins.fetchAllPins(setupAppPins, failSetup);
 
-	
-	//pins.active(false);
-	/*var t = new ThermoCtrl(300, 250, pins.get(16));
-	var d = new SwitchCtrl(400, 200, pins.get(16));
-	t.addTicks(10);
-	d.scale(0.4);*/
-
-	
-	//fetchPinValues();
+  
+    svg.addItem('rect',{x:2, y:2, width:250, height:165, rx:10, ry:10,
+	  				  style:'fill:gray;stroke:gray;stroke-width:1;fill-opacity:0.1;stroke-opacity:0.9'});
 }

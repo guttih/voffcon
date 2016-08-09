@@ -21,6 +21,7 @@ class ControlElement {
 	}
 	getNameExtender() 	{return this.nameExtender;}
 	getId() 	{return this.name + this.nameExtender;}
+	getSvg()				{ return $('#'+this.getId()+' > svg');}
 	logString()	{ return '(' + this.left + ',' + this.top + ') name:' +  this.name+ ' id:' +  this.getId();}
 	log() 		{		console.log(this.logString()) ;	}
 
@@ -67,6 +68,19 @@ class ControlElement {
                  'transform' : 'rotate('+ degrees +'deg)'});
 	}
 	destroyElement() {$('#' + super.getId()).remove();}
+
+			/*innerHtml : you can skip this if you don't need any innerHTML on your element*/
+	makeSVG(tag, attrs, innerHtml) {
+			var el= document.createElementNS('http://www.w3.org/2000/svg', tag);
+			for (var k in attrs){
+				el.setAttribute(k, attrs[k]);
+			}
+			
+			if (innerHtml !== undefined){
+				el.innerHTML = innerHtml;
+			}
+			return el;
+	}
 }
 
 class PinControl extends ControlElement {
@@ -95,16 +109,5 @@ class PinControl extends ControlElement {
 
 	scaleValue(){return ( 100 * this.getPinValue() ) / this.getHigestValue();}
 	
-		/*innerHtml : you can skip this if you don't need any innerHTML on your element*/
-	makeSVG(tag, attrs, innerHtml) {
-			var el= document.createElementNS('http://www.w3.org/2000/svg', tag);
-			for (var k in attrs){
-				el.setAttribute(k, attrs[k]);
-			}
-			
-			if (innerHtml !== undefined){
-				el.innerHTML = innerHtml;
-			}
-			return el;
-	}
+
 }

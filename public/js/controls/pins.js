@@ -9,12 +9,18 @@ class Pins {
 		this.pins.push(new Pin(number, value, this.host, higestValue));
 	}
 	/*will delete all existing pins and fetch all pins and their values from the server and add them*/
-	fetchAllPins(callback){
+	fetchAllPins(callback, errorCallback){
 		this.pins = [];
-		var posting = $.get( pins.host+'/pins');
+		var posting = $.get( this.host+'/pins');
 		var that = this;
 		posting.done(function(data){
 			that.addPins(data.pins, callback);
+		})
+		.fail(function(data){
+			console.log("fail pins::fetchAllPins");
+			if (errorCallback!==undefined){
+				errorCallback(data);
+			}
 		});
 		
 	}

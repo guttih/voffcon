@@ -44,7 +44,8 @@ module.exports = function(grunt) {
 					ThermoCtrl:false,
 					SliderCtrl:false,
 					SwitchCtrl:false,
-					Pin:false
+					Pin:false,
+					Pins:false
 					
 				}
 		}

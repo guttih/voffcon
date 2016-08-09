@@ -28,9 +28,18 @@ function onClickCAllback(obj){
 
 
 function fetchPinValues(){
+	console.log("fetchPinVaues");
 	var posting = $.get( pins.host+'/pins');
 	posting.done(function(data){
 		updateView(data.pins);
+	})
+	.fail(function(data){
+		console.log("error");
+		alert("error");
+	})
+	.always(function(data){
+		console.log("always");
+		alert("always");
 	});
 }
 
@@ -43,7 +52,6 @@ var setupAppPins = function setupAppPins(){
 	if (pins.isFirefox()){
 		offset=43;
 	}
-
 	for(var x = 0; x < pins.pins.length; x++) {
 		
 		pin = pins.pins[x];
@@ -56,20 +64,22 @@ var setupAppPins = function setupAppPins(){
 	}
 	
 };
+var failSetup = function failSetup(data){
+	console.log("failSetup");
+	console.log(data);
+};
 function onLoad(){
 	controls = [];
 	var maxValue = 1024;
 	pins = new Pins('http://192.168.1.151:5100', 1023);
-	/*pins.add(16,0, maxValue);
-	pins.add(5,0, maxValue);
-	pins.add(4,0, maxValue);
-	pins.add(0,0, maxValue);
-	pins.add(2,0, maxValue);
-	pins.add(14,0, maxValue);
-	pins.add(12,0, maxValue);
-	pins.add(13,0, maxValue);
-	pins.add(15,0, maxValue);*/
-	pins.fetchAllPins(setupAppPins);
+	
+	//hvað ef við höfum pins frá 2mur devices?
+	//IP tala er ekki sú sama fyrir alla pinna
+	//þannig að ef það eru 2 device þá þarf 2 pins object.
+	//þarf þá ekki pins Objectið að heita Device?
+	
+	pins.fetchAllPins(setupAppPins, failSetup);
+
 	
 	//pins.active(false);
 	/*var t = new ThermoCtrl(300, 250, pins.get(16));

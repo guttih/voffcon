@@ -13,7 +13,7 @@ function updateView( pinValues ) {
 }
 
 function onClickCAllback(obj){
-	console.log("onClickCAllback");
+	console.log('onClickCAllback');
 	var pin = obj.pinObject;
 	var value = obj.getPinValue();
 	pin.active(false);
@@ -28,16 +28,16 @@ function onClickCAllback(obj){
 
 
 function fetchPinValues(){
-	console.log("fetchPinVaues");
+	console.log('fetchPinVaues');
 	var posting = $.get( pins.host+'/pins');
 	posting.done(function(data){
 		updateView(data.pins);
 	})
 	.fail(function(data){
-		console.log("fetchPinValues::fail");
+		console.log('fetchPinValues::fail');
 	})
 	.always(function(data){
-		console.log("fetchPinValues::always");
+		console.log('fetchPinValues::always');
 	});
 }
 
@@ -64,22 +64,21 @@ var setupAppPins = function setupAppPins(){
 	
 };
 var failSetup = function failSetup(data){
-	console.log("failSetup");
+	console.log('failSetup');
 	console.log(data);
 };
-function onLoad(){
-	var svg = new svgCtrl('backImage', 25,-20, 400, 300);
-	controls = [];
-	var maxValue = 1024;
-	pins = new Pins('http://192.168.1.151:5100', 1023);
-	
-	//hvað ef við höfum pins frá 2mur devices?
-	//IP tala er ekki sú sama fyrir alla pinna
-	//þannig að ef það eru 2 device þá þarf 2 pins object.
-	//þarf þá ekki pins Objectið að heita Device?
-	pins.fetchAllPins(setupAppPins, failSetup);
 
+
+function onLoad(){
+	var str = "var svg = new svgCtrl('backImage', 25,-20, 400, 300);"+
+	"controls = [];" +
+	"var maxValue = 1024;"+
+	"pins = new Pins('http://192.168.1.151:5100', 1023);"+
+	
+	"pins.fetchAllPins(setupAppPins, failSetup);"+
   
-    svg.addItem('rect',{x:2, y:2, width:250, height:165, rx:10, ry:10,
-	  				  style:'fill:gray;stroke:gray;stroke-width:1;fill-opacity:0.1;stroke-opacity:0.9'});
+    "svg.addItem('rect',{x:2, y:2, width:250, height:165, rx:10, ry:10,"+
+	"style:'fill:gray;stroke:gray;stroke-width:1;fill-opacity:0.1;"+ "stroke-opacity:0.9'});";
+	var F = new Function(str);
+	return(F());
 }

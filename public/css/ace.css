@@ -1,0 +1,37 @@
+#editorjs { 
+    position: absolute; /* Added */
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+.acediv{
+  position:relative;
+  height:380px;
+    margin-left:10px;
+  margin-right:10px;
+}
+.ace_editor  {
+  border-radius: 86px;
+}
+
+#editorHtml { 
+       position: absolute; /* Added */
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+}
+
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-center {
+  text-align: center;
+}

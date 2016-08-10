@@ -8,7 +8,6 @@ function updateView( pinValues ) {
 		for(var i = 0; i<pinValues.length;i++){
 			pins.get(pinValues[i].pin).setValue(pinValues[i].val);			
 			
-			//if(pins[i].m === 1 ){			/*mode 1 = OUTPUT*/
 		} // for
 }
 
@@ -68,17 +67,28 @@ var failSetup = function failSetup(data){
 	console.log(data);
 };
 
-
-function onLoad(){
-	var str = "var svg = new svgCtrl('backImage', 25,-20, 400, 300);"+
-	"controls = [];" +
-	"var maxValue = 1024;"+
-	"pins = new Pins('http://192.168.1.151:5100', 1023);"+
-	
-	"pins.fetchAllPins(setupAppPins, failSetup);"+
-  
-    "svg.addItem('rect',{x:2, y:2, width:250, height:165, rx:10, ry:10,"+
-	"style:'fill:gray;stroke:gray;stroke-width:1;fill-opacity:0.1;"+ "stroke-opacity:0.9'});";
+function runCodeString(str){
 	var F = new Function(str);
 	return(F());
+}
+function onLoad(){
+	var str = "var svg = new svgCtrl('backImage', 25,-20, 400, 300);" +
+	"controls = [];" +
+	"var maxValue = 1024;" +
+	"pins = new Pins('http://192.168.1.151:5100', 1023);" +
+	
+	"pins.fetchAllPins(setupAppPins, failSetup);" +
+  
+    "svg.addItem('rect',{x:2, y:2, width:250, height:165, rx:10, ry:10," +
+	"style:'fill:gray;stroke:gray;stroke-width:1;fill-opacity:0.1;" + "stroke-opacity:0.9'});";
+	//runCodeString(str);
+	var svg = new svgCtrl('backImage', 25,-20, 400, 300);
+	controls = [];
+	var maxValue = 1024;
+	pins = new Pins('http://192.168.1.151:5100', 1023);
+	
+	pins.fetchAllPins(setupAppPins, failSetup);
+  
+    svg.addItem('rect',{x:2, y:2, width:250, height:165, rx:10, ry:10,
+	style:'fill:gray;stroke:gray;stroke-width:1;fill-opacity:0.1;stroke-opacity:0.9'});
 }

@@ -72,7 +72,7 @@ function runCodeString(str){
 	return(F());
 }
 function onLoad(){
-	var str = "var svg = new svgCtrl('backImage', 25,-20, 400, 300);" +
+	var str = "var svg = new SvgCtrl('backImage', 25,-20, 400, 300);" +
 	"controls = [];" +
 	"var maxValue = 1024;" +
 	"pins = new Pins('http://192.168.1.151:5100', 1023);" +
@@ -82,7 +82,7 @@ function onLoad(){
     "svg.addItem('rect',{x:2, y:2, width:250, height:165, rx:10, ry:10," +
 	"style:'fill:gray;stroke:gray;stroke-width:1;fill-opacity:0.1;" + "stroke-opacity:0.9'});";
 	//runCodeString(str);
-	var svg = new svgCtrl('backImage', 25,-20, 400, 300);
+	var svg = new SvgCtrl('backImage', 25,-20, 400, 300);
 	controls = [];
 	var maxValue = 1024;
 	pins = new Pins('http://192.168.1.151:5100', 1023);

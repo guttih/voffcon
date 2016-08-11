@@ -1,4 +1,4 @@
-class svgCtrl extends ControlElement {
+class SvgCtrl extends ControlElement {
 	constructor(idExtender, left, top, width, height){
 		super('svgctrl', idExtender,  left, top);
 		var svg = super.getSvg();

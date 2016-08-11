@@ -14,6 +14,7 @@ module.exports = function(grunt) {
 		'<%=jsRoutes%>*.js',
 		'<%=jsUtils%>*.js',
 		'!<%=jsDir%>bootstrap.js',
+		'!<%=jsDir%>bootstrap.min.js',
 		'!<%=jsDir%>jquery-3.1.0.min.js',
 		 
 		'test/**/*.js'],
@@ -45,8 +46,10 @@ module.exports = function(grunt) {
 					ThermoCtrl:false,
 					SliderCtrl:false,
 					SwitchCtrl:false,
+					SvgCtrl:false,
 					Pin:false,
-					Pins:false
+					Pins:false,
+					ace:false
 					
 				}
 		}

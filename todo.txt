@@ -1,0 +1,6 @@
+Búa til modify function fyrir model object
+	C:\git\ardos\models\controller.js
+		users ætti að vera owners
+búa til routes fyrir 
+	C:\git\ardos\routes\cards.js
+	C:\git\ardos\routes\ccontrollers.js

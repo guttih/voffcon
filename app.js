@@ -19,6 +19,8 @@ var db = mongoose.connection;
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var devices = require('./routes/devices');
+var controllers = require('./routes/controllers');
+var cards = require('./routes/cards');
 var addresses = lib.getAddresses();
 
 // Init App
@@ -63,6 +65,7 @@ app.use(cookieParser());
 
 // Set Static Folder
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/ace-builds', express.static(path.join(__dirname, 'node_modules/ace-builds')));
 
 // Express Session
 app.use(session({
@@ -113,6 +116,8 @@ app.use(function (req, res, next) {
 app.use('/', routes);
 app.use('/users', users);
 app.use('/devices', devices);
+app.use('/controllers', controllers);
+app.use('/cards', cards);
 
 // Set Port
 app.set('port', (process.env.PORT || 3000));

@@ -4,10 +4,8 @@
 		<title>Ardos</title>
 		<meta charset="utf-8">
 		<link rel="stylesheet" href="/css/bootstrap.css" />
-		
 		<link rel="stylesheet" href="/css/style.css" />
-		<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
-		<!--<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>-->
+		<link rel="stylesheet" href="/css/ace.css" />
 		
 	</head>
 	<body>
@@ -18,6 +16,8 @@
 			{{#if user}}
 				<li role="presentation"><a href="/">Dashboard</a></li>
 				<li role="presentation"><a href="/users/logout">Logout</a></li>
+				<li role="presentation"><a href="/controllers">Controllers</a></li>
+				<li role="presentation"><a href="/cards">Cards</a></li>
 				<li role="presentation"><a href="/devices">esp8266 WiFi server</a></li>
 			{{else}}
 				<li role="presentation"><a href="/users/login">Login</a></li>
@@ -65,12 +65,12 @@
 		</div>
 
 		<footer class="footer">
-		<p>&copy; 2015 Ardos, Inc.</p>
+		<p>&copy; 2016 Ardos, Inc.</p>
 		</footer>
 
 	</div> <!-- /container -->
 	<div id="config" data-settings='{"serverUrl":"http://www.guttih.com:3000"}' />
-	
+	<script src="/js/jquery-3.1.0.min.js"></script>
 	<script src="/js/bootstrap.min.js"></script>	
 	<script src="/js/main.js"></script>
 	

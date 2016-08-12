@@ -14,3 +14,19 @@ var editor2 = ace.edit("editorHtml");
     editor2.getSession().setMode("ace/mode/html");
 str = "<div id='editorHtml'>this will be a html code</div>";
 editor2.setValue(str);
+
+$('#btnSaveControl').click(function() {
+    var strCode = editor1.getValue();
+    var strHtml = editor2.getValue();
+	console.log("html template:");
+    console.log(strHtml);
+    console.log("Control class:");
+    console.log(strCode);
+    
+});
+$('#btnSaveCard').click(function() {
+    var strCard = editor1.getValue();
+    console.log("card code:");
+    console.log(strCard);
+    
+});

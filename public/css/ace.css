@@ -8,8 +8,8 @@
 .acediv{
   position:relative;
   height:380px;
-    margin-left:10px;
-  margin-right:10px;
+    margin-left:0px;
+  margin-right:0px;
 }
 .ace_editor  {
   border-radius: 8px;

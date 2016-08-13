@@ -4,17 +4,16 @@
 <div class="row row-padd">
 	<h4 class="text-left">Name</h4>
 			<p>Give the card a desciptive name, but not to long.</p>
-	<input type="text" class="form-control" id="controler-name">
+	<input type="text" class="form-control" id="controler-name" value="Garage lights">
 </div>
 
 <div class="row row-padd">
 		<h4 class="text-left">Description</h4>
 		<p>Descripe what your card does. What device(s) will the user be controlling or seeing values from.</p>
 		<div style="" class="acediv ace-text-container">
-			<div id="editor-desc" class="ace-text">
-Which device will the user be controlling?
-What values will the user be looking at?
-What will the user need to know, when controlling a device?
+			<div id="editor-desc" class="ace-text"
+>This card controls a device of the type ESP8266 which is located in my garage.  
+You can control the brightness of nine lights connected to the device. 
 			</div>
 		</div>
 </div>
@@ -23,9 +22,83 @@ What will the user need to know, when controlling a device?
 	<p>Here you need to insert the JavaScript code for your card.</p>
 	<div class="acediv">
 		<div id="editor-js-card"
->function card(items) {
-	var x = 'þetta er málið';
-	return x;
+>var pin1, pin2,
+	switch1, meter1, diode1, slider1, text1,
+	switch2, meter2, diode2, slider2, text2;
+var timer1;
+const TIMEOUT = 1000;
+
+function updateView( pinValues ) {
+		for(var i = 0; i&lt;pinValues.length;i++){
+			pins.get(pinValues[i].pin).setValue(pinValues[i].val);			
+		} // for
+}
+
+function onClickCAllback(obj){
+	console.log('onClickCAllback');
+	var pin = obj.pinObject;
+	var value = obj.getPinValue();
+	pin.active(false);
+	var sendObj = {};
+	sendObj[pin.getNumber()] = value;
+	var SERVERURL = pin.host;
+	var posting = $.post( SERVERURL+'/pins', sendObj);
+	posting.done(function(data){
+		updateView(data.pins);
+	});
+}
+
+function fetchPinValues(){
+	console.log('fetchPinVaues');
+	var posting = $.get( pins.host+'/pins');
+	posting.done(function(data){
+		updateView(data.pins);
+	})
+	.fail(function(data){
+		console.log('fetchPinValues::fail');
+	})
+	.always(function(data){
+		console.log('fetchPinValues::always');
+	});
+}
+
+var pins;
+var controls;
+var d ,t,s;
+
+var setupAppPins = function setupAppPins(){
+	var pin, d,s, i=0, offsetX=0, baseX=40, offsetY=0;
+	if (pins.isFirefox()){
+		offsetX=43;
+		offsetY=-23;
+	}
+	for(var x = 0; x &lt; pins.pins.length; x++) {
+		
+		pin = pins.pins[x];
+		d = new DiodeCtrl(baseX+i,0,pin);
+		s = new SliderCtrl(baseX+i-(32+offsetX), 75+offsetY, pin);
+		i = i + 25;
+		s.rotate(270);
+		s.scale(0.7);
+		pin.registerClicks(onClickCAllback);
+	}
+	
+};
+var failSetup = function failSetup(data){
+	console.log('failSetup');
+	console.log(data);
+};
+
+function onLoad(){
+
+	var svg = new SvgCtrl('backImage', 25,-20, 400, 300);
+	controls = [];
+	var maxValue = 1024;
+	pins = new Pins('http://192.168.1.151:5100', 1023);
+	
+	pins.fetchAllPins(setupAppPins, failSetup);
+	svg.addItem('rect',{x:2, y:2, width:250, height:165, rx:10, ry:10,
+	style:'fill:gray;stroke:gray;stroke-width:1;fill-opacity:0.1;stroke-opacity:0.9'});
 }
 		</div>
 	</div>

@@ -20,7 +20,7 @@ npm install
 ```shell
 node app
 ```
-### developing the app
+### developing the app (Node server)
 ```shell
 grunt
 ```
@@ -41,7 +41,7 @@ has not been tested or implemented yet
 
 ##The device web server
 This program needs to be uploaded on the device you want to control from the node server.
-The webserver will only allow request to it, if the request comes from a client which is on the same subnet. In fact the webserver will check for the first 3 numbers in the calling ipaddress and if they match the deivces ipaddress numbers then the caller will be considered save and his requests will be acted upon.
+The webserver will only allow request to it, if the request comes from a client which is on the same subnet. In fact the webserver will check for the first 3 numbers in the calling ip address and if they match the deivces ip address numbers then the caller will be considered save and his requests will be acted upon.
 
 Possible commands:
 - /pins

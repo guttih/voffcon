@@ -5,6 +5,7 @@ var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
 
 // Card Schema
+// 	Info on Schema types: http://mongoosejs.com/docs/schematypes.html
 var CardSchema = mongoose.Schema({
 	name: {
 		type: String,
@@ -15,7 +16,9 @@ var CardSchema = mongoose.Schema({
 	},
 	data: Schema.Types.Mixed, /*here I will store anything cards can be of different types*/
 	
+	/*These users are allowed to modify or delete this card*/
 	 owners: [{ObjectId}],
+	 /*These users are allowed to use this card*/
 	 users: [{ObjectId}]
 });
 

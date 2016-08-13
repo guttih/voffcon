@@ -5,8 +5,12 @@ var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
 
 // Controller Schema
+// 	Info on Schema types: http://mongoosejs.com/docs/schematypes.html
 var ControllerSchema = mongoose.Schema({
 	name: {
+		type: String
+	},
+	description: {
 		type: String
 	},
 	template: {
@@ -15,8 +19,8 @@ var ControllerSchema = mongoose.Schema({
 	code: {
 		type: String
 	},
-	/*these users are allowed to edit this control*/
-	 users: [{ObjectId}]
+	/*these users are allowed to modify or delete this control*/
+	 owners: [{ObjectId}]
 });
 
 var Controller = module.exports = mongoose.model('Controller', ControllerSchema);

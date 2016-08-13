@@ -1,10 +1,12 @@
 "use strict";
+
 var mongoose = require('mongoose');
 var fs = require('fs');
 var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
 
 // Device Schema
+// 	Info on Schema types: http://mongoosejs.com/docs/schematypes.html
 var DeviceSchema = mongoose.Schema({
 	url: {
 		type: String,
@@ -16,7 +18,7 @@ var DeviceSchema = mongoose.Schema({
 	description: {
 		type: String
 	},
-
+	
 	 users: [{ObjectId}]
 });
 

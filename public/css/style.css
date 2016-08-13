@@ -80,8 +80,26 @@ body {
 
 .page-header{
   margin-top:0;
+  margin-right:15px;
 }
 
 footer{
   margin-top:40px;
+}
+
+.row-padd{
+  padding-left:15px;
+  padding-right:15px;
+
+}
+.row-padd:after {
+    display: block;
+    content: '';
+    /*background: lightskyblue;*/
+    
+    margin-top:15px;
+    margin-bottom: 15px;
+    margin-left: 0px;
+    margin-right: 0px;
+    height       : 1px;
 }

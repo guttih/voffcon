@@ -14,8 +14,9 @@ var CardSchema = mongoose.Schema({
 	description: {
 		type: String
 	},
-	data: Schema.Types.Mixed, /*here I will store anything cards can be of different types*/
-	
+	code: {
+		type: String
+	},
 	/*These users are allowed to modify or delete this card*/
 	 owners: [{ObjectId}],
 	 /*These users are allowed to use this card*/

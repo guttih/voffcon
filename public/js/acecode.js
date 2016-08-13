@@ -29,21 +29,13 @@ function initEditorText(editorId, strText){
 		showPrintMargin		: false
 	});
 }
-var str = "function controller(items) { \n"+
-		"	var x = 'þetta er málið';\n"+
-		"	return x;\n"+
-		"}\n";
 
-var editor1 = initEditor('editor-js-ctrl',   'javascript', 'monokai', str);
-str = "function card(items) { \n"+
-		"	var x = 'þetta er málið';\n"+
-		"	return x;\n"+
-		"}\n";
-var editor4 = initEditor('editor-js-card',   'javascript', 'monokai', str);
+var editor1 = initEditor('editor-js-ctrl',   'javascript', 'monokai');
+var editor4 = initEditor('editor-js-card',   'javascript', 'monokai');
 var editor3 = initEditorText('editor-desc');
 
 
-var editor2 = initEditor('editor-html-ctrl',   'html', 'chaos', '<div id="editorHtml">\n\tthis will be a html code\n</div>');
+var editor2 = initEditor('editor-html-ctrl',   'html', 'chaos');
 
 $('#btnSaveControl').click(function() {
 	var strCode = editor1.getValue();

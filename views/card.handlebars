@@ -1,8 +1,13 @@
 <div class="row">
 	<h3 class="page-header pull-right">New Card</h3>
 </div>
+<div class="row row-padd">
+	<h4 class="text-left">Name</h4>
+			<p>Give the card a desciptive name, but not to long.</p>
+	<input type="text" class="form-control" id="controler-name">
+</div>
 
-<div class="row">
+<div class="row row-padd">
 		<h4 class="text-left">Description</h4>
 		<p>Descripe what your card does. What device(s) will the user be controlling or seeing values from.</p>
 		<div style="" class="acediv ace-text-container">
@@ -12,17 +17,22 @@ What values will the user be looking at?
 What will the user need to know, when controlling a device?
 			</div>
 		</div>
-	</div>
-	<div class="row">
-		<h4 class="text-left">Card Control</h4>
-		<p>Here you need to insert the JavaScript code for your card.</p>
-		<div class="acediv">
-			<div id="editor-js-card"></div>
+</div>
+<div class="row row-padd">
+	<h4 class="text-left">Card Control</h4>
+	<p>Here you need to insert the JavaScript code for your card.</p>
+	<div class="acediv">
+		<div id="editor-js-card"
+>function card(items) {
+	var x = 'þetta er málið';
+	return x;
+}
 		</div>
 	</div>
-	<div class="row">
-		<button id="btnSaveCard" type="button" class="btn btn-default pull-right">Save Card</button>
-	</div>
+</div>
+<div class="row  row-padd">
+	<button id="btnSaveCard" type="button" class="btn btn-success pull-right">Save Card</button>
+</div>
 <script src="js\jquery-3.1.0.min.js"></script>
 
 <script src="/ace-builds/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>

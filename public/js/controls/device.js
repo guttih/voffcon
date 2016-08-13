@@ -1,5 +1,5 @@
 "use strict";
-class Pins {
+class Device {
 	constructor(host, highestValue){
 		this.pins = [];
 		this.host = host;

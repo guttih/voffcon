@@ -1,7 +1,8 @@
 Búa til modify function fyrir model object
 	C:\git\ardos\models\controller.js
 		users ætti að vera owners
-Ná að vista controller
-	controller save
-
-isPoweruser
+Vista controller
+Vista card
+Vista Device
+device síða á að leyfa vistun á nýju device
+pins klasi í test2 ætti að heita deviceg

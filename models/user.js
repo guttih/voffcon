@@ -20,6 +20,9 @@ var UserSchema = mongoose.Schema({
 	name: {
 		type: String
 	},
+	//level 0 = normal user
+	//level 1 = power user
+	//level 2 = admin (who can change user values such as change their user level)
 	level: {
 		type: Number
 	}
@@ -39,7 +42,7 @@ module.exports.createUser = function(newUser, callback){
 	if (newUser._doc.level === 0){
 		User.find().count(function (err, count) {
 			if (err || count === 0) {
-				newUser._doc.level = 1; //the first user will become a powerUser
+				newUser._doc.level = 2; //the first user will become admin
 			}
 			_createUser(newUser, callback);
 		});	

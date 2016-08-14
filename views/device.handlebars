@@ -1,3 +1,10 @@
+<div class="row">
+	<h3 class="page-header pull-right">New Device</h3>
+</div>
+
+
+
+
 <p>Server was started at <span id="serverStarted">Not time set</span> </p>
 <p>Server has been running for <span id="serverRunning">Not time set</span> </p>
 
@@ -8,7 +15,7 @@
 
 
 <!--Move this to a new register device file-->
-<form method="post" action="/devices/register">
+<form method="post" action="/devices/register" id="deviceform">
 	<div class="form-group">
 		<label>Name</label>
 		<input type="text" class="form-control" placeholder="Name this device" name="name" required>
@@ -18,7 +25,7 @@
 		<div class="form-group">
 			
 			<div class="col-md-12">
-				<textarea class="form-control" rows="3" placeholder="Descripe your device, where is it, what does it control.  Is it dangerous?" required></textarea>
+				<textarea name="description" form="deviceform" class="form-control" rows="3" placeholder="Descripe your device, where is it, what does it control.  Is it dangerous?"></textarea>
 			</div>
 		</div>
 	</div>

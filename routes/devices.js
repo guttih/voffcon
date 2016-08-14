@@ -24,13 +24,13 @@ router.get('/started/:deviceId', lib.authenticateRequest, function(req, res){
 	//ef hann hefur aðgang að því þá þarf að sækja það og
 	//sækja svo urlið úr því til að vista það sem SERVERURL
 	console.log("got: "+deviceId);
-	Device.getUserDevicesById(deviceId, req.user._id, function(err, device){
+	Device.getDeviceById(deviceId, function(err, device){
 		if (err !== null){
 			res.statusCode = 404;
 			var obj = {text:'Error 404: User device not found!'};
 			return res.json(obj);
 		}
-		var SERVERURL = device[0].url;
+		var SERVERURL = device.url;
 		console.log("SERVERURL:"+SERVERURL);
 		//todo: put below in a sepperate function possible as a middleware
 			request.get(SERVERURL+'/started',
@@ -106,13 +106,15 @@ router.post('/pins', lib.authenticateRequest, function(req, res){
 
 });
 
+router.get('/register', function(req, res){
+	res.render('register-device');
+});
+
 // Register Device
 router.post('/register', function(req, res){
-	var name = req.body.name;
-	var url = req.body.url;
-
 	// Validation
 	req.checkBody('name', 'Name is required').notEmpty();
+	req.checkBody('description', 'description is required').notEmpty();
 	req.checkBody('url', 'url is required').notEmpty();
 	var errors = req.validationErrors();
 
@@ -122,12 +124,13 @@ router.post('/register', function(req, res){
 		});
 	} else {
 		var newDevice = new Device({
-			name: name,
-			url:url,
-			users:[]
+			name: req.body.name,
+			url:req.body.url,
+			description:req.body.description,
+			owners:[]
 			
 		});
-		newDevice.users.push(req.user._id);
+		newDevice.owners.push(req.user._id);
 		
 		console.log("newDevice");
 		console.log(newDevice);

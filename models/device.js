@@ -19,7 +19,7 @@ var DeviceSchema = mongoose.Schema({
 		type: String
 	},
 	
-	 users: [{ObjectId}]
+	 owners: [{ObjectId}]
 });
 
 var Device = module.exports = mongoose.model('Device', DeviceSchema);
@@ -42,13 +42,14 @@ module.exports.getDeviceById = function(id, callback){
 };
 
 module.exports.listDevicesByUserId = function (id, callback){
-	var query = {users:{$elemMatch: { _id:id }}};
+	var query = {owners:{$elemMatch: { _id:id }}};
 	Device.find(query, callback);
 };
 
+/*if you only want owners to get the device use this function*/
 module.exports.getUserDevicesById = function (deviceId, userId, callback){
 	var query = {	_id: deviceId,
-					users:{$elemMatch: { _id:userId }}
+					owners:{$elemMatch: { _id:userId }}
 		};
 	Device.find(query, callback);
 };

@@ -18,7 +18,7 @@ console.log(config);
 
 // Register
 router.get('/register', function(req, res){
-	res.render('register');
+	res.render('register-user');
 });
 
 // Login
@@ -47,7 +47,7 @@ router.post('/register', function(req, res){
 	var errors = req.validationErrors();
 
 	if(errors){
-		res.render('register',{
+		res.render('register-user',{
 			errors:errors
 		});
 	} else {

@@ -6,7 +6,6 @@ var interfaces = os.networkInterfaces();
 var router = express.Router();
 
 module.exports.authenticateUrl = function authenticateUrl(req, res, next){	
-	console.log('ensureAuthenticated');
 	if(req.isAuthenticated()){
 		return next();
 	} else {
@@ -16,7 +15,6 @@ module.exports.authenticateUrl = function authenticateUrl(req, res, next){
 };
 
 module.exports.authenticateRequest = function authenticateRequest(req, res, next){
-	console.log('authenticateRquest');
 	if(req.isAuthenticated()){
 		return next();
 	} else {

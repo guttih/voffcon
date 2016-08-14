@@ -3,6 +3,4 @@ Búa til modify function fyrir model object
 		users ætti að vera owners
 Vista controller
 Vista card
-Vista Device
-device síða á að leyfa vistun á nýju device
-pins klasi í test2 ætti að heita deviceg
+device síða á að leyfa listun devica

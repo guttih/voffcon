@@ -68,10 +68,18 @@ module.exports.listCardsByUserId = function (id, callback){
 	var query = {users:{$elemMatch: { _id:id }}};
 	Card.find(query, callback);
 };
-
+/*if you only want users to get cards that they have access to, use this function*/
 module.exports.getUserCardsById = function (CardId, userId, callback){
 	var query = {	_id: CardId,
 					users:{$elemMatch: { _id:userId }}
+		};
+	Card.find(query, callback);
+};
+
+/*if you only want owners to get their cards use this function*/
+module.exports.getOwnerCardsById = function (CardId, userId, callback){
+	var query = {	_id: CardId,
+					owners:{$elemMatch: { _id:userId }}
 		};
 	Card.find(query, callback);
 };

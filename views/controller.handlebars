@@ -7,7 +7,7 @@
 <div class="row row-padd">
 <h4 class="text-left">Name</h4>
 		<p>The name of the control needs to be exactly the same as the id of the template</p>
-<input type="text" class="form-control" id="name" value="svgctrl">
+<input type="text" class="form-control" id="name" value="svg-ctrl">
 </div>
 
 <div class="form-horizontal">
@@ -29,10 +29,10 @@ draw frames around other controls or add descriptive text around other controls.
 	<p style="font-size:11px; font-style: italic;">Don't worry about the comment involving &lt;!DOCTYPE html&gt;</p>
 	<div class="acediv">
 		<div id="editor-html-ctrl"
->&lt;div id="svgctrl" class="svgctrl" style="position:absolute"&gt;
+>&lt;div id="svg-ctrl" class="svg-ctrl" style="position:absolute"&gt;
 	&lt;svg width="100"  height="100" class="control"&gt;
 	&lt;/svg&gt;
-&lt;/div&gt; &lt;!--svgctrl--&gt;
+&lt;/div&gt; &lt;!--svg-ctrl--&gt;
 </div>
 	</div>
 </div>
@@ -43,7 +43,7 @@ draw frames around other controls or add descriptive text around other controls.
 		<div id="editor-js-ctrl"
 >class SvgCtrl extends ControlElement {
 	constructor(idExtender, left, top, width, height){
-		super('svgctrl', idExtender,  left, top);
+		super('svg-ctrl', idExtender,  left, top);
 		var svg = super.getSvg();
 		svg.attr('width', width);
 		svg.attr('height', height);

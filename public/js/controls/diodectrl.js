@@ -5,7 +5,7 @@ class DiodeCtrl extends PinControl {
 		if (highestValue === undefined){
 			highestValue = pinObject.getHigestValue();
 		}
-		super('diodectrl', left, top, pinNumber, pinValue, highestValue);
+		super('diode-ctrl', left, top, pinNumber, pinValue, highestValue);
 
 		var ratio = highestValue / pinObject.getHigestValue();
 		this.setPinValueRatio(ratio);

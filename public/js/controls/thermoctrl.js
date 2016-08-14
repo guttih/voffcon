@@ -25,7 +25,7 @@ class ThermoCtrl extends PinControl {
 		if (highestValue === undefined){
 			highestValue = pinObject.getHigestValue();
 		}
-		super('thermoctrl', left, top, pinNumber, pinValue, highestValue);
+		super('thermo-ctrl', left, top, pinNumber, pinValue, highestValue);
 		this.maxheight = 140;
 		this.yStart = 15;
 		var ratio = highestValue / pinObject.getHigestValue();

@@ -3,7 +3,7 @@ class TextCtrl extends PinControl {
 		var pinNumber = pinObject.getNumber();
 		var pinValue  = pinObject.getValue();
 		
-		super('textctrl', left, top, pinNumber, pinValue, highestValue);
+		super('text-ctrl', left, top, pinNumber, pinValue, highestValue);
 
 		var ratio = 1;
 		if(highestValue !== undefined){

@@ -5,7 +5,7 @@ class SliderCtrl extends PinControl {
 		if (highestValue === undefined){
 			highestValue = pinObject.getHigestValue();
 		}
-		super('sliderctrl', left, top, pinNumber, pinValue, highestValue);
+		super('slider-ctrl', left, top, pinNumber, pinValue, highestValue);
 		this.getSlider().attr('max', highestValue);
 		this.setPinValueRatio(1);
 		this.setValue(super.getPinValue());

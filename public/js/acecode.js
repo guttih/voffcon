@@ -36,7 +36,6 @@ function initEditorText(editorId, strText){
 }
 function updateEditState(text, buttonID){
 	if ( text === undefined || text === ""){
-			console.log("disabling");
 			$('#' + buttonID).prop('disabled', true);
 		}
 		else{
@@ -49,14 +48,6 @@ function saveControl(){
 		var strHtml = editHtmlCtrl.getValue();
 		var strName = $('#name').val();
 		var strDesc = $('#description').val();
-		console.log("control name:");
-		console.log(strName);
-		console.log("control description:");
-		console.log(strDesc);
-		console.log("html template:");
-		console.log(strHtml);
-		console.log("Control class:");
-		console.log(strCode);
 		 var sendObj = {
 			 name			: strName,
 			 description	: strDesc,
@@ -67,13 +58,21 @@ function saveControl(){
 		 $('#template').val(strHtml);
 		 document.getElementById("template").value = strHtml;
 		 document.getElementById('controller-form').submit();
-		//post to : action="/controllers/register"
-		
-		/*var posting = $.post( SERVER +'/controllers/register', sendObj);
-		posting.done(function( data ) {
-			console.log("posting done............");
-			console.log(data);
-		});*/
+
+}
+function saveCard(){
+
+	var strCode = editJsCard.getValue();
+	var strName = $('#name').val();
+	var strDesc = $('#description').val();
+	var sendObj = {
+			name		: strName,
+			description	: strDesc,
+			code		: strCode
+		};
+	$('#code').val(strCode);
+	document.getElementById('card-form').submit();
+
 }
 function aceInit(){
 	editJsCtrl = initEditor(  'editor-js-ctrl',   'javascript', 'monokai');
@@ -85,15 +84,7 @@ function aceInit(){
 		saveControl();
 	});
 	$('#btnSaveCard').click(function() {
-		var strName = $('#name').val();
-		var strDesc = $('#description').val();
-		var strCard = editJsCard.getValue();
-		console.log("card name:");
-		console.log(strName);
-		console.log("card description:");
-		console.log(strDesc);
-		console.log("card code:");
-		console.log(strCard);
+		saveCard();
 	});
 	if (editJsCard !== undefined){
 		buttonID = 'btnSaveCard';
@@ -158,7 +149,6 @@ function updateSaveButtonState(buttonID){
 
 function updateSaveButtonStateHelper(buttonID){
 	
-	console.log("updateSaveButtonStateHelper");
 	var selectBtn = '#'+buttonID;
 	if ($("#name").val() === ""){
 			$(selectBtn).prop('disabled', true);  

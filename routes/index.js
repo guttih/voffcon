@@ -7,5 +7,8 @@ var lib = require('../utils/glib');
 router.get('/', lib.authenticateUrl, function(req, res){
 	res.render('index');
 });
+router.get('/result', lib.authenticateUrl, function(req, res){
+	res.render('result');
+});
 
 module.exports = router;

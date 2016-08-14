@@ -15,6 +15,7 @@ router.get('/', lib.authenticateUrl, function(req, res){
 router.get('/register', function(req, res){
 	res.render('register-controller');
 });
+
 router.post('/register', lib.authenticatePowerRequest, function(req, res){
 	// Validation
 	req.checkBody('name', 'Name is required').notEmpty();
@@ -24,6 +25,7 @@ router.post('/register', lib.authenticatePowerRequest, function(req, res){
 	var errors = req.validationErrors();
 
 	if(errors){
+		//todo: user must type all already typed values again, fix that
 		res.render('register-controller',{errors:errors	});
 	} else {
 				var newController = new Controller({
@@ -34,8 +36,7 @@ router.post('/register', lib.authenticatePowerRequest, function(req, res){
 					owners:[]
 			});
 			newController.owners.push(req.user._id);
-			console.log("todo: uncomment");
-			console.log(newController._doc);
+			//todo: update if controller already exists
 			Controller.createController(newController, function(err, controller){
 				if(err) {throw err;}
 				console.log("controller created:");
@@ -44,7 +45,9 @@ router.post('/register', lib.authenticatePowerRequest, function(req, res){
 
 			req.flash('success_msg',	'You successfully created the ' + 
 										newController._doc.name + ' controller' );
-			res.redirect('/controllers/register');
+			//todo: redirect to what?
+			
+			res.redirect('/result');
 	}
 });
 module.exports = router;

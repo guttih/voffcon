@@ -1,4 +1,5 @@
-var	editJsCtrl,
+var	SERVER,
+	editJsCtrl,
 	editJsCard,
 	editHtmlCtrl,
 	checkTimer;
@@ -62,6 +63,17 @@ function aceInit(){
 		console.log(strHtml);
 		console.log("Control class:");
 		console.log(strCode);
+		 var sendObj = {
+			 name			: strName,
+			 description	: strDesc,
+			 template		: strHtml,
+			  code			: strCode
+		 };
+		var posting = $.post( SERVER +'/controllers/register', sendObj);
+		posting.done(function( data ) {
+			console.log("posting done............");
+			console.log(data);
+		});
 	});
 	$('#btnSaveCard').click(function() {
 		var strName = $('#name').val();
@@ -77,6 +89,7 @@ function aceInit(){
 	if (editJsCard !== undefined){
 		buttonID = 'btnSaveCard';
 	}
+	
 	//registering change events from user input
 	$('#name')
 		.keyup(function() {  updateEditState($.trim($(this).val()), buttonID);  })
@@ -85,36 +98,31 @@ function aceInit(){
 		.keyup(function() {  updateEditState($.trim($(this).val()), buttonID);	})
 		.change(function(){  updateEditState($.trim($(this).val())), buttonID;	});
 	
+	if (editHtmlCtrl !== undefined){
+		editHtmlCtrl.getSession().on('change', function() {
+			updateEditState(editHtmlCtrl.getValue(), buttonID);
+		});
+		editHtmlCtrl.getSession().on('changeAnnotation', function() {
+			updateEditState(editHtmlCtrl.getValue(), buttonID);
+		});
+	}
 
-
-
-
-		if (editHtmlCtrl !== undefined){
-			editHtmlCtrl.getSession().on('change', function() {
-				updateEditState(editHtmlCtrl.getValue(), buttonID);
-			});
-			editHtmlCtrl.getSession().on('changeAnnotation', function() {
-				updateEditState(editHtmlCtrl.getValue(), buttonID);
-			});
-		}
-
-		if (editJsCtrl !== undefined){
-			editJsCtrl.getSession().on('change', function() {
-				updateEditState(editJsCtrl.getValue(), buttonID);
-			});
-			editJsCtrl.getSession().on('changeAnnotation', function() {
-				updateEditState(editJsCtrl.getValue(), buttonID);
-			});
-		}
-		if (editJsCard !== undefined){
-			editJsCard.getSession().on('change', function() {
-				updateEditState(editJsCard.getValue(), buttonID);
-			});
-			editJsCard.getSession().on('changeAnnotation', function() {
-				updateEditState(editJsCard.getValue(), buttonID);
-			});
-		}
-	
+	if (editJsCtrl !== undefined){
+		editJsCtrl.getSession().on('change', function() {
+			updateEditState(editJsCtrl.getValue(), buttonID);
+		});
+		editJsCtrl.getSession().on('changeAnnotation', function() {
+			updateEditState(editJsCtrl.getValue(), buttonID);
+		});
+	}
+	if (editJsCard !== undefined){
+		editJsCard.getSession().on('change', function() {
+			updateEditState(editJsCard.getValue(), buttonID);
+		});
+		editJsCard.getSession().on('changeAnnotation', function() {
+			updateEditState(editJsCard.getValue(), buttonID);
+		});
+	}
 }
 
 function isEditorTextValid(editor){
@@ -174,3 +182,9 @@ function updateSaveButtonStateHelper(buttonID){
 	$(selectBtn).prop('disabled', false);
 }
 aceInit();//when script loads this runs.
+
+$(function () {  
+	/* this is the *$( document ).ready(function( $ ) but jshint does not like that*/
+	SERVER = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ':'+window.location.port: '');
+
+});

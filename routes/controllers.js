@@ -12,4 +12,24 @@ var config = lib.getConfig();
 router.get('/', lib.authenticateUrl, function(req, res){
 	res.render('controller');/*this is the views/controller.handlebars*/
 });
+router.post('/register', lib.authenticatePowerRequest, function(req, res){
+	var newController = new Controller({
+			 name			: req.body.name,
+			 description	: req.body.description,
+			 template		: req.body.template,
+			  code			: req.body.code,
+			  owners:[]
+	});
+	newController.owners.push(req.user._id);
+
+	Controller.createController(newController, function(err, controller){
+		if(err) {throw err;}
+		console.log("controller created:");
+		console.log(controller);
+	});
+
+	req.flash('success_msg',	'You successfully created the ' + 
+								controller.name + ' controller' );
+	res.redirect('/login');
+});
 module.exports = router;

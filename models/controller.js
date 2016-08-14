@@ -1,4 +1,13 @@
 "use strict";
+
+/* create your controller collection
+ 	goto mongo bin folder and type:
+	 mongo
+	 use ardos
+	 db.createCollection('controllers');
+	 show
+*/
+//tutorial : https://www.youtube.com/watch?v=Z1ktxiqyiLA
 var mongoose = require('mongoose');
 var fs = require('fs');
 var Schema = mongoose.Schema;
@@ -19,10 +28,9 @@ var ControllerSchema = mongoose.Schema({
 	code: {
 		type: String
 	},
-	/*these users are allowed to modify or delete this control*/
 	 owners: [{ObjectId}]
 });
-
+	/*owners are users, allowed to modify or delete this control*/
 var Controller = module.exports = mongoose.model('Controller', ControllerSchema);
 
 /*

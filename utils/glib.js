@@ -22,6 +22,15 @@ module.exports.authenticateRequest = function authenticateRequest(req, res, next
 		return res.send('Error 401: You are not not authorized! ');
 	}
 };
+module.exports.authenticatePowerRequest = function authenticatePowerRequest(req, res, next){
+
+	if(req.isAuthenticated() && req.user._doc.level > 0){
+		return next();
+	} else {
+			  res.statusCode = 401;
+		return res.send('Error 401: You are not not authorized! ');
+	}
+};
 module.exports.makeRequestPostOptions = function makeRequestOptions(url, formData){
 	var options = {
 	url: url,

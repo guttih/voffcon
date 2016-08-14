@@ -1,6 +1,9 @@
 Búa til modify function fyrir model object
 	C:\git\ardos\models\controller.js
 		users ætti að vera owners
-Vista controller
+
+breyta vista card og gera eins og vista controller.
+	vista card á nú að submitta formi en ekki gera post.request manually
 Vista card
+
 device síða á að leyfa listun devica

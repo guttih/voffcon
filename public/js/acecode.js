@@ -43,15 +43,9 @@ function updateEditState(text, buttonID){
 			updateSaveButtonState(buttonID);
 		}
 }
-
-function aceInit(){
-	editJsCtrl = initEditor(  'editor-js-ctrl',   'javascript', 'monokai');
-	editJsCard = initEditor(  'editor-js-card',   'javascript', 'monokai');
-	editHtmlCtrl = initEditor('editor-html-ctrl', 'html',       'chaos');
-	var buttonID = 'btnSaveControl';
-
-	$('#btnSaveControl').click(function() {
-		var strCode = editJsCtrl.getValue();
+function saveControl(){
+	
+	var strCode = editJsCtrl.getValue();
 		var strHtml = editHtmlCtrl.getValue();
 		var strName = $('#name').val();
 		var strDesc = $('#description').val();
@@ -69,11 +63,26 @@ function aceInit(){
 			 template		: strHtml,
 			  code			: strCode
 		 };
-		var posting = $.post( SERVER +'/controllers/register', sendObj);
+		 $('#code').val(strCode);
+		 $('#template').val(strHtml);
+		 document.getElementById("template").value = strHtml;
+		 document.getElementById('controller-form').submit();
+		//post to : action="/controllers/register"
+		
+		/*var posting = $.post( SERVER +'/controllers/register', sendObj);
 		posting.done(function( data ) {
 			console.log("posting done............");
 			console.log(data);
-		});
+		});*/
+}
+function aceInit(){
+	editJsCtrl = initEditor(  'editor-js-ctrl',   'javascript', 'monokai');
+	editJsCard = initEditor(  'editor-js-card',   'javascript', 'monokai');
+	editHtmlCtrl = initEditor('editor-html-ctrl', 'html',       'chaos');
+	var buttonID = 'btnSaveControl';
+
+	$('#btnSaveControl').click(function() {
+		saveControl();
 	});
 	$('#btnSaveCard').click(function() {
 		var strName = $('#name').val();

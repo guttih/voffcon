@@ -1,85 +1,84 @@
-	<!DOCTYPE html>
-	<html>
-	<head>
-		<title>Ardos</title>
-		<meta charset="utf-8">
-		<link rel="stylesheet" href="/css/bootstrap.css" />
-		<link rel="stylesheet" href="/css/style.css" />
-		<link rel="stylesheet" href="/css/ace.css" />
-		
-	</head>
-	<body>
-	<div class="container">
-		<div class="header clearfix">
-		<nav>
-			<ul class="nav nav-pills pull-right">
-			{{#if user}}
-				<li role="presentation"><a href="/">Dashboard</a></li>
-			{{/if}}
-			{{#if power_user}}
-				<li role="presentation"><a href="/cards">Cards</a></li>
-				<li role="presentation"><a href="/controllers">Controls</a></li>
-				<li role="presentation"><a href="/devices/register">Devices</a></li>
-				<li role="presentation"><a href="/devices">work</a></li>
-				
-				
-			{{/if}}
-			{{#if user}}
-				<li role="presentation"><a href="/users/logout">Logout</a></li>
-			{{else}}
-				<li role="presentation"><a href="/users/login">Login</a></li>
-				<li role="presentation"><a href="/users/register">Register</a></li>
-			{{/if}}
-			</ul>
-		</nav>
-		<h3 class="text-muted">LoginApp</h3>
-		</div>
-
-	<!-- Modal -->
-		<div class="modal fade" id="myModal" role="dialog">
-			<div class="modal-dialog">
-				<!-- Modal content-->
-				<div class="modal-content">
-					<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">Modal Header</h4>
-					</div>
-				<div class="modal-body">
-					<p>Modal Text</p>
-				</div>
-					<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="row">
-			<div class="col-lg-12">
-				{{#if success_msg}}
-				<div class="alert alert-success">{{success_msg}}</div>
-				{{/if}}
-
-				{{#if error_msg}}
-				<div class="alert alert-danger">{{error_msg}}</div>
-				{{/if}}
-
-				{{#if error}}
-				<div class="alert alert-danger">{{error}}</div>
-				{{/if}}
-				{{{body}}}
-			</div>
-		</div>
-
-		<footer class="footer">
-		<p>&copy; 2016 Ardos, Inc.</p>
-		</footer>
-
-	</div> <!-- /container -->
-	<div id="config" data-settings='{"serverUrl":"http://www.guttih.com:3000"}' />
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Ardos</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="/css/bootstrap.css" />
+	<link rel="stylesheet" href="/css/style.css" />
+	<link rel="stylesheet" href="/css/ace.css" />
 	<script src="/js/jquery-3.1.0.min.js"></script>
-	<script src="/js/bootstrap.min.js"></script>	
-	<script src="/js/main.js"></script>
+	<script src="/js/bootstrap.min.js"></script>
 	
-	</body>
-	</html>
+</head>
+<body>
+<div class="container">
+	<div class="header clearfix">
+	<nav>
+		<ul class="nav nav-pills pull-right">
+		{{#if user}}
+			<li role="presentation"><a href="/">Dashboard</a></li>
+		{{/if}}
+		{{#if power_user}}
+			<li role="presentation"><a href="/cards">Cards</a></li>
+			<li role="presentation"><a href="/controllers/register">Controls</a></li>
+			<li role="presentation"><a href="/devices/register">Devices</a></li>
+			<li role="presentation"><a href="/devices">work</a></li>
+			
+			
+		{{/if}}
+		{{#if user}}
+			<li role="presentation"><a href="/users/logout">Logout</a></li>
+		{{else}}
+			<li role="presentation"><a href="/users/login">Login</a></li>
+			<li role="presentation"><a href="/users/register">Register</a></li>
+		{{/if}}
+		</ul>
+	</nav>
+	<h3 class="text-muted">LoginApp</h3>
+	</div>
+
+<!-- Modal -->
+	<div class="modal fade" id="myModal" role="dialog">
+		<div class="modal-dialog">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Modal Header</h4>
+				</div>
+			<div class="modal-body">
+				<p>Modal Text</p>
+			</div>
+				<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-lg-12">
+			{{#if success_msg}}
+			<div class="alert alert-success">{{success_msg}}</div>
+			{{/if}}
+
+			{{#if error_msg}}
+			<div class="alert alert-danger">{{error_msg}}</div>
+			{{/if}}
+
+			{{#if error}}
+			<div class="alert alert-danger">{{error}}</div>
+			{{/if}}
+			{{{body}}}
+		</div>
+	</div>
+
+	<footer class="footer">
+	<p>&copy; 2016 Ardos, Inc.</p>
+	</footer>
+
+</div> <!-- /container -->
+<div id="config" data-settings='{"serverUrl":"http://www.guttih.com:3000"}' />
+<script src="/js/main.js"></script>
+</body>
+</html>

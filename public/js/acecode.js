@@ -180,10 +180,37 @@ function updateSaveButtonStateHelper(buttonID){
 	
 	$(selectBtn).prop('disabled', false);
 }
-aceInit();//when script loads this runs.
+
+function setControlValues(control){
+	editJsCtrl.setValue(control.code);
+	editHtmlCtrl.setValue(control.template);
+	$("#name").val(control.name);
+	$("#description").val(control.description);
+}
+function getControl(id){
+	var url = SERVER+'/controls/item/'+id;
+		var request = $.get(url);
+	console.log('getUserControlList url : ' + url);
+	request.done(function( data ) {
+		console.log(data);
+		setControlValues(data);
+		}).fail(function( data ) {
+			if (data.status===401){
+				showModal("You need to be logged in!", data.responseText);
+			}
+			else if (data.status===404){
+				showModal("Not found!", data.responseText);
+			}
+		});
+}
 
 $(function () {  
-	/* this is the *$( document ).ready(function( $ ) but jshint does not like that*/
+	aceInit();//when script loads this runs.
 	SERVER = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ':'+window.location.port: '');
+	var control = $( '#item' ).data( 'control' );
+	if (control !== undefined){
+		getControl(control.id);
+
+	}
 
 });

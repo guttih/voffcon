@@ -12,8 +12,26 @@ var config = lib.getConfig();
 router.get('/', lib.authenticateUrl, function(req, res){
 	res.render('index-control');
 });
-router.get('/register', function(req, res){
-	res.render('register-control');
+router.get('/register', lib.authenticatePowerUrl, function(req, res){
+			res.render('register-control');
+});
+router.get('/register/:controlID', lib.authenticatePowerUrl, function(req, res){
+	var id = req.params.controlID;
+	if (id !== undefined){
+		Control.getControlById(id, function(err, control){
+				if(err || control === null) {
+					req.flash('error',	'Could not find control.' );
+					res.redirect('/result');
+				} else{
+					var obj = {id : id,
+						name: control.name};
+					var str = JSON.stringify(obj);
+					res.render('register-control', {item:str});
+				}
+			});
+		
+	}
+
 });
 
 router.post('/register', lib.authenticatePowerRequest, function(req, res){
@@ -55,16 +73,6 @@ router.get('/list', lib.authenticateUrl, function(req, res){
 	res.render('list-control');
 });
 
-router.get('/item/:controlID', lib.authenticatePowerUrl, function(req, res){
-	var id = req.params.controlID;
-	console.log(id);
-	res.render('result', {error:'todo: call register controller page with params'});
-});
-router.get('/b', lib.authenticatePowerUrl, function(req, res){
-	
-	res.render('list-control');
-});
-
 /*listing all devices and return them as a json array*/
 router.get('/control-list', lib.authenticateRequest, function(req, res){
 	Control.listControlsByOwnerId(req.user._id, function(err, controlList){
@@ -77,5 +85,28 @@ router.get('/control-list', lib.authenticateRequest, function(req, res){
 		}
 		res.json(arr);
 	});
+});
+router.get('/item/:controlID', lib.authenticateRequest, function(req, res){
+	var id = req.params.controlID;
+	if (id !== undefined){
+		Control.getControlById(id, function(err, control){
+				if(err || control === null) {
+					res.send('Error 404 : Not found! ');
+				} else{
+					res.json(control);
+				}
+			});
+		
+	}
+	/*Control.listControlsByOwnerId(req.user._id, function(err, controlList){
+		
+		var arr = [];
+		for(var i = 0; i < controlList.length; i++){
+					arr.push({	name:controlList[i].name, 
+								description:controlList[i].description,
+								id:controlList[i]._id});
+		}
+		res.json(arr);
+	});*/
 });
 module.exports = router;

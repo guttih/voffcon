@@ -31,7 +31,7 @@ function setControllistValues(controlList){
 		name 		= controlList[i].name;
 		description = controlList[i].description;
 		
-		var str =  createListItem(name, description, SERVER+'/controls/item/'+ id);
+		var str =  createListItem(name, description, SERVER+'/controls/register/'+ id);
 		$("#control-list").append(str);
 	}
 }

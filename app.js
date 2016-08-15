@@ -19,7 +19,7 @@ var db = mongoose.connection;
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var devices = require('./routes/devices');
-var controllers = require('./routes/controllers');
+var controls = require('./routes/controls');
 var cards = require('./routes/cards');
 var addresses = lib.getAddresses();
 
@@ -120,7 +120,7 @@ next();
 app.use('/', routes);
 app.use('/users', users);
 app.use('/devices', devices);
-app.use('/controllers', controllers);
+app.use('/controls', controls);
 app.use('/cards', cards);
 
 // Set Port

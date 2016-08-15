@@ -1,5 +1,5 @@
 Búa til modify function fyrir model object
-	C:\git\ardos\models\controller.js
+	C:\git\ardos\models\control.js
 		users ætti að vera owners
 
 

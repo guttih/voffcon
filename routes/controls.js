@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var request = require('request');
 var lib = require('../utils/glib');
-var Controller = require('../models/controller');
+var Control = require('../models/control');
 var config = lib.getConfig();
 
 //Hér á að búa til module fyrir queries á devices
@@ -10,10 +10,10 @@ var config = lib.getConfig();
 //Þegar query er gert á device þá þarf url á devicesið að vera með 
 //í query objectinu
 router.get('/', lib.authenticateUrl, function(req, res){
-	res.render('index-controller');
+	res.render('index-control');
 });
 router.get('/register', function(req, res){
-	res.render('register-controller');
+	res.render('register-control');
 });
 
 router.post('/register', lib.authenticatePowerRequest, function(req, res){
@@ -26,25 +26,25 @@ router.post('/register', lib.authenticatePowerRequest, function(req, res){
 
 	if(errors){
 		//todo: user must type all already typed values again, fix that
-		res.render('register-controller',{errors:errors	});
+		res.render('register-control',{errors:errors	});
 	} else {
-				var newController = new Controller({
+				var newControl = new Control({
 					name			: req.body.name,
 					description	: req.body.description,
 					template		: req.body.template,
 					code			: req.body.code,
 					owners:[]
 			});
-			newController.owners.push(req.user._id);
-			//todo: update if controller already exists
-			Controller.createController(newController, function(err, controller){
+			newControl.owners.push(req.user._id);
+			//todo: update if control already exists
+			Control.createControl(newControl, function(err, control){
 				if(err) {throw err;}
-				console.log("controller created:");
-				console.log(controller);
+				console.log("control created:");
+				console.log(control);
 			});
 
 			req.flash('success_msg',	'You successfully created the ' + 
-										newController._doc.name + ' controller' );
+										newControl._doc.name + ' control' );
 			//todo: redirect to what?
 			
 			res.redirect('/result');

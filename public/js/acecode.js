@@ -57,7 +57,7 @@ function saveControl(){
 		 $('#code').val(strCode);
 		 $('#template').val(strHtml);
 		 document.getElementById("template").value = strHtml;
-		 document.getElementById('controller-form').submit();
+		 document.getElementById('control-form').submit();
 
 }
 function saveCard(){

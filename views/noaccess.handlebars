@@ -1,0 +1,18 @@
+<div class="row">
+	<h3 class="page-header pull-right">No access</h3>
+</div>
+		<div class="col-lg-12">
+			{{#if success_msg}}
+			<div class="alert alert-success">{{success_msg}}</div>
+			{{/if}}
+
+			{{#if error_msg}}
+			<div class="alert alert-danger">{{error_msg}}</div>
+			{{/if}}
+
+			{{#if error}}
+			<div class="alert alert-danger">{{error}}</div>
+			{{/if}}
+			{{{body}}}
+		</div>
+<p>You do not have access to perform this action.</p>

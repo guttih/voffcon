@@ -14,6 +14,23 @@ module.exports.authenticateUrl = function authenticateUrl(req, res, next){
 	}
 };
 
+module.exports.authenticatePowerUrl = function authenticatePowerUrl(req, res, next){	
+	if(req.isAuthenticated() && req.user._doc.level > 0){
+		return next();
+	} else {
+		req.flash('error_msg',	'You do not have power user rights and therefore cannot perform this action' );
+		res.redirect('/result');
+	}
+};
+module.exports.authenticateAdminUrl = function authenticateAdminUrl(req, res, next){	
+	if(req.isAuthenticated() && req.user._doc.level > 1){
+		return next();
+	} else {
+		req.flash('error_msg',	'You do not have administrator rights and therefore cannot perform this action' );
+		res.redirect('/result');
+	}
+};
+
 module.exports.authenticateRequest = function authenticateRequest(req, res, next){
 	if(req.isAuthenticated()){
 		return next();

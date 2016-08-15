@@ -1,0 +1,20 @@
+<div class="row">
+	<h3 class="page-header pull-right">Control list</h3>
+</div>
+{{#if errors}}
+      {{#each errors}}
+        <div class="alert alert-danger">{{msg}}</div>
+      {{/each}}
+{{/if}}
+<div class="row">
+	<p> </p>
+</div>
+<div class="row">
+	<div id = "control-list" class="control-list list-group">
+	<!-- listItems will be added here-->
+	</div>
+
+</div>
+
+<script src="/js/bootstrap.min.js"></script>	
+<script src="/js/list-controls.js"></script>	

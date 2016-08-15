@@ -50,14 +50,14 @@ module.exports.getControlById = function(id, callback){
 	Control.findById(id, callback);
 };
 
-module.exports.listControlsByUserId = function (id, callback){
-	var query = {users:{$elemMatch: { _id:id }}};
+module.exports.listControlsByOwnerId = function (id, callback){
+	var query = {owners:{$elemMatch: { _id:id }}};
 	Control.find(query, callback);
 };
 
-module.exports.getUserControlsById = function (ControlId, userId, callback){
+module.exports.getOwnerControlsById = function (ControlId, userId, callback){
 	var query = {	_id: ControlId,
-					users:{$elemMatch: { _id:userId }}
+					owners:{$elemMatch: { _id:userId }}
 		};
 	Control.find(query, callback);
 };

@@ -67,16 +67,13 @@ function getUserDeviceList(){
 		// Put the results in a div
 		setDevicelistValues(data);
 		}).fail(function( data ) {
-
-		if (data.status===401){
-			showModal("You need to be logged in!", data.responseText);
-		}
+			if (data.status===401){
+				showModal("You need to be logged in!", data.responseText);
+			}
 		});
 }
 
 function setDevicelistValues(devicelist){
-
-	//$("#devicelist option").remove();
 	var key, name, shallDisable = true;
 	$("#devicelist").empty().prop( "disabled", true );
 	for(var i = 0; i < devicelist.length; i++){
@@ -97,26 +94,25 @@ function setDevicelistValues(devicelist){
 }
 
 function getWhenServerStarted(){
-var url = SERVER+'/devices/started';
-var selected = $( "#devicelist" ).val();
-if (selected===undefined){
-	console.log("NOTHING selected");
-	return;
-}
-selected = JSON.parse(selected);
-console.log("selected");
-console.log(selected);
-	var request = $.get(SERVER+'/devices/started/'+selected.id);
-	
-request.done(function( data ) {
-	// Put the results in a div
-	setServerStartedValue(data.date);
-	}).fail(function( data ) {
-
-	if (data.status===401){
-		showModal("You need to be logged in!", data.responseText);
+	var url = SERVER+'/devices/started';
+	var selected = $( "#devicelist" ).val();
+	if (selected===undefined){
+		console.log("NOTHING selected");
+		return;
 	}
-	});
+	selected = JSON.parse(selected);
+	console.log("selected");
+	console.log(selected);
+		var request = $.get(SERVER+'/devices/started/'+selected.id);
+		
+	request.done(function( data ) {
+		// Put the results in a div
+		setServerStartedValue(data.date);
+	}).fail(function( data ) {
+			if (data.status===401){
+				showModal("You need to be logged in!", data.responseText);
+			}
+		});
 }
 
 function showModal(title, message){
@@ -130,5 +126,5 @@ $(function () {
 	/* this is the *$( document ).ready(function( $ ) but jshint does not like that*/
 	var SERVER = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ':'+window.location.port: '');
 	//todo: run this only if logged in getWhenServerStarted();
-	$('.dropdown-toggle').dropdown();
+	$('.dropdown-toggle').dropdown();/*for the dropdown-toggle bootstrap class*/
 });

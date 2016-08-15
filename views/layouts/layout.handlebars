@@ -19,13 +19,27 @@
 			<li role="presentation"><a href="/">Dashboard</a></li>
 		{{/if}}
 		{{#if power_user}}
-			<li role="presentation"><a href="/cards/register">Cards</a></li>
-			<li role="presentation"><a href="/cards/list">Cardlist</a></li>
-			<li role="presentation"><a href="/controllers/register">Controls</a></li>
-			<li role="presentation"><a href="/devices/register">Devices</a></li>
-			<li role="presentation"><a href="/devices">work</a></li>
-			
-			
+			<li class="dropdown">
+				<a class="dropdown-toggle" data-toggle="dropdown" href="#">Cards <span class="caret"></span></a>
+				<ul class="dropdown-menu">
+					<li><a href="/cards/register">Register a new card</a></li>
+					<li><a href="/cards/list">List cards</a></li>
+				</ul>
+			</li>
+			<li class="dropdown">
+				<a class="dropdown-toggle" data-toggle="dropdown" href="#">Controls <span class="caret"></span></a>
+				<ul class="dropdown-menu">
+					<li><a href="/controllers/register">Register a new control</a></li>
+					<li><a href="/controllers/list">List controls</a></li>
+				</ul>
+			</li>
+			<li class="dropdown">
+				<a class="dropdown-toggle" data-toggle="dropdown" href="#">Devices <span class="caret"></span></a>
+				<ul class="dropdown-menu">
+					<li><a href="/devices/register">Register new</a></li>
+					<li><a href="/devices">work</a></li>
+				</ul>
+			</li>
 		{{/if}}
 		{{#if user}}
 			<li role="presentation"><a href="/users/logout">Logout</a></li>

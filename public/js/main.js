@@ -130,4 +130,5 @@ $(function () {
 	/* this is the *$( document ).ready(function( $ ) but jshint does not like that*/
 	var SERVER = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ':'+window.location.port: '');
 	//todo: run this only if logged in getWhenServerStarted();
+	$('.dropdown-toggle').dropdown();
 });

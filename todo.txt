@@ -2,15 +2,4 @@ Búa til modify function fyrir model object
 	C:\git\ardos\models\controller.js
 		users ætti að vera owners
 
-device síða á að leyfa listun devica
-búa til navigation þar sem leiðarkerfi er svona fyrir t.d. 
-controller
-	create new controllser
-	list controllers
-card
-	create new card
-	list cards
-device
-	create new device
-	list device		
 

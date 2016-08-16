@@ -137,7 +137,6 @@ function isEditorTextValid(editor){
 	var arr = editor.getSession().getAnnotations();
 	for(var i = 0; i < arr.length; i++){
 		if (arr[i].type === 'error'){
-			console.log("there are errors in the editor");
 			return false;
 		}
 	}
@@ -186,19 +185,37 @@ function updateSaveButtonStateHelper(buttonID){
 	$(selectBtn).prop('disabled', false);
 }
 
-function setControlValues(control){
-	editJsCtrl.setValue(control.code);
-	editHtmlCtrl.setValue(control.template);
-	$("#name").val(control.name);
-	$("#description").val(control.description);
+function setControlValues(item){
+	editJsCtrl.setValue(item.code);
+	editHtmlCtrl.setValue(item.template);
+	$("#name").val(item.name);
+	$("#description").val(item.description);
+}
+function setCardValues(item){
+	editJsCard.setValue(item.code);
+	$("#name").val(item.name);
+	$("#description").val(item.description);
 }
 function getControl(id){
 	var url = SERVER+'/controls/item/'+id;
 		var request = $.get(url);
-	console.log('getUserControlList url : ' + url);
 	request.done(function( data ) {
-		console.log(data);
 		setControlValues(data);
+		}).fail(function( data ) {
+			if (data.status===401){
+				showModal("You need to be logged in!", data.responseText);
+			}
+			else if (data.status===404){
+				showModal("Not found!", data.responseText);
+			}
+		});
+}
+
+function getCard(id){
+	var url = SERVER+'/cards/item/'+id;
+		var request = $.get(url);
+	request.done(function( data ) {
+		setCardValues(data);
 		}).fail(function( data ) {
 			if (data.status===401){
 				showModal("You need to be logged in!", data.responseText);
@@ -212,10 +229,9 @@ function getControl(id){
 $(function () {  
 	aceInit();//when script loads this runs.
 	SERVER = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ':'+window.location.port: '');
-	var control = $( '#item' ).data( 'control' );
-	if (control !== undefined){
-		getControl(control.id);
-
-	}
+	var control = $( '#item' ).data('control');
+	var card    = $( '#item' ).data('card');
+	if (control !== undefined){ getControl(control.id);	}
+	if (card !== undefined){ getCard(card.id);	}
 
 });

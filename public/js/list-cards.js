@@ -4,9 +4,7 @@ var SERVER;
 function getUserCardList(){
 	var url = SERVER+'/cards/card-list';
 		var request = $.get(url);
-	console.log('getUserCardList url : ' + url);
 	request.done(function( data ) {
-		console.log(data);
 		setCardlistValues(data);
 		}).fail(function( data ) {
 			if (data.status===401){
@@ -25,7 +23,6 @@ function createListItem(name, description, url){
 function setCardlistValues(cardList){
 	var id, name, description;
 	for(var i = 0; i < cardList.length; i++){
-		console.log(cardList[i]);
 		id 		= cardList[i].id;
 		name 		= cardList[i].name;
 		description = cardList[i].description;
@@ -34,8 +31,6 @@ function setCardlistValues(cardList){
 		$("#card-list").append(str);
 	}
 }
-
-
 
 $(function () {  
 	/* this is the *$( document ).ready(function( $ ) but jshint does not like that*/

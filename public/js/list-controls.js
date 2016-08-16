@@ -4,9 +4,7 @@ var SERVER;
 function getUserControlList(){
 	var url = SERVER+'/controls/control-list';
 		var request = $.get(url);
-	console.log('getUserControlList url : ' + url);
 	request.done(function( data ) {
-		console.log(data);
 		setControllistValues(data);
 		}).fail(function( data ) {
 			if (data.status===401){
@@ -25,7 +23,6 @@ function createListItem(name, description, url){
 function setControllistValues(controlList){
 	var id, name, description;
 	for(var i = 0; i < controlList.length; i++){
-		console.log(controlList[i]);
 		id 		= controlList[i].id;
 		name 		= controlList[i].name;
 		description = controlList[i].description;

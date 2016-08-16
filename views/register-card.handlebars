@@ -6,12 +6,17 @@
         <div class="alert alert-danger">{{msg}}</div>
       {{/each}}
 {{/if}}
+{{#if item}}
+			<div id='item' data-card='{{{item}}}' />
+{{/if}}
 <form  method="post" id="card-form">
 	<div class="row row-padd">
 		<h4 class="text-left">Name</h4>
-				<p>Give the card a desciptive name, but not to long.</p>
-		<input type="text" class="form-control" id="name" name="name" value="Garage lights">
-		<input type="hidden" id="code" name="code" value="">
+			<p>Give the card a desciptive name, but not to long.</p>
+		<input type="text"   id="name"     name="name" class="form-control" value="" placeholder="Name of your card">
+		<input type="hidden" id="id"       name="id" value="">
+		<input type="hidden" id="code"     name="code" value="">
+		
 	</div>
 
 	<div class="form-horizontal">
@@ -20,10 +25,7 @@
 		<div class="form-group">
 			
 			<div class="col-md-12">
-				<textarea id="description" name="description" form="card-form" class="form-control" rows="3" placeholder="Descripe your device, where is it, what does it control.  Is it dangerous?">
-	This card controls a device of the type ESP8266 which is located in my garage.
-	You can control the brightness of nine lights connected to the device. 
-				</textarea>
+				<textarea id="description" name="description" form="card-form" class="form-control" rows="3" placeholder="Descripe your card, and what you can do with it."></textarea>
 			</div>
 		</div>
 	</div>
@@ -31,85 +33,7 @@
 		<h4 class="text-left">Card Control</h4>
 		<p>Here you need to insert the JavaScript code for your card.</p>
 		<div class="acediv">
-			<div id="editor-js-card"
-	>var device;
-
-	function updateView( pinValues ) {
-			for(var i = 0; i &lt;pinValues.length;i++){
-				device.get(pinValues[i].pin).setValue(pinValues[i].val);			
-			} // for
-	}
-
-	function onClickCAllback(obj){
-		console.log('onClickCAllback');
-		var pin = obj.pinObject;
-		var value = obj.getPinValue();
-		pin.active(false);
-		var sendObj = {};
-		sendObj[pin.getNumber()] = value;
-		var SERVERURL = pin.host;
-		var posting = $.post( SERVERURL+'/pins', sendObj);
-		posting.done(function(data){
-			updateView(data.pins);
-		});
-	}
-
-	function fetchPinValues(){
-		console.log('fetchPinVaues');
-		var posting = $.get( pins.host+'/pins');
-		posting.done(function(data){
-			updateView(data.pins);
-		})
-		.fail(function(data){
-			console.log('fetchPinValues::fail');
-		})
-		.always(function(data){
-			console.log('fetchPinValues::always');
-		});
-	}
-
-	var setupAppPins = function setupAppPins(){
-		var pin, d,s, i=0, offsetX=0, baseX=40, offsetY=0;
-		if (device.isFirefox()){
-			offsetX=43;
-			offsetY=-23;
-		}
-
-		for(var x = 0; x  &lt; device.pins.length; x++) {
-			
-			pin = device.pins[x];
-			d = new DiodeCtrl(baseX+i,0,pin);
-			s = new SliderCtrl(baseX+i-(32+offsetX), 75+offsetY, pin);
-			i = i + 25;
-			s.rotate(270);
-			s.scale(0.7);
-			pin.registerClicks(onClickCAllback);
-		}
-	};
-
-	var setupFailed = function setupFailed(data){
-		console.log('Setup failed');
-		console.log(data);
-	};
-
-	//to run javascript stored in a string
-	function runCodeString(str){
-		var F = new Function(str);
-		return(F());
-	}
-
-	function onLoad(){
-
-		var svg = new SvgCtrl('backImage', 25,-20, 400, 300);
-		var maxValue = 1024;
-		device = new Device('http://192.168.1.151:5100', 1023);
-		
-		device.fetchAllPins(setupAppPins, setupFailed);
-	
-		svg.addItem('rect',{x:2, y:2, width:250, height:165, rx:10, ry:10,
-		style:'fill:gray;stroke:gray;stroke-width:1;fill-opacity:0.1;stroke-opacity:0.9'});
-	}
-
+			<div id="editor-js-card">
 			</div>
 		</div>
 	</div>
@@ -117,6 +41,7 @@
 <div class="row  row-padd">
 	<button id="btnSaveCard" type="button" class="btn btn-success pull-right">Save Card</button>
 </div>
+
 <script src="/ace-builds/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
 <script src="/js/acecode.js" type="text/javascript" charset="utf-8"></script>
 <script src="/js/bootstrap.min.js"></script>	

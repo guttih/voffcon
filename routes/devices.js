@@ -166,24 +166,6 @@ router.get('/list', lib.authenticateRequest, function(req, res){
 			arr:["This is a string one", "this is string two"]
 		}
 	};
-/*
-	var newCard = new Card({
-			name: "test-card",
-			description:"This card is created for testing porpouses",
-			data:data,
-			owners:[],
-			users:[]
-			
-		});
-		newCard.owners.push(req.user._id);
-		Card.createCard(newCard, function(err, newCard){
-			if(err) {throw err;}
-			console.log("created a new Card");
-			console.log(newCard);
-		});
-*/
-
-
 	
 });
 module.exports = router;

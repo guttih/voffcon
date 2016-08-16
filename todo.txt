@@ -1,8 +1,6 @@
-Copera register/:ControlID yfir í register/:CardID
-og gera eins
-
 Svo þarf að vera hægt að breyta levelum usera og sá sem á að geta það er admin
 
-Það þarf að vera hægt að eyða card, og control
+Það þarf að vera hægt að eyða card, control og user
 
-list devices
+hvað á að gera við devices?
+	list og edit devices?

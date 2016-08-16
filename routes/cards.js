@@ -57,6 +57,35 @@ router.get('/list', lib.authenticateUrl, function(req, res){
 	res.render('list-card');
 });
 
+/*listing all devices and return them as a json array*/
+router.get('/card-list', lib.authenticateRequest, function(req, res){
+	Card.listByOwnerId(req.user._id, function(err, cardList){
+		
+		var arr = [];
+		for(var i = 0; i < cardList.length; i++){
+					arr.push({	name:cardList[i].name, 
+								description:cardList[i].description,
+								id:cardList[i]._id});
+		}
+		res.json(arr);
+	});
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

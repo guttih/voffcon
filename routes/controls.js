@@ -18,7 +18,7 @@ router.get('/register', lib.authenticatePowerUrl, function(req, res){
 router.get('/register/:controlID', lib.authenticatePowerUrl, function(req, res){
 	var id = req.params.controlID;
 	if (id !== undefined){
-		Control.getControlById(id, function(err, control){
+		Control.getById(id, function(err, control){
 				if(err || control === null) {
 					req.flash('error',	'Could not find control.' );
 					res.redirect('/result');
@@ -41,7 +41,10 @@ router.post('/register', lib.authenticatePowerRequest, function(req, res){
 	req.checkBody('template', 'a html template is required').notEmpty();
 	req.checkBody('code', 'javascript code is required').notEmpty();
 	var errors = req.validationErrors();
-
+	if (req.body.id.length > 0 )
+	{
+		var controlID = req.body.id;
+	}
 	if(errors){
 		//todo: user must type all already typed values again, fix that
 		res.render('register-control',{errors:errors	});
@@ -55,7 +58,7 @@ router.post('/register', lib.authenticatePowerRequest, function(req, res){
 			});
 			newControl.owners.push(req.user._id);
 			//todo: update if control already exists
-			Control.createControl(newControl, function(err, control){
+			Control.create(newControl, function(err, control){
 				if(err) {throw err;}
 				console.log("control created:");
 				console.log(control);
@@ -69,13 +72,49 @@ router.post('/register', lib.authenticatePowerRequest, function(req, res){
 	}
 });
 
+router.post('/register/:controlID', lib.authenticatePowerRequest, function(req, res){
+	var id = req.params.controlID;
+	req.checkBody('name', 'Name is required').notEmpty();
+	req.checkBody('description', 'description is required').notEmpty();
+	req.checkBody('template', 'a html template is required').notEmpty();
+	req.checkBody('code', 'javascript code is required').notEmpty();
+	var errors = req.validationErrors();
+
+	if(errors){
+		//todo: user must type all already typed values again, fix that
+		res.render('register-control',{errors:errors	});
+	} else {
+				var values = {
+					name		: req.body.name,
+					description : req.body.description,
+					template	: req.body.template,
+					code		: req.body.code
+				};
+				Control.modify(id, values, function(err, result){
+					if(err || result === null || result.ok !== 1) {//(result.ok===1 result.nModified===1)
+						//res.send('Error 404 : Not found or unable to update! ');
+							req.flash('error',	' unable to update' );
+					} else{
+							if (result.nModified === 0){
+								req.flash('success_msg',	'Control is unchanged!' );
+							} else {
+								req.flash('success_msg',	'Control updated!' );
+							}
+					}
+					res.redirect('/result');
+				});
+			
+	}
+});
+
+
 router.get('/list', lib.authenticateUrl, function(req, res){
 	res.render('list-control');
 });
 
 /*listing all devices and return them as a json array*/
 router.get('/control-list', lib.authenticateRequest, function(req, res){
-	Control.listControlsByOwnerId(req.user._id, function(err, controlList){
+	Control.listByOwnerId(req.user._id, function(err, controlList){
 		
 		var arr = [];
 		for(var i = 0; i < controlList.length; i++){
@@ -89,7 +128,7 @@ router.get('/control-list', lib.authenticateRequest, function(req, res){
 router.get('/item/:controlID', lib.authenticateRequest, function(req, res){
 	var id = req.params.controlID;
 	if (id !== undefined){
-		Control.getControlById(id, function(err, control){
+		Control.getById(id, function(err, control){
 				if(err || control === null) {
 					res.send('Error 404 : Not found! ');
 				} else{
@@ -98,15 +137,6 @@ router.get('/item/:controlID', lib.authenticateRequest, function(req, res){
 			});
 		
 	}
-	/*Control.listControlsByOwnerId(req.user._id, function(err, controlList){
-		
-		var arr = [];
-		for(var i = 0; i < controlList.length; i++){
-					arr.push({	name:controlList[i].name, 
-								description:controlList[i].description,
-								id:controlList[i]._id});
-		}
-		res.json(arr);
-	});*/
+
 });
 module.exports = router;

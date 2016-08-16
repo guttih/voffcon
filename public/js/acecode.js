@@ -7,7 +7,7 @@ var	SERVER,
 function initEditor(editorId, mode, theme, strValue){
 	//https://ace.c9.io/build/kitchen-sink.html
 	// https://github.com/ajaxorg/ace/wiki/Configuring-Ace
-element = document.getElementById(editorId);
+	element = document.getElementById(editorId);
 if (element === null){ return;}
 var edi = ace.edit(editorId);
 	if (edi === undefined){
@@ -43,6 +43,11 @@ function updateEditState(text, buttonID){
 		}
 }
 function saveControl(){
+
+	var controlID = $( '#item' ).data( 'control' );
+	if (controlID !== undefined){
+		document.getElementById('id').value = controlID.id;
+	}
 	
 	var strCode = editJsCtrl.getValue();
 		var strHtml = editHtmlCtrl.getValue();
@@ -96,7 +101,7 @@ function aceInit(){
 		.change(function(){  updateEditState($.trim($(this).val()), buttonID);	});
 	$('#description')
 		.keyup(function() {  updateEditState($.trim($(this).val()), buttonID);	})
-		.change(function(){  updateEditState($.trim($(this).val())), buttonID;	});
+		.change(function(){  updateEditState($.trim($(this).val()), buttonID);	});
 	
 	if (editHtmlCtrl !== undefined){
 		editHtmlCtrl.getSession().on('change', function() {

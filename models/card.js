@@ -23,28 +23,6 @@ var CardSchema = mongoose.Schema({
 	 users: [{ObjectId}]
 });
 
-/*
-var newCard = {
-
-	name:"test card",
-	description::"information about the card",
-	owners: [],
-	 users: [],
-	elements: [	{
-						id:"aLongNumberWichIsTheIdOfTheElement",
-						
-						values:[
-									{pinNumber:5},
-									{pinValue:0},
-									{pinValue:'100px'},
-									{top:'10px'},
-									{left:'100px'}
-								]
-					}
-	]
-}
-*/
-
 var Card = module.exports = mongoose.model('Card', CardSchema);
 
 /*
@@ -64,8 +42,13 @@ module.exports.getCardById = function(id, callback){
 	Card.findById(id, callback);
 };
 
-module.exports.listCardsByUserId = function (id, callback){
-	var query = {users:{$elemMatch: { _id:id }}};
+module.exports.listCardsByUserId = function (userId, callback){
+	var query = {users:{$elemMatch: { _id:userId }}};
+	Card.find(query, callback);
+};
+
+module.exports.listByOwnerId = function (userId, callback){
+	var query = {owners:{$elemMatch: { _id:userId }}};
 	Card.find(query, callback);
 };
 /*if you only want users to get cards that they have access to, use this function*/

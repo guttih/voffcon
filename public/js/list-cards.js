@@ -1,13 +1,13 @@
-/*client javascript file for the list-control page*/
+/*client javascript file for the list-card page*/
 var SERVER;
 
-function getUserControlList(){
-	var url = SERVER+'/controls/control-list';
+function getUserCardList(){
+	var url = SERVER+'/cards/card-list';
 		var request = $.get(url);
-	console.log('getUserControlList url : ' + url);
+	console.log('getUserCardList url : ' + url);
 	request.done(function( data ) {
 		console.log(data);
-		setControllistValues(data);
+		setCardlistValues(data);
 		}).fail(function( data ) {
 			if (data.status===401){
 				showModal("You need to be logged in!", data.responseText);
@@ -22,16 +22,16 @@ function createListItem(name, description, url){
 				"</a>";
 	return strElm; 
 }
-function setControllistValues(controlList){
+function setCardlistValues(cardList){
 	var id, name, description;
-	for(var i = 0; i < controlList.length; i++){
-		console.log(controlList[i]);
-		id 		= controlList[i].id;
-		name 		= controlList[i].name;
-		description = controlList[i].description;
+	for(var i = 0; i < cardList.length; i++){
+		console.log(cardList[i]);
+		id 		= cardList[i].id;
+		name 		= cardList[i].name;
+		description = cardList[i].description;
 		
-		var str =  createListItem(name, description, SERVER+'/controls/register/'+ id);
-		$("#control-list").append(str);
+		var str =  createListItem(name, description, SERVER+'/cards/register/'+ id);
+		$("#card-list").append(str);
 	}
 }
 
@@ -41,5 +41,5 @@ $(function () {
 	/* this is the *$( document ).ready(function( $ ) but jshint does not like that*/
 	SERVER = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ':'+window.location.port: '');
 	
-	getUserControlList();
+	getUserCardList();
 });

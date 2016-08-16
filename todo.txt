@@ -1,5 +1,5 @@
-Búa til modify function fyrir model object
-	C:\git\ardos\models\control.js
-		users ætti að vera owners
+Copera register/:ControlID yfir í register/:CardID
+og gera eins
 
+Svo þarf að vera hægt að breyta levelum usera og sá sem á að geta það er admin
 

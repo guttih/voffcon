@@ -104,3 +104,10 @@ footer{
     margin-right: 0px;
     height       : 1px;
 }
+/*
+.list-group-item > span > a{
+  margin-right:8px;
+}*/
+.list-group-item > span > button{
+  margin-left:9px;
+}

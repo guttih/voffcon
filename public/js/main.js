@@ -122,6 +122,45 @@ function showModal(title, message){
 	$('#myModal').modal('show');
 }
 
+/*routeText is the element type to be deleted 'cards', 'controls' or 'devices'*/
+function createListItem(id, name, description, routeText, bAddRunButton){
+	var url = SERVER+'/'+ routeText +'/register/'+ id;
+	var strElm = 
+'<div id="listItem'+ id +'" class="list-group-item clearfix">' +
+	'<h5 class="list-group-item-heading">' + name + '</h5>' +
+	description +
+	'<span class="pull-right">' +
+	'<a href="'+ url +'" class="btn btn-xs btn-success"> <span class="glyphicon glyphicon-edit"></span>&nbsp;Edit </a>';
+	if (bAddRunButton){
+		strElm +='<button onclick="runItem(\''+id+'\');" class="btn btn-xs btn-success"> <span class="glyphicon glyphicon-play"></span>&nbsp;Run </button>';
+	}
+	 strElm +='<button onclick="deleteItem(\''+ routeText +'\', \''+id+'\');" class="btn btn-xs btn-danger"> <span class="glyphicon glyphicon-trash"></span> Delete </button>' +
+	'</span>' +'</div>';
+
+	return strElm; 
+}
+
+/*routeText is the element type to be deleted 'cards', 'controls' or 'devices'*/
+function deleteItem(routeText, id){
+	var url = SERVER+'/'+ routeText +'/'+id;
+	$.ajax({
+		url: url,
+		type: 'DELETE',
+		success: function(data) {
+			console.log("delete responce.");
+			console.log(data);
+			console.log('todo: onDeleted remove this item from the dom list' );
+			
+			$('#listItem'+ id).remove();
+		},
+		error: function (res){
+			console.log(res);
+			showModal('Error when deleting',	
+					res.responseText + '   (' + res.status + ': ' + res.statusText+')');
+		}
+	});
+}
+
 $(function () {  
 	/* this is the *$( document ).ready(function( $ ) but jshint does not like that*/
 	var SERVER = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ':'+window.location.port: '');

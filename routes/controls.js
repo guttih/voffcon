@@ -68,7 +68,7 @@ router.post('/register', lib.authenticatePowerRequest, function(req, res){
 										newControl._doc.name + ' control' );
 			//todo: redirect to what?
 			
-			res.redirect('/result');
+			res.redirect('/controls/list');
 	}
 });
 
@@ -101,12 +101,23 @@ router.post('/register/:controlID', lib.authenticatePowerRequest, function(req, 
 								req.flash('success_msg',	'Control updated!' );
 							}
 					}
-					res.redirect('/result');
+					res.redirect('/controls/list');
 				});
 			
 	}
 });
 
+router.delete('/:controlID', lib.authenticatePowerRequest, function(req, res){
+	var id = req.params.controlID;
+	Control.delete(id, function(err, result){
+		if(err !== null){
+			res.status(404).send('unable to delete control "' + id + '".');
+		} else {
+			res.status(200).send('Control deleted.');
+		}
+	});
+	
+});
 
 router.get('/list', lib.authenticateUrl, function(req, res){
 	res.render('list-control');

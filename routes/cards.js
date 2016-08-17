@@ -63,7 +63,7 @@ router.post('/register', lib.authenticatePowerRequest, function(req, res){
 			req.flash('success_msg',	'You successfully created the ' + 
 										newCard._doc.name + ' card' );
 			//todo: redirect to what?
-			res.redirect('/result');
+			res.redirect('/cards/list');
 	}
 });
 
@@ -95,10 +95,22 @@ router.post('/register/:cardID', lib.authenticatePowerRequest, function(req, res
 								req.flash('success_msg',	'Card updated!' );
 							}
 					}
-					res.redirect('/result');
+					res.redirect('/cards/list');
 				});
 			
 	}
+});
+
+router.delete('/:cardID', lib.authenticatePowerRequest, function(req, res){
+	var id = req.params.cardID;
+	Card.delete(id, function(err, result){
+		if(err !== null){
+			res.status(404).send('unable to delete card "' + id + '".');
+		} else {
+			res.status(200).send('Card deleted.');
+		}
+	});
+	
 });
 
 

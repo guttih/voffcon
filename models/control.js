@@ -56,6 +56,11 @@ module.exports.modify = function (id, newValues, callback){
 	Control.update({_id: id}, val, callback);
 };
 
+module.exports.delete = function (id, callback){
+	
+	Control.findByIdAndRemove(id, callback);
+};
+
 //get all controls owned by the given user
 module.exports.listByOwnerId = function (userId, callback){
 	var query = {owners:{$elemMatch: { _id:userId }}};

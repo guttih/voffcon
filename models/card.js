@@ -48,6 +48,11 @@ module.exports.modify = function (id, newValues, callback){
 	Card.update({_id: id}, val, callback);
 };
 
+module.exports.delete = function (id, callback){
+	
+	Card.findByIdAndRemove(id, callback);
+};
+
 module.exports.listByUserId = function (userId, callback){
 	var query = {users:{$elemMatch: { _id:userId }}};
 	Card.find(query, callback);

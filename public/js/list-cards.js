@@ -12,14 +12,13 @@ function getUserCardList(){
 			}
 		});
 }
-function createListItem(name, description, url){
-	var strElm;
-	strElm =	'<a href="'+ url +'" class="list-group-item list-group-item-action">\n' + 
-				'<h5 class="list-group-item-heading">' + name + '</h5>' +
-				'<p class="list-group-item-text">'+ description +'.</p>' +
-				"</a>";
-	return strElm; 
+
+
+function runItem(id){
+	console.log('todo: run this item : ' + id);
 }
+
+
 function setCardlistValues(cardList){
 	var id, name, description;
 	for(var i = 0; i < cardList.length; i++){
@@ -27,7 +26,7 @@ function setCardlistValues(cardList){
 		name 		= cardList[i].name;
 		description = cardList[i].description;
 		
-		var str =  createListItem(name, description, SERVER+'/cards/register/'+ id);
+		var str =  createListItem(id, name, description, 'cards', true);
 		$("#card-list").append(str);
 	}
 }
@@ -37,4 +36,5 @@ $(function () {
 	SERVER = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ':'+window.location.port: '');
 	
 	getUserCardList();
+	
 });

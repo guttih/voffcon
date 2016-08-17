@@ -57,7 +57,7 @@ module.exports.getUserByUsername = function(username, callback){
 	User.findOne(query, callback);
 };
 
-module.exports.getUserById = function(id, callback){
+module.exports.getById = function(id, callback){
 	User.findById(id, callback);
 };
 
@@ -70,4 +70,10 @@ module.exports.comparePassword = function(candidatePassword, hash, callback){
 };
 module.exports.count = function(id, callback){
 	User.count();
+};
+
+//get all users
+module.exports.list = function (callback){
+	var query = {};
+	User.find(query, callback);
 };

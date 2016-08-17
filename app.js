@@ -108,6 +108,9 @@ res.locals.user = req.user || null;
 if(res.locals.user && res.locals.user._doc.level > 0){
 			res.locals.power_user = req.user;
 }
+if(res.locals.user && res.locals.user._doc.level > 1){
+			res.locals.admin = req.user;
+}
 
 res.locals.modal_msg = req.flash('modal_msg');
 res.locals.modal_header_msg = req.flash('modal_header_msg');

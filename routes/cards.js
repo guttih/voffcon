@@ -114,7 +114,7 @@ router.delete('/:cardID', lib.authenticatePowerRequest, function(req, res){
 });
 
 
-
+/*render a page with list of users*/
 router.get('/list', lib.authenticateUrl, function(req, res){
 	res.render('list-card');
 });

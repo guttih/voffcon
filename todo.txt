@@ -1,6 +1,22 @@
+búa til í users.js 
+	router.post('/register/:userID',
+
+en hér verðum við að vara okkur
+loggaður inn user má breyta sínum gildum en engum öðrum nema hann sé poweruser
+password þarf að skoða vel, 
+ef á að updata level þá bara breyta level eigindi engu öðrum 
+
+
+
+
+
 Svo þarf að vera hægt að breyta levelum usera og sá sem á að geta það er admin
 
-Það þarf að vera hægt að eyða card, control og user
+Það þarf að vera hægt að eyða user
+user edit, delete
+
+
 
 hvað á að gera við devices?
-	list og edit devices?
+	list, edit delete devices?
+	þarf ekki að vera hægt að test devices?

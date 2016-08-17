@@ -6,26 +6,35 @@
         <div class="alert alert-danger">{{msg}}</div>
       {{/each}}
 {{/if}}
-<form method="post" action="/users/register">
+{{#if item}} <!-- if you want to edit a specific user -->
+			<div id='item' data-user='{{{item}}}' />
+{{/if}}
+<form id ="user-form" method="post" action="/users/register">
    <div class="form-group">
     <label>Name</label>
-    <input type="text" class="form-control" placeholder="Name" name="name">
+    <input type="text" class="form-control" placeholder="Name" id="name" name="name">
+     <input type="hidden"                                      id="id"   name="id" value="">
   </div>
   <div class="form-group">
     <label>Username</label>
-    <input type="text" class="form-control" placeholder="Username" name="username">
+    <input type="text" class="form-control" placeholder="Username" id="username" name="username">
   </div>
    <div class="form-group">
     <label>Email</label>
-    <input type="email" class="form-control" placeholder="Email" name="email">
+    <input type="email" class="form-control" placeholder="Email" id="email" name="email">
   </div>
   <div class="form-group">
     <label>Password</label>
-    <input type="password" class="form-control" placeholder="Password" name="password">
+    <input type="password" class="form-control" placeholder="Password" id="password" name="password">
   </div>
   <div class="form-group">
     <label>Confirm Password</label>
-    <input type="password" class="form-control" placeholder="Password" name="password2">
+    <input type="password" class="form-control" placeholder="Password" id="password2" name="password2">
   </div>
-  <button type="submit" class="btn btn-default">Submit</button>
+  <!--<button type="submit" class="btn btn-success">Submit</button>-->
 </form>
+  <div class="row  row-padd">
+	  <button id="btnSaveUser" type="button" class="btn btn-success pull-right">Save Card</button>
+</div>
+
+<script src="/js/register-user.js" type="text/javascript" charset="utf-8"></script>

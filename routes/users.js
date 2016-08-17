@@ -92,7 +92,7 @@ passport.serializeUser(function(user, done) {
 });
 
 passport.deserializeUser(function(id, done) {
-  User.getUserById(id, function(err, user) {
+  User.getById(id, function(err, user) {
     done(err, user);
   });
 });
@@ -111,6 +111,73 @@ router.get('/logout', function(req, res){
 	res.redirect('/users/login');
 });
 
+router.get('/list', lib.authenticateUrl, function(req, res){
+	res.render('list-user');
+});
 
+/*listing all devices and return them as a json array*/
+router.get('/user-list', lib.authenticateRequest, function(req, res){
+	User.list(function(err, userList){
+		var strDescription, strLevel;
+		var arr = [];
+		for(var i = 0; i < userList.length; i++){
+
+			
+		switch (userList[i].level) {
+			case 0:
+				strLevel = "normal user";
+				break;
+			case 1:
+				strLevel = "power user";
+				break;
+			default: 
+				strLevel = "administrator";
+			}
+
+			strDescription = 'User ' + userList[i].username + 
+							' is a <b>' + strLevel + 
+							 '</b>.  email:' + userList[i].email;
+
+					arr.push({	name:userList[i].name, 
+								description:strDescription,
+								id:userList[i]._id,
+								username:userList[i].username,
+								email: userList[i].email,
+								level:userList[i].level
+							});
+		}
+		res.json(arr);
+	});
+});
+
+router.get('/register/:userID', lib.authenticatePowerUrl, function(req, res){
+	var id = req.params.userID;
+	if (id !== undefined){
+		User.getById(id, function(err, user){
+				if(err || user === null) {
+					req.flash('error',	'Could not find user.' );
+					res.redirect('/result');
+				} else{
+					var obj = {id : id,
+						name: user.name};
+					var str = JSON.stringify(obj);
+					res.render('register-user', {item:str});
+				}
+			});
+	}
+});
+
+router.get('/item/:userID', lib.authenticateRequest, function(req, res){
+	var id = req.params.userID;
+	if (id !== undefined){
+		User.getById(id, function(err, user){
+				if(err || user === null) {
+					res.send('Error 404 : Not found! ');
+				} else{
+					res.json(user);
+				}
+			});
+	}
+});
 
 module.exports = router;

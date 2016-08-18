@@ -72,8 +72,26 @@ module.exports.count = function(id, callback){
 	User.count();
 };
 
+
+
 //get all users
 module.exports.list = function (callback){
 	var query = {};
 	User.find(query, callback);
+};
+
+module.exports.modify = function (id, newValues, callback){
+	if (newValues.password !== undefined){
+		//we need to encrypt the password
+		bcrypt.genSalt(10, function(err, salt) {
+			bcrypt.hash(newUser.password, salt, function(err, hash) {
+				newValues.password = hash;
+				var val = {$set: newValues};
+				User.update({_id: id}, val, callback);
+			});
+		});
+	} else {
+		var val = {$set: newValues};
+		User.update({_id: id}, val, callback);
+	}
 };

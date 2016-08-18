@@ -1,38 +1,55 @@
 var	SERVER,
 	checkTimer;
 
-
-function updateEditState(text, buttonID){
+function updateEditState(id, text, buttonID){
 	if ( text === undefined || text === ""){
-			$('#' + buttonID).prop('disabled', true);
+		if ( isEditMode() && (id === 'password' ||id === 'password2') ){
+				//we are in edit mode then the passwords just need to match
+				//todo: simplify these ifs
+			var passwordsDoNotMatch = ( $('#password').val() !== $('#password2').val() );
+			if (passwordsDoNotMatch){
+				setSaveButtonState(buttonID, passwordsDoNotMatch, "passwords do not match");
+			} else{ 
+				updateSaveButtonState(buttonID);
+			}
 		}
-		else{
-			updateSaveButtonState(buttonID);
+		else {
+			setSaveButtonState(buttonID, true, id + " is missing!");
 		}
+	} else {
+		updateSaveButtonState(buttonID);
+	}
+}
+
+//returns true if we are in edit mode otherwise false;
+function isEditMode(){
+	if ($( '#item' ).data( 'user' ) !== undefined){ 
+		return true;
+	}
+	return false;
 }
 
 function saveUser(){
-
-	
-	
-	
-
-	var sendObj = {
+	var user = $( '#item' ).data( 'user' );
+	if (user !== undefined){ /*we are in editmode*/
+		document.getElementById('id').value = user.id;
+		//this triggers post route on server "users/register/:userID"
+	}
+	/*var sendObj = {
 			id			: $('#id').val(),
 			name		: $('#name').val(),
 			username	: $('#username').val(),
 			email		: $('#email').val(),
-			password	: $('#password').val()
-		};
-	
-	console.log('document.getElementById("user-form").submit();');
-
+			password	: $('#password').val(),
+			password2	: $('#password2').val()
+		};*/
+	document.getElementById("user-form").submit();
 }
 function registerUserInput($el){
 	var buttonID = 'btnSaveUser';
 	$el
-		.keyup(function() {  updateEditState($.trim($(this).val()), buttonID);  })
-		.change(function(){  updateEditState($.trim($(this).val()), buttonID);	});
+		.keyup(function() {  updateEditState(this.id, $.trim($(this).val()), buttonID);  })
+		.change(function(){  updateEditState(this.id, $.trim($(this).val()), buttonID);	});
 }
 function init(){
 	var buttonID = 'btnSaveUser';
@@ -40,6 +57,7 @@ function init(){
 	$('#btnSaveUser').click(function() {
 		saveUser();
 	});
+	$("#div-level").hide();
 	
 	//registering change events from user input
 	/*$('#name')
@@ -61,16 +79,34 @@ function updateSaveButtonState(buttonID){
 	}, 300);
 }
 
-function updateSaveButtonStateHelper(buttonID){
+function setSaveButtonState(buttonID, shallDisable, strResonForDisabling){
+	$( '#'+buttonID).prop('disabled', shallDisable);
+	if (shallDisable){
 		
-	var selectBtn = '#'+buttonID;
-	if ($("#name").val()      === ""){ $(selectBtn).prop('disabled', true);  return;	}
-	if ($("#username").val()  === ""){ $(selectBtn).prop('disabled', true);  return;	}
-	if ($("#email").val()     === ""){ $(selectBtn).prop('disabled', true);  return;	}
-	if ($("#password").val()  === ""){  $(selectBtn).prop('disabled', true);  return;	}
-	if ($("#password2").val() === ""){  $(selectBtn).prop('disabled', true);  return;	}
+		$( '#error-text > span').text(strResonForDisabling);
+		$( '#error-text').show();
+	} else{
+		$( '#error-text').hide();
+	}
 	
-	$(selectBtn).prop('disabled', false);
+}
+
+function updateSaveButtonStateHelper(buttonID){
+	setSaveButtonState(buttonID, true, "strResonForDisabling");
+	var selectBtn = '#'+buttonID;
+	if ($("#name").val()      === ""){         setSaveButtonState(buttonID, true, "name is missing");  return;	}
+	if ($("#username").val()  === ""){         setSaveButtonState(buttonID, true, "username is missing");  return;	}
+	if ($("#email").val()     === ""){         setSaveButtonState(buttonID, true, "email is missing");   return;	}
+	if (!isEditMode()){
+		if ($("#password").val()  === ""){     setSaveButtonState(buttonID, true, "password is missing");   return;	}
+		if ($("#password2").val()     === ""){ setSaveButtonState(buttonID, true, "confirm password is missing");   return;	}
+	}
+	var passwordsDoNotMatch = ( $('#password').val() !== $('#password2').val() );
+	
+
+	setSaveButtonState(buttonID, passwordsDoNotMatch, "passwords do not match");
+	
+	
 }
 
 function setUserValues(item){
@@ -78,6 +114,16 @@ function setUserValues(item){
 	$('#name').val(item.name);
 	$('#username').val(item.username);
 	$('#email').val(item.email);
+	$("#level").val(item.level);
+	if (item.currentUserLevel > 1){
+		$("#div-level").show();
+	} else {
+		$("#div-level").hide();
+	}
+	//this triggers post route on server "users/register/:userID"
+	document.getElementById('id').value = item.id;
+		
+	
 }
 
 function getUser(id){
@@ -102,5 +148,5 @@ $(function () {
 	var user    = $( '#item' ).data('user');
 	
 	if (user !== undefined){ getUser(user.id);	}
-
+	updateSaveButtonState('btnSaveUser');
 });

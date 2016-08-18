@@ -1,16 +1,15 @@
-búa til í users.js 
-	router.post('/register/:userID',
+
+það þarf að vera hægt að eyða user.
+
+	
+það þarf að búa til change profile... sem er register  user fyrir innloggaðann user
 
 en hér verðum við að vara okkur
-loggaður inn user má breyta sínum gildum en engum öðrum nema hann sé poweruser
-password þarf að skoða vel, 
-ef á að updata level þá bara breyta level eigindi engu öðrum 
+	loggaður inn user má breyta sínum gildum en engum öðrum nema hann sé admin
+	update á level má bara gera ef innloggaður user er administrator
+	ef á að updata level þá bara breyta level eigindi engu öðrum 
 
 
-
-
-
-Svo þarf að vera hægt að breyta levelum usera og sá sem á að geta það er admin
 
 Það þarf að vera hægt að eyða user
 user edit, delete
@@ -20,3 +19,6 @@ user edit, delete
 hvað á að gera við devices?
 	list, edit delete devices?
 	þarf ekki að vera hægt að test devices?
+
+hverjir mega registra sig...
+á að bjóða uppá að jón jónsson út í bæ fái að registera sig, held ekki

@@ -68,6 +68,53 @@ router.post('/register', function(req, res){
 	}
 });
 
+//todo: only a authenticateAdminRequest
+router.post('/register/:userID', lib.authenticateAdminRequest, function(req, res){
+	//user modify
+	var id = req.params.userID;
+	var password = req.body.password;
+
+	req.checkBody('name', 'Name is required').notEmpty();
+	req.checkBody('email', 'Email is required').notEmpty();
+	req.checkBody('email', 'Email is not valid').isEmail();
+	req.checkBody('username', 'Username is required').notEmpty();
+	req.checkBody('level', 'level is required').notEmpty();
+	if (password !== undefined && password.length > 0 ){
+		req.checkBody('password', 'Password is required').notEmpty();
+		req.checkBody('password2', 'Passwords do not match').equals(req.body.password);
+	}
+	var errors = req.validationErrors();
+
+	if(errors){
+		//todo: user must type all already typed values again, fix that
+		res.render('register-user',{errors:errors	});
+	} else {
+		var values = {
+				name     : req.body.name,
+				email    : req.body.email,
+				username : req.body.username,
+				level : req.body.level
+			};
+		
+		if (password !== undefined && password.length > 0 ){
+			values['password'] = req.body.password;
+		}
+		User.modify(id, values, function(err, result){
+			if(err || result === null || result.ok !== 1) {
+					req.flash('error',	' unable to update' );
+			} else{
+					if (result.nModified === 0){
+						req.flash('success_msg',	'User is unchanged!' );
+					} else {
+						req.flash('success_msg',	'User updated!' );
+					}
+			}
+			res.redirect('/users/list');
+		});
+			
+	}
+});
+
 passport.use(new LocalStrategy(
   function(username, password, done) {
    User.getUserByUsername(username, function(err, user){
@@ -174,6 +221,10 @@ router.get('/item/:userID', lib.authenticateRequest, function(req, res){
 				if(err || user === null) {
 					res.send('Error 404 : Not found! ');
 				} else{
+					if (res.locals.user._doc.level > 1){
+						//current user is a poweruser so let's tell the client script that
+						user._doc.currentUserLevel = res.locals.user._doc.level;
+					}
 					res.json(user);
 				}
 			});

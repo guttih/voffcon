@@ -34,7 +34,7 @@ function initEditorText(editorId, strText){
 		showPrintMargin		: false
 	});
 }
-function updateEditState(text, buttonID){
+function updateEditState($elm, text, buttonID){
 	if ( text === undefined || text === ""){
 			$('#' + buttonID).prop('disabled', true);
 		}

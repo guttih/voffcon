@@ -15,6 +15,9 @@ router.get('/', lib.authenticateUrl, function(req, res){
 	res.render('device');/*this is the views/device.handlebars*/
 });
 
+router.get('/register', lib.authenticateUrl, function(req, res){
+			res.render('register-user');
+});
 
 // Get started time from a device
 router.get('/started/:deviceId', lib.authenticateRequest, function(req, res){

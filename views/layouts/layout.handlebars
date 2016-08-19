@@ -17,6 +17,7 @@
 		<ul class="nav nav-pills pull-right">
 		{{#if user}}
 			<li role="presentation"><a href="/">Dashboard</a></li>
+			
 		{{/if}}
 		{{#if admin}}
 			<li class="dropdown">
@@ -52,6 +53,7 @@
 		{{/if}}
 		{{#if user}}
 			<li role="presentation"><a href="/users/logout">Logout</a></li>
+			<li role="presentation"><a href="/users/register/{{user._id}}">Profile</a></li>
 		{{else}}
 			<li role="presentation"><a href="/users/login">Login</a></li>
 			<li role="presentation"><a href="/users/register">Register</a></li>

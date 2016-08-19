@@ -69,6 +69,7 @@ router.post('/register', function(req, res){
 });
 
 //todo: only a authenticateAdminRequest
+//todo: user change profile
 router.post('/register/:userID', lib.authenticateAdminRequest, function(req, res){
 	//user modify
 	var id = req.params.userID;
@@ -114,6 +115,55 @@ router.post('/register/:userID', lib.authenticateAdminRequest, function(req, res
 			
 	}
 });
+
+router.post('/profile/:userID', lib.authenticateRequest, function(req, res){
+	var id = req.params.userID;
+	if (id !== res.locals.user._doc._id ){
+		req.flash('error',	'you can only modify your own settings.' );
+		res.redirect('/result');
+	} else {
+	var password = req.body.password;
+
+	req.checkBody('name', 'Name is required').notEmpty();
+	req.checkBody('email', 'Email is required').notEmpty();
+	req.checkBody('email', 'Email is not valid').isEmail();
+	req.checkBody('username', 'Username is required').notEmpty();
+	if (password !== undefined && password.length > 0 ){
+		req.checkBody('password', 'Password is required').notEmpty();
+		req.checkBody('password2', 'Passwords do not match').equals(req.body.password);
+	}
+	var errors = req.validationErrors();
+
+	if(errors){
+		//todo: user must type all already typed values again, fix that
+		res.render('register-user',{errors:errors	});
+	} else {
+		var values = {
+				name     : req.body.name,
+				email    : req.body.email,
+				username : req.body.username,
+			};
+		
+		if (password !== undefined && password.length > 0 ){
+			values['password'] = req.body.password;
+		}
+		User.modify(id, values, function(err, result){
+			if(err || result === null || result.ok !== 1) {
+					req.flash('error',	' unable to update' );
+			} else{
+					if (result.nModified === 0){
+						req.flash('success_msg',	'User is unchanged!' );
+					} else {
+						req.flash('success_msg',	'User updated!' );
+					}
+			}
+			res.redirect('/users/list');
+		});
+			
+	}
+}
+});
+
 
 passport.use(new LocalStrategy(
   function(username, password, done) {

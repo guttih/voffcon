@@ -11,11 +11,6 @@ en hér verðum við að vara okkur
 
 
 
-Það þarf að vera hægt að eyða user
-user edit, delete
-
-
-
 hvað á að gera við devices?
 	list, edit delete devices?
 	þarf ekki að vera hægt að test devices?

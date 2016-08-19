@@ -1,7 +1,7 @@
 
-það þarf að vera hægt að eyða user.
 
-	
+
+
 það þarf að búa til change profile... sem er register  user fyrir innloggaðann user
 
 en hér verðum við að vara okkur
@@ -22,3 +22,8 @@ hvað á að gera við devices?
 
 hverjir mega registra sig...
 á að bjóða uppá að jón jónsson út í bæ fái að registera sig, held ekki
+
+Búa til síðu sem inniheldur forritið sem hlaða ská upp á tækið
+	sú síða býður þér uppá að skrifa inn ip addressu, password á wifi-ið og nafn fyrir tækið.
+	generate code takki. sem mun búa til kóða sem copy peista má inn í arduino IDE.
+	

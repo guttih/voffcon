@@ -231,4 +231,15 @@ router.get('/item/:userID', lib.authenticateRequest, function(req, res){
 	}
 });
 
+router.delete('/:userID', lib.authenticateAdminRequest, function(req, res){
+	var id = req.params.userID;
+	User.delete(id, function(err, result){
+		if(err !== null){
+			res.status(404).send('unable to delete user "' + id + '".');
+		} else {
+			res.status(200).send('User deleted.');
+		}
+	});
+	
+});
 module.exports = router;

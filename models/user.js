@@ -95,3 +95,7 @@ module.exports.modify = function (id, newValues, callback){
 		User.update({_id: id}, val, callback);
 	}
 };
+module.exports.delete = function (id, callback){
+	
+	User.findByIdAndRemove(id, callback);
+};

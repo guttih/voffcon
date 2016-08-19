@@ -110,7 +110,7 @@ router.post('/register/:userID', lib.authenticateAdminRequest, function(req, res
 						req.flash('success_msg',	'User updated!' );
 					}
 			}
-			res.redirect('/users/list');
+			res.redirect('/users/register/'+id);
 		});
 			
 	}
@@ -118,7 +118,8 @@ router.post('/register/:userID', lib.authenticateAdminRequest, function(req, res
 
 router.post('/profile/:userID', lib.authenticateRequest, function(req, res){
 	var id = req.params.userID;
-	if (id !== res.locals.user._doc._id ){
+	var loggedInUserID = res.locals.user._doc._id.toString(); 
+	if (id !== loggedInUserID ){
 		req.flash('error',	'you can only modify your own settings.' );
 		res.redirect('/result');
 	} else {
@@ -136,7 +137,7 @@ router.post('/profile/:userID', lib.authenticateRequest, function(req, res){
 
 	if(errors){
 		//todo: user must type all already typed values again, fix that
-		res.render('register-user',{errors:errors	});
+		res.render('profile-user',{errors:errors	});
 	} else {
 		var values = {
 				name     : req.body.name,
@@ -157,7 +158,7 @@ router.post('/profile/:userID', lib.authenticateRequest, function(req, res){
 						req.flash('success_msg',	'User updated!' );
 					}
 			}
-			res.redirect('/users/list');
+			res.redirect('/users/profile/'+id);
 		});
 			
 	}
@@ -259,6 +260,23 @@ router.get('/register/:userID', lib.authenticatePowerUrl, function(req, res){
 						name: user.name};
 					var str = JSON.stringify(obj);
 					res.render('register-user', {item:str});
+				}
+			});
+	}
+});
+
+router.get('/profile/:userID', lib.authenticatePowerUrl, function(req, res){
+	var id = req.params.userID;
+	if (id !== undefined){
+		User.getById(id, function(err, user){
+				if(err || user === null) {
+					req.flash('error',	'Could not find user.' );
+					res.redirect('/result');
+				} else{
+					var obj = {id : id,
+						name: user.name};
+					var str = JSON.stringify(obj);
+					res.render('profile-user', {item:str});
 				}
 			});
 	}

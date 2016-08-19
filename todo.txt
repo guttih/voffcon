@@ -1,10 +1,6 @@
 
 
 
-
-það þarf að búa til change profile... sem er register  user fyrir innloggaðann user
-
-en hér verðum við að vara okkur
 	loggaður inn user má breyta sínum gildum en engum öðrum nema hann sé admin
 	update á level má bara gera ef innloggaður user er administrator
 	ef á að updata level þá bara breyta level eigindi engu öðrum 

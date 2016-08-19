@@ -44,10 +44,9 @@ function saveUser(){
 			password2	: $('#password2').val()
 		};*/
 	var isPowerUser = $("#div-level").is(":visible");
-	if (!isPowerUser){
-		$('#contactsForm').attr('action', "users/profile").submit();
-	}
+	
 	document.getElementById("user-form").submit();
+	
 }
 function registerUserInput($el){
 	var buttonID = 'btnSaveUser';

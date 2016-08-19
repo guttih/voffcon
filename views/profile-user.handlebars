@@ -1,0 +1,52 @@
+<div class="row">
+	<h3 class="page-header pull-right">Register</h3>
+</div>
+{{#if errors}}
+	{{#each errors}}
+		<div class="alert alert-danger">{{msg}}</div>
+	{{/each}}
+{{/if}}
+{{#if item}} <!-- if you want to edit a specific user -->
+			<div id='item' data-user='{{{item}}}' />
+{{/if}}
+<form method="post" id ="user-form">
+<div class="form-group">
+	<label>Name</label>
+	<input type="text" class="form-control" placeholder="Name" id="name" name="name">
+	<input type="hidden"                                      id="id"   name="id" value="">
+</div>
+<div class="form-group">
+	<label>Username</label>
+	<input type="text" class="form-control" placeholder="Username" id="username" name="username">
+</div>
+<div class="form-group">
+	<label>Email</label>
+	<input type="email" class="form-control" placeholder="Email" id="email" name="email">
+</div>
+<div class="form-group">
+	<label>Password</label>
+	<input type="password" class="form-control" placeholder="Password" id="password" name="password">
+</div>
+<div class="form-group">
+	<label>Confirm Password</label>
+	<input type="password" class="form-control" placeholder="Password" id="password2" name="password2">
+</div>
+<!--<button type="submit" class="btn btn-success">Submit</button>-->
+<div id ="div-level" class="form-group">
+	<label>User level</label>
+	<select id="level" name="level" class="form-control" form="user-form">
+		<option selected="selected" value="0">Normal user</option>
+		<option value="1">Power user</option>
+		<option value="2">Administrator</option>
+	</select>
+</div>
+</form>
+<div class="row  row-padd">
+	<div id="error-text" class="alert alert-danger pull-left" role="alert">
+		<strong>Invalid form values, </strong> <span>this is asdkfl asædf asædf aæs bad asædf asædf aæs bad asædf asædf aæs bad asædf asædf aæs bad asædf asædf aæs bad</span>
+	</div>
+	<button id="btnSaveUser" type="button" class="btn btn-success pull-right">Save User values</button>
+	
+</div>
+
+<script src="/js/register-user.js" type="text/javascript" charset="utf-8"></script>

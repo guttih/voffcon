@@ -1,12 +1,14 @@
 "use strict";
+var iDeviceClassMakerID = 0;
 class Device {
 	constructor(host, highestValue){
+		this.ID = ++iDeviceClassMakerID;
 		this.pins = [];
 		this.host = host;
 		this.highestValue = highestValue;
 	}
 	add(number, value, higestValue){
-		this.pins.push(new Pin(number, value, this.host, higestValue));
+		this.pins.push(new Pin(number, value, this.host, higestValue, this.ID));
 	}
 	/*will delete all existing pins and fetch all pins and their values from the server and add them*/
 	fetchAllPins(callback, errorCallback){

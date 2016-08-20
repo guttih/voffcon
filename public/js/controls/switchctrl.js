@@ -5,7 +5,7 @@ class SwitchCtrl extends PinControl {
 		if (highestValue === undefined){
 			highestValue = pinObject.getHigestValue();
 		}
-		super('switch-ctrl', left, top, pinNumber, pinValue, highestValue);
+		super('switch-ctrl', left, top, pinNumber, pinValue, highestValue, pinObject.getDeviceID());
 
 		this.setValue(super.getPinValue());
 		pinObject.addControl(this);

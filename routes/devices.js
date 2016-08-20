@@ -16,7 +16,7 @@ router.get('/', lib.authenticateUrl, function(req, res){
 });
 
 router.get('/register', lib.authenticateUrl, function(req, res){
-			res.render('register-user');
+			res.render('register-device');
 });
 
 // Get started time from a device

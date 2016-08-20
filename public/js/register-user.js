@@ -95,7 +95,7 @@ function setSaveButtonState(buttonID, shallDisable, strResonForDisabling){
 }
 
 function updateSaveButtonStateHelper(buttonID){
-	setSaveButtonState(buttonID, true, "strResonForDisabling");
+	setSaveButtonState(buttonID, true, "");
 	var selectBtn = '#'+buttonID;
 	if ($("#name").val()      === ""){         setSaveButtonState(buttonID, true, "name is missing");  return;	}
 	if ($("#username").val()  === ""){         setSaveButtonState(buttonID, true, "username is missing");  return;	}
@@ -125,6 +125,7 @@ function setUserValues(item){
 	}
 	//this triggers post route on server "users/register/:userID"
 	document.getElementById('id').value = item.id;
+	updateSaveButtonStateHelper('btnSaveUser');
 		
 	
 }
@@ -151,5 +152,5 @@ $(function () {
 	var user    = $( '#item' ).data('user');
 	
 	if (user !== undefined){ getUser(user.id);	}
-	updateSaveButtonState('btnSaveUser');
+	updateSaveButtonStateHelper('btnSaveUser');
 });

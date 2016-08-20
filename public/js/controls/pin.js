@@ -1,11 +1,12 @@
 "use strict";
 class Pin { 
-	constructor(number, value, host, higestValue) {
+	constructor(number, value, host, higestValue, deviceID) {
 		this.controls = [];
 		this.number = number;
 		this.value = value;
 		this.host = host;
 		this.higestValue = higestValue;
+		this.deviceID = deviceID;
 	}
 	//adds or attaches a pin control to this pin
 	addControl(control){
@@ -19,6 +20,9 @@ class Pin {
 	}
 	getHigestValue(){
 		return this.higestValue;
+	}
+	getDeviceID(){
+		return this.deviceID;
 	}
 	/*
 	This functon will set a new value to this pin and update all connected controls*/

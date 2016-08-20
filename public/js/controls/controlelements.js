@@ -1,6 +1,3 @@
-//todo: nú vantar map function hún segir til um hæstu tölu og lægstu
-//todo: gera makeScale function sem addar skala á glasið.  makeScale þarf að hafa option hvort þú viljir bara sjá strikin eða hvort eigi að bæta við tölunum. °
-
 /* https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes  and
 http://www.2ality.com/2015/02/es6-classes-final.html */
 
@@ -84,8 +81,14 @@ class ControlElement {
 }
 
 class PinControl extends ControlElement {
-	constructor(name, left, top, pinNumber, pinValue, highestValue){
-		super(name, pinNumber, left, top);
+	constructor(name, left, top, pinNumber, pinValue, highestValue, deviceID){
+		var nameExtender;
+		if (deviceID !== undefined || deviceID !== null){
+				nameExtender = deviceID + '_' + pinNumber;
+		} else {
+			nameExtender = pinNumber;
+		}
+		super(name, nameExtender, left, top);
 		this.pinNumber = pinNumber;
 		this.pinValue = pinValue;
 		if (highestValue !== undefined) {

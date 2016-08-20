@@ -209,7 +209,7 @@ router.get('/logout', function(req, res){
 	res.redirect('/users/login');
 });
 
-router.get('/list', lib.authenticateUrl, function(req, res){
+router.get('/list', lib.authenticateAdminUrl, function(req, res){
 	res.render('list-user');
 });
 
@@ -248,7 +248,7 @@ router.get('/user-list', lib.authenticateRequest, function(req, res){
 	});
 });
 
-router.get('/register/:userID', lib.authenticatePowerUrl, function(req, res){
+router.get('/register/:userID', lib.authenticateAdminUrl, function(req, res){
 	var id = req.params.userID;
 	if (id !== undefined){
 		User.getById(id, function(err, user){
@@ -265,7 +265,7 @@ router.get('/register/:userID', lib.authenticatePowerUrl, function(req, res){
 	}
 });
 
-router.get('/profile/:userID', lib.authenticatePowerUrl, function(req, res){
+router.get('/profile/:userID', lib.authenticateUrl, function(req, res){
 	var id = req.params.userID;
 	if (id !== undefined){
 		User.getById(id, function(err, user){

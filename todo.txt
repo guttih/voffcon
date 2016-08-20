@@ -1,3 +1,12 @@
+to run a card:
+	búa til template-ið í domminu
+	sækja í minni þau control sem vísað er í og hlaða þau í minni
+	keyra kortið
+
+
+
+
+
 þegar ég var að gera new control og fyllti ekki út template og smellti á save control
 þá kom "a html template is required" villa og öll gildi sem ég hafði slegið inn þuruðust út
 

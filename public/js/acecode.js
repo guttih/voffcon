@@ -112,23 +112,101 @@ function aceInit(){
 	}
 
 	if (editJsCtrl !== undefined){
-		editJsCtrl.getSession().on('change', function() {
+		var session = editJsCtrl.getSession();
+		session.on('change', function() {
+			
 			updateEditState(editJsCtrl.getValue(), buttonID);
 		});
-		editJsCtrl.getSession().on('changeAnnotation', function() {
+		session.on('changeAnnotation', function() {
 			updateEditState(editJsCtrl.getValue(), buttonID);
+		});
+
+		session.on("changeAnnotation", function() {
+			var annotations = session.getAnnotations()||[];
+			var lenBefore = annotations.length;
+			if (removeKnownAnnotations(session, annotations) < lenBefore){
+				session.setAnnotations(annotations);
+			}
 		});
 	}
 	if (editJsCard !== undefined){
-		editJsCard.getSession().on('change', function() {
+		var session = editJsCard.getSession();
+		session.on('change', function(bata) {
+			console.log(bata);
 			updateEditState(editJsCard.getValue(), buttonID);
 		});
-		editJsCard.getSession().on('changeAnnotation', function() {
+		session.on('changeAnnotation', function() {
 			updateEditState(editJsCard.getValue(), buttonID);
+		});
+	
+		session.on("changeAnnotation", function() {
+			var annotations = session.getAnnotations()||[];
+			var lenBefore = annotations.length;
+			if (removeKnownAnnotations(session, annotations) < lenBefore){
+				session.setAnnotations(annotations);
+			}
 		});
 	}
 }
 
+
+// parameter useOldObjecIfExits
+// extracts the using statement array from from the code.
+// for example extracts this array : var using = ["DiodeCtrl", "SliderCtrl", "SvgCtrl"];
+function getCardUsingStatement(session){
+	var line, arr, lower, obj;
+	for(var i = 0; i<session.getLength(); i++){
+		line = $.trim(session.getLine(i));
+		lower = line.toLowerCase();
+		arr = line.split(" ");
+		if (arr[0]!=='var') {continue;}
+		if (arr[1]!=='using'){
+			if (arr[1]!=='using=') {continue;}
+		}
+		else {
+			if (arr[2]!=='='){continue;}
+		}
+		var iStart, iStop;
+		iStart = line.indexOf('[');
+		iStop = line.indexOf(']');
+		if ((iStop <= iStart) || iStop < 0 || iStart < 0 ){continue;}
+		line = line.substring(iStart, iStop + 1);
+		obj = JSON.parse(line);
+	}
+	return obj;
+}
+
+function removeKnownAnnotations(session, annotations){
+
+	var  i = annotations.length;
+	while (i--) {
+		if(isKeyword(session, annotations[i].text)) {
+		annotations.splice(i, 1);
+		}
+	}
+	return annotations.length;
+}
+
+function isKeyword(session, annotation){
+	var end = annotation.indexOf("' is not defined.");
+	if (end === -1 ) {return false;}
+	var word = annotation.substring(1, end);
+	switch(word){
+		case "$"			:
+		case "Device"		:
+		case "PinControl"	:
+								return true;
+
+	}
+	//example "'DiodeCtrl' is not defined."
+	
+	var obj = getCardUsingStatement(session, false);
+	if (obj !== undefined){
+		var index = obj.indexOf(word);
+		return (index > -1);
+	}
+	return false;
+}
 function isEditorTextValid(editor){
 	if ($.trim(editor.getValue()) === ""){
 		return false;

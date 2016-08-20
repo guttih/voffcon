@@ -150,7 +150,6 @@ function aceInit(){
 }
 
 
-// parameter useOldObjecIfExits
 // extracts the using statement array from from the code.
 // for example extracts this array : var using = ["DiodeCtrl", "SliderCtrl", "SvgCtrl"];
 function getCodeUsingStatement(session){

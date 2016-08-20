@@ -20,7 +20,8 @@ var edi = ace.edit(editorId);
 		edi.getSession().setMode("ace/mode/" +  mode);
 	}
 	if (strValue !== undefined){
-		edi.setValue(strValue);
+		
+		edi.setValue(strValue, -1);
 	}
 	return edi;
 }
@@ -124,7 +125,7 @@ function aceInit(){
 		session.on("changeAnnotation", function() {
 			var annotations = session.getAnnotations()||[];
 			var lenBefore = annotations.length;
-			if (removeKnownAnnotations(session, annotations) < lenBefore){
+			if (removeKnownAnnotations(editJsCtrl.getValue(), annotations) < lenBefore){
 				session.setAnnotations(annotations);
 			}
 		});
@@ -132,7 +133,6 @@ function aceInit(){
 	if (editJsCard !== undefined){
 		var session = editJsCard.getSession();
 		session.on('change', function(bata) {
-			console.log(bata);
 			updateEditState(editJsCard.getValue(), buttonID);
 		});
 		session.on('changeAnnotation', function() {
@@ -142,16 +142,45 @@ function aceInit(){
 		session.on("changeAnnotation", function() {
 			var annotations = session.getAnnotations()||[];
 			var lenBefore = annotations.length;
-			if (removeKnownAnnotations(session, annotations) < lenBefore){
+			if (removeKnownAnnotations(editJsCard.getValue(), annotations) < lenBefore){
 				session.setAnnotations(annotations);
 			}
 		});
 	}
 }
 
+function test(str){
+	var obj = extractUsingArray(str);
+	console.log("obj");
+	console.log(obj);
+}
+// handles multiple lines, but must be slower.
+// returns a string array of the using statment
+function extractUsingArray(strCode){
+	var line = strCode.replace(/\s\s+/g, ' ');
+	var iStart, iStop;
+	iStart = line.indexOf('var using =');
+	if (iStart > -1) {iStart +=11; }
+	else {
+		iStart = line.indexOf('var using=');
+		if (iStart === -1) {return; }
+		iStart +=10;
+	}
+	iStop = line.indexOf(']', iStart);
+	if (iStart === -1 ) {return; }
+	line = line.substring(iStart, iStop+1);
+	try {
+		console.log(line);
+		var obj = JSON.parse(line);
+		return obj;
+	} catch (e) {
+		console.log("Invalid using statement.");
+	}
+}
 
 // extracts the using statement array from from the code.
 // for example extracts this array : var using = ["DiodeCtrl", "SliderCtrl", "SvgCtrl"];
+/*
 function getCodeUsingStatement(session){
 	var line, arr, lower, obj;
 	for(var i = 0; i<session.getLength(); i++){
@@ -160,33 +189,34 @@ function getCodeUsingStatement(session){
 		arr = line.split(" ");
 		if (arr[0]!=='var') {continue;}
 		if (arr[1]!=='using'){
-			if (arr[1]!=='using=') {continue;}
+			if (arr[1].indexOf('using=') !== 0) {continue;}
 		}
 		else {
 			if (arr[2]!=='='){continue;}
 		}
 		var iStart, iStop;
 		iStart = line.indexOf('[');
-		iStop = line.indexOf(']');
-		if ((iStop <= iStart) || iStop < 0 || iStart < 0 ){continue;}
+		if (iStart === -1 ){continue;}
+		iStop = line.indexOf(']', iStart);
+		if (iStop === -1 ){continue;}
 		line = line.substring(iStart, iStop + 1);
 		obj = JSON.parse(line);
 	}
 	return obj;
 }
-
-function removeKnownAnnotations(session, annotations){
+*/
+function removeKnownAnnotations(strCode, annotations){
 
 	var  i = annotations.length;
 	while (i--) {
-		if(isKeyword(session, annotations[i].text)) {
+		if(isKeyword(strCode, annotations[i].text)) {
 		annotations.splice(i, 1);
 		}
 	}
 	return annotations.length;
 }
 
-function isKeyword(session, annotation){
+function isKeyword(strCode, annotation){
 	var end = annotation.indexOf("' is not defined.");
 	if (end === -1 ) {return false;}
 	var word = annotation.substring(1, end);
@@ -199,7 +229,7 @@ function isKeyword(session, annotation){
 	}
 	//example "'DiodeCtrl' is not defined."
 	
-	var obj = getCodeUsingStatement(session, false);
+	var obj = extractUsingArray(strCode, false);
 	if (obj !== undefined){
 		var index = obj.indexOf(word);
 		return (index > -1);
@@ -262,13 +292,13 @@ function updateSaveButtonStateHelper(buttonID){
 }
 
 function setControlValues(item){
-	editJsCtrl.setValue(item.code);
-	editHtmlCtrl.setValue(item.template);
+	editJsCtrl.setValue(item.code, -1);
+	editHtmlCtrl.setValue(item.template, -1);
 	$("#name").val(item.name);
 	$("#description").val(item.description);
 }
 function setCardValues(item){
-	editJsCard.setValue(item.code);
+	editJsCard.setValue(item.code, -1);
 	$("#name").val(item.name);
 	$("#description").val(item.description);
 }

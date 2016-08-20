@@ -1,6 +1,9 @@
 to run a card:
 	búa til template-ið í domminu
-	sækja í minni þau control sem vísað er í og hlaða þau í minni
+	sækja úr minn þau ctrl sem includuð eru í using statement.
+		getCodeUsingStatement... notar eiditor session
+		við þurfum að sækja kóðann leita að using statement
+		og extracta eins
 	keyra kortið
 
 

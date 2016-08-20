@@ -153,7 +153,7 @@ function aceInit(){
 // parameter useOldObjecIfExits
 // extracts the using statement array from from the code.
 // for example extracts this array : var using = ["DiodeCtrl", "SliderCtrl", "SvgCtrl"];
-function getCardUsingStatement(session){
+function getCodeUsingStatement(session){
 	var line, arr, lower, obj;
 	for(var i = 0; i<session.getLength(); i++){
 		line = $.trim(session.getLine(i));
@@ -200,7 +200,7 @@ function isKeyword(session, annotation){
 	}
 	//example "'DiodeCtrl' is not defined."
 	
-	var obj = getCardUsingStatement(session, false);
+	var obj = getCodeUsingStatement(session, false);
 	if (obj !== undefined){
 		var index = obj.indexOf(word);
 		return (index > -1);

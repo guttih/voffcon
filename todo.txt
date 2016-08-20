@@ -1,3 +1,5 @@
+þegar ég var að gera new control og fyllti ekki út template og smellti á save control
+þá kom "a html template is required" villa og öll gildi sem ég hafði slegið inn þuruðust út
 
 	loggaður inn user má breyta sínum gildum en engum öðrum nema hann sé admin
 	update á level má bara gera ef innloggaður user er administrator

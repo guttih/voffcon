@@ -67,11 +67,7 @@ var setupFailed = function setupFailed(data){
 	console.log('Setup failed');
 	console.log(data);
 };
-//to run javascript stored in a string
-function runCodeString(str){
-	var F = new Function(str);
-	return(F());
-}
+
 function drawControls(name, device, xOff, yOff){
 	var x = xOff+25,
 		y = yOff-20;
@@ -102,6 +98,13 @@ var maxValue = 1023;
  drawControls('backImage1', device1, 100, 0, 1023);
  drawControls('backImage2', device2, 100, 180, 1023);
  drawControls('backImage3', device3, 100, 360, 1023);
- 
+
+console.log("test");
+
 
 }
+//to run javascript stored in a string
+/*function runCodeString(str){
+	var F = new Function(str);
+	return(F());
+}*/

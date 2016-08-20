@@ -1,7 +1,10 @@
 "use strict";
 var iDeviceClassMakerID = 0;
+
 class Device {
 	constructor(host, highestValue){
+		
+		//iDeviceClassMakerID = iDeviceClassMakerID + 1; 
 		this.ID = ++iDeviceClassMakerID;
 		this.pins = [];
 		this.host = host;

@@ -1,3 +1,9 @@
+"use strict";
+/*
+Use this control to turn a pin value off or on.
+This control will display a iphone-like switch which
+the user can click on to turn the pin on or off. 
+*/
 class SwitchCtrl extends PinControl {
 	constructor(left, top, pinObject, highestValue){
 		var pinNumber = pinObject.getNumber();

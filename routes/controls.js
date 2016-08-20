@@ -64,8 +64,8 @@ router.post('/register', lib.authenticatePowerRequest, function(req, res){
 				console.log(control);
 			});
 
-			req.flash('success_msg',	'You successfully created the ' + 
-										newControl._doc.name + ' control' );
+			req.flash('success_msg',	'You successfully created the \"' + 
+										newControl._doc.name + '\" control' );
 			//todo: redirect to what?
 			
 			res.redirect('/controls/list');

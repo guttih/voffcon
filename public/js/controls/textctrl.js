@@ -1,3 +1,7 @@
+/*
+Use this control to display the value of a pin
+The value will be displayed as a text.
+*/
 class TextCtrl extends PinControl {
 	constructor(left, top, pinObject, highestValue){
 		var pinNumber = pinObject.getNumber();
@@ -32,7 +36,6 @@ class TextCtrl extends PinControl {
 		this.getText().css({color:'#cccccc'});
 	}
 
-	
 	setValue(value){
 		super.setPinValue(value*this.pinValueRatio);
 		this.getText().css({color:'#000000'});
@@ -42,7 +45,5 @@ class TextCtrl extends PinControl {
 	setPinValueRatio(ratio){
 		this.pinValueRatio = ratio;
 	}
-	
-
 }//class
 

@@ -1,11 +1,10 @@
-//todo: nú vantar map function hún segir til um hæstu tölu og lægstu
-//todo: gera makeScale function sem addar skala á glasið.  makeScale þarf að hafa option hvort þú viljir bara sjá strikin eða hvort eigi að bæta við tölunum. °
-
-/* https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes  and
-http://www.2ality.com/2015/02/es6-classes-final.html */
-
 "use strict";
-/*	if we call the pin value on the device devicePinValue.
+/*	
+	Use this control to display temperature.
+	This control will display a thermometer which you can 
+	use to interpret a pins value to a temperature.
+
+	if we call the pin value on the device devicePinValue.
 		and we want to be able to set that value directly with the setValue function
 		then you can use the setPinValueRatio function to make the setValue function 
 		always map the  devicePinValue to the meter value.

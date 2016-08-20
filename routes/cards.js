@@ -60,8 +60,8 @@ router.post('/register', lib.authenticatePowerRequest, function(req, res){
 				console.log(card);
 			});
 
-			req.flash('success_msg',	'You successfully created the ' + 
-										newCard._doc.name + ' card' );
+			req.flash('success_msg',	'You successfully created the \"' + 
+										newCard._doc.name + '\" card' );
 			//todo: redirect to what?
 			res.redirect('/cards/list');
 	}

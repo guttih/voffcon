@@ -48,7 +48,7 @@ module.exports = function(grunt) {
 					SwitchCtrl:false,
 					SvgCtrl:false,
 					Pin:false,
-					Pins:false,
+					Device:false,
 					ace:false
 					
 				}

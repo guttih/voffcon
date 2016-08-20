@@ -7,8 +7,7 @@ var	SERVER,
 function initEditor(editorId, mode, theme, strValue){
 	//https://ace.c9.io/build/kitchen-sink.html
 	// https://github.com/ajaxorg/ace/wiki/Configuring-Ace
-	element = document.getElementById(editorId);
-if (element === null){ return;}
+if (document.getElementById(editorId) === null){ return;}
 var edi = ace.edit(editorId);
 	if (edi === undefined){
 		return;

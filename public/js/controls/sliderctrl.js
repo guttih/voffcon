@@ -1,3 +1,9 @@
+"use strict";
+/*
+Use this control to change a pins value.
+The control will show a slider with a small marker wich the user
+can drag or slide to change the pin's value.
+*/
 class SliderCtrl extends PinControl {
 	constructor(left, top, pinObject, highestValue){
 		var pinNumber = pinObject.getNumber();

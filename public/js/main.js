@@ -116,7 +116,6 @@ function getWhenServerStarted(){
 }
 
 function showModal(title, message){
-		console.log("------------------showModal------------------");
 	$(".modal-title").text(title);
 	$(".modal-body").text(message); 
 	$('#myModal').modal('show');

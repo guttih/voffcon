@@ -1,3 +1,9 @@
+"use strict";
+/*
+	Use this control to display the value of a pin.
+	This control draws a image of an diode on the screen and within
+	that diode there is a number representing the pin value.
+*/
 class DiodeCtrl extends PinControl {
 	constructor(left, top, pinObject, highestValue){
 		var pinNumber = pinObject.getNumber();

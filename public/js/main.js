@@ -136,11 +136,12 @@ function createListItem(id, name, description, routeText, bAddRunButton){
 
 /*routeText is the element type to be deleted 'cards', 'controls' or 'devices'*/
 function deleteItem(routeText, id){
-
+	var singular;
+	singular = routeText.substring(0, routeText.length-1);
 	//showModal('Delete item',	'Are you sure you want to delete this '+ routeText +'?');
 	
-	showModalConfirm('Delete ' + routeText,	
-		'Are you sure you want to delete this '+ routeText +'?',
+	showModalConfirm('Delete ' + singular,	
+		'Are you sure you want to delete this '+ singular +'?',
 		'Delete', 
 		function(){
 			var url = SERVER+'/'+ routeText +'/'+id;

@@ -112,3 +112,27 @@ footer{
 .list-group-item > span > button{
   margin-left:9px;
 }
+
+.dropdown:hover .dropdown-menu {
+    display: block !important;
+    margin-top: 0; /* remove the gap so it doesn't close*/
+    color:red !important;
+ }
+ .dropdown {
+    /*display: block !important;*/
+  
+    color:gray !important;
+ }
+
+ .nav > ul > a{
+    color:gray !important;
+ }
+
+nav > ul > li > a{
+    color:#777777;
+    font-weight: 1200;
+    font-size: 16px;
+ }
+ nav > ul > li > a:hover{
+    color:#222222;
+ }

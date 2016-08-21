@@ -115,11 +115,6 @@ function getWhenServerStarted(){
 		});
 }
 
-function showModal(title, message){
-	$(".modal-title").text(title);
-	$(".modal-body").text(message); 
-	$('#myModal').modal('show');
-}
 
 /*routeText is the element type to be deleted 'cards', 'controls' or 'devices'*/
 function createListItem(id, name, description, routeText, bAddRunButton){
@@ -141,7 +136,34 @@ function createListItem(id, name, description, routeText, bAddRunButton){
 
 /*routeText is the element type to be deleted 'cards', 'controls' or 'devices'*/
 function deleteItem(routeText, id){
-	var url = SERVER+'/'+ routeText +'/'+id;
+
+	//showModal('Delete item',	'Are you sure you want to delete this '+ routeText +'?');
+	
+	showModalConfirm('Delete ' + routeText,	
+		'Are you sure you want to delete this '+ routeText +'?',
+		'Delete', 
+		function(){
+			var url = SERVER+'/'+ routeText +'/'+id;
+			$.ajax({
+				url: url,
+				type: 'DELETE',
+				success: function(data) {
+					console.log("delete responce.");
+					console.log(data);
+					console.log('todo: onDeleted remove this item from the dom list' );
+					
+					$('#listItem'+ id).remove();
+				},
+				error: function (res){
+					console.log(res);
+					showModal('Error when deleting',	
+							res.responseText + '   (' + res.status + ': ' + res.statusText+')');
+				}
+			});
+		
+		});
+		
+	/*var url = SERVER+'/'+ routeText +'/'+id;
 	$.ajax({
 		url: url,
 		type: 'DELETE',
@@ -157,8 +179,35 @@ function deleteItem(routeText, id){
 			showModal('Error when deleting',	
 					res.responseText + '   (' + res.status + ': ' + res.statusText+')');
 		}
-	});
+	});*/
 }
+function showModal(title, message){
+	$(".modal-title").text(title);
+	$(".modal-body").text(message);
+	$('#btn-confirm').hide(); 
+	$('#myModal').modal('show');
+	
+}
+
+function showModalConfirm(title, message, confirmButtonText, callback){
+	$(".modal-title").text(title);
+	$(".modal-body").text(message); 
+	if (callback === undefined){
+		//no button text provided
+		$('#btn-confirm').text("Confirm");
+		callback = confirmButtonText; /**/
+
+	} else {
+		$('#btn-confirm').text(confirmButtonText);
+	}
+	$('#btn-confirm').on('click', function(e) {
+		callback();
+		$('#myModal').modal('hide');
+	});
+	$('#btn-confirm').show();
+	$('#myModal').modal('show');
+}
+
 
 $(function () {  
 	/* this is the *$( document ).ready(function( $ ) but jshint does not like that*/

@@ -1,4 +1,4 @@
-var device1, device2, device3;
+var device1, device2, device3, device4;
 
 function updateView(device, pinValues ) {
 		for(var i = 0; i<pinValues.length;i++){
@@ -10,6 +10,7 @@ function getDevice(pin){
 	switch(pin.deviceID) {
 		case 2: return device2;
 		case 3: return device3;
+		case 4: return device4;
 	}
 	return device1;
 }
@@ -25,24 +26,6 @@ function onClickCAllback(obj){
 		updateView(dev, data.pins);
 	});
 }
-/*
-function fetchPinValues(){
-	console.log('fetchPinVaues');
-	var posting = $.get( pins.host+'/pins');
-	posting.done(function(data, ss){
-		console.log("ss");
-		console.log(ss);
-		console.log("data");
-		console.log(data);
-		updateView(data.pins);
-	})
-	.fail(function(data){
-		console.log('fetchPinValues::fail');
-	})
-	.always(function(data){
-		console.log('fetchPinValues::always');
-	});
-}*/
 
 var setupAppPins = function setupAppPins(device, xBase, yBase){
 
@@ -81,27 +64,15 @@ function drawControls(name, device, xOff, yOff){
 	device.fetchAllPins(function(){setupAppPins(device, xOff, yOff);}, setupFailed);
 }
 function onLoad(){
-/*	var svg = new SvgCtrl('backImage', 25,-20, 400, 300);
-	svg.addItem('rect',{x:2, y:2, width:250, height:165, rx:10, ry:10,
-	style:'fill:gray;stroke:gray;stroke-width:1;fill-opacity:0.1;stroke-opacity:0.9'});
-	device = new Device('http://192.168.1.151:5100', 1023);
-	device.fetchAllPins(function(){setupAppPins(0,0);}, setupFailed);
-	xOff = 300; 
-	yOff = 300;
-  
-*/
-
-var maxValue = 1023;
- device1 = new Device('http://192.168.1.151:5100', maxValue);
- device2 = new Device('http://192.168.1.152:5100', maxValue);
- device3 = new Device('http://192.168.1.153:5100', maxValue);
- drawControls('backImage1', device1, 100, 0, 1023);
- drawControls('backImage2', device2, 100, 180, 1023);
- drawControls('backImage3', device3, 100, 360, 1023);
-
-console.log("test");
-
-
+	var maxValue = 1023;
+	device1 = new Device('http://192.168.1.151:5100', maxValue);
+	device2 = new Device('http://192.168.1.152:5100', maxValue);
+	device3 = new Device('http://192.168.1.153:5100', maxValue);
+	device4 = new Device('http://192.168.1.154:5100', maxValue);
+	drawControls('backImage1', device1, 100, 0, 1023);
+	drawControls('backImage2', device2, 360, 0, 1023);
+	drawControls('backImage3', device3, 100, 190, 1023);
+	drawControls('backImage4', device4, 360, 190, 1023);
 }
 //to run javascript stored in a string
 /*function runCodeString(str){

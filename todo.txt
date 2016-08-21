@@ -39,3 +39,9 @@ Búa til síðu sem inniheldur forritið sem hlaða ská upp á tækið
 	sú síða býður þér uppá að skrifa inn ip addressu, password á wifi-ið og nafn fyrir tækið.
 	generate code takki. sem mun búa til kóða sem copy peista má inn í arduino IDE.
 	
+Þessi eigindi ættu að vera til á öllum hlutum vistaðir í gagnagrunn.
+	last modified	: dateTime
+	last created	: dateTime
+	og það er spurning um hvort ekki yrði líka bætt við tveimur eigindum í viðbót
+		last modified by : userID
+		created by : userID

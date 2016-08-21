@@ -57,6 +57,8 @@ router.get('/started/:deviceId', lib.authenticateRequest, function(req, res){
 			).pipe(res);
 		});
 });
+//todo: here we have a hardcoded SERVERURL, we need to change this
+//this route needs to take a device ID like so router.get('/pins/:deviceID'...
 router.get('/pins', lib.authenticateRequest, function(req, res){
 	
 	var SERVERURL = 'http://192.168.1.151:5100';

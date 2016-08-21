@@ -165,4 +165,6 @@ $(function () {
 	var SERVER = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ':'+window.location.port: '');
 	//todo: run this only if logged in getWhenServerStarted();
 	$('.dropdown-toggle').dropdown();/*for the dropdown-toggle bootstrap class*/
+	$("[rel='tooltip']").tooltip();/*activate boostrap tooltips*/
+
 });

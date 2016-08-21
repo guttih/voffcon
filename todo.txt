@@ -16,7 +16,7 @@ to run a card:
 	keyra kortið
 
 
-
+make the "devices.js::router.get('/pins'..." route take an id.  Like so router.get('/pins/:deviceID'... 
 
 
 þegar ég var að gera new control og fyllti ekki út template og smellti á save control

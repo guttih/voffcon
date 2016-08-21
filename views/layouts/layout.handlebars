@@ -36,6 +36,19 @@
 					<li><a href="/cards/list">List cards</a></li>
 				</ul>
 			</li>
+<!--        if you want a image dropdown menu
+			<li class="dropdown">
+				<a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Cards">
+					<img src="/images/profile.png" alt="Cards" style="width:20px;height:20px;"><span class="caret"></span>
+				</a>
+				<ul class="dropdown-menu">
+					<li><a href="/cards/register">Register a new card</a></li>
+					<li><a href="/cards/list">List cards</a></li>
+				</ul>
+			</li>
+-->
+
+
 			<li class="dropdown">
 				<a class="dropdown-toggle" data-toggle="dropdown" href="#">Controls <span class="caret"></span></a>
 				<ul class="dropdown-menu">
@@ -52,15 +65,30 @@
 			</li>
 		{{/if}}
 		{{#if user}}
-			<li role="presentation"><a href="/users/profile/{{user._id}}">Profile</a></li>
-			<li role="presentation"><a href="/users/logout">Logout</a></li>
+
+
+
+
+			<li role="presentation">
+				<a href="/users/profile/{{user._id}}" rel="tooltip" data-placement="bottom" title="Your profile settings">
+					<img src="/images/profile.png" alt="Your profile" style="width:20px;height:20px;">
+				</a>
+			</li>
+			<li role="presentation">
+				<a href="/users/logout"  rel="tooltip" data-placement="bottom" title="Logout from Ardos">
+					<img src="/images/logout.png" alt="Logout from Ardos" style="width:20px;height:20px;">
+				</a>
+			</li>
 		{{else}}
 			<li role="presentation"><a href="/users/login">Login</a></li>
 			<li role="presentation"><a href="/users/register">Register</a></li>
 		{{/if}}
 		</ul>
 	</nav>
-	<h3 class="text-muted">Ardos</h3>
+	<!--<h3 class="text-muted">Ardos</h3>-->
+	<a href="/">
+		<img src="/images/logo.png" alt="An operating system for Arduino" title="an operating system for arudio" width="50" height="50">
+	</a>
 	</div>
 
 <!-- Modal -->

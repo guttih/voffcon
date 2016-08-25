@@ -113,6 +113,10 @@ router.delete('/:cardID', lib.authenticatePowerRequest, function(req, res){
 	
 });
 
+/*render a page wich runs a card, that is if the user is a registered user for that card (has access)*/
+router.get('/run/:cardID', lib.authenticateCardUrl, function(req, res){
+	res.render('run-card');
+});
 
 /*render a page with list of users*/
 router.get('/list', lib.authenticateUrl, function(req, res){

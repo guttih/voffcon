@@ -25,7 +25,6 @@ function dirExists(path) {
 	} catch (e) {		
 		return false;
 	}
-	return true;
 }
 
 // Returns true if all parameters checkout otherwise false.

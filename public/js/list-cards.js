@@ -16,6 +16,8 @@ function getUserCardList(){
 
 function runItem(id){
 	console.log('todo: run this item : ' + id);
+	window.location.assign("run/"+id);
+	///cards/run/57b8441a160dd34c408131ba
 }
 
 

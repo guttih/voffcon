@@ -3,6 +3,7 @@ const validator = require('./validator.js');
 const os = require('os');
 const fs = require('fs');
 var interfaces = os.networkInterfaces();
+var Card = require('../models/card');
 var router = express.Router();
 
 module.exports.authenticateUrl = function authenticateUrl(req, res, next){	
@@ -29,6 +30,26 @@ module.exports.authenticateAdminUrl = function authenticateAdminUrl(req, res, ne
 		req.flash('error_msg',	'You do not have administrator rights and therefore cannot perform this action' );
 		res.redirect('/result');
 	}
+};
+module.exports.authenticateCardUrl = function authenticateCardUrl(req, res, next){
+	if(req.isAuthenticated()){
+		var CardId = req.params.cardID;
+		var userId = req.user._id;
+		Card.getUserCardById(CardId, userId, function(err, result){
+			if(err || result === null || result.length < 1) {
+				req.flash('error_msg',	'You are not have permission to use this card.' );
+				res.redirect('/result');
+			} else {
+				return next();
+			}
+		});
+		
+	} else {
+
+		req.flash('error_msg',	'You are not have permission to use this card and therefore cannot run it.' );
+		res.redirect('/result');
+	}
+	
 };
 
 module.exports.authenticateRequest = function authenticateRequest(req, res, next){

@@ -121,8 +121,8 @@ function createListItem(id, name, description, routeText, bAddRunButton){
 	var url = SERVER+'/'+ routeText +'/register/'+ id;
 	var strElm = 
 '<div id="listItem'+ id +'" class="list-group-item clearfix">' +
-	'<h5 class="list-group-item-heading">' + name + '</h5>' +
-	description +
+	'<p class="list-group-item-heading">' + name + '</p>' + 
+	'<span class="list-group-item-text">' +description + '</span>'+
 	'<span class="pull-right">' +
 	'<a href="'+ url +'" class="btn btn-xs btn-success"> <span class="glyphicon glyphicon-edit"></span>&nbsp;Edit </a>';
 	if (bAddRunButton){

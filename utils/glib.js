@@ -123,3 +123,26 @@ module.exports.getAddresses = function getAddresses(){
 	}
 	return addresses;
 };
+
+// returns a string array of the using statment
+module.exports.extractUsingArray = function extractUsingArray(strCode){
+	var line = strCode.replace(/\s\s+/g, ' ');
+	var iStart, iStop;
+	iStart = line.indexOf('var using =');
+	if (iStart > -1) {iStart +=11; }
+	else {
+		iStart = line.indexOf('var using=');
+		if (iStart === -1) {return; }
+		iStart +=10;
+	}
+	iStop = line.indexOf(']', iStart);
+	if (iStart === -1 ) {return; }
+	line = line.substring(iStart, iStop+1);
+	try {
+		console.log(line);
+		var obj = JSON.parse(line);
+		return obj;
+	} catch (e) {
+		console.log("Invalid using statement.");
+	}
+}

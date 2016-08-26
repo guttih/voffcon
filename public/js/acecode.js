@@ -2,7 +2,8 @@ var	SERVER,
 	editJsCtrl,
 	editJsCard,
 	editHtmlCtrl,
-	checkTimer;
+	checkTimer,
+	buttonID;
 
 function initEditor(editorId, mode, theme, strValue){
 	//https://ace.c9.io/build/kitchen-sink.html
@@ -34,7 +35,7 @@ function initEditorText(editorId, strText){
 		showPrintMargin		: false
 	});
 }
-function updateEditState($elm, text, buttonID){
+function updateEditState(text, buttonID){
 	if ( text === undefined || text === ""){
 			$('#' + buttonID).prop('disabled', true);
 		}
@@ -79,11 +80,12 @@ function saveCard(){
 	document.getElementById('card-form').submit();
 
 }
+
 function aceInit(){
 	editJsCtrl = initEditor(  'editor-js-ctrl',   'javascript', 'monokai');
 	editJsCard = initEditor(  'editor-js-card',   'javascript', 'monokai');
 	editHtmlCtrl = initEditor('editor-html-ctrl', 'html',       'chaos');
-	var buttonID = 'btnSaveControl';
+	buttonID = 'btnSaveControl';
 
 	$('#btnSaveControl').click(function() {
 		saveControl();
@@ -131,19 +133,20 @@ function aceInit(){
 		});
 	}
 	if (editJsCard !== undefined){
-		var session = editJsCard.getSession();
-		session.on('change', function(bata) {
+		var xsession = editJsCard.getSession();
+		xsession.on('change', function() {
+			
 			updateEditState(editJsCard.getValue(), buttonID);
 		});
-		session.on('changeAnnotation', function() {
+		xsession.on('changeAnnotation', function() {
 			updateEditState(editJsCard.getValue(), buttonID);
 		});
-	
-		session.on("changeAnnotation", function() {
-			var annotations = session.getAnnotations()||[];
+
+		xsession.on("changeAnnotation", function() {
+			var annotations = xsession.getAnnotations()||[];
 			var lenBefore = annotations.length;
 			if (removeKnownAnnotations(editJsCard.getValue(), annotations) < lenBefore){
-				session.setAnnotations(annotations);
+				xsession.setAnnotations(annotations);
 			}
 		});
 	}
@@ -154,7 +157,6 @@ function test(str){
 	console.log("obj");
 	console.log(obj);
 }
-// handles multiple lines, but must be slower.
 // returns a string array of the using statment
 function extractUsingArray(strCode){
 	var line = strCode.replace(/\s\s+/g, ' ');
@@ -221,9 +223,10 @@ function isKeyword(strCode, annotation){
 	if (end === -1 ) {return false;}
 	var word = annotation.substring(1, end);
 	switch(word){
-		case "$"			:
-		case "Device"		:
-		case "PinControl"	:
+		case "$"				:
+		case "Device"			:
+		case "PinControl"		:
+		case "ControlElement"	:
 								return true;
 
 	}

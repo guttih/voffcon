@@ -4,3 +4,25 @@
 <div class="row">
 	<p>{{user.name}}</p>
 </div>
+
+
+<script src="/js/controls/controlelements.js"></script>
+<script src="/js/controls/device.js"></script>
+<script src="/js/controls/pin.js"></script>
+
+
+<div id="templates" style="position:relative;top:-800px;background:blue">
+
+
+	{{#if template}}
+				{{{template}}}
+	{{/if}}
+	{{#if code}}
+	<script type="text/javascript">
+				{{{code}}}
+	</script>
+	{{/if}}
+</div> <!--templates-->
+<div id="controls" style="position:relative">
+</div>
+

@@ -3,6 +3,7 @@ var router = express.Router();
 var request = require('request');
 var lib = require('../utils/glib');
 var Card = require('../models/card');
+var Control = require('../models/control');
 var config = lib.getConfig();
 
 
@@ -113,11 +114,6 @@ router.delete('/:cardID', lib.authenticatePowerRequest, function(req, res){
 	
 });
 
-/*render a page wich runs a card, that is if the user is a registered user for that card (has access)*/
-router.get('/run/:cardID', lib.authenticateCardUrl, function(req, res){
-	res.render('run-card');
-});
-
 /*render a page with list of users*/
 router.get('/list', lib.authenticateUrl, function(req, res){
 	res.render('list-card');
@@ -152,6 +148,41 @@ router.get('/item/:cardID', lib.authenticateRequest, function(req, res){
 		
 	}
 
+});
+
+/*render a page wich runs a card, that is if the user is a registered user for that card (has access)*/
+router.get('/run/:cardID', lib.authenticateCardUrl, function(req, res){
+	var id = req.params.cardID;
+	Card.getById(id, function(err, card){
+		if(err || card === null) {
+			req.flash('error',	'Could not find card.' );
+			res.redirect('/result');
+		} else{
+
+			var code = card._doc.code;
+			var template = '<p id="prufa">Þetta er prufa</p>';
+			var using = lib.extractUsingArray(code);
+			var obj = {	template:template,
+						code:code
+					};
+			Control.getByNames(using, function(err, controls){
+				if(err || controls === null || controls.length < 1) {
+					req.flash('error',	'Could not find controls.' );
+					res.redirect('/result');
+				} else {
+					var ctrlCode="", ctrlTemplate="";
+					for(var i = 0; i<controls.length; i++){
+						ctrlCode += '// control: '	+ controls[i]._doc.name +
+									'\n' 			+ controls[i]._doc.code + '\n\n';
+						ctrlTemplate += controls[i]._doc.template + '\n\n';
+					}
+					ctrlCode+="\n\n//The card\n\n" + code;
+					res.render('run-card', {template:ctrlTemplate,	code:ctrlCode});
+				}
+			})
+			
+		}
+	});
 });
 
 

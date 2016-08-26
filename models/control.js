@@ -45,6 +45,11 @@ module.exports.getByName = function(Controlname, callback){
 	var query = {Controlname: Controlname};
 	Control.findOne(query, callback);
 };
+module.exports.getByNames = function(ControlnameArray, callback){
+	
+	var query = {name: { $in: ControlnameArray }};
+	Control.find(query, callback);
+};
 
 module.exports.getById = function(id, callback){
 	Control.findById(id, callback);

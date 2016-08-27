@@ -63,7 +63,9 @@ class SliderCtrl extends PinControl {
 			obj['callback'] = callback;
 		}
 		//todo: slider will not update when set to a new value
-		this.getSlider().on( "mouseup", obj, this.onClick );
+		/*this.getSlider().on( "mouseup", obj, this.onClick );*/
+		this.getSlider().live( "tap mouseup change touchstart", obj, this.onClick );
+	
 	}
 	
 

@@ -96,7 +96,7 @@ router.post('/register/:cardID', lib.authenticatePowerRequest, function(req, res
 								req.flash('success_msg',	'Card updated!' );
 							}
 					}
-					res.redirect('/cards/list');
+					res.redirect('/cards/run/'+id);
 				});
 			
 	}
@@ -179,24 +179,9 @@ router.get('/run/:cardID', lib.authenticateCardUrl, function(req, res){
 					ctrlCode+="\n\n//The card\n\n" + code;
 					res.render('run-card', {template:ctrlTemplate,	code:ctrlCode});
 				}
-			})
-			
+			});
 		}
 	});
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 module.exports = router;

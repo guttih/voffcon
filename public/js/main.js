@@ -209,9 +209,13 @@ function showModalConfirm(title, message, confirmButtonText, callback){
 	$('#myModal').modal('show');
 }
 
+function changeHref(from, to){
+	console.log("Changing href from \""+ from +"\" to \""+ to+"\"." );
+	window.location.href = window.location.href.replace(from,to);
+}
 
 $(function () {  
-	/* this is the *$( document ).ready(function( $ ) but jshint does not like that*/
+	/* this is the $( document ).ready(function( $ ) but jshint does not like that*/
 	var SERVER = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ':'+window.location.port: '');
 	//todo: run this only if logged in getWhenServerStarted();
 	$('.dropdown-toggle').dropdown();/*for the dropdown-toggle bootstrap class*/

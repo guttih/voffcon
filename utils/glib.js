@@ -145,4 +145,4 @@ module.exports.extractUsingArray = function extractUsingArray(strCode){
 	} catch (e) {
 		console.log("Invalid using statement.");
 	}
-}
+};

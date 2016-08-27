@@ -1,10 +1,14 @@
+var using = ["DiodeCtrl", "SliderCtrl", "SvgCtrl"];
+
 var device1, device2, device3, device4;
 
 function updateView(device, pinValues ) {
+		log("updateView start");
 		for(var i = 0; i<pinValues.length;i++){
 			device.get(pinValues[i].pin).setValue(pinValues[i].val);			
 			
 		} // for
+		log("updateView end");
 }
 function getDevice(pin){
 	switch(pin.deviceID) {
@@ -63,7 +67,19 @@ function drawControls(name, device, xOff, yOff){
 
 	device.fetchAllPins(function(){setupAppPins(device, xOff, yOff);}, setupFailed);
 }
-function onLoad(){
+function log(str){
+	$('#bottom').append('<p>'+str+'</p>');
+}
+function logObj(obj){
+	var str;
+	str = JSON.stringify(obj, null, 4); // (Optional) beautiful indented output.
+	console.log(obj); // Logs output to dev tools console.
+	var temp = "<hr><pre>"+ str +"</pre><hr>"; 
+	$('#bottom').append(temp);
+}
+
+$(function () {
+    $("#controls").css("min-height", "350px");  
 	var maxValue = 1023;
 	device1 = new Device('http://192.168.1.151:5100', maxValue);
 	device2 = new Device('http://192.168.1.152:5100', maxValue);
@@ -73,9 +89,4 @@ function onLoad(){
 	drawControls('backImage2', device2, 360, 0, 1023);
 	drawControls('backImage3', device3, 100, 190, 1023);
 	drawControls('backImage4', device4, 360, 190, 1023);
-}
-//to run javascript stored in a string
-/*function runCodeString(str){
-	var F = new Function(str);
-	return(F());
-}*/
+});

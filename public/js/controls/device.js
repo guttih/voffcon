@@ -2,21 +2,22 @@
 var iDeviceClassMakerID = 0;
 
 class Device {
-	constructor(host, highestValue){
+	constructor(savedDeviceID, highestValue){
 		
 		//iDeviceClassMakerID = iDeviceClassMakerID + 1; 
 		this.ID = ++iDeviceClassMakerID;
 		this.pins = [];
-		this.host = host;
+		this.savedDeviceID = savedDeviceID;
 		this.highestValue = highestValue;
 	}
 	add(number, value, higestValue){
-		this.pins.push(new Pin(number, value, this.host, higestValue, this.ID));
+		this.pins.push(new Pin(number, value, this.savedDeviceID, higestValue, this.ID));
 	}
 	/*will delete all existing pins and fetch all pins and their values from the server and add them*/
 	fetchAllPins(callback, errorCallback){
 		this.pins = [];
-		var posting = $.get( this.host+'/pins');
+		//var posting = $.get( this.host+'/pins');
+		var posting = $.get(getServer()+'/devices/pins/'+this.savedDeviceID);
 		var that = this;
 		posting.done(function(data){
 			that.addPins(data.pins, callback);

@@ -4,7 +4,7 @@ class Pin {
 		this.controls = [];
 		this.number = number;
 		this.value = value;
-		this.host = host;
+		this.savedDeviceID = host;
 		this.higestValue = higestValue;
 		this.deviceID = deviceID;
 	}

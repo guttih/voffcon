@@ -25,7 +25,7 @@ function onClickCAllback(obj){
 	var sendObj = {};
 	sendObj[pin.getNumber()] = value;
 	var dev = getDevice(pin);
-	var posting = $.post( pin.host+'/pins', sendObj);
+	var posting = $.post( pin.savedDeviceID+'/pins', sendObj);
 	posting.done(function(data){
 		updateView(dev, data.pins);
 	});
@@ -63,7 +63,7 @@ function drawControls(name, device, xOff, yOff){
 	style:'fill:gray;stroke:gray;stroke-width:1;fill-opacity:0.1;stroke-opacity:0.9'});
 
 	var text = new SvgCtrl(name+'t1', x+45,y+166, 200, 50);	
-	text.addText(20, 11, device.host, "fill:#283438;font-size:11px;");
+	text.addText(20, 11, device.savedDeviceID, "fill:#283438;font-size:11px;");
 
 	device.fetchAllPins(function(){setupAppPins(device, xOff, yOff);}, setupFailed);
 }
@@ -81,10 +81,10 @@ function logObj(obj){
 $(function () {
     $("#controls").css("min-height", "350px");  
 	var maxValue = 1023;
-	device1 = new Device('http://192.168.1.151:5100', maxValue);
-	device2 = new Device('http://192.168.1.152:5100', maxValue);
-	device3 = new Device('http://192.168.1.153:5100', maxValue);
-	device4 = new Device('http://192.168.1.154:5100', maxValue);
+	device1 = new Device('57afb108b450ab9c2f820507', maxValue);
+	device2 = new Device('57b75d339eda5e703998868b', maxValue);
+	device3 = new Device('57b75d619eda5e703998868c', maxValue);
+	device4 = new Device('57b8c32f121e2b4c41edd604', maxValue);
 	drawControls('backImage1', device1, 100, 0, 1023);
 	drawControls('backImage2', device2, 360, 0, 1023);
 	drawControls('backImage3', device3, 100, 190, 1023);

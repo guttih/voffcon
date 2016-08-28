@@ -79,16 +79,19 @@ module.exports.authenticateAdminRequest = function authenticateAdminRequest(req,
 	}
 };
 module.exports.makeRequestPostOptions = function makeRequestOptions(url, formData){
+	var byteLength = Buffer.byteLength(formData);
 	var options = {
 	url: url,
 	method: 'POST',
 	form: formData,
 		
 		headers: {
-			'Content-Type': 'application/x-www-form-urlencoded',
-			'Content-Length': Buffer.byteLength(formData)
+			'Content-Type': 'application/json',
+			/*'Content-Type': 'application/x-www-form-urlencoded',*/
+			'Content-Length': byteLength
 		}
 	};
+	console.log("options");console.log(options);
 	return options;
 };
 

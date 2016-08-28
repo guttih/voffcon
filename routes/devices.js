@@ -59,56 +59,107 @@ router.get('/started/:deviceId', lib.authenticateRequest, function(req, res){
 });
 //todo: here we have a hardcoded SERVERURL, we need to change this
 //this route needs to take a device ID like so router.get('/pins/:deviceID'...
-router.get('/pins', lib.authenticateRequest, function(req, res){
-	
-	var SERVERURL = 'http://192.168.1.151:5100';
-	var urlid = SERVERURL+'/pins';
-	console.log(urlid);
-	request.get(urlid,
-				function (err, res, body) {
-								if (res){
-									console.log("statuscode:"+res.statusCode);
-								}
+router.get('/pins/:deviceId', lib.authenticateRequest, function(req, res){
+	var deviceId = req.params.deviceId;
 
-							if (err) {
-								return console.error(err);
-							}
-							if (body){
-								console.log(body);
-							}
-							return body;
-				}
-		).pipe(res);
+	Device.getDeviceById(deviceId, function(err, device){
+		if (err !== null){
+			res.statusCode = 404;
+			var obj = {text:'Error 404: User device not found!'};
+			return res.json(obj);
+		}
+
+		
+		var urlid = device._doc.url+'/pins';
+		console.log(urlid);
+		request.get(urlid,
+					function (err, res, body) {
+									if (res){
+										console.log("get pins statuscode:"+res.statusCode);
+									}
+
+								if (err) {
+									return console.error(err);
+								}
+								if (body){
+									console.log(body);
+								}
+								return body;
+					}
+			).pipe(res);
+
+
+
+
 });
 
-router.post('/pins', lib.authenticateRequest, function(req, res){
-	var SERVERURL = 'http://192.168.1.151:5100';
-	var urlid = SERVERURL+'/pins';
 
-	var formData = {5: 500,
-					0: 0,
-					16: 16,
-			4: 40,
-					12: 120,
-				13:130,
-				15:900 };
 
-		request(lib.makeRequestPostOptions(urlid, formData),
-			function (err, res, body) {
-					if (res){
-						console.log("statuscode:"+res.statusCode);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+});
+
+router.post('/pins/:deviceId', lib.authenticateRequest, function(req, res){
+	//var SERVERURL = 'http://192.168.1.154:5100';
+	//var urlid = SERVERURL+'/pins';
+	/*var formData = {5: 999,
+					0: 999,
+					16: 999,
+					4: 999,
+					12: 999,
+					13:999,
+					15:999 };*/
+
+	var deviceId = req.params.deviceId;
+	var b = req.body;	
+	Device.getDeviceById(deviceId, function(err, device){
+		if (err !== null){
+			res.statusCode = 404;
+			var obj = {text:'Error 404: User device not found!'};
+			return res.json(obj);
+		}
+	
+			var urlid = device._doc.url+'/pins';					
+			var formData = {};
+			
+			var keys = Object.keys(b);
+			keys.forEach(function(key) {
+					console.log(key+ ':' + b[key])
+					formData[key] = Number(b[key]);	
+				}, this);
+			
+			keys = Object.keys(formData);
+			console.log("before delte");
+
+				formData = JSON.stringify(formData);
+				request(lib.makeRequestPostOptions(urlid, formData),
+					function (err, res, body) {
+							if (res){
+								console.log("statuscode:"+res.statusCode);
+							}
+
+						if (err) {
+							return console.error(err);
+						}
+						if (body){
+							console.log(body);
+						}
+						return body;
 					}
-
-				if (err) {
-					return console.error(err);
-				}
-				if (body){
-					console.log(body);
-				}
-				return body;
-			}
-		).pipe(res);
-
+				).pipe(res);}
+	);
 });
 
 router.get('/register', function(req, res){

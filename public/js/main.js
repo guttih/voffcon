@@ -214,9 +214,18 @@ function changeHref(from, to){
 	window.location.href = window.location.href.replace(from,to);
 }
 
+function getServer(){
+	console.log("window.location.protocol");
+	if (window.location.protocol === 'file:')
+	{	//dummy
+		return 'http://www.guttih.com:6100';
+	}
+	return window.location.protocol+'//'+window.location.hostname+(window.location.port ? ':'+window.location.port: '');
+}
+
 $(function () {  
 	/* this is the $( document ).ready(function( $ ) but jshint does not like that*/
-	var SERVER = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ':'+window.location.port: '');
+	var SERVER = getServer();
 	//todo: run this only if logged in getWhenServerStarted();
 	$('.dropdown-toggle').dropdown();/*for the dropdown-toggle bootstrap class*/
 	$("[rel='tooltip']").tooltip();/*activate boostrap tooltips*/

@@ -13,7 +13,7 @@ const char* password = "abba537496";
 IPAddress myIp(192,168,1,151),
           gateway(192,168,1,254),
           subnet(255,255,255,0);
-
+const int PORT = 5100;
 
 // if you do not want a special address to be whiteListed you can add it here. 
 // comment this next line out if you do not want this exception
@@ -37,7 +37,7 @@ boolean   grantAccessToAllClientsOnSameSubnet = true;
 .*/
 boolean   grantAccessToFirstCaller = false; 
 
-ESP8266WebServer server(5100);
+ESP8266WebServer server(PORT);
 
 
 void handleRoot() {
@@ -82,27 +82,72 @@ StringList whiteList; //todo: maybe whiteList should be a IPAddress not String
 
 //////////////////////////////////////////////////////////
 void handlePins(){
-  Serial.println("handlePins");
+  Serial.println("handlePins client IP: " + server.client().remoteIP().toString());
   if (!isAuthorized()) return;
   int pin;
   int val;
   if (server.method() == HTTP_POST)
-  {
+  {   Serial.println("HTTP_POST");
     String name;
-    /*name = "User-Agent";if (server.client.hasHeader(name)){
-            Serial.println("Found "+name+": " + server.header(name));}*/
-    name = "Content-Type";if (server.hasHeader(name)){
-            Serial.println("Found "+name+": " + server.header(name));}
-    name = "Host";if (server.hasHeader(name)){
-            Serial.println("Found "+name+": " + server.header(name));}
-    name = "Content-Length";if (server.hasHeader(name)){
-            Serial.println("Found "+name+": " + server.header(name));}
+    
+    Serial.println("arg count " + String(server.args()));
     for (uint8_t i=0; i<server.args(); i++){
       Serial.println("Set pin " + server.argName(i) + ": " + server.arg(i));
       pin = urlTool.toNumber(server.argName(i));
       val = urlTool.toNumber(server.arg(i));
-      if (pin > -1 && val > -1)
+      if (pin > -1 && val > -1){
         pinnar.setValue(pin, val);
+      } else 
+      { 
+        Serial.println("Error converting number!!!!");
+        String name = server.argName(i);
+        String line = server.arg(i);
+        if (  name.equals("plain")   && 
+              line.indexOf("{\"") == 0 &&
+              line.indexOf('}')+1 == line.length()/*We will not handle nested objects*/
+            )
+        {
+              //let's try to parse a json
+              String strPin, strValue; 
+              Serial.println("let's try to parse a json");
+              int iCol=1, iCom;
+              Serial.println("0" + line);
+              line = line.substring(1, line.length()-1);
+              Serial.println("1:" + line);
+              line+=",";
+              Serial.println("2:" + line);
+              line.replace("\"", "");
+              line.replace("\"", "");
+              Serial.println("3:Line:" + line);
+              iCol = line.indexOf(':');
+              iCom = line.indexOf(',');
+              
+              while(iCol>0 && iCom>3)
+              {
+                strPin = line.substring(0, iCol);
+                strValue = line.substring(iCol+1, iCom);
+                line.remove(0, iCom+1);
+                Serial.println("Pin  :" + strPin);
+                Serial.println("Value:" + strValue);
+                pin = urlTool.toNumber(strPin);
+                val = urlTool.toNumber(strValue);
+                if (pin > -1 && val > -1){
+                  pinnar.setValue(pin, val);
+                }
+                iCol = line.indexOf(':');
+                iCom = line.indexOf(',');
+               }
+              
+              
+
+
+              
+          
+        }
+        
+        
+        //String str = server.arg(i);
+      }
     }
   }
 

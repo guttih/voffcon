@@ -4,7 +4,7 @@
 boolean GPins::setValue(int pinNumber, int newValue){
          int i = indexOf(pinNumber);
           if (i < 0) return false;
-       Serial.println("setting value of "+String(i));
+       Serial.println("setting value of "+String(i) + " to " + String(newValue));
        mPins[i]->setValue(newValue);
        return true;
 }

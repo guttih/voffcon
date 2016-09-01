@@ -1,19 +1,6 @@
-to run a card:
-	búa til template-ið í domminu
-	sækja kortið úr gunni
-	sækja úr minn þau ctrl sem includuð eru í using statement.
-		get sótt  using statement úr kóða með acecode.js::extractUsingArray 
-			(kannski þessi func eigi að vera í main.js)
-		sækja hverja using skrá úr gagnagrunn
-		hlaða sótta skrá í gang
-			keyra með func:
-				//to run javascript stored in a string
-				function runCodeString(str){
-					var F = new Function(str);
-					return(F());
-				}
-		
-	keyra kortið
+Card owner should be able to select other users to have access to their cards (run access)
+	same goes for devices
+	http://select2.github.io/select2/
 
 
 make the "devices.js::router.get('/pins'..." route take an id.  Like so router.get('/pins/:deviceID'... 

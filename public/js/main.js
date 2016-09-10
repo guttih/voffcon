@@ -117,7 +117,7 @@ function getWhenServerStarted(){
 
 
 /*routeText is the element type to be deleted 'cards', 'controls' or 'devices'*/
-function createListItem(id, name, description, routeText, bAddAccessButton, bAddEditButton, bAddRunButton, bAddDeleteButton){
+function createListItem(id, name, description, routeText, bAddRunButton, bAddAccessButton, bAddEditButton, bAddDeleteButton){
 	var url = SERVER+'/'+ routeText +'/register/'+ id;
 	var strElm = 
 '<div id="listItem'+ id +'" class="list-group-item clearfix">' +
@@ -125,15 +125,16 @@ function createListItem(id, name, description, routeText, bAddAccessButton, bAdd
 	'<span class="list-group-item-text">' +description + '</span>'+
 	'<span class="pull-right">';
 	//window.location.href = '/cards/useraccess/'+ card.id;
+	if (bAddRunButton){
+		strElm +='<button onclick="runItem(\''+id+'\');" class="btn btn-xs btn-success"> <span class="glyphicon glyphicon-play"></span>&nbsp;Run </button>';
+	}
 	if (bAddAccessButton){
 		strElm += '<a href="/cards/useraccess/'+ id +'" class="btn btn-xs btn-warning"> <span class="glyphicon glyphicon-user"></span>&nbsp;Access </a>';
 	}
 	if (bAddEditButton){
 		strElm += '<a href="'+ url +'" class="btn btn-xs btn-warning"> <span class="glyphicon glyphicon-edit"></span>&nbsp;Edit </a>';
 	}
-	if (bAddRunButton){
-		strElm +='<button onclick="runItem(\''+id+'\');" class="btn btn-xs btn-success"> <span class="glyphicon glyphicon-play"></span>&nbsp;Run </button>';
-	}
+
 	if (bAddDeleteButton){
 	 strElm +='<button onclick="deleteItem(\''+ routeText +'\', \''+id+'\');" class="btn btn-xs btn-danger"> <span class="glyphicon glyphicon-trash"></span> Delete </button>' 
 	}

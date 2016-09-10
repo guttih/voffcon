@@ -22,13 +22,14 @@ function runItem(id){
 
 
 function setCardlistValues(cardList){
-	var id, name, description;
+	var id, name, description, isOwner;
 	for(var i = 0; i < cardList.length; i++){
-		id 		= cardList[i].id;
+		id          = cardList[i].id;
 		name 		= cardList[i].name;
-		description = cardList[i].description;
-		
-		var str =  createListItem(id, name, description, 'cards', true, true, true, true);
+		description = cardList[i].description,
+		isOwner     = cardList[i].isOwner;
+		console.log()
+		var str =  createListItem(id, name, description, 'cards', true, isOwner, isOwner, isOwner);
 		$("#card-list").append(str);
 	}
 }

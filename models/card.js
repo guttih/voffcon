@@ -108,6 +108,33 @@ module.exports.listByOwnerId = function (userId, callback){
 	var query = {owners:{$elemMatch: { _id:userId }}};
 	Card.find(query, callback);
 };
+module.exports.listByOwnerAndUserId = function (userId, callback){
+		var query = {
+					$or:[
+							{users:{$elemMatch: { _id:userId }}},
+							{owners:{$elemMatch: { _id:userId }}}
+						]
+				};
+	Card.find(query, callback);
+
+	/*var queryUsers = {users:{$elemMatch: { _id:userId }}};
+	var queryOwners = {owners:{$elemMatch: { _id:userId }}};
+
+	Card.find(queryUsers, function(err, users){
+		users.forEach(function(element) {
+			console.log(element.name);
+		}, this);*/
+		/*users.each(function(err, data){
+						console.log('user:' + data.name);
+				});
+		Card.find(queryOwners, function(err, owners){
+				owners.each(function(err, data){
+						console.log('owner:' + data.name);
+				});
+		});
+
+	})*/
+};
 /*if you only want users to get cards that they have access to, use this function*/
 module.exports.getUserCardById = function (CardId, userId, callback){
 	var query = {	_id: CardId,

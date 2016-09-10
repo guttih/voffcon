@@ -13,7 +13,7 @@ var setUserlistValues = function setUserlistValues(userList){
 		name 		= userList[i].name;
 		description = userList[i].description;
 		
-		var str =  createListItem(id, name, description, 'users', false, true, false, true);
+		var str =  createListItem(id, name, description, 'users', false, false, true, true);
 		$("#user-list").append(str);
 	}
 }

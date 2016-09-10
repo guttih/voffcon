@@ -149,3 +149,15 @@ module.exports.extractUsingArray = function extractUsingArray(strCode){
 		console.log("Invalid using statement.");
 	}
 };
+
+// check if a userID is in array
+module.exports.findObjectID = function findObjectID(array, objectID) {
+	var ret = false;
+	array.forEach(function(element) {
+		if ( objectID.equals(element._doc._id) ){
+			ret = true;
+			return true;
+		}
+	}, this);
+	return ret;
+};

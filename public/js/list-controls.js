@@ -20,7 +20,7 @@ function setControllistValues(controlList){
 		name 		= controlList[i].name;
 		description = controlList[i].description;
 		
-		var str =  createListItem(id, name, description, 'controls', false, true, false, true);
+		var str =  createListItem(id, name, description, 'controls', false, false, true, true);
 		$("#control-list").append(str);
 	}
 }

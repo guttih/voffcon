@@ -1,156 +1,169 @@
 /* Space out content a bit */
 body {
-  padding-top: 20px;
-  padding-bottom: 20px;
+	padding-top: 20px;
+	padding-bottom: 20px;
 }
 
 /* Everything but the jumbotron gets side spacing for mobile first views */
 .header,
 .marketing,
 .footer {
-  padding-right: 15px;
-  padding-left: 15px;
+	padding-right: 15px;
+	padding-left: 15px;
 }
 
 /* Custom page header */
 .header {
-  padding-bottom: 20px;
- /* border-bottom: 1px solid #e5e5e5;*/
+	padding-bottom: 20px;
+/* border-bottom: 1px solid #e5e5e5;*/
 }
 /* Make the masthead heading the same height as the navigation */
 .header h3 {
-  margin-top: 0;
-  margin-bottom: 0;
-  line-height: 40px;
+	margin-top: 0;
+	margin-bottom: 0;
+	line-height: 40px;
 }
 
 /* Custom page footer */
 .footer {
-  padding-top: 19px;
-  color: #777;
-  border-top: 1px solid #e5e5e5;
+	padding-top: 19px;
+	color: #777;
+	border-top: 1px solid #e5e5e5;
 }
 
 /* Customize container */
 @media (min-width: 768px) {
-  .container {
-    max-width: 730px;
-  }
+	.container {
+		max-width: 730px;
+	}
 }
 .container-narrow > hr {
-  margin: 30px 0;
+	margin: 30px 0;
 }
 
 /* Main marketing message and sign up button */
 .jumbotron {
-  text-align: center;
-  /*border-bottom: 1px solid #e5e5e5;*/
+	text-align: center;
+	/*border-bottom: 1px solid #e5e5e5;*/
 }
 .jumbotron .btn {
-  padding: 14px 24px;
-  font-size: 21px;
+	padding: 14px 24px;
+	font-size: 21px;
 }
 
 /* Supporting marketing content */
 .marketing {
-  margin: 40px 0;
+	margin: 40px 0;
 }
 .marketing p + h4 {
-  margin-top: 28px;
+	margin-top: 28px;
 }
 
 /* Responsive: Portrait tablets and up */
 @media screen and (min-width: 768px) {
-  /* Remove the padding we set earlier */
-  .header,
-  .marketing,
-  .footer {
-    padding-right: 0;
-    padding-left: 0;
-  }
-  /* Space out the masthead */
-  .header {
-    margin-bottom: 30px;
-  }
-  /* Remove the bottom border on the jumbotron for visual effect */
-  .jumbotron {
-    border-bottom: 0;
-  }
+/* Remove the padding we set earlier */
+	.header,
+	.marketing,
+	.footer {
+		padding-right: 0;
+		padding-left: 0;
+	}
+	/* Space out the masthead */
+	.header {
+		margin-bottom: 30px;
+	}
+	/* Remove the bottom border on the jumbotron for visual effect */
+	.jumbotron {
+		border-bottom: 0;
+	}
 }
 
 .page-header{
-  margin-top:-20px;
-  margin-right:15px;
-  margin-bottom:-20px;
-  border-bottom:0px;
+	margin-top:-20px;
+	margin-right:15px;
+	margin-bottom:-20px;
+	border-bottom:0px;
 }
 
 footer{
-  margin-top:40px;
+	margin-top:40px;
 }
 
 .row-padd{
-  padding-left:15px;
-  padding-right:15px;
-
+	padding-left:15px;
+	padding-right:15px;
 }
 .row-padd:after {
-    display: block;
-    content: '';
-    /*background: lightskyblue;*/
-    
-    margin-top:15px;
-    margin-bottom: 15px;
-    margin-left: 0px;
-    margin-right: 0px;
-    height       : 1px;
+	display: block;
+	content: '';
+	/*background: lightskyblue;*/
+
+	margin-top:15px;
+	margin-bottom: 15px;
+	margin-left: 0px;
+	margin-right: 0px;
+	height       : 1px;
 }
-/*
-.list-group-item > span > a{
-  margin-right:8px;
-}*/
+
 .list-group-item > span > button{
-  margin-left:9px;
+	margin-right:7px;
+}
+.list-group-item > span > a {
+	margin-right:7px;
 }
 
-.dropdown:hover .dropdown-menu {
-    display: block !important;
-    margin-top: 0; /* remove the gap so it doesn't close*/
-    color:red !important;
- }
- .dropdown {
-    /*display: block !important;*/
-  
-    color:gray !important;
- }
+.list-group-item > span  > button:last-child{
+	margin-right:0px;
+}
 
- .nav > ul > a{
-    color:gray !important;
- }
+/*.list-group-item > span > a:first-child {
+	margin-left:0px;
+}*/
+.dropdown:hover .dropdown-menu {
+	display: block !important;
+	margin-top: 0; /* remove the gap so it doesn't close*/
+	color:red !important;
+}
+.dropdown {
+	/*display: block !important;*/
+	color:gray !important;
+}
+
+.nav > ul > a{
+	color:gray !important;
+}
 
 nav > ul > li > a{
-    color:#777777;
-    font-weight: 1200;
-    font-size: 16px;
- }
- nav > ul > li > a:hover{
-    color:#222222;
- }
-
- .list-group-item-heading{
-   font-size: 14px;
-   margin-bottom: 0px;
-
- }
-  .list-group-item-heading::first-letter { 
-    font-size: 16px;
-    font-weight: 600;
+	color:#777777;
+	font-weight: 1200;
+	font-size: 16px;
 }
-  .list-group-item-text{
-    margin-top: 0px;
-    position: relative;
-    top:-5px;
-   font-size: 12px;
-   font-style: italic;
-   
- }
+nav > ul > li > a:hover{
+	color:#222222;
+}
+
+.list-group-item-heading{
+	font-size: 14px;
+	margin-bottom: 0px;
+}
+.list-group-item-heading::first-letter { 
+	font-size: 16px;
+	font-weight: 600;
+}
+.list-group-item-text{
+	margin-top: 0px;
+	position: relative;
+	top:-5px;
+	font-size: 12px;
+	font-style: italic;
+}
+
+.error-response-text{
+	background:#f2dede;
+	color: #a94442;
+	font-size: 14px;
+	font-weight: bold;
+	padding:10px;
+	margin: 5px 0px 5px; 
+	border-radius: 5px;
+}

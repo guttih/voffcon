@@ -1,0 +1,23 @@
+<div class="row">
+	<h3 class="page-header pull-right">User access</h3>
+</div>
+{{#if errors}}
+	{{#each errors}}
+		<div class="alert alert-danger">{{msg}}</div>
+	{{/each}}
+{{/if}}
+<div class="row">
+	<p>"Grant users access to the card "{{card.name}}".</p>
+</div>
+
+
+<div class="row">
+	<div id = "user-list" class="user-list list-group">
+	<!-- listItems will be added here-->
+	</div>
+</div>
+
+<button id="btnUpdateAccessCard" type="button" class="btn btn-success pull-right">Update user access</button>
+
+<script src="/js/bootstrap.min.js"></script>	
+<script src="/js/useraccess.js"></script>

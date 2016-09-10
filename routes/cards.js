@@ -98,7 +98,6 @@ router.post('/register/:cardID', lib.authenticatePowerRequest, function(req, res
 					}
 					res.redirect('/cards/run/'+id);
 				});
-			
 	}
 });
 
@@ -182,6 +181,52 @@ router.get('/run/:cardID', lib.authenticateCardUrl, function(req, res){
 			});
 		}
 	});
+});
+
+/*render a page wich runs a card, that is if the user is a registered user for that card (has access)*/
+router.get('/useraccess/:cardID', lib.authenticateCardUrl, function(req, res){
+	var id = req.params.cardID;
+	Card.getById(id, function(err, retCard){
+		if(err || retCard === null) {
+			req.flash('error',	'Could not find card.' );
+			res.redirect('/result');
+		} else{
+			var card = {
+				id:id,
+				name:retCard._doc.name
+			};
+			res.render('useraccess_card', { card:card });
+		}
+	});
+});
+
+router.post('/useraccess/:cardID', lib.authenticatePowerRequest, function(req, res){
+	var id = req.params.cardID;
+	owners = JSON.parse(req.body.owners);
+	users = JSON.parse(req.body.users);
+	var values = {
+			owners: owners,
+			users: users
+			};
+
+		Card.modifyUserAccess(id, values, function(err, result){
+		var code = 500;
+		if(err) {//(result.ok===1 result.nModified===1)
+			//res.send('Error 404 : Not found or unable to update! ');
+			var msg = "Error modifying users access.";
+			if (err.messageToUser !== undefined){
+				msg += "<br/><br/>" + err.messageToUser;
+				if (err.statusCode !== undefined){
+					code = err.statusCode;
+				}
+			}
+				res.status(code).send(msg);
+		} else{
+				res.status(200).send('Users access changed.');
+		}
+		
+	});
+
 });
 
 module.exports = router;

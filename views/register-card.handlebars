@@ -8,6 +8,8 @@
 {{/if}}
 {{#if item}}
 			<div id='item' data-card='{{{item}}}' />
+			  
+			
 {{/if}}
 <form  method="post" id="card-form">
 	<div class="row row-padd">
@@ -39,9 +41,11 @@
 	</div>
 </form>
 <div class="row  row-padd">
+	<button id="btnUserAccessCard" type="button" class="btn btn-default pull-left">User access</button>
 	<button id="btnSaveCard" type="button" class="btn btn-success pull-right">Save Card</button>
 </div>
 
+<script src="/js/register-card.js" type="text/javascript" charset="utf-8"></script>
 <script src="/ace-builds/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
 <script src="/js/acecode.js" type="text/javascript" charset="utf-8"></script>
 <script src="/js/bootstrap.min.js"></script>	

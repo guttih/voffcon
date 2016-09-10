@@ -117,22 +117,72 @@ function getWhenServerStarted(){
 
 
 /*routeText is the element type to be deleted 'cards', 'controls' or 'devices'*/
-function createListItem(id, name, description, routeText, bAddRunButton){
+function createListItem(id, name, description, routeText, bAddAccessButton, bAddEditButton, bAddRunButton, bAddDeleteButton){
 	var url = SERVER+'/'+ routeText +'/register/'+ id;
 	var strElm = 
 '<div id="listItem'+ id +'" class="list-group-item clearfix">' +
 	'<p class="list-group-item-heading">' + name + '</p>' + 
 	'<span class="list-group-item-text">' +description + '</span>'+
-	'<span class="pull-right">' +
-	'<a href="'+ url +'" class="btn btn-xs btn-success"> <span class="glyphicon glyphicon-edit"></span>&nbsp;Edit </a>';
+	'<span class="pull-right">';
+	//window.location.href = '/cards/useraccess/'+ card.id;
+	if (bAddAccessButton){
+		strElm += '<a href="/cards/useraccess/'+ id +'" class="btn btn-xs btn-warning"> <span class="glyphicon glyphicon-user"></span>&nbsp;Access </a>';
+	}
+	if (bAddEditButton){
+		strElm += '<a href="'+ url +'" class="btn btn-xs btn-warning"> <span class="glyphicon glyphicon-edit"></span>&nbsp;Edit </a>';
+	}
 	if (bAddRunButton){
 		strElm +='<button onclick="runItem(\''+id+'\');" class="btn btn-xs btn-success"> <span class="glyphicon glyphicon-play"></span>&nbsp;Run </button>';
 	}
-	 strElm +='<button onclick="deleteItem(\''+ routeText +'\', \''+id+'\');" class="btn btn-xs btn-danger"> <span class="glyphicon glyphicon-trash"></span> Delete </button>' +
-	'</span>' +'</div>';
+	if (bAddDeleteButton){
+	 strElm +='<button onclick="deleteItem(\''+ routeText +'\', \''+id+'\');" class="btn btn-xs btn-danger"> <span class="glyphicon glyphicon-trash"></span> Delete </button>' 
+	}
+	strElm +='</span>' +'</div>';
 
 	return strElm; 
 }
+
+function createListItemUserAccess(id, name, description, routeText, selectedOption){
+	var url = SERVER+'/'+ routeText +'/register/'+ id;
+	var sel0, sel1, sel2;
+	sel0 = (selectedOption === 0) ? ' selected' : '';
+	sel1 = (selectedOption === 1) ? ' selected' : '';
+	sel2 = (selectedOption === 2) ? ' selected' : '';
+	var strElm = 
+'<div id="' + id +'" class="list-group-item clearfix">' +
+	'<p class="list-group-item-heading">' + name + '</p>' + 
+	'<span class="list-group-item-text">' +description + '</span>'+
+	'<span class="pull-right">';
+	strElm+='<select class="access-select form-control">'+
+  				'<option value="0"' + sel0 + '>No access</option>' 	+
+  				'<option value="1"' + sel1 + '>User</option>'		+
+  				'<option value="2"' + sel2 + '>Owner</option>'	+
+			'</select>';
+	strElm +='</span>' +'</div>';
+
+	return strElm; 
+}
+
+// changes the background color of a select box which handles user access to items
+function setSelectAccessBackgroundClick(){
+	var $elm = $('.access-select');
+	$elm.on('change', function() {
+		var color = 'white';
+
+		switch(this.value){
+			case "1" : color = '#F0F7ED'; break;
+			case "2" : color = '#A1D490'; break;
+		}
+		$(this).css("background-color", color);
+	});
+
+	// run the onChange
+	$elm.each(function( index ) {
+  		$( this ).trigger("change");
+	});
+}
+
+
 
 /*routeText is the element type to be deleted 'cards', 'controls' or 'devices'*/
 function deleteItem(routeText, id){
@@ -164,31 +214,29 @@ function deleteItem(routeText, id){
 		
 		});
 		
-	/*var url = SERVER+'/'+ routeText +'/'+id;
-	$.ajax({
-		url: url,
-		type: 'DELETE',
-		success: function(data) {
-			console.log("delete responce.");
-			console.log(data);
-			console.log('todo: onDeleted remove this item from the dom list' );
-			
-			$('#listItem'+ id).remove();
-		},
-		error: function (res){
-			console.log(res);
-			showModal('Error when deleting',	
-					res.responseText + '   (' + res.status + ': ' + res.statusText+')');
-		}
-	});*/
+}
+function showModalError(title, responce){
+
+	showModal(title, 
+			'Error ' + responce.status + ' : ' + responce.statusText + 
+			'\n\n<p class="error-response-text">' + responce.responseText + '</p>');
+	
 }
 function showModal(title, message){
 	$(".modal-title").text(title);
-	$(".modal-body").text(message);
+	if (message.indexOf('\n')>-1)
+	{
+		message = message.replace('\n', '<br/>');
+		$(".modal-body").html(message);
+	}
+	else {
+		$(".modal-body").text(message);
+	}
 	$('#btn-confirm').hide(); 
 	$('#myModal').modal('show');
 	
 }
+
 
 function showModalConfirm(title, message, confirmButtonText, callback){
 	$(".modal-title").text(title);
@@ -217,11 +265,53 @@ function changeHref(from, to){
 function getServer(){
 	console.log("window.location.protocol");
 	if (window.location.protocol === 'file:')
-	{	//dummy
+	{	//todo: remove dummy
 		return 'http://www.guttih.com:6100';
 	}
 	return window.location.protocol+'//'+window.location.hostname+(window.location.port ? ':'+window.location.port: '');
 }
+
+
+function getServerUrl(){
+	var serverUrl = window.location.protocol + '//' + window.location.hostname +(window.location.port ? ':'+window.location.port: '');
+	return serverUrl;
+}
+
+/*function getUserUserList(callback){
+	var url = SERVER+'/users/user-list';
+		var request = $.get(url);
+	request.done(function( data ) {
+		callback(data);
+		}).fail(function( data ) {
+			if (data.status===401){
+				showModal("You need to be logged in!", data.responseText);
+			}
+		});
+}*/
+
+function getUserUserList(callback){
+	var url = '/users/user-list';
+	requestData(url, callback);
+}
+
+
+// makes a call to the API requesting data
+// the subUrl should not contain the protocol, hostname nor port number
+function requestData(subUrl, callback){
+		var url = SERVER + subUrl;
+		var request = $.get(url);
+	request.done(function( data ) {
+		callback(data);
+		}).fail(function( data ) {
+			if (data.status===401){
+				showModal("You need to be logged in!", data.responseText);
+			}
+		});
+}
+
+
+
+
 
 $(function () {  
 	/* this is the $( document ).ready(function( $ ) but jshint does not like that*/

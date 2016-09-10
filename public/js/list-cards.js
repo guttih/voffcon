@@ -28,7 +28,7 @@ function setCardlistValues(cardList){
 		name 		= cardList[i].name;
 		description = cardList[i].description;
 		
-		var str =  createListItem(id, name, description, 'cards', true);
+		var str =  createListItem(id, name, description, 'cards', true, true, true, true);
 		$("#card-list").append(str);
 	}
 }

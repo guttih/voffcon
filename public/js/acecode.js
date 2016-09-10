@@ -335,7 +335,7 @@ function getCard(id){
 		});
 }
 
-$(function () {  
+/*$(function () {  
 	aceInit();//when script loads this runs.
 	SERVER = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ':'+window.location.port: '');
 	var control = $( '#item' ).data('control');
@@ -343,4 +343,13 @@ $(function () {
 	if (control !== undefined){ getControl(control.id);	}
 	if (card !== undefined){ getCard(card.id);	}
 
-});
+});*/
+
+function initAce(){
+	aceInit();//when script loads this runs.
+	SERVER = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ':'+window.location.port: '');
+	var control = $( '#item' ).data('control');
+	var card    = $( '#item' ).data('card');
+	if (control !== undefined){ getControl(control.id);	}
+	if (card !== undefined){ getCard(card.id);	}
+}

@@ -12,15 +12,7 @@ function getUserControlList(){
 			}
 		});
 }
-/*
-function createListItem(name, description, url){
-	var strElm;
-	strElm =	'<a href="'+ url +'" class="list-group-item list-group-item-action">\n' + 
-				'<h5 class="list-group-item-heading">' + name + '</h5>' +
-				'<p class="list-group-item-text">'+ description +'.</p>' +
-				"</a>";
-	return strElm; 
-}*/
+
 function setControllistValues(controlList){
 	var id, name, description;
 	for(var i = 0; i < controlList.length; i++){
@@ -28,7 +20,7 @@ function setControllistValues(controlList){
 		name 		= controlList[i].name;
 		description = controlList[i].description;
 		
-		var str =  createListItem(id, name, description, 'controls', false);
+		var str =  createListItem(id, name, description, 'controls', false, true, false, true);
 		$("#control-list").append(str);
 	}
 }

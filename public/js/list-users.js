@@ -16,7 +16,7 @@ var setUserlistValues = function setUserlistValues(userList){
 		var str =  createListItem(id, name, description, 'users', false, false, true, true);
 		$("#user-list").append(str);
 	}
-}
+};
 
 $(function () {  
 	/* this is the *$( document ).ready(function( $ ) but jshint does not like that*/

@@ -26,9 +26,8 @@ function setCardlistValues(cardList){
 	for(var i = 0; i < cardList.length; i++){
 		id          = cardList[i].id;
 		name 		= cardList[i].name;
-		description = cardList[i].description,
+		description = cardList[i].description;
 		isOwner     = cardList[i].isOwner;
-		console.log()
 		var str =  createListItem(id, name, description, 'cards', true, isOwner, isOwner, isOwner);
 		$("#card-list").append(str);
 	}

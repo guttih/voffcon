@@ -20,7 +20,7 @@ function getServerUrl(){
 //
 function getLastItemOfUrl(url){
 	
-	if (url === undefined) return;
+	if (url === undefined) {return;}
 	var i = url.lastIndexOf('/');
 	if (i < 0) { return;}
 	var ret = url.substr(i + 1); 
@@ -43,13 +43,13 @@ function getCardUserAccessLevel(card, id){
 	if (card === undefined) {return 0;}
 	if (card.owners === undefined) {return 0;}
 	if (card.users === undefined) {return 0;}
-
-	for (var i = 0; i < card.owners.length; i++) {
+	var i;
+	for (i = 0; i < card.owners.length; i++) {
 		if (card.owners[i]._id === id){
 			return 2;
 		}
 	}
-	for (var i = 0; i < card.users.length; i++) {
+	for (i = 0; i < card.users.length; i++) {
 		if (card.users[i]._id === id){
 			return 1;
 		}
@@ -69,10 +69,7 @@ var setUserlistValues = function setUserlistValues(userList){
 		$("#user-list").append(str);
 	}
 	setSelectAccessBackgroundClick();
-
-}
-
-
+};
 
 var card;
 var users;
@@ -82,7 +79,7 @@ var setCardValues = function setCardValues(cardData){
 		users = allUsersData;
 		setUserlistValues(users);
 	});
-}
+};
 
 
 
@@ -94,7 +91,7 @@ $('#btnUpdateAccessCard').click(function() {
 		var id = $(this).attr('id');
 
 		var sel = $('#' + id +' select');
-		val = sel.val();
+		var val = sel.val();
 		if (val === "2"){
 			obj.owners.push(id);
 		} else if (val === "1"){

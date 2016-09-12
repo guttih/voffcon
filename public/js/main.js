@@ -136,7 +136,7 @@ function createListItem(id, name, description, routeText, bAddRunButton, bAddAcc
 	}
 
 	if (bAddDeleteButton){
-	 strElm +='<button onclick="deleteItem(\''+ routeText +'\', \''+id+'\');" class="btn btn-xs btn-danger"> <span class="glyphicon glyphicon-trash"></span> Delete </button>' 
+	 strElm +='<button onclick="deleteItem(\''+ routeText +'\', \''+id+'\');" class="btn btn-xs btn-danger"> <span class="glyphicon glyphicon-trash"></span> Delete </button>';
 	}
 	strElm +='</span>' +'</div>';
 

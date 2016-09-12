@@ -136,8 +136,8 @@ router.post('/pins/:deviceId', lib.authenticateRequest, function(req, res){
 			
 			var keys = Object.keys(b);
 			keys.forEach(function(key) {
-					console.log(key+ ':' + b[key])
-					formData[key] = Number(b[key]);	
+					console.log(key+ ':' + b[key]);
+					formData[key] = Number(b[key]);
 				}, this);
 			
 			keys = Object.keys(formData);

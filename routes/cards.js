@@ -69,7 +69,7 @@ router.post('/register', lib.authenticatePowerRequest, function(req, res){
 });
 
 
-router.post('/register/:cardID', lib.authenticatePowerRequest, function(req, res){
+router.post('/register/:cardID', lib.authenticateCardOwnerUrl, function(req, res){
 	var id = req.params.cardID;
 	req.checkBody('name', 'Name is required').notEmpty();
 	req.checkBody('description', 'description is required').notEmpty();
@@ -101,7 +101,7 @@ router.post('/register/:cardID', lib.authenticatePowerRequest, function(req, res
 	}
 });
 
-router.delete('/:cardID', lib.authenticatePowerRequest, function(req, res){
+router.delete('/:cardID', lib.authenticateCardOwnerUrl, function(req, res){
 	var id = req.params.cardID;
 	Card.delete(id, function(err, result){
 		if(err !== null){
@@ -144,7 +144,7 @@ router.get('/card-list', lib.authenticateRequest, function(req, res){
 
 
 
-router.get('/item/:cardID', lib.authenticateRequest, function(req, res){
+router.get('/item/:cardID', lib.authenticateCardUserUrl, function(req, res){
 	var id = req.params.cardID;
 	if (id !== undefined){
 		Card.getById(id, function(err, card){
@@ -160,7 +160,7 @@ router.get('/item/:cardID', lib.authenticateRequest, function(req, res){
 });
 
 /*render a page wich runs a card, that is if the user is a registered user for that card (has access)*/
-router.get('/run/:cardID', lib.authenticateCardUrl, function(req, res){
+router.get('/run/:cardID', lib.authenticateCardUserUrl, function(req, res){
 	var id = req.params.cardID;
 	Card.getById(id, function(err, card){
 		if(err || card === null) {
@@ -194,7 +194,7 @@ router.get('/run/:cardID', lib.authenticateCardUrl, function(req, res){
 });
 
 /*render a page wich runs a card, that is if the user is a registered user for that card (has access)*/
-router.get('/useraccess/:cardID', lib.authenticateCardUrl, function(req, res){
+router.get('/useraccess/:cardID', lib.authenticateCardOwnerUrl, function(req, res){
 	var id = req.params.cardID;
 	Card.getById(id, function(err, retCard){
 		if(err || retCard === null) {
@@ -210,9 +210,9 @@ router.get('/useraccess/:cardID', lib.authenticateCardUrl, function(req, res){
 	});
 });
 
-router.post('/useraccess/:cardID', lib.authenticatePowerRequest, function(req, res){
-	var id = req.params.cardID;
-	owners = JSON.parse(req.body.owners);
+router.post('/useraccess/:cardID', lib.authenticateCardOwnerUrl, function(req, res){
+	var id = req.params.cardID,
+	owners = JSON.parse(req.body.owners),
 	users = JSON.parse(req.body.users);
 	var values = {
 			owners: owners,

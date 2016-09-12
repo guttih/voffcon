@@ -23,6 +23,7 @@ module.exports.authenticatePowerUrl = function authenticatePowerUrl(req, res, ne
 		res.redirect('/result');
 	}
 };
+
 module.exports.authenticateAdminUrl = function authenticateAdminUrl(req, res, next){	
 	if(req.isAuthenticated() && req.user._doc.level > 1){
 		return next();
@@ -31,18 +32,45 @@ module.exports.authenticateAdminUrl = function authenticateAdminUrl(req, res, ne
 		res.redirect('/result');
 	}
 };
-module.exports.authenticateCardUrl = function authenticateCardUrl(req, res, next){
+
+module.exports.authenticateCardUserUrl = function authenticateCardUserUrl(req, res, next){
 	if(req.isAuthenticated()){
-		var CardId = req.params.cardID;
-		var userId = req.user._id;
-		Card.getUserCardById(CardId, userId, function(err, result){
-			if(err || result === null || result.length < 1) {
-				req.flash('error_msg',	'You are not have permission to use this card.' );
-				res.redirect('/result');
-			} else {
-				return next();
-			}
-		});
+		if (req.user._doc.level > 1){
+			return next(); //admins can do everything
+		} else {
+			var CardId = req.params.cardID;
+			var userId = req.user._id;
+			Card.getUserCardById(CardId, userId, function(err, result){
+				if(err || result === null || result.length < 1) {
+					req.flash('error_msg',	'You are not have permission to use this card.' );
+					res.redirect('/result');
+				} else {
+					return next();
+				}
+			});
+		}
+	} else {
+		req.flash('error_msg',	'You are not have permission to use this card and therefore cannot run it.' );
+		res.redirect('/result');
+	}
+};
+
+module.exports.authenticateCardOwnerUrl = function authenticateCardOwnerUrl(req, res, next){
+	if(req.isAuthenticated()){
+		if (req.user._doc.level > 1){
+			return next();
+		} else {
+					var CardId = req.params.cardID;
+					var userId = req.user._id;
+					Card.getOwnerCardById(CardId, userId, function(err, result){
+						if(err || result === null || result.length < 1) {
+							req.flash('error_msg',	'You are not have permission to use this card.' );
+							res.redirect('/result');
+						} else {
+							return next();
+						}
+					});
+		}
 		
 	} else {
 

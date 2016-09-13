@@ -119,7 +119,7 @@ router.delete('/:controlID', lib.authenticateControlOwnerUrl, function(req, res)
 	
 });
 
-router.get('/list', lib.authenticatePowerUrl, function(req, res){
+router.get('/list', lib.authenticateUrl, function(req, res){
 	res.render('list-control');
 });
 
@@ -154,8 +154,54 @@ router.get('/item/:controlID', lib.authenticateRequest, function(req, res){
 					res.json(control);
 				}
 			});
-		
 	}
+});
+
+/*render a page wich runs a control, that is if the user is a registered user for that control (has access)*/
+router.get('/useraccess/:controlID', lib.authenticateControlOwnerUrl, function(req, res){
+	var id = req.params.controlID;
+	Control.getById(id, function(err, retControl){
+		if(err || retControl === null) {
+			req.flash('error',	'Could not find control.' );
+			res.redirect('/result');
+		} else{
+			var control = {
+				id:id,
+				name:retControl._doc.name
+			};
+			res.render('useraccess_control', { control:control });
+		}
+	});
+});
+
+router.post('/useraccess/:controlID', lib.authenticateControlOwnerUrl, function(req, res){
+	var id = req.params.controlID,
+	owners = JSON.parse(req.body.owners),
+	users = JSON.parse(req.body.users);
+	var values = {
+			owners: owners,
+			users: users
+			};
+
+		Control.modifyUserAccess(id, values, function(err, result){
+		var code = 500;
+		if(err) {//(result.ok===1 result.nModified===1)
+			//res.send('Error 404 : Not found or unable to update! ');
+			var msg = "Error modifying users access.";
+			if (err.messageToUser !== undefined){
+				msg += "<br/><br/>" + err.messageToUser;
+				if (err.statusCode !== undefined){
+					code = err.statusCode;
+				}
+			}
+				res.status(code).send(msg);
+		} else{
+				res.status(200).send('Users access changed.');
+		}
+		
+	});
 
 });
+
+
 module.exports = router;

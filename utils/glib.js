@@ -4,6 +4,7 @@ const os = require('os');
 const fs = require('fs');
 var interfaces = os.networkInterfaces();
 var Card = require('../models/card');
+var Control = require('../models/control');
 var router = express.Router();
 
 module.exports.authenticateUrl = function authenticateUrl(req, res, next){	
@@ -85,7 +86,7 @@ module.exports.authenticateControlOwnerUrl = function authenticateControlOwnerUr
 		if (req.user._doc.level > 1){
 			return next();
 		} else {
-					var ControlId = req.params.ControlID;
+					var ControlId = req.params.controlID;
 					var userId = req.user._id;
 					Control.getOwnerControlById(ControlId, userId, function(err, result){
 						if(err || result === null || result.length < 1) {

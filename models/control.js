@@ -81,7 +81,8 @@ module.exports.getOwnerControlById = function (ControlId, userId, callback){
 	Control.find(query, callback);
 };
 
-/*if you only want users to get cards that they have access to, use this function*/
+/*if you only want users to get controls that they have access to, use this function*/
+/* UNUSED FUNCTION
 module.exports.getUserControldById = function (ControlId, userId, callback){
 	var query = {	_id: ControlId,
 					$or:[
@@ -90,4 +91,37 @@ module.exports.getUserControldById = function (ControlId, userId, callback){
 						]
 				};
 	Control.find(query, callback);
+};*/
+
+module.exports.modifyUserAccess = function (ControlId, newValues, callback){
+	var query = {	_id: ControlId	};
+
+	if (newValues.owners === undefined && newValues.users === undefined ) {
+		return callback(errorToUser("No owners nor users are specified.", 400)); //nothing to change then.
+	} else if ((newValues.owners !== undefined && newValues.owners.length < 1) ) {
+		return callback(errorToUser("There must always be at least one owner for each control.", 403)); //there must always be at least one owner.
+	}
+
+	Control.findOne(query, function(err, control){
+		if (err) {
+			return callback(err); 
+		} //todo: what to do, if error?  maybe throw err;
+
+		if (newValues.owners !== undefined ){
+
+			control.owners.splice(0,control.owners.length);
+			newValues.owners.forEach(function(element) {
+				control.owners.push(element);
+			}, this);
+		}
+
+		if (newValues.users !== undefined){
+			control.users.splice(0,control.users.length);
+			newValues.users.forEach(function(element) {
+				control.users.push(element);
+			}, this);
+		}
+
+		control.save(callback);
+	});
 };

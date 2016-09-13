@@ -129,7 +129,7 @@ function createListItem(id, name, description, routeText, bAddRunButton, bAddAcc
 		strElm +='<button onclick="runItem(\''+id+'\');" class="btn btn-xs btn-success"> <span class="glyphicon glyphicon-play"></span>&nbsp;Run </button>';
 	}
 	if (bAddAccessButton){
-		strElm += '<a href="/cards/useraccess/'+ id +'" class="btn btn-xs btn-warning"> <span class="glyphicon glyphicon-user"></span>&nbsp;Access </a>';
+		strElm += '<a href="/'+ routeText +'/useraccess/'+ id +'" class="btn btn-xs btn-warning"> <span class="glyphicon glyphicon-user"></span>&nbsp;Access </a>';
 	}
 	if (bAddEditButton){
 		strElm += '<a href="'+ url +'" class="btn btn-xs btn-warning"> <span class="glyphicon glyphicon-edit"></span>&nbsp;Edit </a>';

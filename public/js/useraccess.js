@@ -14,10 +14,7 @@ function getServerUrl(){
 	return serverUrl;
 }
 
-
-
 //returns undefined if the last item is not found
-//
 function getLastItemOfUrl(url){
 	
 	if (url === undefined) {return;}
@@ -27,33 +24,30 @@ function getLastItemOfUrl(url){
 	return ret;
 }
 
-
-function getCard(callback){
-	var cardId = getLastItemOfUrl(window.location.href);
-	if (cardId === undefined || cardId.length < 11) {
-		return; //invalid at end of url;
-	}
-	var url = '/cards/item/' + cardId;
-	requestData(url, callback);
-}
-
-
-//finds the access level of a user to a given control card
-function getCardUserAccessLevel(card, id){
-	if (card === undefined) {return 0;}
-	if (card.owners === undefined) {return 0;}
-	if (card.users === undefined) {return 0;}
+//finds the access level of a user to a given card, control or device
+function getItemUserAccessLevel(inItem, id){
 	var i;
-	for (i = 0; i < card.owners.length; i++) {
-		if (card.owners[i]._id === id){
-			return 2;
+
+	if (inItem === undefined) {
+		return 0;
+	}
+
+	if (inItem.owners !== undefined) {
+		for (i = 0; i < inItem.owners.length; i++) {
+			if (inItem.owners[i]._id === id){
+				return 2;
+			}
+		}	
+	}
+
+	if (inItem.users !== undefined) {
+		for (i = 0; i < inItem.users.length; i++) {
+			if (inItem.users[i]._id === id){
+				return 1;
+			}
 		}
 	}
-	for (i = 0; i < card.users.length; i++) {
-		if (card.users[i]._id === id){
-			return 1;
-		}
-	}
+	
 	return 0;
 } 
 
@@ -64,79 +58,12 @@ var setUserlistValues = function setUserlistValues(userList){
 		name 		= userList[i].name;
 		description = userList[i].description;
 		
-		var accessLevel = getCardUserAccessLevel(card, id);
+		var accessLevel = getItemUserAccessLevel(item, id);
 		var str =  createListItemUserAccess(id, name, description, 'users', accessLevel);
 		$("#user-list").append(str);
 	}
 	setSelectAccessBackgroundClick();
 };
 
-var card;
+var item;
 var users;
-var setCardValues = function setCardValues(cardData){
-	card = cardData;
-	getUserUserList(function(allUsersData){
-		users = allUsersData;
-		setUserlistValues(users);
-	});
-};
-
-
-
-$('#btnUpdateAccessCard').click(function() {
-
-	var obj = { owners: [],
-					users:  []};
-	$('#user-list').children().each(function () {
-		var id = $(this).attr('id');
-
-		var sel = $('#' + id +' select');
-		var val = sel.val();
-		if (val === "2"){
-			obj.owners.push(id);
-		} else if (val === "1"){
-			obj.users.push(id);
-		}  
-	});
-	
-	var cid = card._id;
-	var sendObj = {};
-	sendObj.owners = JSON.stringify(obj.owners);
-	sendObj.users = JSON.stringify(obj.users);
-	var posting = $.post( '/cards/useraccess/'+cid, sendObj);
-	posting
-		.done(function(data){
-			//window.location.href = '/cards/useraccess/'+cid;
-			showModal("Access updated", "User access successfully updated.");
-		})
-		.fail(function(data){
-			console.log("failed posting");
-			console.log(data);
-			showModalError('Error updating user access', data);
-		});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
-});
-
-$(function () {
-	var url = getServerUrl();
-	console.log(url);
-	getCard(setCardValues);
-
-});

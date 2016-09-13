@@ -1,7 +1,12 @@
 
 
 
-næst, Gera access síğu fyrir controls
+N Æ S T , Gera access síğu fyrir device
+Breyta useraccess_device.handlebars şannig ağ hún virki fyrir device en ekki card
+(rename card to device, or Card to Control or cards to controls)
+
+	user  access?? allir hafa user access //şarf ekki ağ tiltaka user
+	owner access?? owner getur breytt access úr engum í owner
 
 
 Device owner should should be able to select other users to grant access to their devices (run access)
@@ -39,3 +44,10 @@ BÃºa til sÃ­Ã°u sem inniheldur forritiÃ° sem hlaÃ°a skÃ¡ upp Ã¡ tÃ¦kiÃ°
 	og Ã¾aÃ° er spurning um hvort ekki yrÃ°i lÃ­ka bÃ¦tt viÃ° tveimur eigindum Ã­ viÃ°bÃ³t
 		last modified by : userID
 		created by : userID
+
+todo: when user changes his own access and he looses the access to change, 
+the user interface shows him like he can change the access but he cannot change anyting
+this is because the middleware authenticateControlOwnerUrl reports an error but
+the client javascript does not pick that kind of error, that is req.flash( error. 
+
+todo: when changing access on a control, user can select user access, but that access does not change anyting.

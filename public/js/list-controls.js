@@ -14,13 +14,14 @@ function getUserControlList(){
 }
 
 function setControllistValues(controlList){
-	var id, name, description;
+	var id, name, description, isOwner;
 	for(var i = 0; i < controlList.length; i++){
 		id 		= controlList[i].id;
 		name 		= controlList[i].name;
 		description = controlList[i].description;
+		isOwner     = controlList[i].isOwner;
 		
-		var str =  createListItem(id, name, description, 'controls', false, false, true, true);
+		var str =  createListItem(id, name, description, 'controls', false, isOwner, isOwner, isOwner);
 		$("#control-list").append(str);
 	}
 }

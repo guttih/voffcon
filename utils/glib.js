@@ -74,7 +74,32 @@ module.exports.authenticateCardOwnerUrl = function authenticateCardOwnerUrl(req,
 		
 	} else {
 
-		req.flash('error_msg',	'You are not have permission to use this card and therefore cannot run it.' );
+		req.flash('error_msg',	'You are not have permission to use this card and therefore cannot change it.' );
+		res.redirect('/result');
+	}
+	
+};
+
+module.exports.authenticateControlOwnerUrl = function authenticateControlOwnerUrl(req, res, next){
+	if(req.isAuthenticated()){
+		if (req.user._doc.level > 1){
+			return next();
+		} else {
+					var ControlId = req.params.ControlID;
+					var userId = req.user._id;
+					Control.getOwnerControlById(ControlId, userId, function(err, result){
+						if(err || result === null || result.length < 1) {
+							req.flash('error_msg',	'You are not have permission to use this control.' );
+							res.redirect('/result');
+						} else {
+							return next();
+						}
+					});
+		}
+		
+	} else {
+
+		req.flash('error_msg',	'You are not have permission to use this control and therefore cannot change.' );
 		res.redirect('/result');
 	}
 	

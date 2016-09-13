@@ -1,6 +1,13 @@
-Card owner should be able to select other users to have access to their cards (run access)
-	same goes for devices
+
+
+
+næst, Gera access síðu fyrir controls
+
+
+Device owner should should be able to select other users to grant access to their devices (run access)
 	http://select2.github.io/select2/
+
+
 
 
 make the "devices.js::router.get('/pins'..." route take an id.  Like so router.get('/pins/:deviceID'... 

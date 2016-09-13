@@ -72,7 +72,7 @@ router.post('/register', lib.authenticatePowerRequest, function(req, res){
 	}
 });
 
-router.post('/register/:controlID', lib.authenticatePowerRequest, function(req, res){
+router.post('/register/:controlID', lib.authenticateControlOwnerUrl, function(req, res){
 	var id = req.params.controlID;
 	req.checkBody('name', 'Name is required').notEmpty();
 	req.checkBody('description', 'description is required').notEmpty();
@@ -107,7 +107,7 @@ router.post('/register/:controlID', lib.authenticatePowerRequest, function(req, 
 	}
 });
 
-router.delete('/:controlID', lib.authenticatePowerRequest, function(req, res){
+router.delete('/:controlID', lib.authenticateControlOwnerUrl, function(req, res){
 	var id = req.params.controlID;
 	Control.delete(id, function(err, result){
 		if(err !== null){
@@ -119,24 +119,32 @@ router.delete('/:controlID', lib.authenticatePowerRequest, function(req, res){
 	
 });
 
-router.get('/list', lib.authenticateUrl, function(req, res){
+router.get('/list', lib.authenticatePowerUrl, function(req, res){
 	res.render('list-control');
 });
 
 /*listing all devices and return them as a json array*/
-router.get('/control-list', lib.authenticateRequest, function(req, res){
+router.get('/control-list', lib.authenticatePowerUrl, function(req, res){
 	Control.listByOwnerId(req.user._id, function(err, controlList){
 		
 		var arr = [];
+		var item;
+		var isOwner;
 		for(var i = 0; i < controlList.length; i++){
+			item = controlList[i];
+			isOwner = lib.findObjectID(item._doc.owners, req.user._id);
+
 					arr.push({	name:controlList[i].name, 
 								description:controlList[i].description,
-								id:controlList[i]._id});
+								id:controlList[i]._id,
+								isOwner:isOwner
+							});
 		}
 		res.json(arr);
 	});
 });
 router.get('/item/:controlID', lib.authenticateRequest, function(req, res){
+	// todo: how to authenticate? now a logged in user can use all controls
 	var id = req.params.controlID;
 	if (id !== undefined){
 		Control.getById(id, function(err, control){

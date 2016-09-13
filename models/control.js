@@ -28,7 +28,8 @@ var ControlSchema = mongoose.Schema({
 	code: {
 		type: String
 	},
-	 owners: [{ObjectId}]
+	 owners: [{ObjectId}],
+	 users: [{ObjectId}]
 });
 	/*owners are users, allowed to modify or delete this control*/
 var Control = module.exports = mongoose.model('Control', ControlSchema);
@@ -77,5 +78,16 @@ module.exports.getOwnerControlById = function (ControlId, userId, callback){
 	var query = {	_id: ControlId,
 					owners:{$elemMatch: { _id:userId }}
 		};
+	Control.find(query, callback);
+};
+
+/*if you only want users to get cards that they have access to, use this function*/
+module.exports.getUserControldById = function (ControlId, userId, callback){
+	var query = {	_id: ControlId,
+					$or:[
+							{users:{$elemMatch: { _id:userId }}},
+							{owners:{$elemMatch: { _id:userId }}}
+						]
+				};
 	Control.find(query, callback);
 };

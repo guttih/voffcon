@@ -22,6 +22,6 @@ $(function () {
 	/* this is the *$( document ).ready(function( $ ) but jshint does not like that*/
 	SERVER = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ':'+window.location.port: '');
 	
-	getUserUserList(setUserlistValues);
+	getUserUserList(setUserlistValues, true);
 	
 });

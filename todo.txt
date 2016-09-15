@@ -1,15 +1,6 @@
 
-make access control for devices
-Change user access_device.handlebars for devices
 
-	user  access?? allusers can access all devices (at least for now)
-	owner access?? owner can change a device and he can also change the device
-
-
-Device owner should should be able to select other users to grant access to their devices (run access)
-	http://select2.github.io/select2/
-
-
+do stuff with the device.....
 
 
 make the "devices.js::router.get('/pins'..." route take an id.  Like so router.get('/pins/:deviceID'... 

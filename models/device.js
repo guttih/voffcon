@@ -36,7 +36,7 @@ module.exports.getDeviceByDevicename = function(Devicename, callback){
 	Device.findOne(query, callback);
 };
 
-module.exports.getDeviceById = function(id, callback){
+module.exports.getById = function(id, callback){
 	Device.findById(id, callback);
 };
 
@@ -56,4 +56,37 @@ module.exports.getUserDevicesById = function (deviceId, userId, callback){
 module.exports.delete = function (id, callback){
 	
 	Device.findByIdAndRemove(id, callback);
+};
+
+module.exports.modifyUserAccess = function (DeviceId, newValues, callback){
+	var query = {	_id: DeviceId	};
+
+	if (newValues.owners === undefined && newValues.users === undefined ) {
+		return callback(errorToUser("No owners nor users are specified.", 400)); //nothing to change then.
+	} else if ((newValues.owners !== undefined && newValues.owners.length < 1) ) {
+		return callback(errorToUser("There must always be at least one owner for each device.", 403)); //there must always be at least one owner.
+	}
+
+	Device.findOne(query, function(err, device){
+		if (err) {
+			return callback(err); 
+		} //todo: what to do, if error?  maybe throw err;
+
+		if (newValues.owners !== undefined ){
+
+			device.owners.splice(0,device.owners.length);
+			newValues.owners.forEach(function(element) {
+				device.owners.push(element);
+			}, this);
+		}
+
+		if (newValues.users !== undefined){
+			device.users.splice(0,device.users.length);
+			newValues.users.forEach(function(element) {
+				device.users.push(element);
+			}, this);
+		}
+
+		device.save(callback);
+	});
 };

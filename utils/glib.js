@@ -168,6 +168,28 @@ module.exports.authenticateDeviceOwnerRequest = function authenticateDeviceOwner
 	}
 };
 
+module.exports.authenticateDeviceOwnerUrl = function authenticateDeviceOwnerUrl(req, res, next){
+	if(req.isAuthenticated()){
+		if (req.user._doc.level > 1){
+			return next();
+		} else {
+					var DeviceId = req.params.deviceID;
+					var userId = req.user._id;
+					Device.getOwnerDeviceById(DeviceId, userId, function(err, result){
+						if(err || result === null || result.length < 1) {
+							req.flash('error_msg',	'You do not have permission to use this device.' );
+							res.redirect('/result');
+						} else {
+							return next();
+						}
+					});
+		}
+	} else {
+
+		req.flash('error_msg',	'You do not have permission to use this device  perform this action on this .' );
+		res.redirect('/result');
+	}
+};
 
 module.exports.authenticateRequest = function authenticateRequest(req, res, next){
 	if(req.isAuthenticated()){

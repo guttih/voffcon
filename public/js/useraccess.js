@@ -51,7 +51,7 @@ function getItemUserAccessLevel(inItem, id){
 	return 0;
 } 
 
-var setUserlistValues = function setUserlistValues(userList){
+var setUserlistValues = function setUserlistValues(userList, includeOption1){
 	var id, name, description; 
 	for(var i = 0; i < userList.length; i++){
 		id 		= userList[i].id;
@@ -59,7 +59,7 @@ var setUserlistValues = function setUserlistValues(userList){
 		description = userList[i].description;
 		
 		var accessLevel = getItemUserAccessLevel(item, id);
-		var str =  createListItemUserAccess(id, name, description, 'users', accessLevel);
+		var str =  createListItemUserAccess(id, name, description, 'users', accessLevel, includeOption1);
 		$("#user-list").append(str);
 	}
 	setSelectAccessBackgroundClick();

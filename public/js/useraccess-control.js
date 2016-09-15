@@ -37,8 +37,8 @@ var setControlValues = function setControlValues(controlData){
 	item = controlData;
 	getUserUserList(function(allUsersData){
 		users = allUsersData;
-		setUserlistValues(users);
-	});
+		setUserlistValues(users, true);
+	}, true);
 };
 
 function getControl(callback){

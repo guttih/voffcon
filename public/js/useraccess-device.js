@@ -1,7 +1,4 @@
-var item;
-
-
-$('#btnUpdateAccessCard').click(function() {
+$('#btnUpdateAccessDevice').click(function() {
 
 	var obj = { owners: [],
 					users:  []};
@@ -21,10 +18,10 @@ $('#btnUpdateAccessCard').click(function() {
 	var sendObj = {};
 	sendObj.owners = JSON.stringify(obj.owners);
 	sendObj.users = JSON.stringify(obj.users);
-	var posting = $.post( '/cards/useraccess/'+cid, sendObj);
+	var posting = $.post( '/devices/useraccess/'+cid, sendObj);
 	posting
 		.done(function(data){
-			//window.location.href = '/cards/useraccess/'+cid;
+			//window.location.href = '/devices/useraccess/'+cid;
 			showModal("Access updated", "User access successfully updated.");
 		})
 		.fail(function(data){
@@ -36,25 +33,23 @@ $('#btnUpdateAccessCard').click(function() {
 });
 
 
-
-
-var setCardValues = function setCardValues(cardData){
-	item = cardData;
+var setDeviceValues = function setDeviceValues(deviceData){
+	item = deviceData;
 	getUserUserList(function(allUsersData){
 		users = allUsersData;
-		setUserlistValues(users, true);
-	}, true);
+		setUserlistValues(users, false);
+	}, false);
 };
 
-function getCard(callback){
-	var cardId = getLastItemOfUrl(window.location.href);
-	if (cardId === undefined || cardId.length < 11) {
+function getDevice(callback){
+	var deviceId = getLastItemOfUrl(window.location.href);
+	if (deviceId === undefined || deviceId.length < 11) {
 		return; //invalid at end of url;
 	}
-	var url = '/cards/item/' + cardId;
+	var url = '/devices/item/' + deviceId;
 	requestData(url, callback);
 }
 
 $(function () {
-	getCard(setCardValues);
+	getDevice(setDeviceValues);
 });

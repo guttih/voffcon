@@ -143,7 +143,7 @@ function createListItem(id, name, description, routeText, bAddRunButton, bAddAcc
 	return strElm; 
 }
 
-function createListItemUserAccess(id, name, description, routeText, selectedOption){
+function createListItemUserAccess(id, name, description, routeText, selectedOption, includeOption1){
 	var url = SERVER+'/'+ routeText +'/register/'+ id;
 	var sel0, sel1, sel2;
 	sel0 = (selectedOption === 0) ? ' selected' : '';
@@ -155,9 +155,11 @@ function createListItemUserAccess(id, name, description, routeText, selectedOpti
 	'<span class="list-group-item-text">' +description + '</span>'+
 	'<span class="pull-right">';
 	strElm+='<select class="access-select form-control">'+
-  				'<option value="0"' + sel0 + '>No access</option>' 	+
-  				'<option value="1"' + sel1 + '>User</option>'		+
-  				'<option value="2"' + sel2 + '>Owner</option>'	+
+  				'<option value="0"' + sel0 + '>No access</option>';
+	if (includeOption1 === true){
+		strElm+=    '<option value="1"' + sel1 + '>User</option>';
+	}
+	strElm+=	'<option value="2"' + sel2 + '>Owner</option>'	+
 			'</select>';
 	strElm +='</span>' +'</div>';
 

@@ -101,7 +101,7 @@ router.post('/register/:cardID', lib.authenticateCardOwnerUrl, function(req, res
 	}
 });
 
-router.delete('/:cardID', lib.authenticateCardOwnerUrl, function(req, res){
+router.delete('/:cardID', lib.authenticateCardOwnerRequest, function(req, res){
 	var id = req.params.cardID;
 	Card.delete(id, function(err, result){
 		if(err !== null){
@@ -210,7 +210,7 @@ router.get('/useraccess/:cardID', lib.authenticateCardOwnerUrl, function(req, re
 	});
 });
 
-router.post('/useraccess/:cardID', lib.authenticateCardOwnerUrl, function(req, res){
+router.post('/useraccess/:cardID', lib.authenticateCardOwnerRequest, function(req, res){
 	var id = req.params.cardID,
 	owners = JSON.parse(req.body.owners),
 	users = JSON.parse(req.body.users);

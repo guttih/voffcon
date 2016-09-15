@@ -1,12 +1,9 @@
 
+make access control for devices
+Change user access_device.handlebars for devices
 
-
-N Æ S T , Gera access síðu fyrir device
-Breyta useraccess_device.handlebars þannig að hún virki fyrir device en ekki card
-(rename card to device, or Card to Control or cards to controls)
-
-	user  access?? allir hafa user access //þarf ekki að tiltaka user
-	owner access?? owner getur breytt access úr engum í owner
+	user  access?? allusers can access all devices (at least for now)
+	owner access?? owner can change a device and he can also change the device
 
 
 Device owner should should be able to select other users to grant access to their devices (run access)

@@ -40,7 +40,7 @@ module.exports.getDeviceById = function(id, callback){
 	Device.findById(id, callback);
 };
 
-module.exports.listDevicesByUserId = function (id, callback){
+module.exports.listByOwnerId = function (id, callback){
 	var query = {owners:{$elemMatch: { _id:id }}};
 	Device.find(query, callback);
 };
@@ -51,4 +51,9 @@ module.exports.getUserDevicesById = function (deviceId, userId, callback){
 					owners:{$elemMatch: { _id:userId }}
 		};
 	Device.find(query, callback);
+};
+
+module.exports.delete = function (id, callback){
+	
+	Device.findByIdAndRemove(id, callback);
 };

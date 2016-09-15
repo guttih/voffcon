@@ -82,7 +82,7 @@ router.get('/pins/:deviceId', lib.authenticateRequest, function(req, res){
 									return console.error(err);
 								}
 								if (body){
-									console.log(body);
+								
 								}
 								return body;
 					}
@@ -200,8 +200,8 @@ router.post('/register', function(req, res){
 		res.redirect('/');
 	}
 });
-
-router.get('/list', lib.authenticateRequest, function(req, res){
+/*
+router.get('/device-list', lib.authenticateRequest, function(req, res){
 	Device.listDevicesByUserId(req.user._id, function(err, deviceList){
 		
 		var arr = [];
@@ -224,4 +224,50 @@ router.get('/list', lib.authenticateRequest, function(req, res){
 	};
 	
 });
+*/
+
+/*listing all devices and return them as a json array*/
+router.get('/device-list', lib.authenticatePowerRequest, function(req, res){
+	Device.listByOwnerId(req.user._id, function(err, deviceList){
+		
+		var arr = [];
+		var item;
+		var isOwner;
+		for(var i = 0; i < deviceList.length; i++){
+			item = deviceList[i];
+			isOwner = lib.findObjectID(item._doc.owners, req.user._id);
+
+					arr.push({	name:deviceList[i].name, 
+								description:deviceList[i].description,
+								id:deviceList[i]._id,
+								isOwner:isOwner
+							});
+		}
+		res.json(arr);
+	});
+});
+
+
+
+
+/*render a page with list of users*/
+router.get('/list', lib.authenticateUrl, function(req, res){
+	res.render('list-device');
+});
+
+
+router.delete('/:deviceID', lib.authenticateDeviceOwnerRequest, function(req, res){
+	var id = req.params.deviceID;
+	Device.delete(id, function(err, result){
+		if(err !== null){
+			res.status(404).send('unable to delete device "' + id + '".');
+		} else {
+			res.status(200).send('Device deleted.');
+		}
+	});
+	
+});
+
+
+
 module.exports = router;

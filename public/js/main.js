@@ -61,7 +61,7 @@ function setServerStartedValue(date){
 
 
 function getUserDeviceList(){
-	var url = SERVER+'/devices/list';
+	var url = SERVER+'/devices/device-list';
 		var request = $.get(url);
 	request.done(function( data ) {
 		// Put the results in a div
@@ -72,7 +72,7 @@ function getUserDeviceList(){
 			}
 		});
 }
-
+/*
 function setDevicelistValues(devicelist){
 	var key, name, shallDisable = true;
 	$("#devicelist").empty().prop( "disabled", true );
@@ -92,7 +92,7 @@ function setDevicelistValues(devicelist){
 		// Add $(this).val() to your list
 	});
 }
-
+*/
 function getWhenServerStarted(){
 	var url = SERVER+'/devices/started';
 	var selected = $( "#devicelist" ).val();

@@ -107,7 +107,7 @@ router.post('/register/:controlID', lib.authenticateControlOwnerUrl, function(re
 	}
 });
 
-router.delete('/:controlID', lib.authenticateControlOwnerUrl, function(req, res){
+router.delete('/:controlID', lib.authenticateControlOwnerRequest, function(req, res){
 	var id = req.params.controlID;
 	Control.delete(id, function(err, result){
 		if(err !== null){
@@ -123,8 +123,8 @@ router.get('/list', lib.authenticateUrl, function(req, res){
 	res.render('list-control');
 });
 
-/*listing all devices and return them as a json array*/
-router.get('/control-list', lib.authenticatePowerUrl, function(req, res){
+/*listing all controls and return them as a json array*/
+router.get('/control-list', lib.authenticatePowerRequest, function(req, res){
 	Control.listByOwnerId(req.user._id, function(err, controlList){
 		
 		var arr = [];
@@ -174,7 +174,7 @@ router.get('/useraccess/:controlID', lib.authenticateControlOwnerUrl, function(r
 	});
 });
 
-router.post('/useraccess/:controlID', lib.authenticateControlOwnerUrl, function(req, res){
+router.post('/useraccess/:controlID', lib.authenticateControlOwnerRequest, function(req, res){
 	var id = req.params.controlID,
 	owners = JSON.parse(req.body.owners),
 	users = JSON.parse(req.body.users);

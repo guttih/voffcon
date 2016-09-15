@@ -43,7 +43,7 @@ module.exports.authenticateCardUserUrl = function authenticateCardUserUrl(req, r
 			var userId = req.user._id;
 			Card.getUserCardById(CardId, userId, function(err, result){
 				if(err || result === null || result.length < 1) {
-					req.flash('error_msg',	'You are not have permission to use this card.' );
+					req.flash('error_msg',	'You do not have permission to use this card.' );
 					res.redirect('/result');
 				} else {
 					return next();
@@ -51,7 +51,7 @@ module.exports.authenticateCardUserUrl = function authenticateCardUserUrl(req, r
 			});
 		}
 	} else {
-		req.flash('error_msg',	'You are not have permission to use this card and therefore cannot run it.' );
+		req.flash('error_msg',	'You do not have permission to use this card and therefore cannot run it.' );
 		res.redirect('/result');
 	}
 };
@@ -65,7 +65,7 @@ module.exports.authenticateCardOwnerUrl = function authenticateCardOwnerUrl(req,
 					var userId = req.user._id;
 					Card.getOwnerCardById(CardId, userId, function(err, result){
 						if(err || result === null || result.length < 1) {
-							req.flash('error_msg',	'You are not have permission to use this card.' );
+							req.flash('error_msg',	'You do not have permission to use this card.' );
 							res.redirect('/result');
 						} else {
 							return next();
@@ -75,10 +75,32 @@ module.exports.authenticateCardOwnerUrl = function authenticateCardOwnerUrl(req,
 		
 	} else {
 
-		req.flash('error_msg',	'You are not have permission to use this card and therefore cannot change it.' );
+		req.flash('error_msg',	'You do not have permission to use this card  perform this action on this  it.' );
 		res.redirect('/result');
 	}
 	
+};
+
+
+module.exports.authenticateCardOwnerRequest = function authenticateCardOwnerRequest(req, res, next){
+	if(req.isAuthenticated()){
+		if (req.user._doc.level > 1){
+			return next();
+		} else {
+					var CardId = req.params.cardID;
+					var userId = req.user._id;
+					Card.getOwnerCardById(CardId, userId, function(err, result){
+						if(err || result === null || result.length < 1) {
+							res.status(401).send('You do not have permission perform this action on this card.');
+						} else {
+							return next();
+						}
+					});
+		}
+		
+	} else {
+		res.status(401).send('You do not have permission to use this card and therefore cannot perform this action.');
+	}
 };
 
 module.exports.authenticateControlOwnerUrl = function authenticateControlOwnerUrl(req, res, next){
@@ -90,7 +112,7 @@ module.exports.authenticateControlOwnerUrl = function authenticateControlOwnerUr
 					var userId = req.user._id;
 					Control.getOwnerControlById(ControlId, userId, function(err, result){
 						if(err || result === null || result.length < 1) {
-							req.flash('error_msg',	'You are not have permission to use this control.' );
+							req.flash('error_msg',	'You do not have permission to use this control.' );
 							res.redirect('/result');
 						} else {
 							return next();
@@ -100,11 +122,52 @@ module.exports.authenticateControlOwnerUrl = function authenticateControlOwnerUr
 		
 	} else {
 
-		req.flash('error_msg',	'You are not have permission to use this control and therefore cannot change.' );
+		req.flash('error_msg',	'You do not have permission to use this control  perform this action on this .' );
 		res.redirect('/result');
 	}
 	
 };
+
+module.exports.authenticateControlOwnerRequest = function authenticateControlOwnerRequest(req, res, next){
+	if(req.isAuthenticated()){
+		if (req.user._doc.level > 1){
+			return next();
+		} else {
+				var ControlId = req.params.controlID;
+				var userId = req.user._id;
+				Control.getOwnerControlById(ControlId, userId, function(err, result){
+					if(err || result === null || result.length < 1) {
+						res.status(401).send('You do not have permission to perform this action on this control.');
+					} else {
+						return next();
+					}
+				});
+		}
+	} else {
+		res.status(401).send('You do not have permission to use this control and therefore cannot perform this action.');
+	}
+};
+
+module.exports.authenticateDeviceOwnerRequest = function authenticateDeviceOwnerRequest(req, res, next){
+	if(req.isAuthenticated()){
+		if (req.user._doc.level > 1){
+			return next();
+		} else {
+				var DeviceId = req.params.controlID;
+				var userId = req.user._id;
+				Device.getOwnerDeviceById(DeviceId, userId, function(err, result){
+					if(err || result === null || result.length < 1) {
+						res.status(401).send('You do not have permission to perform this action on this control.');
+					} else {
+						return next();
+					}
+				});
+		}
+	} else {
+		res.status(401).send('You do not have permission to use this control and therefore cannot perform this action.');
+	}
+};
+
 
 module.exports.authenticateRequest = function authenticateRequest(req, res, next){
 	if(req.isAuthenticated()){

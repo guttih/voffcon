@@ -30,41 +30,48 @@ router.get('/login', function(req, res){
 
 // Register User
 router.post('/register', function(req, res){
-	var name = req.body.name;
-	var email = req.body.email;
-	var username = req.body.username;
-	var password = req.body.password;
-	var password2 = req.body.password2;
+var config = lib.getConfig();
+if (config.allowUserRegistration === true) {
+		var name = req.body.name;
+		var email = req.body.email;
+		var username = req.body.username;
+		var password = req.body.password;
+		var password2 = req.body.password2;
 
-	// Validation
-	req.checkBody('name', 'Name is required').notEmpty();
-	req.checkBody('email', 'Email is required').notEmpty();
-	req.checkBody('email', 'Email is not valid').isEmail();
-	req.checkBody('username', 'Username is required').notEmpty();
-	req.checkBody('password', 'Password is required').notEmpty();
-	req.checkBody('password2', 'Passwords do not match').equals(req.body.password);
+		// Validation
+		req.checkBody('name', 'Name is required').notEmpty();
+		req.checkBody('email', 'Email is required').notEmpty();
+		req.checkBody('email', 'Email is not valid').isEmail();
+		req.checkBody('username', 'Username is required').notEmpty();
+		req.checkBody('password', 'Password is required').notEmpty();
+		req.checkBody('password2', 'Passwords do not match').equals(req.body.password);
 
-	var errors = req.validationErrors();
+		var errors = req.validationErrors();
 
-	if(errors){
-		res.render('register-user',{ errors:errors });
-	} else {
-		var newUser = new User({
-			name: name,
-			email:email,
-			username: username,
-			password: password,
-			level:0
-		});
+		if(errors){
+			res.render('register-user',{ errors:errors });
+		} else {
+			var newUser = new User({
+				name: name,
+				email:email,
+				username: username,
+				password: password,
+				level:0
+			});
 
-		User.createUser(newUser, function(err, user){
-			if(err) {throw err;}
-			console.log(user);
-		});
+			User.createUser(newUser, function(err, user){
+				if(err) {throw err;}
+				console.log(user);
+			});
 
-		req.flash('success_msg', 'You are registered and can now login');
+			req.flash('success_msg', 'You are registered and can now login');
 
-		res.redirect('/users/login');
+			res.redirect('/users/login');
+		}
+	} else { 
+		req.flash('error_msg', 'New users are not allowed at this time.');
+
+			res.redirect('/users/login');
 	}
 });
 
@@ -310,4 +317,29 @@ router.delete('/:userID', lib.authenticateAdminRequest, function(req, res){
 	});
 	
 });
+
+//todo: this route shoud not be in users route, but a new route called maybe "settings"
+router.post('/settings', lib.authenticateCardOwnerRequest, function(req, res){
+	var allowUserRegistration = JSON.parse(req.body.allowUserRegistration);
+	//read the config file into a variable.
+	var str ='';
+	var changes = 0;
+	var config = lib.getConfig();
+	if (allowUserRegistration !== undefined){
+		console.log("Ok, let's add this variable to the config file.");
+		config.allowUserRegistration = allowUserRegistration;
+		lib.setConfig(config);
+		changes++;
+	}
+	if (changes > 0){
+		res.status(200).send('Settings changed.');
+	} else {
+	// if all variables where missing return error
+	//if was able to save return this
+		res.status(422).send('Settings unchanged, no variables to change found.');
+	}
+
+});
+
+
 module.exports = router;

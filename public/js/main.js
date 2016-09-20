@@ -261,12 +261,10 @@ function showModalConfirm(title, message, confirmButtonText, callback){
 }
 
 function changeHref(from, to){
-	console.log("Changing href from \""+ from +"\" to \""+ to+"\"." );
 	window.location.href = window.location.href.replace(from,to);
 }
 
 function getServer(){
-	console.log("window.location.protocol");
 	if (window.location.protocol === 'file:')
 	{	//todo: remove dummy
 		return 'http://www.guttih.com:6100';
@@ -291,6 +289,34 @@ function getServerUrl(){
 			}
 		});
 }*/
+
+function changeUsersCanRegister(){
+	var $elm = $('#allow-user-registration');
+	var checked = $elm.hasClass( "checked" );
+	var allow = true;  
+	if (checked === true){
+		allow = false; //checked was, and is  true, so we are denying access
+	}
+	var sendObj = {};
+	sendObj.allowUserRegistration = allow;
+	var posting = $.post( '/users/settings', sendObj);
+	posting
+		.done(function(data){
+			//successful update let's change the class "checked"
+			if (allow === true) {//successfully able to ALLOW users to register 
+				$elm.addClass("checked");
+			} else { //successfully able to DENY users to register 
+				$elm.removeClass("checked");
+			}
+		})
+		.fail(function(data){
+			console.log("failed posting");
+			console.log(data);
+			showModalError('Error updating settings for user registration', data);
+		});
+	
+	//window.location.href = asdf
+}
 
 function getUserUserList(callback){
 	var url = '/users/user-list';

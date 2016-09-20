@@ -1,4 +1,1 @@
-{
-	"serverUrl":"http://www.guttih.com:5100",
-	"port": 6100
-}
+{"serverUrl":"http://www.guttih.com:5100","port":6100,"allowUserRegistration":false}

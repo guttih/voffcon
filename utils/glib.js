@@ -246,11 +246,21 @@ module.exports.getConfig = function getConfig(){
 		var str = JSON.stringify(conf);
 		fs.writeFile(file, str, function(err) {
 			if(err) {
-				return console.log("Could not write default values to the config file.  Error : " + err);
+				console.log("Could not write default values to the config file.  Error : " + err);
 			}
 		});
 	}
 	return conf;
+};
+
+module.exports.setConfig = function setConfig(conf){
+	var file = __dirname + './../config.json';
+		var str = JSON.stringify(conf);
+		fs.writeFile(file, str, function(err) {
+			if(err) {
+				console.log("Could not write default values to the config file.  Error : " + err);
+			} 
+		});
 };
 
 module.exports.getAddresses = function getAddresses(){

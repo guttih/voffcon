@@ -5,18 +5,6 @@ do stuff with the device.....
 
 make the "devices.js::router.get('/pins'..." route take an id.  Like so router.get('/pins/:deviceID'... 
 
-
-þegar ég var að gera new control og fyllti ekki út template og smellti á save control
-þá kom "a html template is required" villa og öll gildi sem ég hafði slegið inn þuruðust út
-
-	loggaður inn user má breyta sínum gildum en engum öðrum nema hann sé admin
-	update á level má bara gera ef innloggaður user er administrator
-	ef á að updata level þá bara breyta level eigindi engu öðrum 
-
-
-
-hvað á að gera við devices?
-	list, edit delete devices?
 	þarf ekki að vera hægt að test devices?
 
 hverjir mega registra sig...

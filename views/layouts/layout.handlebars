@@ -13,31 +13,29 @@
 	
 </head>
 <body>
+<!--		{{#if config}}
+			<h1>{{config.allowUserRegistration}}</h1>
+		{{/if}}
+-->
 <div class="container">
 	<div class="header clearfix">
 	<nav>
 		<ul class="nav nav-pills pull-right">
 		{{#if user}}
 			<li role="presentation"><a href="/">Dashboard</a></li>
-			
 		{{/if}}
 		{{#if admin}}
 			<li class="dropdown">
 				<a  data-toggle="dropdown" href="#">Users</a>
 				<ul class="dropdown-menu">
-					<li><a href="/users/register">Register a new user</a></li>
+					<li><a  href="/users/register">Register a new user</a></li>
 					<li><a href="/users/list">List users</a></li>
 
-					<li>
-						<a href="#" data-toggle="collapse" data-target="#itemSettings" data-parent="#stacked-menu">
-							Site Settings<span class="caret arrow"></span>
-						</a>          
-						<ul class="nav nav-pills nav-stacked collapse" id="itemSettings">
-						<li class="dropdown" ><a href="#">Allow new users to register (todo)</a></li>
-						<li><a href="#">Deny new users to register (todo)</a></li>
-						</ul>
-					</li>	
-					
+					<li class="menu-item dropdown dropdown-submenu"><a href="#">Settings</a>
+					<ul class="dropdown-menu">
+						<li class="menu-item {{allowUserRegistration}}" id="allow-user-registration"><a href="javascript:changeUsersCanRegister()"><span class="glyphicon glyphicon-ok"></span>New users can register</a></li>
+					</ul>
+					</li>
 				</ul>
 			</li>
 		{{/if}}
@@ -145,6 +143,9 @@
 			{{{body}}}
 		</div>
 	</div>
+	
+	
+
 
 	<footer class="footer">
 	<p>&copy; 2016 Ardos, Inc.</p>

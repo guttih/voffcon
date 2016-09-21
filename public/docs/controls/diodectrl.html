@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title></title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link href="css/style.css" rel="stylesheet">
+	</head>
+	<body>
+	<div>
+		<h2>DiodeCtrl documentation.</h2>
+		<dl class="dl-horizontal">
+		<dt>Description</dt>
+			<dd>Use this control to display the value of a pin. This control draws a image of an diode on the screen and within that diode there is a number representing the pin value.</dd>
+		<dt>Usage</dt>
+			<dd>todo:</dd>
+		<dt>Code example on a card:</dt>
+		<dd>	
+			<pre><code>var using = ["DiodeCtrl"];
+var pin1, diode1;
+
+$(function () {
+	pin1    = new Pin(16, 999, '57afb108b450ab9c2f820507', 1023);
+	//Show the pinvalue 999 as a diode at location x=12 and y=55
+	diode1  = new DiodeCtrl(12,55,pin1);
+	//make the diode inactive, (shows it as gray) instead of red.
+	pin1.active(false);
+});</code></pre>
+		</dd>
+	</dl>
+	</div>
+	</body>
+</html>

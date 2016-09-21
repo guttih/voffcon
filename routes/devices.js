@@ -279,36 +279,21 @@ router.post('/useraccess/:deviceID', lib.authenticateDeviceOwnerRequest, functio
 });
 
 /*render a page wich runs a diagnostic card, for a device, if the user is a registered user for that device (has access)*/
+
 router.get('/run/:deviceID', lib.authenticateDeviceOwnerUrl, function(req, res){
 	var id = req.params.deviceID;
-	var deviceCardId = 'thedevicecardid';
-		Card.getById(deviceCardId, function(err, card){
-		if(err || card === null) {
-			req.flash('error',	'Could not find card.' );
+	Device.getById(id, function(err, retDevice){
+		if(err || retDevice === null) {
+			req.flash('error',	'Could not find device.' );
 			res.redirect('/result');
 		} else{
-
-			var code = card._doc.code;
-			var template = '<p id="prufa">No template found</p>';
-			var using = lib.extractUsingArray(code);
-			var obj = {	template:template,
-						code:code
-					};
-			Control.getByNames(using, function(err, controls){
-				if(err || controls === null || controls.length < 1) {
-					req.flash('error',	'Could not find controls.' );
-					res.redirect('/result');
-				} else {
-					var ctrlCode="", ctrlTemplate="";
-					for(var i = 0; i<controls.length; i++){
-						ctrlCode += '// control: '	+ controls[i]._doc.name +
-									'\n' 			+ controls[i]._doc.code + '\n\n';
-						ctrlTemplate += controls[i]._doc.template + '\n\n';
-					}
-					ctrlCode+="\n\n//The card\n\n" + code;
-					res.render('run-card', {template:ctrlTemplate,	code:ctrlCode, deviceID : deviceID });
-				}
-			});
+			var device = {	id:id,
+							name:retDevice._doc.name,
+							url:retDevice._doc.url,
+							description:retDevice._doc.description
+						  };
+			var str = JSON.stringify(device);
+			res.render('run-device', { device:str });
 		}
 	});
 });

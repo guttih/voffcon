@@ -35,9 +35,11 @@ $('#btnUpdateAccessDevice').click(function() {
 
 var setDeviceValues = function setDeviceValues(deviceData){
 	item = deviceData;
+	console.log(item);
 	getUserUserList(function(allUsersData){
 		users = allUsersData;
 		setUserlistValues(users, false);
+		
 	}, false);
 };
 

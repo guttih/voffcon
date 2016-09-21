@@ -2,7 +2,8 @@
 	<h3 class="page-header pull-right">Device diagnostic card</h3>
 </div>
 <div class="row">
-	<p>{{user.name}}</p>
+	<p>Here you can view information about the device.</p>
+	<p id="status-text" class="alert-warning">The system has been unable to connect to the device.</p>
 </div>
 
 
@@ -11,28 +12,66 @@
 <script src="/js/controls/pin.js"></script>
 
 <div id="top"></div>
-<div id="templates" style="position:relative;top:-800px;background:blue">
+{{#if device}}
+<script type="text/javascript">
+	var device = {{{device}}}
+</script>
+{{/if}}
+
+	<table id="table-device" class="table table-bordered table-hover">
+		<thead>
+			<tr>
+				<td colspan="2" style="text-align: center;font-weight: bold">Device Information</td>
+			</tr>
+		</thead>
+		<!--<tfoot>
+			<tr>
+				<td>Sum</td>
+				<td>$180</td>
+			</tr>
+		</tfoot>-->
+		<tbody>
+			<tr><td>Name</td> 		<td id="device-name"></td></tr>
+			<tr><td>ID</td> 		<td id="device-id"></td></tr>
+			<tr><td>Started</td>	<td id="server-started"></td></tr>
+			<tr><td>Url</td> 		<td id="device-url"></td></tr>
+			<tr><td>Description</td> 		<td id="device-description"></td></tr>
+		</tbody>
+	</table>
+
+	<table id ="table-pins" class="table table-bordered table-hover">
+		<thead>
+			<tr>
+				<td colspan="3" style="text-align: center;font-weight: bold">Pins on this device</td>
+			</tr>
+			<tr style="font-weight: bold">
+				<td>Number</td>
+				<td>Value</td>
+				<td>Mode</td>
+			</tr>
+		</thead>
+		<tfoot>
+			<tr style="font-weight: bold">
+				<td>Count</td>
+				<td id="pin-count">0</td>
+				<td></td>
+			</tr>
+		</tfoot>
+		<tbody>
+			
+		</tbody>
+	</table>
 
 
-	{{#if template}}
-				{{{template}}}
-	{{/if}}
-	{{#if code}}
-	<script type="text/javascript">
-				{{{code}}}
-	</script>
-	{{/if}}
 
-</div> <!--templates-->
-<div id="controls" style="position:relative;min-height: 300px;">
+{{#if admin}}
+<!--todo: show only for card owners and admin -->
+<div class="row  row-padd">
+	<button onclick="changeHref('/run/', '/register/')" class="btn btn-xs btn-success"> 
+		<span class="glyphicon glyphicon-edit"></span>&nbsp;edit 
+	</button>
 </div>
-	{{#if admin}}
-	<!--todo: show only for card owners and admin -->
-	<div class="row  row-padd">
-		<button onclick="changeHref('/run/', '/register/')" class="btn btn-xs btn-success"> 
-			<span class="glyphicon glyphicon-edit"></span>&nbsp;edit 
-		</button>
-	</div>
-	{{/if}}
+{{/if}}
 <div id="bottom"></div>
 
+<script src="/js/run-device.js"></script>

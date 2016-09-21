@@ -21,7 +21,7 @@ function setDevicelistValues(deviceList){
 		description = deviceList[i].description;
 		isOwner     = deviceList[i].isOwner;
 		
-		var str =  createListItem(id, name, description, 'devices', false, isOwner, isOwner, isOwner);
+		var str =  createListItem(id, name, description, 'devices', isOwner, isOwner, isOwner, isOwner);
 		$("#device-list").append(str);
 	}
 }

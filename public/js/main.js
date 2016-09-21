@@ -65,6 +65,7 @@ function getUserDeviceList(){
 		var request = $.get(url);
 	request.done(function( data ) {
 		// Put the results in a div
+		console.log(data);
 		setDevicelistValues(data);
 		}).fail(function( data ) {
 			if (data.status===401){
@@ -326,20 +327,26 @@ function getUserUserList(callback){
 
 // makes a call to the API requesting data
 // the subUrl should not contain the protocol, hostname nor port number
-function requestData(subUrl, callback){
+function requestData(subUrl, callback, errorCallback){
 		var url = SERVER + subUrl;
 		var request = $.get(url);
 	request.done(function( data ) {
 		callback(data);
 		}).fail(function( data ) {
-			if (data.status===401){
-				showModal("You need to be logged in!", data.responseText);
+			if (errorCallback !== undefined){
+				errorCallback(data);
+			} else {
+				if (data.status===401){
+					showModal("You need to be logged in!", data.responseText);
+				}
 			}
 		});
 }
 
 
-
+function runItem(id){
+	window.location.assign("run/"+id);
+}
 
 
 $(function () {  

@@ -2,6 +2,13 @@
 
 do stuff with the device.....
 
+finna device og senda það sem {{code}} object
+
+
+
+add a document property to Control module which accepts a valid html documentation url.  for example. make this url point to
+starting with making the diodeCtrl documentation point to : C:\git\ardos\public\docs\controls\diodectrl.html
+
 
 make the "devices.js::router.get('/pins'..." route take an id.  Like so router.get('/pins/:deviceID'... 
 

@@ -14,13 +14,6 @@ function getUserCardList(){
 }
 
 
-function runItem(id){
-	console.log('todo: run this item : ' + id);
-	window.location.assign("run/"+id);
-	///cards/run/57b8441a160dd34c408131ba
-}
-
-
 function setCardlistValues(cardList){
 	var id, name, description, isOwner;
 	for(var i = 0; i < cardList.length; i++){

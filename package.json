@@ -1,12 +1,12 @@
 {
   "name": "ardos",
   "version": "1.0.0",
-  "description": "Simple authentication system",
+  "description": "An access controlled system to control or get data from Arduino or arduino-like devices.",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Brad Traversy",
+  "author": "Gudjon Holm Sigurdsson",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "*",

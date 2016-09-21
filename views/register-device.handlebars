@@ -7,23 +7,31 @@ Register
         <div class="alert alert-danger">{{msg}}</div>
       {{/each}}
 {{/if}}
+{{#if device}}
+<script type="text/javascript">
+	var device = {{{device}}};
+</script>
+{{/if}}
 <form method="post" action="/devices/register" id="deviceform">
 	<div class="form-group">
 		<label>Name</label>
-		<input type="text" class="form-control" placeholder="Name this device" name="name" required>
+		<input id="device-name" type="text" class="form-control" placeholder="Name this device" name="name" required>
 	</div>
 	<div class="form-horizontal">
 		<label>Description</label>
 		<div class="form-group">
 			
 			<div class="col-md-12">
-				<textarea name="description" form="deviceform" class="form-control" rows="3" placeholder="Descripe your device, where is it, what does it control.  Is it dangerous?" required></textarea>
+				<textarea id="device-description" name="description" form="deviceform" class="form-control" rows="3" placeholder="Descripe your device, where is it, what does it control.  Is it dangerous?" required></textarea>
 			</div>
 		</div>
 	</div>
 	<div class="form-group">
 		<label>url</label>
-		<input type="text" class="form-control" placeholder="http://192.168.1.101:1234" name="url" required>
+		<input id="device-url" type="text" class="form-control" placeholder="http://192.168.1.101:1234" name="url" required>
 	</div>
-	<button type="submit" class="btn btn-success pull-right">Submit</button>
+	
 </form>
+<button id="btn-run" class="btn btn-default"> <span class=" pull-left glyphicon glyphicon-play"></span>&nbsp;Run </button>
+<button id="btn-submit-deviceform" class="btn btn-success pull-right">Submit</button>
+<script src="/js/register-device.js"></script>

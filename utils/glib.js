@@ -236,7 +236,6 @@ module.exports.makeRequestPostOptions = function makeRequestOptions(url, formDat
 
 module.exports.getConfig = function getConfig(){
 	var file = __dirname + './../config.json';
-	console.log(file);
 	var conf;
 	if (validator.fileExists(file)){
 		conf = require(file);

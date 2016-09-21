@@ -53,6 +53,12 @@ module.exports.getUserDevicesById = function (deviceId, userId, callback){
 	Device.find(query, callback);
 };
 
+module.exports.modify = function (id, newValues, callback){
+	//$set
+	var val = {$set: newValues};
+	Device.update({_id: id}, val, callback);
+};
+
 module.exports.delete = function (id, callback){
 	
 	Device.findByIdAndRemove(id, callback);

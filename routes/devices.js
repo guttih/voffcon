@@ -15,9 +15,6 @@ router.get('/', lib.authenticateUrl, function(req, res){
 	res.render('device');//this is the views/device.handlebars
 });
 
-router.get('/register', lib.authenticateUrl, function(req, res){
-			res.render('register-device');
-});
 
 // Get started time from a device
 router.get('/started/:deviceId', lib.authenticateRequest, function(req, res){
@@ -138,22 +135,41 @@ router.post('/pins/:deviceId', lib.authenticateRequest, function(req, res){
 	);
 });
 
-router.get('/register', function(req, res){
+router.get('/register', lib.authenticatePowerUrl, function(req, res){
 	res.render('register-device');
 });
 
+router.get('/register/:deviceID', lib.authenticatePowerUrl, function(req, res){
+	var id = req.params.deviceID;
+	if (id !== undefined){
+		Device.getById(id, function(err, device){
+				if(err || device === null) {
+					req.flash('error',	'Could not find device.' );
+					res.redirect('/result');
+				} else{
+					var obj = {id : id,
+						name: device.name,
+						description: device.description,
+						url: device.url
+					};
+					var str = JSON.stringify(obj);
+					res.render('register-device', {device:str});
+				}
+			});
+	}
+});
+
 // Register Device
-router.post('/register', function(req, res){
+router.post('/register', lib.authenticatePowerRequest, function(req, res){
 	// Validation
 	req.checkBody('name', 'Name is required').notEmpty();
 	req.checkBody('description', 'description is required').notEmpty();
 	req.checkBody('url', 'url is required').notEmpty();
+	
 	var errors = req.validationErrors();
 
 	if(errors){
-		res.render('register-device',{
-			errors:errors
-		});
+		res.status(422).json(errors);
 	} else {
 		var newDevice = new Device({
 			name: req.body.name,
@@ -174,6 +190,41 @@ router.post('/register', function(req, res){
 		req.flash('success_msg', 'You have registered the device');
 
 		res.redirect('/');
+	}
+});
+
+router.post('/register/:deviceID', lib.authenticatePowerRequest, function(req, res){
+	var id = req.params.deviceID;
+	req.checkBody('url', 'url is required').notEmpty();
+	req.checkBody('description', 'description is required').notEmpty();
+	req.checkBody('name', 'Name is required').notEmpty();
+	
+	
+
+	var errors = req.validationErrors();
+
+	if(errors){
+		res.status(422).json(errors);
+		
+	} else {
+				var values = {
+					name		: req.body.name,
+					description : req.body.description,
+					url		: req.body.url
+				};
+				Device.modify(id, values, function(err, result){
+					if(err || result === null || result.ok !== 1) {//(result.ok===1 result.nModified===1)
+						//res.send('Error 404 : Not found or unable to update! ');
+							req.flash('error',	' unable to update' );
+					} else{
+							if (result.nModified === 0){
+								req.flash('success_msg',	'Device is unchanged!' );
+							} else {
+								req.flash('success_msg',	'Device updated!' );
+							}
+					}
+					res.redirect('/devices/run/'+id);
+				});
 	}
 });
 
@@ -278,7 +329,7 @@ router.post('/useraccess/:deviceID', lib.authenticateDeviceOwnerRequest, functio
 	});
 });
 
-/*render a page wich runs a diagnostic card, for a device, if the user is a registered user for that device (has access)*/
+/*render a page wich runs a diagnostic device, for a device, if the user is a registered user for that device (has access)*/
 
 router.get('/run/:deviceID', lib.authenticateDeviceOwnerUrl, function(req, res){
 	var id = req.params.deviceID;

@@ -20,12 +20,12 @@
     "express-validator": "*",
     "grunt-concurrent": "^2.3.1",
     "mongodb": "^2.2.8",
-    "mongoose": "^4.5.10",
+    "mongoose": "^4.6.1",
     "nodemon": "^1.10.2",
     "passport": "*",
     "passport-http": "*",
     "passport-local": "*",
-    "request": "^2.74.0"
+    "request": "^2.75.0"
   },
   "devDependencies": {
     "grunt": "^1.0.1",
@@ -34,5 +34,16 @@
     "grunt-contrib-watch": "^1.0.0",
     "grunt-nodemon": "^0.4.2",
     "nodemon": "^1.9.2"
-  }
+  },
+  "directories": {
+    "doc": "docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/guttih/ardos.git"
+  },
+  "bugs": {
+    "url": "https://github.com/guttih/ardos/issues"
+  },
+  "homepage": "https://github.com/guttih/ardos#readme"
 }

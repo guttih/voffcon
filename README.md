@@ -12,11 +12,12 @@ You will need to install the following if you haven't already.
 + [Node.js](https://nodejs.org/en/) To run the Node server
 
 ### Windows 7 problem when installing mongoDB
-If you are having problem installing mongoDB on windows 7, then you could try the following
+If you are having problem installing mongoDB on windows 7, then you could try the following.
+
 1. Do not have spaces in the installation folder for example do NOT install to "C:\Program Files\MongoDB", better would be "C:\MongoDB"
 2. Try to run Run : "C:\MongoDB\Server\3.2\bin\mongod.exe"
 3. If you get a hotfix error when running Mongo, install this [Hotifx](http://hotfixv4.microsoft.com/Windows%207/Windows%20Server2008%20R2%20SP1/sp2/Fix405791/7600/free/451413_intl_x64_zip.exe)  and goto step 2.
-4. if you are still having problems then this worked for me.  Open the cmd. 
+4. if you are still having problems then this worked for me.  Open the command window (cmd) and do the following.
 ```shell
 C:
 cd C:\MongoDB\Server\3.2
@@ -24,7 +25,7 @@ mkdir data
 mkdir data\db
 mkdir log
 cd bin
-mongod.exe --directoryperdb --dbpath C:\MongoDB\Server\3.2\data\db --logpath C:\MongoDB\Server\3.2\log\mongodb.log --logappend- 
+mongod.exe --directoryperdb --dbpath C:\MongoDB\Server\3.2\data\db --logpath C:\MongoDB\Server\3.2\log\mongodb.log --logappend
 ```
 
 ### Run the mongodb server

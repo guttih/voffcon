@@ -1,10 +1,11 @@
 
 
-do stuff with the device.....
 
-finna device og senda það sem {{code}} object
+þegar card krassar þá má það alls ekki krassa servernum, eins og gerist þegtar 
+	device4 = new Device('57e2a6f74a43074811a0720f', maxValue);
+	hefur rangt id á device-i.
 
-
+make more nice dashbord, expecially for user who are normal users.
 
 add a document property to Control module which accepts a valid html documentation url.  for example. make this url point to
 starting with making the diodeCtrl documentation point to : C:\git\ardos\public\docs\controls\diodectrl.html

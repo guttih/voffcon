@@ -136,6 +136,8 @@ app.use('/devices', devices);
 app.use('/controls', controls);
 app.use('/cards', cards);
 
+
+
 //var config = lib.getConfig();
 // Set Port
 //app.set('port', (process.env.PORT || 3000));
@@ -144,6 +146,7 @@ app.set('port', config.port);
 app.listen(app.get('port'), function(){
 	//console.log('Server started on port '+app.get('port'));
 	console.log('Server started');
+	lib.getDefaultGateWay();
 	addresses.forEach(function(entry) {
 		console.log(" " + entry +":"+ app.get('port'));
 	});

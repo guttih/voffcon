@@ -1,22 +1,18 @@
 
-Make ace editor bigger and smaller. 
+dashbord for a guest user needs to list all cards he can access
+
 
 þegar card krassar þá má það alls ekki krassa servernum, eins og gerist þegtar 
 	device4 = new Device('57e2a6f74a43074811a0720f', maxValue);
 	hefur rangt id á device-i.
 
-make more nice dashbord, expecially for user who are normal users.
+make more nice dashbord, eggxpecially for user who are normal users.
 
 add a document property to Control module which accepts a valid html documentation url.  for example. make this url point to
 starting with making the diodeCtrl documentation point to : C:\git\ardos\public\docs\controls\diodectrl.html
 
 
 make the "devices.js::router.get('/pins'..." route take an id.  Like so router.get('/pins/:deviceID'... 
-
-	þarf ekki að vera hægt að test devices?
-
-hverjir mega registra sig...
-á að bjóða uppá að jón jónsson út í bæ fái að registera sig, held ekki
 
 Búa til síðu sem inniheldur forritið sem hlaða ská upp á tækið
 	sú síða býður þér uppá að skrifa inn ip addressu, password á wifi-ið og nafn fyrir tækið.

@@ -5,6 +5,7 @@ const fs = require('fs');
 var interfaces = os.networkInterfaces();
 var Card = require('../models/card');
 var Control = require('../models/control');
+var defaultInterfaces = require('default-network');
 var router = express.Router();
 
 module.exports.authenticateUrl = function authenticateUrl(req, res, next){	
@@ -289,6 +290,9 @@ module.exports.getAddresses = function getAddresses(){
 	return addresses;
 };
 
+
+
+
 // returns a string array of the using statment
 module.exports.extractUsingArray = function extractUsingArray(strCode){
 	var line = strCode.replace(/\s\s+/g, ' ');
@@ -322,4 +326,35 @@ module.exports.findObjectID = function findObjectID(array, objectID) {
 		}
 	}, this);
 	return ret;
+};
+
+module.exports.getNetWorkInfo = function getNetWorkInfo(callback, callbackError) {
+	
+	network.get_active_interface(function(err, obj) {
+ 
+		if (err !== null || obj === undefined || obj === null){
+			if (callbackError !== undefined)
+			{
+				callbackError();
+			}
+		} else {
+			callback(obj);
+		}
+  /* obj should be:
+ 
+  { name: 'eth0',
+    ip_address: '10.0.1.3',
+    mac_address: '56:e5:f9:e4:38:1d',
+    type: 'Wired',
+    netmask: '255.255.255.0',
+    gateway_ip: '10.0.1.1' }
+ 
+  */
+});
+};
+
+module.exports.getDefaultGateWay = function getDefaultGateWay(){
+	defaultInterfaces.collect(function(error, data) {
+  console.log(data);
+});
 };

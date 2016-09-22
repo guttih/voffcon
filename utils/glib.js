@@ -234,33 +234,47 @@ module.exports.makeRequestPostOptions = function makeRequestOptions(url, formDat
 	return options;
 };
 
-module.exports.getConfig = function getConfig(){
-	var file = __dirname + './../config.json';
-	var conf;
-	if (validator.fileExists(file)){
-		conf = require(file);
-	}
-	else{
-		conf = { 'serverUrl' : 'http://www.guttih.com:5100' };
-		var str = JSON.stringify(conf);
-		fs.writeFile(file, str, function(err) {
-			if(err) {
-				console.log("Could not write default values to the config file.  Error : " + err);
-			}
-		});
-	}
-	return conf;
-};
 
 module.exports.setConfig = function setConfig(conf){
 	var file = __dirname + './../config.json';
 		var str = JSON.stringify(conf);
+		//add an endline between variables
+		str = str.replace(/,\"/g, ",\n\"");
 		fs.writeFile(file, str, function(err) {
 			if(err) {
 				console.log("Could not write default values to the config file.  Error : " + err);
 			} 
 		});
 };
+
+module.exports.getConfig = function getConfig(){
+	var file = __dirname + './../config.json';
+	var conf;
+	var makeNewFile = true;
+	if (validator.fileExists(file)){
+		try{
+			conf = require(file);
+			makeNewFile = false;
+		} catch(e) {
+			makeNewFile = true;
+		}
+	}
+	if (makeNewFile === true){
+		conf = { serverUrl : 'http://www.guttih.com:5100',
+					port:6100,
+					allowUserRegistration: true 
+				};
+		//var str = JSON.stringify(conf);
+		module.exports.setConfig(conf);
+		/*fs.writeFile(file, str, function(err) {
+			if(err) {
+				console.log("Could not write default values to the config file.  Error : " + err);
+			}
+		});*/
+	}
+	return conf;
+};
+
 
 module.exports.getAddresses = function getAddresses(){
 	var addresses = [];

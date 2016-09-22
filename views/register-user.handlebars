@@ -1,14 +1,17 @@
-<div class="row">
-	<h3 class="page-header pull-right">Register</h3>
-</div>
+
+{{#if item}} <!-- if you want to edit a specific user -->
+			<div id='item' data-user='{{{item}}}' />
+			<div class="row"><h3 class="page-header pull-right">Modify user settings</h3></div>
+{{else}}
+			<div class="row"><h3 class="page-header pull-right">Register</h3></div>			
+{{/if}}
+
 {{#if errors}}
 	{{#each errors}}
 		<div class="alert alert-danger">{{msg}}</div>
 	{{/each}}
 {{/if}}
-{{#if item}} <!-- if you want to edit a specific user -->
-			<div id='item' data-user='{{{item}}}' />
-{{/if}}
+
 <form method="post" id ="user-form">
 <div class="form-group">
 	<label>Name</label>

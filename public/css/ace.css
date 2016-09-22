@@ -6,7 +6,7 @@
 
 .acediv{
   position:relative;
-  height:450px;
+  height:250px;
     margin-left:0px;
   margin-right:0px;
 }
@@ -31,4 +31,8 @@
 
 .text-center {
   text-align: center;
+}
+
+.add-top-margin {
+	margin-top:15px;
 }

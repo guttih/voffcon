@@ -1,17 +1,21 @@
-<div class="row">
-	<h3 class="page-header pull-right">Register a new device</h3>
-</div>
+
 Register
+
+{{#if device}}
+<script type="text/javascript">
+	var device = {{{device}}};
+</script>
+	<div class="row"><h3 class="page-header pull-right">Modify a device</h3></div>
+{{else}}
+			<div class="row"><h3 class="page-header pull-right">Register a new device</h3></div>			
+{{/if}}
+
 {{#if errors}}
       {{#each errors}}
         <div class="alert alert-danger">{{msg}}</div>
       {{/each}}
 {{/if}}
-{{#if device}}
-<script type="text/javascript">
-	var device = {{{device}}};
-</script>
-{{/if}}
+
 <form method="post" action="/devices/register" id="deviceform">
 	<div class="form-group">
 		<label>Name</label>

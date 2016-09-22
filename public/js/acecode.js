@@ -353,3 +353,63 @@ function initAce(){
 	if (control !== undefined){ getControl(control.id);	}
 	if (card !== undefined){ getCard(card.id);	}
 }
+
+function resizeAceWindow(buttonHtmlElement){
+	var	i, grow, $button, $container, $editor, w,h, editorId, ctrl;
+
+	//get id of the div parent div of the parent div of the editor
+	//id of the parent parent div should be appended to the button id in the DOM
+	i = buttonHtmlElement.id.indexOf('_');
+	if (i<1){ 
+		return;
+	}
+
+	$container = $('#'+buttonHtmlElement.id.substring(i+1));
+
+	$editor = $container.find('.ace_editor');
+	editorId = $editor.id;
+	if (editorId == undefined){
+		editorId = $editor.get(0).id;
+	}
+
+	console.log(editorId);
+		switch(editorId){
+		case 'editor-js-card' : ctrl = editJsCard; 		break;
+		case 'editor-js-ctrl' : ctrl = editJsCtrl; 		break;
+		case 'editor-html-ctrl' : ctrl = editHtmlCtrl; 	break;
+		default : return; //invalid id.
+		
+	}
+	
+	
+	//check if we are suppose to grow to windowsize or shrink to default.
+	//find class "glyphicon-plus" of the subelement span
+	$button = $('#'+buttonHtmlElement.id);
+	grow = $button.find("span").hasClass("glyphicon-plus");
+	if (grow){
+		w = $(window).width() * 0.8;
+		h = $(window).height() * 0.91;
+		if (w > 2048){
+			w = 900; //no need to grow more
+		} 
+		$container.width( w );
+		$container.height( h );
+		$container.css( "padding-right", "10px");
+		
+		$editor.height( h );
+		$button.find("span").removeClass("glyphicon-plus").addClass("glyphicon-minus");
+		
+	} else {
+		w = "100%";
+		h = "100%";
+		$container.width( w );
+		$container.height( h );
+		$editor.height($container.width());
+		$editor.height($container.height());
+		$container.css( "padding-right", "0px" );
+		$button.find("span").removeClass("glyphicon-minus").addClass("glyphicon-plus");
+	}
+
+	ctrl.resize();
+	
+}

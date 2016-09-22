@@ -1,14 +1,18 @@
-<div class="row">
-	<h3 class="page-header pull-right">New Control</h3>
-</div>
+
+
+{{#if item}} <!-- if you want to edit a specific control -->
+			<div id='item' data-control='{{{item}}}' />
+			<div class="row"><h3 class="page-header pull-right">Modify Control</h3></div>
+{{else}}			
+			<div class="row"><h3 class="page-header pull-right">New Control</h3></div>
+{{/if}}
+
 {{#if errors}}
       {{#each errors}}
         <div class="alert alert-danger">{{msg}}</div>
       {{/each}}
 {{/if}}
-{{#if item}} <!-- if you want to edit a specific control -->
-			<div id='item' data-control='{{{item}}}' />
-{{/if}}
+
 <form  method="post" id="control-form">
 	<div class="row row-padd">
 		<h4 class="text-left">Name</h4>
@@ -32,20 +36,41 @@
 	<div class="row row-padd">
 		<h4 class="text-left">Control class</h4>
 		<p>Here you need to insert the JavaScript class of you control.</p>
-		<div class="acediv">
-			<div id="editor-js-ctrl"></div>
+		<button 	id="btn-resize_editor-js-ctrl-container" 
+					type="button"
+					rel="tooltip" data-placement="top" title="Resize the code window" 
+					class="btn btn-default btn-sm" 
+					onclick="resizeAceWindow(this)"
+					>
+						<span class="glyphicon glyphicon-plus"></span>
+		</button>
+		<div id="editor-js-ctrl-container">
+			<div class="acediv">
+				<div id="editor-js-ctrl"></div>
+			</div>
 		</div>
 	</div>
 	<div class="row row-padd">
 		<h4 class="text-left">Template</h4>
 		<p>Here you need to insert the HTML template of your control.</p>
 		<p style="font-size:11px; font-style: italic;">Don't worry about the comment involving &lt;!DOCTYPE html&gt;</p>
-		<div class="acediv">
-			<div id="editor-html-ctrl"></div>
+		<button 	id="btn-resize_editor-js-html-container" 
+					type="button"
+					rel="tooltip" data-placement="top" title="Resize the code window" 
+					class="btn btn-default btn-sm" 
+					onclick="resizeAceWindow(this)"
+					>
+						<span class="glyphicon glyphicon-plus"></span>
+		</button>
+		<div id="editor-js-html-container">
+			<div class="acediv">
+				<div id="editor-html-ctrl"></div>
+			</div>
 		</div>
 	</div>
 </form>
 <div class="row  row-padd">
+	<button id="btnUserAccessControl" type="button" class="btn btn-warning pull-left">User access</button>
 	<button id="btnSaveControl" type="button" class="btn btn-success pull-right">Save control</button>
 </div>
 

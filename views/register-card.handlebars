@@ -1,16 +1,18 @@
-<div class="row">
-	<h3 class="page-header pull-right">New Card</h3>
-</div>
+
+
+{{#if item}}
+			<div id='item' data-card='{{{item}}}' />
+			<div class="row"><h3 class="page-header pull-right">Modify Card</h3></div>		
+{{else}}
+			<div class="row"><h3 class="page-header pull-right">New Card</h3></div>			
+{{/if}}
+
 {{#if errors}}
       {{#each errors}}
         <div class="alert alert-danger">{{msg}}</div>
       {{/each}}
 {{/if}}
-{{#if item}}
-			<div id='item' data-card='{{{item}}}' />
-			  
-			
-{{/if}}
+
 <form  method="post" id="card-form">
 	<div class="row row-padd">
 		<h4 class="text-left">Name</h4>
@@ -25,7 +27,6 @@
 		<label>Description</label>
 		<p>Descripe what your card does. What device(s) will the user be controlling or seeing values from.</p>
 		<div class="form-group">
-			
 			<div class="col-md-12">
 				<textarea id="description" name="description" form="card-form" class="form-control" rows="3" placeholder="Descripe your card, and what you can do with it."></textarea>
 			</div>
@@ -34,8 +35,19 @@
 	<div class="row row-padd">
 		<h4 class="text-left">Card Control</h4>
 		<p>Here you need to insert the JavaScript code for your card.</p>
-		<div class="acediv">
-			<div id="editor-js-card"></div>
+
+		<button 	id="btn-resize_editor-js-card-container" 
+					type="button"
+					rel="tooltip" data-placement="top" title="Resize the code window" 
+					class="btn btn-default btn-sm" 
+					onclick="resizeAceWindow(this)"
+					>
+						<span class="glyphicon glyphicon-plus"></span>
+		</button>
+		<div id="editor-js-card-container">
+			<div class="acediv">			
+				<div id="editor-js-card"></div>
+			</div>
 		</div>
 	</div>
 </form>

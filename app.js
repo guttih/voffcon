@@ -145,8 +145,24 @@ app.set('port', config.port);
 
 app.listen(app.get('port'), function(){
 	//console.log('Server started on port '+app.get('port'));
+
+	//todo: remvoe this code, and add it to glib and make a solution for linux also
+	/*const os = require('os');
 	console.log('Server started');
-	lib.getDefaultGateWay();
+	var gateways;
+	var osStr = os.type();
+	if (osStr.indexOf("Windows")===0){
+		lib.getWindwsDefaultGateways(function(data){
+			gateways = data;
+			if (gateways !== undefined ){
+				console.log("Default gateway: " + gateways[0]);
+			}
+		});
+	}*/
+	lib.getFirstDefaultGateWay(function(defaultGateway){
+			console.log("default gateway : " + defaultGateway);
+	});
+
 	addresses.forEach(function(entry) {
 		console.log(" " + entry +":"+ app.get('port'));
 	});

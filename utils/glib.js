@@ -5,6 +5,7 @@ const fs = require('fs');
 var interfaces = os.networkInterfaces();
 var Card = require('../models/card');
 var Control = require('../models/control');
+const exec = require('child_process').exec;
 var defaultInterfaces = require('default-network');
 var router = express.Router();
 
@@ -265,13 +266,8 @@ module.exports.getConfig = function getConfig(){
 					port:6100,
 					allowUserRegistration: true 
 				};
-		//var str = JSON.stringify(conf);
 		module.exports.setConfig(conf);
-		/*fs.writeFile(file, str, function(err) {
-			if(err) {
-				console.log("Could not write default values to the config file.  Error : " + err);
-			}
-		});*/
+
 	}
 	return conf;
 };
@@ -353,8 +349,73 @@ module.exports.getNetWorkInfo = function getNetWorkInfo(callback, callbackError)
 });
 };
 
-module.exports.getDefaultGateWay = function getDefaultGateWay(){
-	defaultInterfaces.collect(function(error, data) {
-  console.log(data);
-});
+//runs the command ipconfig and returns all, windows default gateways found.
+module.exports.getWindwsDefaultGateways = function getWindwsDefaultGateways(callback, callbackError){
+		
+	var shellCommand = 'ipconfig';
+	var gateways = [];
+	var errStr;
+		//running the dos command ipconfig, and parsing the result
+		exec(shellCommand, function(err, out, code) {
+			var lines = out.split("\r\n");
+			var res;
+			var bool;
+			lines.forEach(function(element) {
+				res = element.split(" : ", 2);
+				if (res.length > 1 && res[1].length){
+						bool = (res[0].indexOf("Default Gateway") > -1); 
+					if (bool && res[1].length > 0 && res[1] !== "::"){
+						gateways.push(res[1]);
+					}
+				}
+			}, this);
+
+			if (err !== null){
+				errStr = ' : ' + err.message + 'Code : ' + err.code; 
+				console.log(errStr);
+			}
+			if (err !== null || gateways.length < 1) {
+				callbackError("No default gatway found!");//returns undefined
+			}
+			else{
+				callback(gateways);
+			}
+		});
+};
+
+module.exports.getFirstDefaultGateWay = function getFirstDefaultGateWay(callback, callbackError){
+	var ip;
+	defaultInterfaces.collect(function(error, collectData) {
+		
+		if (error === null && collectData !== null) {
+			 var keys = Object.keys(collectData);
+			 if (keys.length > 0){
+				var key = keys[0]; 
+			 	ip = collectData[key][0].address;
+			 }
+		}
+		 if (ip !== undefined && ip.length > 6) {
+			 console.log("defaultInterfaces got the defaultIP");
+		 	callback(ip);
+		} else {
+					var osStr = os.type();
+					if (osStr.indexOf("Windows") === 0){
+						module.exports.getWindwsDefaultGateways(function(gateways){
+							if (gateways !== undefined ){
+								ip = gateways[0];
+								console.log("getWindwsDefaultGateways got the defaultIP");
+								callback(ip);
+							} else {
+								if (callbackError !== undefined) {
+									callbackError("unable to get windows default gateway.");
+								}
+							} 
+						});
+					} else{
+						if (callbackError !== undefined) {
+							callbackError("unable to get default gateway.");
+						}
+					}
+				}
+	});
 };

@@ -32,12 +32,13 @@ router.get('/login', function(req, res){
 router.post('/register', function(req, res){
 var config = lib.getConfig();
 if (config.allowUserRegistration === true) {
+	
 		var name = req.body.name;
 		var email = req.body.email;
 		var username = req.body.username;
 		var password = req.body.password;
 		var password2 = req.body.password2;
-
+		
 		// Validation
 		req.checkBody('name', 'Name is required').notEmpty();
 		req.checkBody('email', 'Email is required').notEmpty();
@@ -45,7 +46,6 @@ if (config.allowUserRegistration === true) {
 		req.checkBody('username', 'Username is required').notEmpty();
 		req.checkBody('password', 'Password is required').notEmpty();
 		req.checkBody('password2', 'Passwords do not match').equals(req.body.password);
-
 		var errors = req.validationErrors();
 
 		if(errors){
@@ -59,14 +59,41 @@ if (config.allowUserRegistration === true) {
 				level:0
 			});
 
-			User.createUser(newUser, function(err, user){
-				if(err) {throw err;}
-				console.log(user);
+			User.getUserByUsername(newUser._doc.name, function(err, oldUser){
+
+				if (err === null && oldUser === null){
+					
+					User.createUser(newUser, function(err, user){
+						if (!err){
+							req.flash('success_msg', 'You are registered and can now login');
+							res.redirect('/users/login');
+						} else {
+							
+							res.render('register-user',{ errors:errors });
+						}
+					});
+				} else {
+					//this username is taken
+					errors = [];
+					errors.push({
+									msg: "Username is taken",
+									param:"name",
+									value: name
+					});
+					var item = {
+						name: name,
+						email:email,
+						username: username
+					};
+					item = JSON.stringify(item);
+
+//todo:  passa clientmegin að tékka vort item.id sé til annars un-autorizedl...............
+
+
+					res.render('register-user',{ errors:errors, newItem:item });
+				}
 			});
-
-			req.flash('success_msg', 'You are registered and can now login');
-
-			res.redirect('/users/login');
+			
 		}
 	} else { 
 		req.flash('error_msg', 'New users are not allowed at this time.');

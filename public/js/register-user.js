@@ -44,8 +44,8 @@ function saveUser(){
 			password2	: $('#password2').val()
 		};*/
 	var isPowerUser = $("#div-level").is(":visible");
-	
-	document.getElementById("user-form").submit();
+	var form = document.getElementById("user-form");
+	form.submit();
 	
 }
 function registerUserInput($el){
@@ -113,12 +113,14 @@ function updateSaveButtonStateHelper(buttonID){
 }
 
 function setUserValues(item){
-	$('#id').val(item.id);
+	if (item.id){
+		$('#id').val(item.id);
+	}
 	$('#name').val(item.name);
 	$('#username').val(item.username);
 	$('#email').val(item.email);
 	$("#level").val(item.level);
-	if (item.currentUserLevel > 1){
+	if (item.currentUserLevel !== undefined && item.currentUserLevel > 1){
 		$("#div-level").show();
 	} else {
 		$("#div-level").hide();
@@ -145,12 +147,19 @@ function getUser(id){
 		});
 }
 
+
 $(function () {  
 	init();//when script loads this runs.
 	SERVER = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ':'+window.location.port: '');
+
+	var user = $( 'item' ).data('user');
 	
-	var user    = $( '#item' ).data('user');
-	
-	if (user !== undefined){ getUser(user.id);	}
+	if (user !== undefined){
+		getUser(user.id);	
+	} else { //was there an error when registering a new user;
+		if (typeof newItem !== 'undefined') {
+			setUserValues(newItem);
+		}
+	}
 	updateSaveButtonStateHelper('btnSaveUser');
 });

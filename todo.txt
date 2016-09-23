@@ -1,3 +1,7 @@
+Villa í user Registration
+	Hægt er að búa til user sem hefur sama user nafnið.
+	Hér þarf að vara sig, því það þarf að vera hægt að breyta user, 
+	en þegar þú nýskráir user þá má ekki yfirskrifa user.
 
 dashbord for a guest user needs to list all cards he can access
 

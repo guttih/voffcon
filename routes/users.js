@@ -49,7 +49,13 @@ if (config.allowUserRegistration === true) {
 		var errors = req.validationErrors();
 
 		if(errors){
-			res.render('register-user',{ errors:errors });
+			var item = {
+						name: name,
+						email:email,
+						username: username
+					};
+					item = JSON.stringify(item); //todo test this
+			res.render('register-user',{ errors:errors, item:item });
 		} else {
 			var newUser = new User({
 				name: name,
@@ -59,7 +65,7 @@ if (config.allowUserRegistration === true) {
 				level:0
 			});
 
-			User.getUserByUsername(newUser._doc.name, function(err, oldUser){
+			User.getUserByUsername(newUser._doc.username, function(err, oldUser){
 
 				if (err === null && oldUser === null){
 					
@@ -90,7 +96,7 @@ if (config.allowUserRegistration === true) {
 //todo:  passa clientmegin að tékka vort item.id sé til annars un-autorizedl...............
 
 
-					res.render('register-user',{ errors:errors, newItem:item });
+					res.render('register-user',{ errors:errors, item:item });
 				}
 			});
 			

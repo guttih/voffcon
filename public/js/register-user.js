@@ -152,13 +152,13 @@ $(function () {
 	init();//when script loads this runs.
 	SERVER = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ':'+window.location.port: '');
 
-	var user = $( 'item' ).data('user');
+	var user = item;
 	
 	if (user !== undefined){
-		getUser(user.id);	
-	} else { //was there an error when registering a new user;
-		if (typeof newItem !== 'undefined') {
-			setUserValues(newItem);
+		if ( user.id!== undefined ){
+			getUser(user.id);
+		} else { //was there an error when registering a new user;
+			setUserValues(user);	
 		}
 	}
 	updateSaveButtonStateHelper('btnSaveUser');

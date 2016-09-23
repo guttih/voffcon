@@ -23,15 +23,22 @@ function updateEditState(id, text, buttonID){
 
 //returns true if we are in edit mode otherwise false;
 function isEditMode(){
-	if ($( '#item' ).data( 'user' ) !== undefined){ 
+	var user;
+	if (typeof item !== 'undefined') {
+		user = item;
+	}
+	if (user !== undefined && user.id !== undefined){
 		return true;
 	}
 	return false;
 }
 
 function saveUser(){
-	var user = $( '#item' ).data( 'user' );
-	if (user !== undefined){ /*we are in editmode*/
+	var user;
+	if (typeof item !== 'undefined') {
+		user = item;
+	}
+	if (user !== undefined && user.id !== undefined){ /*we are in editmode*/
 		document.getElementById('id').value = user.id;
 		//this triggers post route on server "users/register/:userID"
 	}

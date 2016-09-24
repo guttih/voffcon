@@ -4,30 +4,52 @@
 		<title></title>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<link href="css/style.css" rel="stylesheet">
+		<script src="/js/jquery-3.1.0.min.js"></script>
+		<script src="/js/bootstrap.min.js"></script>
+		<style type="text/css" media="screen">
+			#editor1 { 
+				position: absolute;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				left: 0;
+			}
+			.code{
+				position:absolute;
+				width:600px;
+				height:180px;
+			}
+		</style>
 	</head>
 	<body>
-	<div>
-		<h2>DiodeCtrl documentation.</h2>
-		<dl class="dl-horizontal">
-		<dt>Description</dt>
-			<dd>Use this control to display the value of a pin. This control draws a image of an diode on the screen and within that diode there is a number representing the pin value.</dd>
-		<dt>Usage</dt>
-			<dd>todo:</dd>
-		<dt>Code example on a card:</dt>
-		<dd>	
-			<pre><code>var using = ["DiodeCtrl"];
-var pin1, diode1;
 
-$(function () {
-	pin1    = new Pin(16, 999, '57afb108b450ab9c2f820507', 1023);
-	//Show the pinvalue 999 as a diode at location x=12 and y=55
-	diode1  = new DiodeCtrl(12,55,pin1);
-	//make the diode inactive, (shows it as gray) instead of red.
-	pin1.active(false);
-});</code></pre>
-		</dd>
-	</dl>
+	<h2>DiodeCtrl documentation.</h2>
+	<p>
+		Use this control to display the value of a pin. This control draws a image of an diode on the screen and within that diode there is a number representing the pin value.
+	</p>
+	<p>Code example on a card:</p>
+	<div class="code">
+		
+<div id="editor1" class="eddi">
+	var using = ["DiodeCtrl"];
+	var pin1, diode1;
+
+	$(function () {
+		pin1    = new Pin(16, 999, '57afb108b450ab9c2f820507', 1023);
+		//Show the pinvalue 999 as a diode at location x=12 and y=55
+		diode1  = new DiodeCtrl(12,55,pin1);
+		//make the diode inactive, (shows it as gray) instead of red.
+		pin1.active(false);
+	});
+</div>
 	</div>
+<script src="/vendor/ace-builds/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    var editor = ace.edit("editor1");
+    editor.setTheme("ace/theme/monokai");
+    editor.getSession().setMode("ace/mode/javascript");
+	editor.setReadOnly(true);
+</script>
+ 
 	</body>
 </html>

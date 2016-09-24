@@ -5,7 +5,14 @@ var lib = require('../utils/glib');
 
 // Get Homepage
 router.get('/', lib.authenticateUrl, function(req, res){
-	res.render('index');
+	res.render('list-card');
+	//res.render('index'); //todo: make nicer dashboard
+});
+router.get('/run/:cardID', lib.authenticateUrl, function(req, res){
+	//for the dasboard
+	var id = req.params.cardID;
+	res.redirect('/cards/run/'+id);
+	//res.render('index'); //todo: make nicer dashboard
 });
 router.get('/result', lib.authenticateUrl, function(req, res){
 	res.render('result');

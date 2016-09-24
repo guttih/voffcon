@@ -1,9 +1,10 @@
 /*client javascript file for the list-user page*/
 var SERVER;
 
+/*
 function runItem(id){
 	console.log('todo: run this item : ' + id);
-}
+}*/
 
 
 var setUserlistValues = function setUserlistValues(userList){

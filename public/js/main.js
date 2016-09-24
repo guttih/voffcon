@@ -343,7 +343,7 @@ function requestData(subUrl, callback, errorCallback){
 			}
 		});
 }
-
+/*
 function changeHref(caller, id){
 	console.log(caller);
 	var newValue = caller.value;
@@ -352,9 +352,17 @@ function changeHref(caller, id){
 		return;
 	}
 	$elm.attr({href: newValue});
+}*/
+
+function runItem(id){
+	window.location.assign("run/"+id);
 }
 
-function changeHref(caller, id){
+function changeHref(from, to){
+	window.location.href = window.location.href.replace(from,to);
+}
+
+function changeHelpHref(caller, id){
 	var newValue = caller.value;
 	var $elm = $("#"+id);
 	if ( $elm.length < 1 ) { 

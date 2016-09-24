@@ -120,6 +120,7 @@ function updateSaveButtonStateHelper(buttonID){
 }
 
 function setUserValues(item){
+
 	if (item.id){
 		$('#id').val(item.id);
 	}
@@ -158,8 +159,11 @@ function getUser(id){
 $(function () {  
 	init();//when script loads this runs.
 	SERVER = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ':'+window.location.port: '');
-
-	var user = item;
+	var user;
+	if (typeof item !== 'undefined') {
+		user = item;
+	}
+	 
 	
 	if (user !== undefined){
 		if ( user.id!== undefined ){

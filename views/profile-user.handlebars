@@ -7,7 +7,9 @@
 	{{/each}}
 {{/if}}
 {{#if item}} <!-- if you want to edit a specific user -->
-			<div id='item' data-user='{{{item}}}' />
+			<script type="text/javascript">
+			var item = {{{item}}};
+		</script>
 {{/if}}
 <form method="post" id ="user-form">
 <div class="form-group">

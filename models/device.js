@@ -17,6 +17,9 @@ var DeviceSchema = mongoose.Schema({
 	},
 	description: {
 		type: String
+	},	
+	helpurl: {
+		type: String
 	},
 	 owners: [{ObjectId}]
 });

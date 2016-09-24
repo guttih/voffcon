@@ -13,6 +13,9 @@ var CardSchema = mongoose.Schema({
 	},
 	description: {
 		type: String
+	},	
+	helpurl: {
+		type: String
 	},
 	code: {
 		type: String

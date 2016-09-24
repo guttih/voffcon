@@ -15,14 +15,14 @@
 
 <form  method="post" id="card-form">
 	<div class="row row-padd">
-		<h4 class="text-left">Name</h4>
+		
+		<label>Name</label>
 			<p>Give the card a desciptive name, but not to long.</p>
 		<input type="text"   id="name"     name="name" class="form-control" value="" placeholder="Name of your card">
 		<input type="hidden" id="id"       name="id" value="">
 		<input type="hidden" id="code"     name="code" value="">
-		
 	</div>
-
+	
 	<div class="form-horizontal">
 		<label>Description</label>
 		<p>Descripe what your card does. What device(s) will the user be controlling or seeing values from.</p>
@@ -33,7 +33,21 @@
 		</div>
 	</div>
 	<div class="row row-padd">
-		<h4 class="text-left">Card Control</h4>
+		<label>Documentation link</label>
+		<p>Url to documentation about this card.</p>
+		<!--todo: the input minimizes to quickly wen making the with less-->
+		<div class="pull-left   col-md-11 row-nopadd">
+			<input 	type="text"   	id="helpurl"  
+					name="helpurl" 	class="form-control" 
+					value="" 		placeholder="Url to documentation" 
+					onchange="changeHref(this, 'a-open-helpurl')"
+					onkeyup ="changeHref(this, 'a-open-helpurl')"
+					paste   ="changeHref(this, 'a-open-helpurl')">
+		</div>
+		<a id="a-open-helpurl" class="btn btn-default pull-right col-md-1" href="#" target="_blank"> <span class="glyphicon glyphicon-open-file"></span></a>
+	</div>
+	<div class="row row-padd">
+		<label>Card</label>
 		<p>Here you need to insert the JavaScript code for your card.</p>
 
 		<button 	id="btn-resize_editor-js-card-container" 

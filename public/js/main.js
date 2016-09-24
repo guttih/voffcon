@@ -300,7 +300,8 @@ function changeUsersCanRegister(){
 	}
 	var sendObj = {};
 	sendObj.allowUserRegistration = allow;
-	var posting = $.post( '/users/settings', sendObj);
+	//var posting = $.post( '/users/settings', sendObj);
+	var posting = $.post( '/settings', sendObj);
 	posting
 		.done(function(data){
 			//successful update let's change the class "checked"
@@ -343,10 +344,25 @@ function requestData(subUrl, callback, errorCallback){
 		});
 }
 
-
-function runItem(id){
-	window.location.assign("run/"+id);
+function changeHref(caller, id){
+	console.log(caller);
+	var newValue = caller.value;
+	var $elm = $("#"+id);
+	if ( $elm.length < 1 ) { 
+		return;
+	}
+	$elm.attr({href: newValue});
 }
+
+function changeHref(caller, id){
+	var newValue = caller.value;
+	var $elm = $("#"+id);
+	if ( $elm.length < 1 ) { 
+		return;
+	}
+	$elm.attr({href: newValue});
+}
+
 
 
 $(function () {  

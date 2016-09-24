@@ -39,7 +39,7 @@ router.post('/register', lib.authenticatePowerRequest, function(req, res){
 	req.checkBody('description', 'description is required').notEmpty();
 	req.checkBody('code', 'javascript code is required').notEmpty();
 	var errors = req.validationErrors();
-
+	 
 	if(errors){
 		//todo: user must type all already typed values again, fix that
 		res.render('register-card',{errors:errors	});
@@ -47,10 +47,12 @@ router.post('/register', lib.authenticatePowerRequest, function(req, res){
 				var newCard = new Card({
 					name			: req.body.name,
 					description		: req.body.description,
+					helpurl			: req.body.helpurl,
 					code			: req.body.code,
 					owners:[],
 					users:[]
 			});
+			
 			newCard.owners.push(req.user._id);
 			newCard.users.push(req.user._id);
 			console.log("todo: uncomment");
@@ -83,6 +85,7 @@ router.post('/register/:cardID', lib.authenticateCardOwnerUrl, function(req, res
 				var values = {
 					name		: req.body.name,
 					description : req.body.description,
+					helpurl		: req.body.helpurl,
 					code		: req.body.code
 				};
 				Card.modify(id, values, function(err, result){
@@ -132,10 +135,11 @@ router.get('/card-list', lib.authenticateRequest, function(req, res){
 				item = cardList[i];
 
 				isOwner = lib.findObjectID(item._doc.owners, req.user._id);
-				arr.push({	id:item._id,
-							name:item.name, 
+				arr.push({	id         :item._id,
+							name       :item.name, 
 							description:item.description,
-							isOwner:isOwner
+							helpurl    :item.helpurl,
+							isOwner    :isOwner
 						});
 		}
 		res.json(arr);

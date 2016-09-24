@@ -54,9 +54,11 @@ function saveControl(){
 		var strHtml = editHtmlCtrl.getValue();
 		var strName = $('#name').val();
 		var strDesc = $('#description').val();
+		var strHelp = $('#helpurl').val();
 		 var sendObj = {
 			 name			: strName,
 			 description	: strDesc,
+			 helpurl        : strHelp,
 			 template		: strHtml,
 			  code			: strCode
 		 };
@@ -71,9 +73,11 @@ function saveCard(){
 	var strCode = editJsCard.getValue();
 	var strName = $('#name').val();
 	var strDesc = $('#description').val();
+	var strHelp = $('#helpurl').val();
 	var sendObj = {
 			name		: strName,
 			description	: strDesc,
+			helpurl     : strHelp,
 			code		: strCode
 		};
 	$('#code').val(strCode);
@@ -294,16 +298,21 @@ function updateSaveButtonStateHelper(buttonID){
 	$(selectBtn).prop('disabled', false);
 }
 
+function setCommonValues(item){
+	$("#name").val(item.name);
+	$("#description").val(item.description);
+	$("#helpurl").val(item.helpurl);
+	$("#a-open-helpurl").attr({href: item.helpurl});
+}
+
 function setControlValues(item){
 	editJsCtrl.setValue(item.code, -1);
 	editHtmlCtrl.setValue(item.template, -1);
-	$("#name").val(item.name);
-	$("#description").val(item.description);
+	setCommonValues(item);
 }
 function setCardValues(item){
 	editJsCard.setValue(item.code, -1);
-	$("#name").val(item.name);
-	$("#description").val(item.description);
+	setCommonValues(item);
 }
 function getControl(id){
 	var url = SERVER+'/controls/item/'+id;

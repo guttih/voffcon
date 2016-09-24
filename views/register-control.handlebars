@@ -15,7 +15,7 @@
 
 <form  method="post" id="control-form">
 	<div class="row row-padd">
-		<h4 class="text-left">Name</h4>
+		<label>Name</label>
 			<p>The name of the control needs to be exactly the same as the id of the template</p>
 		<input type="text"   id="name"     name="name" class="form-control" value="" placeholder="Name of your control">
 		<input type="hidden" id="id"       name="id" value="">
@@ -34,7 +34,21 @@
 		</div>
 	</div>
 	<div class="row row-padd">
-		<h4 class="text-left">Control class</h4>
+		<label>Documentation link</label>
+		<p>Url to documentation about this control.</p>
+		<!--todo: the input minimizes to quickly wen making the with less-->
+		<div class="pull-left   col-md-11 row-nopadd">
+			<input 	type="text"   	id="helpurl"  
+					name="helpurl" 	class="form-control" 
+					value="" 		placeholder="Url to documentation" 
+					onchange="changeHref(this, 'a-open-helpurl')"
+					onkeyup ="changeHref(this, 'a-open-helpurl')"
+					paste   ="changeHref(this, 'a-open-helpurl')">
+		</div>
+		<a id="a-open-helpurl" class="btn btn-default pull-right col-md-1" href="#" target="_blank"> <span class="glyphicon glyphicon-open-file"></span></a>
+	</div>
+	<div class="row row-padd">
+		<label>Control class</label>
 		<p>Here you need to insert the JavaScript class of you control.</p>
 		<button 	id="btn-resize_editor-js-ctrl-container" 
 					type="button"
@@ -51,7 +65,7 @@
 		</div>
 	</div>
 	<div class="row row-padd">
-		<h4 class="text-left">Template</h4>
+		<label>Template</label>
 		<p>Here you need to insert the HTML template of your control.</p>
 		<p style="font-size:11px; font-style: italic;">Don't worry about the comment involving &lt;!DOCTYPE html&gt;</p>
 		<button 	id="btn-resize_editor-js-html-container" 

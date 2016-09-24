@@ -50,10 +50,11 @@ router.post('/register', lib.authenticatePowerRequest, function(req, res){
 		res.render('register-control',{errors:errors	});
 	} else {
 				var newControl = new Control({
-					name			: req.body.name,
-					description	: req.body.description,
-					template		: req.body.template,
-					code			: req.body.code,
+					name        : req.body.name,
+					description : req.body.description,
+					helpurl     : req.body.helpurl,
+					template    : req.body.template,
+					code        : req.body.code,
 					owners:[]
 			});
 			newControl.owners.push(req.user._id);
@@ -87,6 +88,7 @@ router.post('/register/:controlID', lib.authenticateControlOwnerUrl, function(re
 				var values = {
 					name		: req.body.name,
 					description : req.body.description,
+					helpurl		: req.body.helpurl,
 					template	: req.body.template,
 					code		: req.body.code
 				};
@@ -134,10 +136,11 @@ router.get('/control-list', lib.authenticatePowerRequest, function(req, res){
 			item = controlList[i];
 			isOwner = lib.findObjectID(item._doc.owners, req.user._id);
 
-					arr.push({	name:controlList[i].name, 
+					arr.push({	name       :controlList[i].name, 
 								description:controlList[i].description,
-								id:controlList[i]._id,
-								isOwner:isOwner
+								helpurl	   : controlList[i].helpurl,
+								id         :controlList[i]._id,
+								isOwner    :isOwner
 							});
 		}
 		res.json(arr);

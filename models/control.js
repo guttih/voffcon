@@ -21,6 +21,9 @@ var ControlSchema = mongoose.Schema({
 	},
 	description: {
 		type: String
+	},	
+	helpurl: {
+		type: String
 	},
 	template: {
 		type: String

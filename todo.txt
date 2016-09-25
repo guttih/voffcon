@@ -9,11 +9,7 @@ dashbord for a guest user needs to list all cards he can access
 
 make more nice dashbord, eggxpecially for user who are normal users.
 
-add a document property to Control module which accepts a valid html documentation url.  for example. make this url point to
-starting with making the diodeCtrl documentation point to : C:\git\ardos\public\docs\controls\diodectrl.html
-
-
-make the "devices.js::router.get('/pins'..." route take an id.  Like so router.get('/pins/:deviceID'... 
+do documentation on built, in objects
 
 Búa til síðu sem inniheldur forritið sem hlaða ská upp á tækið
 	sú síða býður þér uppá að skrifa inn ip addressu, password á wifi-ið og nafn fyrir tækið.
@@ -29,6 +25,6 @@ Búa til síðu sem inniheldur forritið sem hlaða ská upp á tækið
 todo: when user changes his own access and he looses the access to change, 
 the user interface shows him like he can change the access but he cannot change anyting
 this is because the middleware authenticateControlOwnerUrl reports an error but
-the client javascript does not pick that kind of error, that is req.flash( error. 
+the client javascript does not pick that kind of error, that is req.flash( error.
+when he removes his own access we need to direct him to the control list page 
 
-todo: when changing access on a control, user can select user access, but that access does not change anyting.

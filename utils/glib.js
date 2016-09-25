@@ -5,6 +5,7 @@ const fs = require('fs');
 var interfaces = os.networkInterfaces();
 var Card = require('../models/card');
 var Control = require('../models/control');
+var Device = require('../models/device');
 const exec = require('child_process').exec;
 var defaultInterfaces = require('default-network');
 var router = express.Router();
@@ -155,7 +156,7 @@ module.exports.authenticateDeviceOwnerRequest = function authenticateDeviceOwner
 		if (req.user._doc.level > 1){
 			return next();
 		} else {
-				var DeviceId = req.params.controlID;
+				var DeviceId = req.params.deviceID;
 				var userId = req.user._id;
 				Device.getOwnerDeviceById(DeviceId, userId, function(err, result){
 					if(err || result === null || result.length < 1) {

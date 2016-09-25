@@ -49,7 +49,7 @@ module.exports.listByOwnerId = function (id, callback){
 };
 
 /*if you only want owners to get the device use this function*/
-module.exports.getUserDevicesById = function (deviceId, userId, callback){
+module.exports.getOwnerDeviceById  = function (deviceId, userId, callback){
 	var query = {	_id: deviceId,
 					owners:{$elemMatch: { _id:userId }}
 		};

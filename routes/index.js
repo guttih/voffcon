@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+const fs = require('fs');
 var lib = require('../utils/glib');
 
 
@@ -23,6 +24,24 @@ router.get('/about', function(req, res){
 router.get('/help', function(req, res){
 	res.render('help');
 });
+router.get('/file', lib.authenticateFileRequest, function(req, res){
+	var name = req.query.name;
+	var filename = __dirname + '/../public' + name;
+	fs.readFile(filename, 'utf8', function(err, data){
+		var code = 200;
+		if (err) {
+			res.send(500).json({error:"Error reading file!"});
+		} else{
+			res.send(data);
+		}
+	});
+	
+	
+});
+
+
+
+
 
 
 //todo: this route shoud not be in users route, but a new route called maybe "settings"

@@ -1,5 +1,8 @@
-/* https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes  and
-http://www.2ality.com/2015/02/es6-classes-final.html */
+/* 
+	about ussing classes in JavaScript:
+     - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes  and
+     - http://www.2ality.com/2015/02/es6-classes-final.html
+*/
 
 "use strict";
 class ControlElement { 
@@ -17,19 +20,19 @@ class ControlElement {
 		
 	}
 	getNameExtender() 	{return this.nameExtender;}
-	getId() 	{return this.name + this.nameExtender;}
-	getSvg()				{ return $('#'+this.getId()+' > svg');}
+	getId() 	{ return this.name + this.nameExtender;}
+	getSvg()	{ return $('#'+this.getId()+' > svg');}
 	logString()	{ return '(' + this.left + ',' + this.top + ') name:' +  this.name+ ' id:' +  this.getId();}
-	log() 		{		console.log(this.logString()) ;	}
+	log() 		{ console.log(this.logString()) ;	}
 
-	getLeft() {return this.left;}
-	getTop() {return this.top;}
-	getName() {return this.name;}
+	getLeft()     { return this.left;}
+	getTop()      { return this.top;}
+	getName()     { return this.name;}
 
-	setLeft(left) {this.left = left;}
-	setTop(top) {this.top = top;}
-	setName(name) {this.name = name;}
-	isFirefox(){return (window.navigator.userAgent.toLowerCase().indexOf('firefox') > -1);}
+	setLeft(left) { this.left = left;}
+	setTop(top)   { this.top = top;}
+	setName(name) { this.name = name;}
+	isFirefox()   { return (window.navigator.userAgent.toLowerCase().indexOf('firefox') > -1);}
 	scale($el, scaleValue){
 		var $element;
 		if (scaleValue === undefined){
@@ -60,10 +63,11 @@ class ControlElement {
 			 $element =  $el;
 		}
 		$element.css({'-webkit-transform' : 'rotate('+ degrees +'deg)',
-                 '-moz-transform' : 'rotate('+ degrees +'deg)',
-                 '-ms-transform' : 'rotate('+ degrees +'deg)',
-                 'transform' : 'rotate('+ degrees +'deg)'});
+                      '-moz-transform' : 'rotate('+ degrees +'deg)',
+                      '-ms-transform' : 'rotate('+ degrees +'deg)',
+                      'transform' : 'rotate('+ degrees +'deg)'});
 	}
+
 	destroyElement() {$('#' + super.getId()).remove();}
 
 			/*innerHtml : you can skip this if you don't need any innerHTML on your element*/
@@ -111,6 +115,4 @@ class PinControl extends ControlElement {
 	getSvg()				{ return $('#'+super.getId()+' > svg');}
 
 	scaleValue(){return ( 100 * this.getPinValue() ) / this.getHigestValue();}
-	
-
 }

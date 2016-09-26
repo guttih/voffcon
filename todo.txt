@@ -1,5 +1,7 @@
 
 
+getWindwsDefaultGateways failes when using it in the bus
+
 dashbord for a guest user needs to list all cards he can access
 
 

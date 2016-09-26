@@ -18,6 +18,27 @@ module.exports.authenticateUrl = function authenticateUrl(req, res, next){
 		res.redirect('/users/login');
 	}
 };
+module.exports.publicFiles = function publicFiles(filename){
+	if (filename !== undefined && filename.indexOf('/js/') === 0)
+	{
+		return true;
+	}
+	return false;
+};
+
+module.exports.authenticateFileRequest = function authenticateFileRequest(req, res, next){	
+	if(req.isAuthenticated()){
+		return next();
+	} else {
+		
+		if (module.exports.publicFiles(req.query.name))
+		{ 
+			return next();
+		} else {
+			res.status(401).send('You do not have permission to view this file.');
+		}
+	}
+};
 
 module.exports.authenticatePowerUrl = function authenticatePowerUrl(req, res, next){	
 	if(req.isAuthenticated() && req.user._doc.level > 0){
@@ -376,7 +397,9 @@ module.exports.getWindwsDefaultGateways = function getWindwsDefaultGateways(call
 				console.log(errStr);
 			}
 			if (err !== null || gateways.length < 1) {
-				callbackError("No default gatway found!");//returns undefined
+				if (callbackError !== undefined){
+					callbackError("No default gatway found!");//returns undefined
+				}
 			}
 			else{
 				callback(gateways);

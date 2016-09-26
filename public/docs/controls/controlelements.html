@@ -16,32 +16,23 @@
 			}
 			.code{
 				position:absolute;
-				width:600px;
-				height:180px;
+				width:900px;
+				height:100%;
 			}
 		</style>
 	</head>
 	<body>
 
-	<h2>DiodeCtrl documentation.</h2>
+	<h2>Control elements documentation.</h2>
+	
 	<p>
-		Use this control to display the value of a pin. This control draws a image of an diode on the screen and within that diode there is a number representing the pin value.
+		When writing code for a control or a card you will have access to the file contolelements.js.  
+		This file contains useful classes for you when creating your code.
 	</p>
-	<p>Code example on a card:</p>
+	<p>Content of the file "contolelements.js":</p>
 	<div class="code">
 		
-<div id="editor1" class="eddi">
-	var using = ["DiodeCtrl"];
-	var pin1, diode1;
-
-	$(function () {
-		pin1    = new Pin(16, 999, '57afb108b450ab9c2f820507', 1023);
-		//Show the pinvalue 999 as a diode at location x=12 and y=55
-		diode1  = new DiodeCtrl(12,55,pin1);
-		//make the diode inactive, (shows it as gray) instead of red.
-		pin1.active(false);
-	});
-</div>
+<div id="editor1" class="eddi"></div>
 	</div>
 <script src="/vendor/ace-builds/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
 <script>
@@ -50,7 +41,14 @@
     editor.getSession().setMode("ace/mode/javascript");
 	editor.setReadOnly(true);
 	editor.session.setUseWorker(false);
+
+	
+	$(function () {  
+			getFile('/js/controls/controlelements.js', function(data){
+		editor.setValue(data);
+		});
+	});
 </script>
- 
+	 <script src="/js/docshelp.js"></script>
 	</body>
 </html>

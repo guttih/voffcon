@@ -1,5 +1,9 @@
 
 
+ADD THE README.MD INTO the Help help.handlebars
+	the style has been added, now just you need to add the javascript
+	and include the markdown libaray in the readme.html
+
 getWindwsDefaultGateways failes when using it in the bus
 
 dashbord for a guest user needs to list all cards he can access

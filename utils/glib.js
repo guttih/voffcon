@@ -19,10 +19,20 @@ module.exports.authenticateUrl = function authenticateUrl(req, res, next){
 	}
 };
 module.exports.publicFiles = function publicFiles(filename){
-	if (filename !== undefined && filename.indexOf('/js/') === 0)
-	{
-		return true;
+	if (filename === undefined){
+		return false;
 	}
+	filename = filename.toLowerCase();
+	switch(filename) {
+		case "/readme.md"    : 
+		case "/package.json" : return true;
+
+		default              :
+								if (filename.indexOf('/public/') === 0)	{
+									return true;
+								}
+	}
+	
 	return false;
 };
 

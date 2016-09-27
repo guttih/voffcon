@@ -23,16 +23,13 @@
 	</head>
 	<body>
 
-	<h2>pin documentation.</h2>
-	<p>Use this class to...
+	<h4>General usage</h4>
+	<p>
+		Use this class to help with keeping track controls connected to a specific device pin.  Using this class you will be able to update all controls as soon as a pins value changes.
 	</p>
-	<p>Code example on a card:</p>
-	<div class="code">
-		
-<div id="editor1" class="eddi">
+	<p>The pin class:</p>
+	<div class="code"><div id="editor1" class="eddi"></div></div>
 	
-</div>
-	</div>
 <script src="/vendor/ace-builds/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
 <script>
     var editor = ace.edit("editor1");
@@ -42,8 +39,8 @@
 	editor.session.setUseWorker(false);
 	
 	$(function () {  
-			getFile('/js/controls/pin.js', function(data){
-		editor.setValue(data);
+			getFile('/public/js/controls/pin.js', function(data){
+		editor.setValue(data, -1);
 		});
 	});
 	

@@ -24,9 +24,14 @@ router.get('/about', function(req, res){
 router.get('/help', function(req, res){
 	res.render('help');
 });
+router.get('/help_development', function(req, res){
+	res.render('help_development');
+});
+
+
 router.get('/file', lib.authenticateFileRequest, function(req, res){
 	var name = req.query.name;
-	var filename = __dirname + '/../public' + name;
+	var filename = __dirname + '/..' + name;
 	fs.readFile(filename, 'utf8', function(err, data){
 		var code = 200;
 		if (err) {

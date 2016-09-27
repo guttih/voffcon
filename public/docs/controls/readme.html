@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title></title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<script src="/js/jquery-3.1.0.min.js"></script>
+		<script src="/js/bootstrap.min.js"></script>
+		<style type="text/css">
+		#markdown > pre{
+				background:#f2f2f2;
+				padding: 10px;
+				margin-left: 20px;
+				margin-right: 20px;
+		}
+		</style>
+
+	</head>
+<body>
+
+	<div id="markdown"> </div> 
+	<script src="https://cdn.rawgit.com/showdownjs/showdown/1.4.3/dist/showdown.min.js"></script>
+	<script src="/vendor/ace-builds/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+	<script>
+		$(function () {  
+				getFile('/README.md', function(text){
+				var converter = new showdown.Converter(),
+					html      = converter.makeHtml(text),
+				element = document.getElementById("markdown");
+				element.innerHTML=html;
+			});
+		});
+		
+	</script>
+
+	<script src="/js/docshelp.js"></script>
+	</body>
+</html>

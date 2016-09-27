@@ -196,3 +196,10 @@ ul > li.menu-item.dropdown.dropdown-submenu:hover > ul{
 	display:block !important;
 }
 /* ---------    submenu end     ---------    */
+
+#markdown > pre{
+		background:#f2f2f2;
+		padding: 10px;
+		margin-left: 20px;
+		margin-right: 20px;
+}

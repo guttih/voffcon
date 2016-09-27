@@ -24,10 +24,11 @@
 	<body>
 
 	<h2>Device documentation.</h2>
+	<h4>General usage</h4>
 	<p>
-		Use this class to...
+		Use this class to help with keeping track of the all pins which belong to a specific device.
 	</p>
-	<p>Code example on a card:</p>
+	<p>The device class:</p>
 	<div class="code">
 		
 <div id="editor1" class="eddi"></div>
@@ -40,8 +41,8 @@
 	editor.setReadOnly(true);
 	editor.session.setUseWorker(false);
 	$(function () {  
-			getFile('/js/controls/device.js', function(data){
-		editor.setValue(data);
+			getFile('/public/js/controls/device.js', function(data){
+		editor.setValue(data, -1);
 		});
 	});
 </script>

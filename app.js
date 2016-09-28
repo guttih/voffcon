@@ -22,8 +22,8 @@ var users = require('./routes/users');
 var devices = require('./routes/devices');
 var controls = require('./routes/controls');
 var cards = require('./routes/cards');
-var addresses = lib.getAddresses();
-
+var addresses = lib.getAddresses(true);
+var subnets = lib.getSubnets(true);
 // Init App
 var app = express();
 
@@ -159,11 +159,20 @@ app.listen(app.get('port'), function(){
 			}
 		});
 	}*/
+	
 	lib.getFirstDefaultGateWay(function(defaultGateway){
-			console.log("default gateway : " + defaultGateway);
+		console.log("default gateway : " + defaultGateway);
+	});
+	lib.getWindowsIpConfig(function(output){
+		lib.printWindowsIpConfig(output);	
 	});
 
+	//if addresses have the same prefix as the default gateway
+	//then they are more likly to be your lan ip address.
 	addresses.forEach(function(entry) {
 		console.log(" " + entry +":"+ app.get('port'));
+	});
+	subnets.forEach(function(entry) {
+		console.log("subnet: " + entry);
 	});
 });

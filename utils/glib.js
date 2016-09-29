@@ -24,11 +24,13 @@ module.exports.publicFiles = function publicFiles(filename){
 	}
 	filename = filename.toLowerCase();
 	switch(filename) {
+		
 		case "/readme.md"    : 
 		case "/package.json" : return true;
 
 		default              :
-								if (filename.indexOf('/public/') === 0)	{
+								if (filename.indexOf('/public/') === 0 ||
+									filename.indexOf('/docs/') === 0  )	{
 									return true;
 								}
 	}

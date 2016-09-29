@@ -1,5 +1,28 @@
-# ardos
+# Ardos
 A System for controlling devices and appliances from anywere.  It is made up from two components.  A node server and A device web server.
+
+# Licence
+        Ardos is a system for controlling devices and appliances from anywere. 
+        It is made up from two components. A node server and A device web server.
+        Copyright (C) 2016  Gudjon Holm Sigurdsson
+
+        This program is free software: you can redistribute it and/or modify
+        it under the terms of the GNU General Public License as published by
+        the Free Software Foundation, either version 3 of the License, or
+        (at your option) any later version.
+
+        This program is distributed in the hope that it will be useful,
+        but WITHOUT ANY WARRANTY; without even the implied warranty of
+        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+        GNU General Public License for more details.
+
+        Here is a [copy](https://github.com/guttih/ardos/blob/master/public/COPYING.txt) of the GNU General Public License.
+        
+You can contact the author by sending email to gudjonholm@gmail.com or 
+by regular post to the address Haseyla 27, 260 Reykjanesbar, Iceland.
+
+
+
 
 ##The node server
 Is a server created with node.js.  This server creates webpages which can be viewed in a web browser like Google Chrome, Microsoft Edge and Internet Explorer. If you portforward the server out to the internet you will be able to accsess your devices from anywhere.  It uses the  [Passport](http://passportjs.org/docs) authentication middleware to keep your devices from being controlled by everyone. 

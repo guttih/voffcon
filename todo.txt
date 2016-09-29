@@ -1,25 +1,19 @@
 
 
-ADD THE README.MD INTO the Help help.handlebars
-	the style has been added, now just you need to add the javascript
-	and include the markdown libaray in the readme.html
-
-getWindwsDefaultGateways failes when using it in the bus
-
-dashbord for a guest user needs to list all cards he can access
-
 
 þegar card krassar þá má það alls ekki krassa servernum, eins og gerist þegtar 
 	device4 = new Device('57e2a6f74a43074811a0720f', maxValue);
 	hefur rangt id á device-i.
 
+Búa til síðu sem inniheldur forritið sem hlaða ská upp á tækið
+	sú síða býður þér uppá að skrifa inn ip addressu, password á wifi-ið og nafn fyrir tækið.
+	generate code takki. sem mun búa til kóða sem copy peista má inn í arduino IDE.
+
 make more nice dashbord, eggxpecially for user who are normal users.
 
 do documentation on built, in objects
 
-Búa til síðu sem inniheldur forritið sem hlaða ská upp á tækið
-	sú síða býður þér uppá að skrifa inn ip addressu, password á wifi-ið og nafn fyrir tækið.
-	generate code takki. sem mun búa til kóða sem copy peista má inn í arduino IDE.
+
 	
 Þessi eigindi ættu að vera til á öllum hlutum vistaðir í gagnagrunn.
 	last modified	: dateTime

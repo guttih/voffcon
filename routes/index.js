@@ -24,6 +24,9 @@ router.get('/about', function(req, res){
 router.get('/help', function(req, res){
 	res.render('help');
 });
+router.get('/licence', function(req, res){
+	res.render('licence');
+});
 router.get('/help_development', function(req, res){
 	res.render('help_development');
 });

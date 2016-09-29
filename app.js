@@ -164,9 +164,6 @@ app.listen(app.get('port'), function(){
 	lib.getFirstDefaultGateWay(function(defaultGateway){
 		console.log("default gateway : " + defaultGateway);
 	});
-	lib.getWindowsIpConfig(function(output){
-		lib.printWindowsIpConfig(output);	
-	});
 
 	//if addresses have the same prefix as the default gateway
 	//then they are more likly to be your lan ip address.

@@ -645,7 +645,7 @@ the exclusion of warranty; and each file should have at least the
         GNU General Public License for more details.
 
         You should have received a copy of the GNU General Public License
-        along with this program.  If not, see <http://www.gnu.org/licenses/>.
+        along with this program.  If not, see <http://www.gnu.org/licenses/>. 
         
 You can contact the author by sending email to gudjonholm@gmail.com or 
 by regular post to the address Haseyla 27, 260 Reykjanesbar, Iceland.

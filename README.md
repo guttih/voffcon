@@ -1,7 +1,7 @@
 # Ardos
-A System for controlling devices and appliances from anywere.  It is made up from two components.  A node server and A device web server.
+A System for controlling devices and appliances from anywere.  It is made up by two components.  A node server and A device web server.  The main benefits of this system is your ability to create your own controls and cards, which other users logged in to your system can use to control devices you deside to put on your cards.
 
-# Licence
+# Licence  
         Ardos is a system for controlling devices and appliances from anywere. 
         It is made up from two components. A node server and A device web server.
         Copyright (C) 2016  Gudjon Holm Sigurdsson
@@ -16,8 +16,11 @@ A System for controlling devices and appliances from anywere.  It is made up fro
         MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
         GNU General Public License for more details.
 
-        Here is a [copy](https://github.com/guttih/ardos/blob/master/public/COPYING.txt) of the GNU General Public License.
+        You should have received a copy of the GNU General Public License
+        along with this program.  If not, see <http://www.gnu.org/licenses/>.
         
+[Click here](https://github.com/guttih/ardos/blob/master/public/COPYING.txt) for a copy of the licence.
+
 You can contact the author by sending email to gudjonholm@gmail.com or 
 by regular post to the address Haseyla 27, 260 Reykjanesbar, Iceland.
 

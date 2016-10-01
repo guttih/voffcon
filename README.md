@@ -95,7 +95,7 @@ has not been tested or implemented yet
 
 ### More about the system
 ####Users
-There will be three kinds of users (actors). "administrator", "power user/card creator" and a "normal user".
+There are three kinds of users (actors). "administrator", "power user/card creator" and a "normal user".
 
 #####Administrator
 Has the power to change/modify or delete all cards, and devices. He can also give a user access to a card, or a device, just like a card creator. This user is the only one who can upgrade, downgrade or delete users. He can f.example change a normal user to "administrator" or a "power user". He can also change a power user back to a normal user. He has total control of everything.

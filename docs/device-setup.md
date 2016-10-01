@@ -1,5 +1,6 @@
 # How to setup the Esp8266
 Description on how to setup the device NodeMcu Module with ESP8266 WiFi on board.
+-
 <img src="/docs/images/esp8266.png" width="200" alt="The esp8266 module">
 
 ## Why we need to setup the device
@@ -40,8 +41,8 @@ We will need to send the Device server program to the device.  We can do that by
         Subnet mask     : The subnet mask it is on.
         SSID            : Service set identifier of the wifi network the device will be connecting to.
         SSID password   : The password to your wifi network. 
-  4. Add the collected information to lines 10 - 16 of the Device Server program (.ino file).
-  5. Compile and send the Device Server program to the device.
+ 4. Add the collected information to lines 10 - 16 of the Device Server program (.ino file).
+ 5. Compile and send the Device Server program to the device.
   
   Now the device has been setup and we can tell the Node server how to connect to it.
 

@@ -47,6 +47,35 @@ We will need to send the Device server program to the device.  We can do that by
   Now the device has been setup and we can tell the Node server how to connect to it.
 
 
+##The Device server
+
+###General information
+As noted above this program needs to be uploaded on the device you want to control from the node server.
+This server will only allow request to it, if the request comes from a client which is on the same subnet. In fact the Device server will check for the first 3 numbers in the calling ip address and if they match the deivces ip address numbers then the caller will be considered save and his requests will be acted upon.  Exeptions to this can be made by whitelisting specific ip addresses.
+
+
+### Possible commands
+These are possible commmands a client (the Node server) can send to the device. 
+
+- /pins
+  - __get__ Get status of all pins
+  - __post__ Change the value of a pin, that is, turn off or on or set a pins value from 0 - 1023
+- /whitelist
+   - __get__ Get all whitlisted ip addresses
+  - __post__ 
+    - __add__ whitelist a new ip address.
+    - __remove__ remove a ip address from the whitelist
+- /started
+    - __get__ Get when the server was turned on
+- /status
+    - __get__ Get the status of the pins, whitelist and when the server was started, all in one request.  (good for beginning of a page)
+- /setup
+  - __get__ whitelists the first caller to the device.  (todo: this is a sequrity risk, should be removed after development)
+- /pinout
+  - __get__ returns the pin mappings of the device.  That is f.example "D0" on the device is mapped to the pin number 16.
+
+Todo: make timed commands.  That is allow a client to send a command which is a sequence of commands made to pins.  That could be shomething like this.  Set pins 1 value to 1023 and set pins 2 value to 0.  Wait for 500 milliseconds and set pins 1 value to 0 and set pins 3 value to 256.
+
 ps.
 If you want to develop the Device server further you can get [documentation](http://esp8266.github.io/Arduino/versions/2.2.0/doc/libraries.html) for the ESP8266 Community libraries. 
 

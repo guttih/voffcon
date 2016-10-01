@@ -95,41 +95,30 @@ has not been tested or implemented yet
 
 ### More about the system
 ####Users
-There will be three kind of users (actors). "administrator", "power user/card creator" and a "normal user".
+There will be three kinds of users (actors). "administrator", "power user/card creator" and a "normal user".
 
 #####Administrator
 Has the power to change/modify or delete all cards, and devices. He can also give a user access to a card, or a device, just like a card creator. This user is the only one who can upgrade, downgrade or delete users. He can f.example change a normal user to "administrator" or a "power user". He can also change a power user back to a normal user. He has total control of everything.
 
 
 #####Power user 
-Is a person who is able to change or create cards or devices. He needs to know how to upload programs to the devices. He needs to know what a subnet is and basic information about networking. He needs to have access to the routers so he can setup IP addresses for the devices. He is the one who will be adding the available devices for everybody. This person will also be creating control-cards. A power user will become a Card creator when he has create a Card or has been given access to change a card.
+Is a person who is able to change or create cards or devices. He needs to know how to upload programs to the devices. He needs to know what a subnet is and basic information about networking. He needs to have access to the routers so he can setup IP addresses for the devices. He is the one who will be adding the available devices for everybody. This person will also be creating control-cards. A power user will become a Card creator when he has created a Card or has been given access to change a card.
 
 #####Card creator
-A card creator is a power user which has created a control card. He has the power to grant others access to his card. He can grant a normal user access to his card and that will allow the normal user to view his card. The normal user will also be able to press or view controls on his card. A card creator can also grant another power user to have a card creator privileges for his card. 
+A card creator is a power user which has created a control card. He has the power to grant others access to his card. He can grant a normal user access to his card and that will allow the normal user to use his card. The normal user will also be able to press or view controls on his card. A card creator can also grant another power user to have a card creator privileges for his card. 
 
 #####User (normal user)
-He knows how to use a browser and he also has gotten information from the power user on how the control-cards work. He knows what the cards control and Do's and Don'ts about a device he Is able to control using the control-cards. All knowledge about the control-cards should be supplied by the power user. 
+He knows how to use a browser and he also has recived information from the power user on how the control-cards work. He knows what the cards control and Do's and Don'ts about a device he Is able to control using the control-cards. All knowledge about the control-cards should be supplied by the power user. 
 
 ####Control card
 A control card is a web-page which the normal user works with. On this card there are buttons or controls which allow the user to change or view the state of the different devices. One card can include controls for many devices. 
-This control card is created by a power user. The creator of the card will also be the one who will give other users access to a card. By default only the user which created the card will have access to the card he created. The creator user can select any user and grant him an access to his card. The card creator is the only one who can modify it. He can grant other power user access to his card giving them the card-creator privileges. No other power user can access his card without the card-creator’s permission.
+This control card is created by a power user. The creator of the card will also be the one who will give other users access to a card. By default only the user which created the card will have access to the card he created. The creator user can select any user and grant him an access to his card. The card creator is the only one who can modify it(with the exeption of the Administrator). He can grant other power user access to his card giving them the card-creator privileges. No other power user can access his card without the card-creator’s permission.
+
+####Control
+A Control is a control class which can be used when creating a card.  These Controls can be thought of as a library.  One control could be f.example DiodeCtrl.  DiodeCtrl could be a class which shows an image of a diode which a Card creator can use to display a pins values as a diode.  Another control could be a slider which allows the Card creator to provide the user an easy control of a pins value by allowing the user to drag a button on a slider around to change a device pin value.  The same user access rules apply to Control as where descriped in the Control Card section above. 
 
 ####Access to devices
-If a user wants to access a device then the system will grant him access if the user is a power user. The system will give a normal user access to a device if his ID is one of the registered user ID’s with access to that device.
-
-When a card creator gives a normal user access to his card, the system will also go through his card, pickup all devices on it and grant the user access to each device he did not have access to before.
-
-
-If if a control card has controls which allow a state change of a device which a normal user does not have access to then that user will not be granted access to that card. That user will need to ask the card ownler to grant him access to the card again which will give the user access to all devices on the card.
-
-
-I will need to create a middleware function which will authenticate every request from the client. This function will have two parameters. A user object and a array of device ID’s. This function could be called authenticateUserAccessToDevices(user, arrDeviceID)
-
-####Think some more about
-Does access to a device need to be a leveled access? That is do we need to be able to give a normal user a “view access” or a “state change access” to a device. 
-A view access is a access which will allow a user to view values on pins and other thins.
-A state change access will give a user access to change the state of pins and other thins on a device.
-
+If a user wants to access a device then the system will grant him access if the user is a power user. The system will only give a normal user access to a device through a control card that controls the device.
 
 ### Later additions to the system / nice to have
 - Make it easier to program the devices. Best would be to make the node server create the program from a template and inject needed

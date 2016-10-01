@@ -32,7 +32,7 @@ We will need to send the Device server program to the device.  We can do that by
  1. Connected the device to your computer using a USB cable.  
  2. Get the Device Server [here](https://github.com/guttih/ardos/tree/master/hardware/Ardos_NodeMcu_ESP8266_WiFi_Server)
    - todo: what is the best way to provide the server.  Now the server is a five file program.  Best would be to merge the five files into one. 
- 3. When you've opened the program and gotten it to build you will need to change a few values in the program. 
+ 3. When you've opened the program and gotten it to build you will need get collect the following information. 
 
         IP              : provide an ip address (IPV4) which you want the device to ask operating system for.
         Port            : provide the port number you want the device to listen and serve from
@@ -40,7 +40,12 @@ We will need to send the Device server program to the device.  We can do that by
         Subnet mask     : The subnet mask it is on.
         SSID            : Service set identifier of the wifi network the device will be connecting to.
         SSID password   : The password to your wifi network. 
-        
+  4. Add the collected information to lines 10 - 16 of the Device Server program (.ino file).
+  5. Compile and send the Device Server program to the device.
+  
+  Now the device has been setup and we can tell the Node server how to connect to it.
 
-If you want to develop the device server further you can get [documentation](http://esp8266.github.io/Arduino/versions/2.2.0/doc/libraries.html) for the ESP8266 Community libraries. 
+
+ps.
+If you want to develop the Device server further you can get [documentation](http://esp8266.github.io/Arduino/versions/2.2.0/doc/libraries.html) for the ESP8266 Community libraries. 
 

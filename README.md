@@ -117,6 +117,6 @@ Possible commands:
   ip address and port for the device.  Default gateway and the subnet mask.  The system can find the Default gateway and the subnet mask
   for the user.  But he will need to provide the ip address, port, wifi password, and the wich access point to use.
 - Write device programs for different types of deivces.  The program should allow the same commands and as the Esp8266 device server.
- - Create a visual/drag'n drop editor, allowing power users create cards more easier.
- - Create a visual/drag'n drop editor, allowing power users controls more easier.
- - Show running cards without the Ardos menu.
+- Create a visual/drag'n drop editor, allowing power users create cards more easier.
+- Create a visual/drag'n drop editor, allowing power users controls more easier.
+- Show running cards without the Ardos menu.

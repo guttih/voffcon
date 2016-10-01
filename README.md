@@ -81,6 +81,10 @@ This application is a server intended to run on a computer where it can access e
 ###The Esp8266 module
 Is the NodeMcu Module with ESP8266 WiFi on board.  It is a small and cheap device which allows you to control real world devices and appliances via a WiFi connection.  A device web server needs to be uploaded to this device so the Node server and the Device can comunicate. 
 
+## Setting up the device server.
+[Click here](https://github.com/guttih/ardos/blob/master/docs/device-setup.md) to get instructions on how to setup the device server.
+
+
 #### 
 <img src="/docs/images/esp8266.png" width="200" alt="The esp8266 module">
 

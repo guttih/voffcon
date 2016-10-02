@@ -32,7 +32,7 @@ We will need to send the Device server program to the device.  We can do that by
  1. Connect the device to your computer using a USB cable.  
  2. Get the Device Server [here](https://github.com/guttih/ardos/tree/master/hardware/Ardos_NodeMcu_ESP8266_WiFi_Server)
    - todo: what is the best way to provide the server.  Now the server is a five file program.  Best would be to merge the five files into one. 
- 3. When you've opened the program and gotten it to build you will need get collect the following information. 
+ 3. When you've opened the program and gotten it to build you will need collect the following information. 
 
         IP              : provide an ip address (IPV4) which you want the device to ask operating system for.
         Port            : provide the port number you want the device to listen and serve from
@@ -50,7 +50,7 @@ We will need to send the Device server program to the device.  We can do that by
 
 ###General information
 As noted above this program needs to be uploaded on the device you want to control from the node server.
-This server will only allow request to it, if the request comes from a client which is on the same subnet. In fact the Device server will check for the first 3 numbers in the calling ip address and if they match the deivces ip address numbers then the caller will be considered save and his requests will be acted upon.  Exeptions to this can be made by whitelisting specific ip addresses.
+This server will only allow request to it, if the request comes from a client which is on the same subnet. In fact the Device server will check for the first 3 numbers in the calling ip address and if all 3 match the device ip address numbers then the caller will be considered save and his requests will be acted upon.  Exeptions to this can be made by whitelisting specific ip addresses.
 
 
 ### Possible commands

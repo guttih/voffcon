@@ -12,7 +12,8 @@ var config = lib.getConfig();
 //Þegar query er gert á device þá þarf url á devicesið að vera með 
 //í query objectinu
 router.get('/', lib.authenticateUrl, function(req, res){
-	res.render('device');//this is the views/device.handlebars
+	//res.render('device');//this is the views/device.handlebars
+	res.redirect("/devices/list");
 });
 
 

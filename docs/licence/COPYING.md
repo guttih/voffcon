@@ -631,7 +631,7 @@ the exclusion of warranty; and each file should have at least the
 "copyright" line and a pointer to where the full notice is found.
 
         Ardos is a system for controlling devices and appliances from anywere. 
-        It is made up from two components. A node server and A device web server.
+        It is made up from two components. A node server and A device server.
         Copyright (C) 2016  Gudjon Holm Sigurdsson
 
         This program is free software: you can redistribute it and/or modify

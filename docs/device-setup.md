@@ -1,6 +1,6 @@
 # How to setup the Esp8266
-Description on how to setup the device NodeMcu Module with ESP8266 WiFi on board.
--
+ Description on how to setup the device NodeMcu Module with ESP8266 WiFi on board.
+
 <img src="/docs/images/esp8266.png" width="200" alt="The esp8266 module">
 
 ## Why we need to setup the device

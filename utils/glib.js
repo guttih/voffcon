@@ -297,7 +297,7 @@ module.exports.getConfig = function getConfig(){
 		}
 	}
 	if (makeNewFile === true){
-		conf = { serverUrl : 'http://www.guttih.com:5100',
+		conf = { serverUrl : 'http://www.guttih.com:5100', //todo: check if it's ok to delete this variable
 					port:6100,
 					allowUserRegistration: true 
 				};
@@ -452,5 +452,105 @@ module.exports.getFirstDefaultGateWay = function getFirstDefaultGateWay(callback
 						}
 					}
 				}
+	});
+};
+
+function getPort(url, assumePortIfMissing) {
+	url = url.toLowerCase();
+    url = url.match(/^(([a-z]+:)?(\/\/)?[^\/]+).*$/)[1] || url;
+    var parts = url.split(':'),
+        port = parseInt(parts[parts.length - 1], 10);
+    if(assumePortIfMissing && ( parts[0] === 'http' && (isNaN(port) || parts.length < 3)) ) {
+        return 80;
+    }
+    if(assumePortIfMissing && ( parts[0] === 'https' && (isNaN(port) || parts.length < 3)) ) {
+        return 443;
+    }
+    if(assumePortIfMissing && ( parts.length === 1 || isNaN(port)) ) {
+		return 80;
+	}
+    return port;
+}
+
+//returns a valid ipv4 ip address
+//returns undefined if url is invalid 
+function getIpv4FromUrl(url) {
+	//todo: think better about this function.... to quick and dirty
+	url = url.replace("https://","");
+	url = url.replace("http://","");
+	url = url.replace("/","");
+    url = url.match(/^(([a-z]+:)?(\/\/)?[^\/]+).*$/)[1] || url;
+	if (/^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$|^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$|^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\s*$/.test(url)) {
+		return url; //
+	}
+}
+// gets the device-server program
+module.exports.makeProgramFile = function makeProgramFile(deviceUrl, callback, errorCallback) {
+	
+	fs.readFile("./hardware/device_server.ino", "utf-8", function(err, file) {
+			if (err === null){
+				ipconfig.getWindowsIpConfig(function(netInfo){
+					//PORT_NUMBER
+					//IPV4_IPADDRESS
+					//IPV4_GATEWAY
+					//IPV4_SUBNET
+					var port, ip, defaultGateWay, subNetMask;
+					if (deviceUrl !== undefined && deviceUrl !== null){
+						var tempPort = getPort(deviceUrl, false);
+						if (!isNaN(tempPort)){ //a port is provided in the url
+							
+							deviceUrl = deviceUrl.replace(':' + tempPort, "");	//removing port
+							
+						} else{ //no port provided, we need to calculate it
+							tempPort = getPort(deviceUrl, true);
+						}
+						ip = getIpv4FromUrl(deviceUrl);
+						if (ip!== undefined){
+							port = tempPort; //only get port number if ip is valid
+						}
+					}
+					var i;
+					for (i=0; i<netInfo.length; i++){
+						var item = netInfo[i];
+						var key = Object.keys(item)[0];
+		
+						var o = item[key];
+						if (o["Default Gateway"]!== undefined &&
+							o["IPv4 Address"]!== undefined &&
+							o["Subnet Mask"]!== undefined ){
+
+								defaultGateWay = o["Default Gateway"]; 
+								subNetMask = o["Subnet Mask"];
+								break;
+						}
+						/*
+						var keys = Object.keys(item[key]);
+						keys.forEach(function(subkey) {
+							console.log("\t"+subkey+ '\t : \t' + item[key][subkey]);
+							*/
+						};
+
+						if (port!== undefined){
+							file = file.replace("PORT_NUMBER", port);
+						}
+						if (ip!== undefined){
+							file = file.replace("IPV4_IPADDRESS", ip);
+						}
+						if (defaultGateWay!== undefined){
+							file = file.replace("IPV4_GATEWAY", defaultGateWay);
+						}
+						if (subNetMask!== undefined){
+							file = file.replace("IPV4_SUBNET", subNetMask);
+						}
+					
+					callback(file);
+				});
+				
+				
+			} else{
+				if (errorCallback){
+					errorCallback("could read the program temlate");
+				}
+			}
 	});
 };

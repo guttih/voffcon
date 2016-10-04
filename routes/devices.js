@@ -350,5 +350,32 @@ router.get('/run/:deviceID', lib.authenticateDeviceOwnerUrl, function(req, res){
 	});
 });
 
+router.get('/program/:deviceID', lib.authenticatePowerUrl, function(req, res){
+	var id = req.params.deviceID;
+	if (id !== undefined){
+		Device.getById(id, function(err, device){
+				if(err || device === null) {
+					req.flash('error',	'Could not find device.' );
+					res.redirect('/result');
+				} else{
+
+					lib.makeProgramFile(device.url , function(data){
+						res.writeHead(200, {'Content-Type': 'application/force-download','Content-disposition':'attachment; filename=device_server.ino'});
+						res.end( data );
+					}, 
+					function(str){
+							req.flash('error',	'Could not read program file.' );
+							res.redirect('/result');
+					});
+					/*var obj = {id : id,
+						name: device.name,
+						description: device.description,
+						url: device.url
+					};*/
+				}
+			});
+	}
+});
+
 
 module.exports = router;

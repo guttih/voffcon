@@ -55,10 +55,19 @@ function setDeviceValues(device){
 	$('#device-description').text(device.description);
 }
 
+
+function initBtnProgram(){
+	$('#btn-download-program').click(function() {
+		window.location.assign('/devices/program/'+device.id);
+		});
+}
+
+
 $(function () {
 	console.log("device");
 	console.log(device);
 	getDeviceStartTime();
 	getPins();
 	setDeviceValues(device);
+	initBtnProgram();
 });

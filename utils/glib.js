@@ -484,6 +484,19 @@ function getIpv4FromUrl(url) {
 		return url; //
 	}
 }
+
+function dotsToCommas(str){
+	var out = "";
+	for(var i = 0; i < str.length; i++){
+		if (str.charAt(i) === '.'){
+			out = out + ','
+		} else {
+			out = out + str.charAt(i);
+		}
+	}
+	return out;
+
+}
 // gets the device-server program
 module.exports.makeProgramFile = function makeProgramFile(deviceUrl, callback, errorCallback) {
 	
@@ -534,12 +547,15 @@ module.exports.makeProgramFile = function makeProgramFile(deviceUrl, callback, e
 							file = file.replace("PORT_NUMBER", port);
 						}
 						if (ip!== undefined){
+							ip = dotsToCommas(ip);
 							file = file.replace("IPV4_IPADDRESS", ip);
 						}
 						if (defaultGateWay!== undefined){
+							defaultGateWay = dotsToCommas(defaultGateWay);
 							file = file.replace("IPV4_GATEWAY", defaultGateWay);
 						}
 						if (subNetMask!== undefined){
+							subNetMask = dotsToCommas(subNetMask);
 							file = file.replace("IPV4_SUBNET", subNetMask);
 						}
 					

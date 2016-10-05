@@ -1,0 +1,24 @@
+
+<div class="row"><h3 class="page-header pull-right">Upload a Control</h3></div>			
+
+{{#if errors}}
+	{{#each errors}}
+		<div class="alert alert-danger">{{msg}}</div>
+	{{/each}}
+{{/if}}
+
+<div class="form-control form-upload">	
+	<form id="uploadForm"
+		enctype="multipart/form-data"
+		action="/controls/upload"
+		method="post">
+		<div class="form-group">
+			<input type="file" name="control" class="btn-file"/>
+		</div>
+		<div class="form-group row">
+			<input type="submit" value="Upload control" class="btn btn-default pull-right" name="submit">
+		</div>
+	</form>
+</div>
+
+<script src="/js/bootstrap.min.js"></script>	

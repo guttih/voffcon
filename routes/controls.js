@@ -4,7 +4,12 @@ var request = require('request');
 var lib = require('../utils/glib');
 var Control = require('../models/control');
 var config = lib.getConfig();
-
+var multer  = require('multer');
+var storage = multer.memoryStorage();
+var upload = multer({
+  storage: storage,
+  limits: { fileSize: 100024 }
+}).single('control');
 //Hér á að búa til module fyrir queries á devices
 //Öll köll til servera sem keyra á device ættu að vera hér.
 //Þegar query er gert á device þá þarf url á devicesið að vera með 
@@ -231,6 +236,38 @@ router.get('/export/:controlID', lib.authenticatePowerUrl, function(req, res){
 			});
 	}
 });
-//todo: make the import function
+router.get('/upload', lib.authenticateUrl, function(req, res){
+	res.render('upload-control');
+});
+
+router.post('/upload', lib.authenticateUrl, function (req, res, next) {
+  // req.file is the `avatar` file
+  // req.body will hold the text fields, if there were any
+  upload(req,res,function(err) {
+        if(err) {
+			req.flash('error',	'Error uploading file.' );
+			res.redirect('/result');
+			return;
+        }
+        console.log(req.file.fieldname);
+        console.log(req.file.originalname);
+		var str = req.file.buffer.toString();
+		var obj;
+		try{
+			obj = JSON.parse(str);
+			
+			if (obj.name !== undefined && obj.description !== undefined && obj.code !== undefined && obj.template !== undefined){
+				res.render('register-control', {itemUpload:str});
+			} else{
+				req.flash('error',	'Error uploading file, invalid object.' );
+				res.redirect('/result');
+			}
+		}
+		catch(e){
+			req.flash('error',	'Error uploading file, error parsing object' );
+			res.redirect('/result');
+		}		
+    });
+});
 
 module.exports = router;

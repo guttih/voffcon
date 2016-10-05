@@ -1,11 +1,4 @@
 
-
-búa til rútu sem heitir import
-	1. bjóða notanda af velja skrá til að uploada
-	2. sækja parsa gildin undir try catch
-	3. ef tekst, opna register control og 
-	    vista gildin í client javascript breytu  
-	4.  í client javascript færa gildi úr breytu ef þau eru til staðar í form control 
 	
 þegar card krassar þá má það alls ekki krassa servernum, eins og gerist þegtar 
 	device4 = new Device('57e2a6f74a43074811a0720f', maxValue);

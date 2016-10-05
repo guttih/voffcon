@@ -5,7 +5,12 @@ var lib = require('../utils/glib');
 var Card = require('../models/card');
 var Control = require('../models/control');
 var config = lib.getConfig();
-
+var multer  = require('multer');
+var storage = multer.memoryStorage();
+var upload = multer({
+  storage: storage,
+  limits: { fileSize: 100024 }
+}).single('card');
 
 router.get('/', lib.authenticateUrl, function(req, res){
 	res.render('index-card');
@@ -267,5 +272,42 @@ router.get('/export/:cardID', lib.authenticatePowerUrl, function(req, res){
 			});
 	}
 });
+
+
+router.get('/upload', lib.authenticateUrl, function(req, res){
+	res.render('upload-card');
+});
+
+router.post('/upload', lib.authenticateUrl, function (req, res, next) {
+  // req.file is the `avatar` file
+  // req.body will hold the text fields, if there were any
+  upload(req,res,function(err) {
+        if(err) {
+            return res.end("Error uploading file.");
+        }
+        console.log(req.file.fieldname);
+        console.log(req.file.originalname);
+		var str = req.file.buffer.toString();
+		var obj;
+		try{
+			obj = JSON.parse(str);
+			
+			if (obj.name !== undefined && obj.description !== undefined && obj.code !== undefined && obj.template === undefined){
+				res.render('register-card', {itemUpload:str});
+			} else{
+				req.flash('error',	'Error uploading file, invalid object.' );
+				res.redirect('/result');
+					
+			}
+		}
+		catch(e){
+			req.flash('error',	'Error uploading file, error parsing object' );
+				res.redirect('/result');
+		}		
+    });
+});
+
+
+
 
 module.exports = router;

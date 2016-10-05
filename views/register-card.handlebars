@@ -7,6 +7,13 @@
 			<div class="row"><h3 class="page-header pull-right">New Card</h3></div>			
 {{/if}}
 
+
+{{#if itemUpload}}
+	<script type="text/javascript">
+		var itemUpload = {{{itemUpload}}};
+	</script>
+{{/if}}
+
 {{#if errors}}
       {{#each errors}}
         <div class="alert alert-danger">{{msg}}</div>

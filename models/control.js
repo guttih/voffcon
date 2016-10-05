@@ -31,9 +31,6 @@ var ControlSchema = mongoose.Schema({
 	code: {
 		type: String
 	},
-	documentation: {
-		type: String
-	},
 	 owners: [{ObjectId}],
 	 users: [{ObjectId}]
 });

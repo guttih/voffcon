@@ -243,4 +243,29 @@ router.post('/useraccess/:cardID', lib.authenticateCardOwnerRequest, function(re
 
 });
 
+router.get('/export/:cardID', lib.authenticatePowerUrl, function(req, res){
+	var id = req.params.cardID;
+	if (id !== undefined){
+		Card.getById(id, function(err, card){
+				if(err || card === null) {
+					req.flash('error',	'Could not find card.' );
+					res.redirect('/result');
+				} else{
+					
+					var obj = {
+						name        : card._doc.name,
+						description : card._doc.description,
+						code        : card._doc.code,
+						helpurl     : card._doc.helpurl,
+					};
+						var data = JSON.stringify(obj);
+						res.writeHead(200, {'Content-Type': 'application/force-download','Content-disposition':'attachment; filename='+card.name+'.ardos.card'});
+						res.end( data );
+					
+					
+				}
+			});
+	}
+});
+
 module.exports = router;

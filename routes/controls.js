@@ -206,5 +206,31 @@ router.post('/useraccess/:controlID', lib.authenticateControlOwnerRequest, funct
 
 });
 
+router.get('/export/:controlID', lib.authenticatePowerUrl, function(req, res){
+	var id = req.params.controlID;
+	if (id !== undefined){
+		Control.getById(id, function(err, control){
+				if(err || control === null) {
+					req.flash('error',	'Could not find control.' );
+					res.redirect('/result');
+				} else{
+					
+					var obj = {
+						name        : control._doc.name,
+						description : control._doc.description,
+						code        : control._doc.code,
+						helpurl     : control._doc.helpurl,
+						template    : control._doc.template
+					};
+						var data = JSON.stringify(obj);
+						res.writeHead(200, {'Content-Type': 'application/force-download','Content-disposition':'attachment; filename='+control.name+'.ardos.ctrl'});
+						res.end( data );
+					
+					
+				}
+			});
+	}
+});
+//todo: make the import function
 
 module.exports = router;

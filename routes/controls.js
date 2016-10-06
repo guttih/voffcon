@@ -241,16 +241,16 @@ router.get('/upload', lib.authenticateUrl, function(req, res){
 });
 
 router.post('/upload', lib.authenticateUrl, function (req, res, next) {
-  // req.file is the `avatar` file
-  // req.body will hold the text fields, if there were any
-  upload(req,res,function(err) {
-        if(err) {
+// req.file is the `avatar` file
+// req.body will hold the text fields, if there were any
+upload(req,res,function(err) {
+		if(err || req.file === undefined || req.file.fieldname !== "control" ) {
 			req.flash('error',	'Error uploading file.' );
 			res.redirect('/result');
 			return;
-        }
-        console.log(req.file.fieldname);
-        console.log(req.file.originalname);
+		}
+		//console.log(req.file.fieldname);
+		//console.log(req.file.originalname);
 		var str = req.file.buffer.toString();
 		var obj;
 		try{

@@ -619,3 +619,6 @@ Program, unless a warranty or assumption of liability accompanies a
 copy of the Program in return for a fee.
 
                      END OF TERMS AND CONDITIONS
+
+You can contact the author by sending email to gudjonholm@gmail.com or 
+by regular post to the address Haseyla 27, 260 Reykjanesbar, Iceland.

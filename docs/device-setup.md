@@ -41,7 +41,7 @@ We will need to send the Device server program to the device.  We can do that by
  9. Save the program to you local hard disk 
  10. Open the program "device_server.ino"  you downloaded
  11. Copy all text and paste it into the new sketch in the arduino IDE
- 12. Change the following values (Some of the were changed for you if you are using windows) 
+ 12. Change the following values (Some of the missing values were changed for you, if you are using windows). 
  13. Find these values and replace them with information about your system. 
 
         IPV4_IPADDRESS  : (IP) Provide an ip address (IPV4) which you want the device to ask operating system for.

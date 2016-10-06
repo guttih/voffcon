@@ -28,15 +28,22 @@ by regular post to the address Haseyla 27, 260 Reykjanesbar, Iceland.
 
 ##The node server
 Is a server created with node.js.  This server creates webpages which can be viewed in a web browser like Google Chrome, Microsoft Edge and Internet Explorer. If you portforward the server out to the internet you will be able to accsess your devices from anywhere.  It uses the  [Passport](http://passportjs.org/docs) authentication middleware to keep your devices from being controlled by everyone. 
-The server provides connections to many devices and uses passport to make sure that the user is authenticated before he is able to give commands to web servers running on the devices.
+The server provides connections to many devices and uses passport to make sure that the user is authenticated before he is able to give commands to servers running on the devices.
 
 ##The basics for the node server
 ###requirements:
 You will need to install the following if you haven't already.
 + [MongoDb](https://www.mongodb.com) To store user- and device information
 + [Node.js](https://nodejs.org/en/) To run the Node server
++ [Arduino IDE](https://www.arduino.cc/en/Main/Software)  To program the devices.
++ "Esp8266 by [ESP8266 community](https://github.com/esp8266)" [see](https://github.com/guttih/ardos/blob/master/docs/device-setup.md) to setup the device server.  
 
-### Windows 7 problem when installing mongoDB
+### Run the mongodb server
++ for windows
++ - do not have spaces in the installation folder for example do NOT install to "C:\Program Files\MongoDB", better would be "C:\MongoDB"
++  Run : "C:\MongoDB\Server\3.2\bin\mongod.exe"
+
+#### Windows 7 problem when installing mongoDB
 If you are having problem installing mongoDB on windows 7, then you could try the following.
 
 1. Do not have spaces in the installation folder for example do NOT install to "C:\Program Files\MongoDB", better would be "C:\MongoDB"
@@ -52,11 +59,6 @@ mkdir log
 cd bin
 mongod.exe --directoryperdb --dbpath C:\MongoDB\Server\3.2\data\db --logpath C:\MongoDB\Server\3.2\log\mongodb.log --logappend
 ```
-
-### Run the mongodb server
-+ for windows
-+ - do not have spaces in the installation folder for example do NOT install to "C:\Program Files\MongoDB", better would be "C:\MongoDB"
-+  Run : "C:\MongoDB\Server\3.2\bin\mongod.exe"
 
 
 ### Setting up the node server

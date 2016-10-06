@@ -39,10 +39,10 @@ We will need to send the Device server program to the device.  We can do that by
  8. Connect the device to your computer using a USB cable.
  9. Select the COM port the device is connected to.
  10. Select from the menu File -> New to create a new sketch.
- 10. Open the program "device_server.ino"  you downloaded.
- 11. Copy all text and paste it into the new sketch in the arduino IDE.
- 12. Change the following values (Some of the missing values were changed for you, if you are using windows). 
- 13. Find these values and replace them with information about your system. 
+ 11. Open the program "device_server.ino"  you downloaded.
+ 12. Copy all text and paste it into the new sketch in the arduino IDE.
+ 13. Change the following values (Some of the missing values were changed for you, if you are using windows). 
+ 14. Find these values and replace them with information about your system. 
 
         IPV4_IPADDRESS  : (IP) Provide an ip address (IPV4) which you want the device to ask operating system for.
         PORT_NUMBER     : (Port) Provide the port number you want the device to listen and serve from
@@ -50,7 +50,7 @@ We will need to send the Device server program to the device.  We can do that by
         IPV4_SUBNET     : (Subnet mask / netmask) The subnet mask it is on.
         WIFI_ACCESSPOINT: (SSID) Service set identifier of the wifi network the device will be connecting to.
         WIFI_PASSWORD   : (SSID password) The password to your wifi network. 
- 14. Compile and send the Device Server program to the device.
+ 15. Compile and send the Device Server program to the device.
   
   Now the device has been setup and you should be able to connect to it.
 

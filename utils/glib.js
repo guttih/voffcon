@@ -7,7 +7,7 @@ var Card = require('../models/card');
 var Control = require('../models/control');
 var Device = require('../models/device');
 const exec = require('child_process').exec;
-var defaultInterfaces = require('default-network');
+var defaultInterfaces = require('default-network'); 
 var ipconfig = require('../utils/ipconfigwin.js');
 var router = express.Router();
 
@@ -502,6 +502,8 @@ module.exports.makeProgramFile = function makeProgramFile(deviceUrl, callback, e
 	
 	fs.readFile("./hardware/device_server.ino", "utf-8", function(err, file) {
 			if (err === null){
+				//todo: extract these values for linux also by creating a new function that
+				//      returns only the needed values, which are IPV4_GATEWAY (default gateway) and IPV4_SUBNET (netmask)
 				ipconfig.getWindowsIpConfig(function(netInfo){
 					//PORT_NUMBER
 					//IPV4_IPADDRESS

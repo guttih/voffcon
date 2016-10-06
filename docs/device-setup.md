@@ -29,21 +29,30 @@ Now we should be able to send our device server program to the device via a usb 
 
 ## Programming the device
 We will need to send the Device server program to the device.  We can do that by doing the following
- 1. Connect the device to your computer using a USB cable.  
- 2. Get the Device Server [here](https://github.com/guttih/ardos/tree/master/hardware/Ardos_NodeMcu_ESP8266_WiFi_Server)
-   - todo: what is the best way to provide the server.  Now the server is a five file program.  Best would be to merge the five files into one. 
- 3. When you've opened the program and gotten it to build you will need collect the following information. 
+ 1. Open the Arduino IDE 
+ 2. Select the device shown in sections 7. and 8. in the list above this one.
+ 3. Connect the device to your computer using a USB cable.
+ 4. Select the COM port the device is connected to
+ 5. Select from the menu File -> New to create a new sketch
+ 5. Go back to the Ardos system
+ 6. Create a device in the Ardos system by going to menu -> Devices ->  Register a new device
+ 7. Save the device
+ 8. Press the "> Run" button and click the button Get program.
+ 9. Save the program to you local hard disk 
+ 10. Open the program "device_server.ino"  you downloaded
+ 11. Copy all text and paste it into the new sketch in the arduino IDE
+ 12. Change the following values (Some of the were changed for you if you are using windows) 
+ 13. Find these values and replace them with information about your system. 
 
-        IP              : provide an ip address (IPV4) which you want the device to ask operating system for.
-        Port            : provide the port number you want the device to listen and serve from
-        Default Gateway : The device needs to know the default gateway it will be using.
-        Subnet mask     : The subnet mask it is on.
-        SSID            : Service set identifier of the wifi network the device will be connecting to.
-        SSID password   : The password to your wifi network. 
- 4. Add the collected information to lines 10 - 16 of the Device Server program (.ino file).
- 5. Compile and send the Device Server program to the device.
+        IPV4_IPADDRESS  : (IP) Provide an ip address (IPV4) which you want the device to ask operating system for.
+        PORT_NUMBER     : (Port) Provide the port number you want the device to listen and serve from
+        IPV4_GATEWAY    : (Default Gateway) The device needs to know the default gateway it will be using.
+        IPV4_SUBNET     : (Subnet mask / netmask) The subnet mask it is on.
+        WIFI_ACCESSPOINT: (SSID) Service set identifier of the wifi network the device will be connecting to.
+        WIFI_PASSWORD   : (SSID password) The password to your wifi network. 
+ 14. Compile and send the Device Server program to the device.
   
-  Now the device has been setup and we can tell the Node server how to connect to it.
+  Now the device has been setup and you should be able to connect to it.
 
 
 ##The Device server

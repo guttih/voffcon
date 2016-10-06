@@ -136,17 +136,13 @@ app.use('/devices', devices);
 app.use('/controls', controls);
 app.use('/cards', cards);
 
-
-
-//var config = lib.getConfig();
-// Set Port
-//app.set('port', (process.env.PORT || 3000));
 app.set('port', config.port);
 
 app.listen(app.get('port'), function(){
 	//console.log('Server started on port '+app.get('port'));
 
 	//todo: remvoe this code, and add it to glib and make a solution for linux also
+	//I will also need a subnet mask / netmask 
 	/*const os = require('os');
 	console.log('Server started');
 	var gateways;

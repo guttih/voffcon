@@ -8,8 +8,8 @@
 #include "GPins.h"
 #include "Gurl.h"
 
-const char* ssid = "Swingxgat";
-const char* password = "abba537496";
+const char* ssid = "WIFI_ACCESSPOINT";
+const char* password = "WIFI_PASSWORD";
 IPAddress myIp(192,168,1,151),
           gateway(192,168,1,254),
           subnet(255,255,255,0);

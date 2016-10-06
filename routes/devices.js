@@ -4,24 +4,17 @@ var request = require('request');
 var lib = require('../utils/glib');
 
 var Device = require('../models/device');
-//var Card = require('../models/card');
-var config = lib.getConfig();
 
-//Hér á að búa til module fyrir queries á devices
-//Öll köll til servera sem keyra á device ættu að vera hér.
-//Þegar query er gert á device þá þarf url á devicesið að vera með 
-//í query objectinu
+
 router.get('/', lib.authenticateUrl, function(req, res){
-	//res.render('device');//this is the views/device.handlebars
 	res.redirect("/devices/list");
 });
 
 
 // Get started time from a device
 router.get('/started/:deviceId', lib.authenticateRequest, function(req, res){
-	console.log(config);
 	var deviceId = req.params.deviceId;
-	//hér þarf að athuga hvort user eigi þetta device.
+	//todo: hér þarf kanski að athuga hvort user eigi þetta device.
 	//ef hann hefur aðgang að því þá þarf að sækja það og
 	//sækja svo urlið úr því til að vista það sem SERVERURL
 	console.log("got: "+deviceId);

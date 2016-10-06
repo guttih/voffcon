@@ -297,8 +297,7 @@ module.exports.getConfig = function getConfig(){
 		}
 	}
 	if (makeNewFile === true){
-		conf = { serverUrl : 'http://www.guttih.com:5100', //todo: check if it's ok to delete this variable
-					port:6100,
+		conf = { 	port:6100,
 					allowUserRegistration: true 
 				};
 		module.exports.setConfig(conf);

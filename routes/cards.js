@@ -4,7 +4,6 @@ var request = require('request');
 var lib = require('../utils/glib');
 var Card = require('../models/card');
 var Control = require('../models/control');
-var config = lib.getConfig();
 var multer  = require('multer');
 var storage = multer.memoryStorage();
 var upload = multer({

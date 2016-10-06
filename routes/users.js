@@ -9,12 +9,8 @@ var http = require('http');
 var request = require('request');
 var lib = require('../utils/glib');
 
-//var SERVERURL = 'http://192.168.1.151:5100';
 
 var config = lib.getConfig();
-//todo: user should maybe store all server urls in a database
-var SERVERURL = config.serverUrl;
-console.log(config);
 
 // Register
 router.get('/register', function(req, res){

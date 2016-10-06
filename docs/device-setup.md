@@ -30,8 +30,8 @@ Now we should be able to send our device server program to the device via a usb 
 ## Programming the device
 We will need to send the Device server program to the device.  We can do that by doing the following
  1. Browse to the the Ardos system.
- 2. Create a device by going to menu -> Devices ->  Register a new device.
- 3. Save the device to add it to the Ardos database.
+ 2. Create a device, by going to menu -> Devices ->  Register a new device.
+ 3. Save the device, to add it to the Ardos database.
  4. Press the "> Run" button and click the "Get program" button.
  5. Save the program to you local hard disk. 
  6. Open the Arduino IDE.
@@ -40,17 +40,17 @@ We will need to send the Device server program to the device.  We can do that by
  9. Select the COM port the device is connected to.
  10. Select from the menu File -> New to create a new sketch.
  11. Open the program "device_server.ino"  you downloaded.
- 12. Copy all text and paste it into the new sketch in the arduino IDE.
- 13. Change the following values (Some of the missing values were changed for you, if you are using windows). 
+ 12. Copy all text in the downloaded file and paste it into the new sketch in the arduino IDE.
+ 13. Change the following values (if you are using windows, Ardos will try to change some of the values automaticly for you). 
  14. Find these values and replace them with information about your system. 
 
         IPV4_IPADDRESS  : (IP) Provide an ip address (IPV4) which you want the device to ask operating system for.
-        PORT_NUMBER     : (Port) Provide the port number you want the device to listen and serve from
+        PORT_NUMBER     : (Port) Provide the port number you want the device to listen and serve from.
         IPV4_GATEWAY    : (Default Gateway) The device needs to know the default gateway it will be using.
         IPV4_SUBNET     : (Subnet mask / netmask) The subnet mask it is on.
         WIFI_ACCESSPOINT: (SSID) Service set identifier of the wifi network the device will be connecting to.
         WIFI_PASSWORD   : (SSID password) The password to your wifi network. 
- 15. Compile and send the Device Server program to the device.
+ 15. Compile, build and send the Device Server program to the device.
   
   Now the device has been setup and you should be able to connect to it.
 
@@ -62,7 +62,7 @@ As noted above this program needs to be uploaded on the device you want to contr
 This server will only allow request to it, if the request comes from a client which is on the same subnet. In fact the Device server will check for the first 3 numbers in the calling ip address and if all 3 match the device ip address numbers then the caller will be considered as save and his requests will be acted upon.  Exeptions to this can be made by whitelisting specific ip addresses.
 
 
-### Possible commands
+### Device server commands
 These are possible commands a client (the Node server) can send to the device. 
 
 - /pins

@@ -28,7 +28,7 @@ by regular post to the address Haseyla 27, 260 Reykjanesbar, Iceland.
 
 ##The node server
 Is a server created with node.js.  This server creates webpages which can be viewed in a web browser like Google Chrome, Microsoft Edge and Internet Explorer. If you portforward the server out to the internet you will be able to accsess your devices from anywhere.  It uses the  [Passport](http://passportjs.org/docs) authentication middleware to keep your devices from being controlled by everyone. 
-The server provides connections to many devices and uses passport to make sure that the user is authenticated before he is able to give commands to servers running on the devices.
+The server provides connections to many devices and uses passport to make sure that the user is authenticated before he is able to give commands to the server running on the devices.
 
 ##The basics for the node server
 ###requirements:
@@ -36,7 +36,7 @@ You will need to install the following if you haven't already.
 + [MongoDb](https://www.mongodb.com) To store user- and device information
 + [Node.js](https://nodejs.org/en/) To run the Node server
 + [Arduino IDE](https://www.arduino.cc/en/Main/Software)  To program the devices.
-+ "Esp8266 by [ESP8266 community](https://github.com/esp8266)" [see](https://github.com/guttih/ardos/blob/master/docs/device-setup.md) to setup the device server.  
++ [Esp8266 library](https://github.com/esp8266/Arduino/tree/633e48f3aec5f1c3c11d4498fc90d378d49e6e9f/libraries/ESP8266WiFi/src) by [ESP8266 community](https://github.com/esp8266).  See these [instructions](https://github.com/guttih/ardos/blob/master/docs/device-setup.md) for how to setup the device server.  
 
 ### Run the mongodb server
 + for windows

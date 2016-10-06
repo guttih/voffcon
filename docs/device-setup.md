@@ -13,7 +13,7 @@ In order to be able to communicate with the device using Ardos, you will need to
 
 ## ESP8266 core for Arduino
 
-"Esp8266 by [ESP8266 community](https://github.com/esp8266)" is the [library](https://github.com/esp8266/Arduino/tree/633e48f3aec5f1c3c11d4498fc90d378d49e6e9f/libraries/ESP8266WiFi/src) I used to write the Device server.  You will need to installed it.  Easiest way to do that is to use the Arduino IDE Board manager.
+"Esp8266 by [ESP8266 community](https://github.com/esp8266)" is the [library](https://github.com/esp8266/Arduino/tree/633e48f3aec5f1c3c11d4498fc90d378d49e6e9f/libraries/ESP8266WiFi/src) I used to write the Device server.  You will need to install it.  Easiest way to do that is to use the Arduino IDE Board manager.
 
 ### Follow these steps to install the ESP8266 core for Arduino:
  1. Open the Arduino IDE
@@ -29,18 +29,18 @@ Now we should be able to send our device server program to the device via a usb 
 
 ## Programming the device
 We will need to send the Device server program to the device.  We can do that by doing the following
- 1. Open the Arduino IDE 
- 2. Select the device shown in sections 7. and 8. in the list above this one.
- 3. Connect the device to your computer using a USB cable.
- 4. Select the COM port the device is connected to
- 5. Select from the menu File -> New to create a new sketch
- 5. Go back to the Ardos system
- 6. Create a device in the Ardos system by going to menu -> Devices ->  Register a new device
- 7. Save the device
- 8. Press the "> Run" button and click the button Get program.
- 9. Save the program to you local hard disk 
- 10. Open the program "device_server.ino"  you downloaded
- 11. Copy all text and paste it into the new sketch in the arduino IDE
+ 1. Browse to the the Ardos system.
+ 2. Create a device by going to menu -> Devices ->  Register a new device.
+ 3. Save the device to add it to the Ardos database.
+ 4. Press the "> Run" button and click the "Get program" button.
+ 5. Save the program to you local hard disk. 
+ 6. Open the Arduino IDE.
+ 7. Select the device shown in sections 7. and 8. in the list above this one.
+ 8. Connect the device to your computer using a USB cable.
+ 9. Select the COM port the device is connected to.
+ 10. Select from the menu File -> New to create a new sketch.
+ 10. Open the program "device_server.ino"  you downloaded.
+ 11. Copy all text and paste it into the new sketch in the arduino IDE.
  12. Change the following values (Some of the missing values were changed for you, if you are using windows). 
  13. Find these values and replace them with information about your system. 
 

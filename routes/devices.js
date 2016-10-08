@@ -75,7 +75,7 @@ router.get('/pins/:deviceId', lib.authenticateRequest, function(req, res){
 	var deviceId = req.params.deviceId;
 
 	Device.getById(deviceId, function(err, device){
-		if (err !== null){
+		if (err !== null || device === null){
 			res.statusCode = 404;
 			var obj = {text:'Error 404: User device not found!'};
 			return res.json(obj);
@@ -107,7 +107,7 @@ router.get('/pinout/:deviceId', lib.authenticateRequest, function(req, res){
 	var deviceId = req.params.deviceId;
 
 	Device.getById(deviceId, function(err, device){
-		if (err !== null){
+		if (err !== null || device === null){
 			res.statusCode = 404;
 			var obj = {text:'Error 404: User device not found!'};
 			return res.json(obj);

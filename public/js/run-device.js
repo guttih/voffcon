@@ -35,11 +35,40 @@ function getDeviceStartTime(){
 	});
 }
 
-function getPins(){
-	requestData(SERVER+'/devices/pins/'+device.id, function(data){
-		setPinValues(data);
+function getPinoutName(pinOuts, pinNumber){
+	var keys = Object.keys(pinOuts);
+ 	var i, key;
+	 for (i = 0; i<keys.length; i++){
+		 	key = keys[i];
+				if (pinOuts[key]===pinNumber){
+					return key;
+				}
+			}
+
+}
+
+function getPinout(){
+	requestData(SERVER+'/devices/pinout/'+device.id, function(pinOutdata){
+		console.log(pinOutdata);
+		requestData(SERVER+'/devices/pins/'+device.id, function(data){
+
+			var name;
+			for(var i = 0; i < data.pins.length; i++){
+				name = getPinoutName(pinOutdata, data.pins[i].pin);
+
+				if (name !== undefined){
+					console.log("found it");
+					data.pins[i].name = name;
+				}
+			}
+			console.log(data.pins);
+			setPinValues(data);
+		});
+		
 	});
 }
+
+
 
 function getModeString(mode){
 	var str ='(' + mode + '): ';
@@ -61,11 +90,13 @@ function setPinValues(data){
 	for(var i = 0; i < pins.length; i++){
 		modeStr = getModeString(pins[i].m);
 		modeStr = '<code style="color:black">'+modeStr+'</code>';
-		row = "<tr><td>"+pins[i].pin+"</td><td>"+pins[i].val+"</td><td>"+modeStr+"</td></tr>";
+		row = "<tr>"+
+			"<td>"+pins[i].name+"</td>"  +
+			"<td>"+pins[i].pin+"</td>"  +
+			"<td>"+pins[i].val+"</td>"  +
+			"<td>"+modeStr+"</td></tr>";
 		$elm.append(row);
 	}
-	console.log("pins");
-	console.log(pins);
 }
 
 function setDeviceValues(device){
@@ -87,7 +118,7 @@ $(function () {
 	console.log("device");
 	console.log(device);
 	getDeviceStartTime();
-	getPins();
 	setDeviceValues(device);
+	getPinout();
 	initBtnProgram();
 });

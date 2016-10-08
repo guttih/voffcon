@@ -521,6 +521,7 @@ module.exports.makeProgramFile = function makeProgramFile(deviceUrl, callback, e
 	
 	fs.readFile("./hardware/device_server.ino", "utf-8", function(err, file) {
 			if (err === null){
+				var config = module.exports.getConfig();
 				//todo: extract these values for linux also by creating a new function that
 				//      returns only the needed values, which are IPV4_GATEWAY (default gateway) and IPV4_SUBNET (netmask)
 				ipconfig.getWindowsIpConfig(function(netInfo){
@@ -578,6 +579,13 @@ module.exports.makeProgramFile = function makeProgramFile(deviceUrl, callback, e
 						if (subNetMask!== undefined){
 							subNetMask = dotsToCommas(subNetMask);
 							file = file.replace("IPV4_SUBNET", subNetMask);
+						}
+
+						if (config.ssid!== undefined){
+							file = file.replace("WIFI_ACCESSPOINT", config.ssid);
+						}
+						if (config.ssidPwd!== undefined){
+							file = file.replace("WIFI_PASSWORD", config.ssidPwd);
 						}
 					
 					callback(file);

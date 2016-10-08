@@ -81,7 +81,6 @@ router.get('/pins/:deviceId', lib.authenticateRequest, function(req, res){
 			return res.json(obj);
 		}
 
-		
 		var urlid = device._doc.url+'/pins';
 		console.log(urlid);
 		request.get(urlid,
@@ -99,10 +98,42 @@ router.get('/pins/:deviceId', lib.authenticateRequest, function(req, res){
 								return body;
 					}
 			).pipe(res);
+	});
+});
 
 
+
+router.get('/pinout/:deviceId', lib.authenticateRequest, function(req, res){
+	var deviceId = req.params.deviceId;
+
+	Device.getById(deviceId, function(err, device){
+		if (err !== null){
+			res.statusCode = 404;
+			var obj = {text:'Error 404: User device not found!'};
+			return res.json(obj);
+		}
+
+		var urlid = device._doc.url+'/pinout';
+		console.log(urlid);
+		request.get(urlid,
+					function (err, res, body) {
+									if (res){
+										console.log("get pinout statuscode:"+res.statusCode);
+									}
+
+								if (err) {
+									return console.error(err);
+								}
+								if (body){
+								
+								}
+								return body;
+					}
+			).pipe(res);
+	});
 });
-});
+
+
 
 router.post('/pins/:deviceId', lib.authenticateRequest, function(req, res){
 	//var SERVERURL = 'http://192.168.1.154:5100';

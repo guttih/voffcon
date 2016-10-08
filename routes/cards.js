@@ -222,31 +222,6 @@ router.get('/run/:cardID', lib.authenticateCardUserUrl, function(req, res){
 });
 
 /*render a page wich runs a card, that is if the user is a registered user for that card (has access)*/
-router.get('/runtest', lib.authenticateCardUserUrl, function(req, res){
-		lib.readFile("./public/js/controls/cardtest.js", function(err, code) {
-			if (err === null){
-				var using = lib.extractUsingArray(code);
-
-				Control.getByNames(using, function(err, controls){
-					if(err || controls === null || controls.length < 1) {
-						req.flash('error',	'Could not find controls.' );
-						res.redirect('/result');
-					} else {
-						var ctrlCode="", ctrlTemplate="";
-						for(var i = 0; i<controls.length; i++){
-							ctrlCode += '// control: '	+ controls[i]._doc.name +
-										'\n' 			+ controls[i]._doc.code + '\n\n';
-							ctrlTemplate += controls[i]._doc.template + '\n\n';
-						}
-						ctrlCode+="\n\n//end of controls....................\n";
-						res.render('run-cardtest', {template:ctrlTemplate,	code:ctrlCode});
-					}
-				});
-			}
-		});
-});
-
-/*render a page wich runs a card, that is if the user is a registered user for that card (has access)*/
 router.get('/useraccess/:cardID', lib.authenticateCardOwnerUrl, function(req, res){
 	var id = req.params.cardID;
 	Card.getById(id, function(err, retCard){

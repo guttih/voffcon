@@ -112,7 +112,7 @@ router.post('/pins/:deviceId', lib.authenticateRequest, function(req, res){
 	var deviceId = req.params.deviceId;
 	var b = req.body;	
 	Device.getById(deviceId, function(err, device){
-		if (err !== null){
+		if (err !== null || device === null){
 			res.statusCode = 404;
 			var obj = {text:'Error 404: User device not found!'};
 			return res.json(obj);
@@ -128,7 +128,6 @@ router.post('/pins/:deviceId', lib.authenticateRequest, function(req, res){
 				}, this);
 			
 			keys = Object.keys(formData);
-			console.log("before delte");
 
 				formData = JSON.stringify(formData);
 				request(lib.makeRequestPostOptions(urlid, formData),
@@ -141,6 +140,7 @@ router.post('/pins/:deviceId', lib.authenticateRequest, function(req, res){
 							return console.error(err);
 						}
 						if (body){
+							//todo: remvoe this line
 							console.log(body);
 						}
 						return body;

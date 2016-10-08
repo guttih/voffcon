@@ -591,3 +591,16 @@ module.exports.makeProgramFile = function makeProgramFile(deviceUrl, callback, e
 			}
 	});
 };
+
+module.exports.readFile = function readFile(filePath, callback) {
+	
+	fs.readFile(filePath, "utf-8", function(err, fileContent) {
+		callback(err, fileContent);
+
+	});
+};
+module.exports.makeValidFilename = function makeValidFilename(filename) {
+	var filename = filename.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+	return filename;
+	
+};

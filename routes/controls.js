@@ -247,7 +247,7 @@ router.get('/export/:controlID', lib.authenticatePowerUrl, function(req, res){
 						template    : control._doc.template
 					};
 						var data = JSON.stringify(obj);
-						res.writeHead(200, {'Content-Type': 'application/force-download','Content-disposition':'attachment; filename='+control.name+'.ardos.ctrl'});
+						res.writeHead(200, {'Content-Type': 'application/force-download','Content-disposition':'attachment; filename=' + lib.makeValidFilename(control.name) + '.ardos.ctrl'});
 						res.end( data );
 					
 					

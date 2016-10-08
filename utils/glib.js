@@ -608,7 +608,7 @@ module.exports.readFile = function readFile(filePath, callback) {
 	});
 };
 module.exports.makeValidFilename = function makeValidFilename(filename) {
-	var filename = filename.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+	var filename = filename.replace(/[^A-Za-z0-9]/gi, '_');
 	return filename;
 	
 };

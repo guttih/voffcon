@@ -1,6 +1,11 @@
 # Ardos
 A System for controlling devices and appliances from anywere.  It is made up by two components.  A node server and A device server.  The main benefits of this system is your ability to create your own controls and cards, which other users logged in to your system can use to control devices you deside to put on your cards.
 
+##Video intoduction
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=NCrnYc6dx2E
+" target="_blank"><img src="http://img.youtube.com/vi/NCrnYc6dx2E/0.jpg" 
+alt="A video tutorial" width="600" height="400" border="10" title="Click here to view the video tutorial" /></a>
+
 # Licence  
         Ardos is a system for controlling devices and appliances from anywhere.
         It consists of two programs.  A “node server” and a “device server”.

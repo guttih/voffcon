@@ -5,30 +5,6 @@ A System for controlling devices and appliances from anywere.  It is made up by 
 <a href="http://www.youtube.com/watch?feature=player_embedded&v=NCrnYc6dx2E
 " target="_blank"><img src="http://img.youtube.com/vi/NCrnYc6dx2E/0.jpg" 
 alt="A video tutorial" width="600" height="400" border="10" title="Click here to view the video tutorial" /></a>
-
-# Licence  
-        Ardos is a system for controlling devices and appliances from anywhere.
-        It consists of two programs.  A “node server” and a “device server”.
-        Copyright (C) 2016  Gudjon Holm Sigurdsson
-
-        This program is free software: you can redistribute it and/or modify
-        it under the terms of the GNU General Public License as published by
-        the Free Software Foundation, version 3 of the License.
-
-        This program is distributed in the hope that it will be useful,
-        but WITHOUT ANY WARRANTY; without even the implied warranty of
-        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        GNU General Public License for more details.
-
-        You should have received a copy of the GNU General Public License
-        along with this program.  If not, see <http://www.gnu.org/licenses/>.
-        
-[Click here](https://github.com/guttih/ardos/blob/master/public/COPYING.txt) for a copy of the licence.
-
-You can contact the author by sending email to gudjonholm@gmail.com or 
-by regular post to the address Haseyla 27, 260 Reykjanesbar, Iceland.
-
-
 ##The node server
 Is a server created with node.js.  This server creates webpages which can be viewed in a web browser like Google Chrome, Microsoft Edge and Internet Explorer. If you portforward the server out to the internet you will be able to accsess your devices from anywhere.  It uses the  [Passport](http://passportjs.org/docs) authentication middleware to keep your devices from being controlled by everyone. 
 The server provides connections to many devices and uses passport to make sure that the user is authenticated before he is able to give commands to the server running on the devices.
@@ -134,3 +110,27 @@ If a user wants to access a device then the system will grant him access if the 
 - Create a visual/drag'n drop editor, allowing power users create cards more easier.
 - Create a visual/drag'n drop editor, allowing power users create controls more easier.
 - Show running cards without the Ardos menu.
+
+
+# Licence  
+        Ardos is a system for controlling devices and appliances from anywhere.
+        It consists of two programs.  A “node server” and a “device server”.
+        Copyright (C) 2016  Gudjon Holm Sigurdsson
+
+        This program is free software: you can redistribute it and/or modify
+        it under the terms of the GNU General Public License as published by
+        the Free Software Foundation, version 3 of the License.
+
+        This program is distributed in the hope that it will be useful,
+        but WITHOUT ANY WARRANTY; without even the implied warranty of
+        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+        GNU General Public License for more details.
+
+        You should have received a copy of the GNU General Public License
+        along with this program.  If not, see <http://www.gnu.org/licenses/>.
+        
+[Click here](https://github.com/guttih/ardos/blob/master/public/COPYING.txt) for a copy of the licence.
+
+You can contact the author by sending email to gudjonholm@gmail.com or 
+by regular post to the address Haseyla 27, 260 Reykjanesbar, Iceland.
+

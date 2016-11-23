@@ -100,6 +100,36 @@ router.get('/pins/:deviceId', lib.authenticateRequest, function(req, res){
 			).pipe(res);
 	});
 });
+//this route needs to take a device ID like so router.get('/custom/:deviceID'...
+router.get('/custom/:deviceId', lib.authenticateRequest, function(req, res){
+	var deviceId = req.params.deviceId;
+
+	Device.getById(deviceId, function(err, device){
+		if (err !== null || device === null){
+			res.statusCode = 404;
+			var obj = {text:'Error 404: User device not found!'};
+			return res.json(obj);
+		}
+
+		var urlid = device._doc.url+'/custom';
+		console.log(urlid);
+		request.get(urlid,
+					function (err, res, body) {
+									if (res){
+										console.log("get pins statuscode:"+res.statusCode);
+									}
+
+								if (err) {
+									return console.error(err);
+								}
+								if (body){
+								
+								}
+								return body;
+					}
+			).pipe(res);
+	});
+});
 
 
 
@@ -179,6 +209,51 @@ router.post('/pins/:deviceId', lib.authenticateRequest, function(req, res){
 				).pipe(res);}
 	);
 });
+
+router.post('/custom/:deviceId', lib.authenticateRequest, function(req, res){
+	//var formData = {5: 999, 0: 999, 16: 999, 	4: 999, 	12: 999,	13:999,	15:999 };
+
+	var deviceId = req.params.deviceId;
+	var b = req.body;	
+	Device.getById(deviceId, function(err, device){
+		if (err !== null || device === null){
+			res.statusCode = 404;
+			var obj = {text:'Error 404: User device not found!'};
+			return res.json(obj);
+		}
+	
+			var urlid = device._doc.url+'/custom';					
+			var formData = {};
+			
+			var keys = Object.keys(b);
+			keys.forEach(function(key) {
+					console.log(key+ ':' + b[key]);
+					formData[key] = Number(b[key]);
+				}, this);
+			
+			keys = Object.keys(formData);
+
+				formData = JSON.stringify(formData);
+				request(lib.makeRequestPostOptions(urlid, formData),
+					function (err, res, body) {
+							if (res){
+								console.log("statuscode:"+res.statusCode);
+							}
+
+						if (err) {
+							return console.error(err);
+						}
+						if (body){
+							//todo: remvoe this line
+							console.log(body);
+						}
+						return body;
+					}
+				).pipe(res);}
+	);
+});
+
+
 
 router.get('/register', lib.authenticatePowerUrl, function(req, res){
 	res.render('register-device');

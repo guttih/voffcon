@@ -227,3 +227,44 @@ ul > li.menu-item.dropdown.dropdown-submenu:hover > ul{
 .form-upload{
 	margin-top: 50px;
 }
+
+.inputDialog{
+	position:absolute;
+	top: 50%;
+	left:50%;
+	background:white;
+	padding:20px;
+	margin: 5px 0px 5px; 
+	border-radius: 8px;	
+	z-index:1001;
+}
+
+.inputDialog > button{
+	margin-left:20px;
+
+}
+.inputDialogPin{
+	font-weight: bold;
+}
+.inputDialogText{
+	margin-bottom:10px;
+}
+.overlay{
+    opacity:0.6;
+	display:none;
+    background-color:#ccc;
+    position:fixed;
+    width:100%;
+    height:100%;
+    top:0px;
+    left:0px;
+    z-index:1000;
+}
+
+.unknownValue{
+	color: gray;
+	font-style: italic;
+	
+}
+
+

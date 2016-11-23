@@ -20,7 +20,7 @@ by regular post to the address Haseyla 27, 260 Reykjanesbar, Iceland.
 */
 
 var deviceStarted;
-
+var inputDialog = $('#getNum');
 function getDeviceStartTime(){
 	$elm = $('#status-text');
 	requestData(SERVER+'/devices/started/'+device.id, function(data){
@@ -63,6 +63,7 @@ function getPinout(){
 			}
 			console.log(data.pins);
 			setPinValues(data);
+			registerOnClickValue(data);
 		});
 		
 	});
@@ -81,6 +82,25 @@ function getModeString(mode){
 	return str;
 }
 
+
+function registerOnClickValue(data){
+	var pins = data.pins;
+	var pin, val;
+	var $elm;
+	for(var i = 0; i < pins.length; i++){
+		$elm = $('#val'+pins[i].pin);
+		$elm.on( "click", function() {
+			var id = $( this ).attr("id");
+			pin = id.substring(3);
+			val = $( this ).text();
+			showInputDialog(pin, val);
+			
+		});
+	}
+}
+
+
+
 function setPinValues(data){
 	var pins = data.pins;
 	var modeStr;
@@ -90,11 +110,11 @@ function setPinValues(data){
 	for(var i = 0; i < pins.length; i++){
 		modeStr = getModeString(pins[i].m);
 		modeStr = '<code style="color:black">'+modeStr+'</code>';
-		row = "<tr>"+
-			"<td>"+pins[i].name+"</td>"  +
-			"<td>"+pins[i].pin+"</td>"  +
-			"<td>"+pins[i].val+"</td>"  +
-			"<td>"+modeStr+"</td></tr>";
+		row = '<tr>'+
+			'<td>'+pins[i].name+'</td>'  +
+			'<td>'+pins[i].pin+'</td>'  +
+			'<td id="val'+ pins[i].pin +'">'+pins[i].val+'</td>'  +
+			'<td>'+modeStr+'</td></tr>';
 		$elm.append(row);
 	}
 }
@@ -107,10 +127,63 @@ function setDeviceValues(device){
 }
 
 
-function initBtnProgram(){
+function showInputDialog(pin, val){
+	$('#inputDialogPin').text(pin);
+	$('#inputDialogValue').val(val);
+	inputDialog.show();
+	$('.overlay').show();
+	
+
+}
+function updatePinValues(pins){
+	var pin, val, $elm;
+	for(var i = 0; i<pins.length; i++){
+		pin = pins[i].pin;
+		val = pins[i].val;
+		$elm = $('#val'+pin); 
+		$elm.text(val);
+		 $('#val'+pin).removeClass("unknownValue");
+
+
+
+	}
+}
+function init(){
 	$('#btn-download-program').click(function() {
 		window.location.assign('/devices/program/'+device.id);
+	});
+	
+	inputDialog.hide();
+	$('#btnSetPinValue').click(function() {
+		$('.overlay').hide();
+		inputDialog.hide();
+
+		var pin = $('#inputDialogPin').text();
+		var val = $('#inputDialogValue').val();
+		 $('#val'+pin).addClass("unknownValue");
+		var deviceId = $('#device-id').text();
+		
+		//pin.active(false); gray the cell
+		var sendObj = {};
+		sendObj[pin]=val;
+		var url = SERVER+'/devices/pins/'+deviceId;
+		var posting = $.post( url, sendObj);
+
+		posting.done(function(data){
+			console.log(data);
+			updatePinValues(data.pins);
 		});
+
+	});
+	inputDialog.hide();
+	$('#btnCancelSetPin').click(function() {
+		$('.overlay').hide();
+		inputDialog.hide();
+	});
+	
+	//select all text when control gets focus
+	$('#inputDialogValue').focus(function() { $(this).select(); } );
+	
 }
 
 
@@ -120,5 +193,5 @@ $(function () {
 	getDeviceStartTime();
 	setDeviceValues(device);
 	getPinout();
-	initBtnProgram();
+	init();
 });

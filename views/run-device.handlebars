@@ -64,6 +64,18 @@
 		</tbody>
 	</table>
 
+<div class="inputDialog" id="getNum">
+	<div class="inputDialogText">
+		<span >Enter a new value for pin number </span>
+		<span id="inputDialogPin" class="inputDialogPin"></span>
+	</div>
+	<input id="inputDialogValue" type="number" min="0" max="1024"/>
+	<button id="btnSetPinValue" type="button" class="btn btn-default">Send</button>
+	<button id="btnCancelSetPin" type="button" class="btn btn-default">Cancel</button>
+ 
+</div>
+<div class="overlay"></div>
+
 
 
 {{#if admin}}

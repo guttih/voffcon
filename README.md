@@ -27,6 +27,7 @@ You will need to install the following if you haven't already.
 + - do not have spaces in the installation folder for example do NOT install to "C:\Program Files\MongoDB", better would be "C:\MongoDB"
 +  Run : "C:\MongoDB\Server\3.2\bin\mongod.exe"
 
+
 #### Windows 7 problem when installing mongoDB
 If you are having problem installing mongoDB on windows 7, then you could try the following.
 
@@ -44,6 +45,37 @@ cd bin
 mongod.exe --directoryperdb --dbpath C:\MongoDB\Server\3.2\data\db --logpath C:\MongoDB\Server\3.2\log\mongodb.log --logappend
 ```
 
+#### Installing Ubuntu 16.04 (Linux) when all prerequisites are missing
+Assuming that you do not have Mongodb, nodejs or npm installed.  This would be the process you would follow.
+
+##### Reload local package database
+```shell
+sudo apt-get update
+
+```
+
+##### Install the MongoDB packages.
+```shell
+echo "deb http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.2.list
+sudo apt-get install -y mongodb-org
+# Create dir to store data and run mongodb
+sudo mkdir /data
+sudo mkdir /data/db
+sudo mongod
+```
+##### Install nodejs
+```shell
+sudo apt-get install -y nodejs
+sudo apt install npm
+
+```
+
+#### Install packages which the Ardos app server uses and running the server
+```shell
+npm install
+node app
+
+```
 
 ### Setting up the node server
 ```shell

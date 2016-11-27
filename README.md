@@ -17,15 +17,21 @@ This application is a server intended to run on a computer where it can access e
 
 ###requirements:
 You will need to install the following if you haven't already.
-+ [MongoDb](https://www.mongodb.com) To store users cards, controls and device information.
++ [MongoDb](https://www.mongodb.com) To store users cards, controls and device information. ([installing](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions))
 + [Node.js](https://nodejs.org/en/) To run the Node server
 + [Arduino IDE](https://www.arduino.cc/en/Main/Software)  To program the devices.
 + [Esp8266 library](https://github.com/esp8266/Arduino/tree/633e48f3aec5f1c3c11d4498fc90d378d49e6e9f/libraries/ESP8266WiFi/src) by [ESP8266 community](https://github.com/esp8266).  See these [instructions](https://github.com/guttih/ardos/blob/master/docs/device-setup.md) for how to setup the device server.  
 
 ### Run the mongodb server
-+ for windows
+#### Windows
 + - do not have spaces in the installation folder for example do NOT install to "C:\Program Files\MongoDB", better would be "C:\MongoDB"
 +  Run : "C:\MongoDB\Server\3.2\bin\mongod.exe"
+#### Linux
+```shell
+mongod
+
+```
+
 
 
 #### Windows 7 problem when installing mongoDB

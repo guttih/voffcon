@@ -24,8 +24,9 @@ You will need to install the following if you haven't already.
 
 ### Run the mongodb server
 #### Windows
-+ - do not have spaces in the installation folder for example do NOT install to "C:\Program Files\MongoDB", better would be "C:\MongoDB"
-+  Run : "C:\MongoDB\Server\3.2\bin\mongod.exe"
+Do not have spaces in the installation folder for example do NOT install to "C:\Program Files\MongoDB", better would be "C:\MongoDB"
++  Run : ```C:\MongoDB\Server\3.2\bin\mongod.exe```
+
 #### Linux
 ```shell
 mongod

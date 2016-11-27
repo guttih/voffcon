@@ -45,7 +45,7 @@ cd bin
 mongod.exe --directoryperdb --dbpath C:\MongoDB\Server\3.2\data\db --logpath C:\MongoDB\Server\3.2\log\mongodb.log --logappend
 ```
 
-#### Installing Ubuntu 16.04 (Linux) when all prerequisites are missing
+#### Installing Ardos node server on Ubuntu 16.04 (Linux) when all prerequisites are missing
 Assuming that you do not have Mongodb, nodejs or npm installed.  This would be the process you would follow.
 
 ##### Reload local package database

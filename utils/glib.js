@@ -293,7 +293,7 @@ module.exports.makeRequestPostOptions = function makeRequestOptions(url, formDat
 
 
 module.exports.setConfig = function setConfig(conf){
-	var file = __dirname + './../config.json';
+	var file = __dirname + '/../config.json';
 		var str = JSON.stringify(conf);
 		//add an endline between variables
 		str = str.replace(/,\"/g, ",\n\"");
@@ -305,7 +305,7 @@ module.exports.setConfig = function setConfig(conf){
 };
 
 module.exports.getConfig = function getConfig(){
-	var file = __dirname + './../config.json';
+	var file = __dirname + '/../config.json';
 	var conf;
 	var makeNewFile = true;
 	if (validator.fileExists(file)){
@@ -516,13 +516,12 @@ function dotsToCommas(str){
 	return out;
 
 }
-// gets the device-server program
-module.exports.makeProgramFile = function makeProgramFile(deviceUrl, callback, errorCallback) {
+var makeProgramFileWindows = function makeProgramFileWindows(deviceUrl, callback, errorCallback) {
 	
 	fs.readFile("./hardware/device_server.ino", "utf-8", function(err, file) {
 			if (err === null){
 				var config = module.exports.getConfig();
-				//todo: extract these values for linux also by creating a new function that
+				//todo: extract these values for linux and windows also by creating a new function that
 				//      returns only the needed values, which are IPV4_GATEWAY (default gateway) and IPV4_SUBNET (netmask)
 				ipconfig.getWindowsIpConfig(function(netInfo){
 					//PORT_NUMBER
@@ -598,6 +597,94 @@ module.exports.makeProgramFile = function makeProgramFile(deviceUrl, callback, e
 				}
 			}
 	});
+};
+var getNetWorkInfoLinux = function getNetWorkInfoLinux(callback) {
+	module.exports.getFirstDefaultGateWay(function(defaultGateway){
+		var addresses = module.exports.getAddresses(true);
+		var subnets = module.exports.getSubnets(true);
+		var data={
+			"defaultGateWay": defaultGateway,
+			"subNetMask":subnets[0],
+			"ip": addresses[0]
+		}
+		callback(data);
+	});
+}
+
+var makeProgramFileLinux = function makeProgramFileLinux(deviceUrl, callback, errorCallback) {
+	
+	fs.readFile("./hardware/device_server.ino", "utf-8", function(err, file) {
+			if (err === null){
+				var config = module.exports.getConfig();
+				//todo: extract these values for linux and windows also by creating a new function that
+				//      returns only the needed values, which are IPV4_GATEWAY (default gateway) and IPV4_SUBNET (netmask)
+				getNetWorkInfoLinux(function(data){
+					//PORT_NUMBER
+					//IPV4_IPADDRESS
+					//IPV4_GATEWAY
+					//IPV4_SUBNET
+					var port, ip, defaultGateWay, subNetMask, serverIp;
+					
+					defaultGateWay = data.defaultGateWay;
+					subNetMask = data.subNetMask;
+					serverIp = data.ip;
+					if (deviceUrl !== undefined && deviceUrl !== null){
+						var tempPort = getPort(deviceUrl, false);
+						if (!isNaN(tempPort)){ //a port is provided in the url
+							
+							deviceUrl = deviceUrl.replace(':' + tempPort, "");	//removing port
+							
+						} else{ //no port provided, we need to calculate it
+							tempPort = getPort(deviceUrl, true);
+						}
+						ip = getIpv4FromUrl(deviceUrl);
+						if (ip!== undefined){
+							port = tempPort; //only get port number if ip is valid
+						}
+					}
+				
+				
+					if (port!== undefined){
+						file = file.replace("PORT_NUMBER", port);
+					}
+					if (ip!== undefined){
+						ip = dotsToCommas(ip);
+						file = file.replace("IPV4_IPADDRESS", ip);
+					}
+					if (defaultGateWay!== undefined){
+						defaultGateWay = dotsToCommas(defaultGateWay);
+						file = file.replace("IPV4_GATEWAY", defaultGateWay);
+					}
+					if (subNetMask!== undefined){
+						subNetMask = dotsToCommas(subNetMask);
+						file = file.replace("IPV4_SUBNET", subNetMask);
+					}
+
+					if (config.ssid!== undefined){
+						file = file.replace("WIFI_ACCESSPOINT", config.ssid);
+					}
+					if (config.ssidPwd!== undefined){
+						file = file.replace("WIFI_PASSWORD", config.ssidPwd);
+					}
+					
+					callback(file);
+				});
+			} else{
+				if (errorCallback){
+					errorCallback("could read the program temlate");
+				}
+			}
+	});
+};
+// gets the device-server program
+module.exports.makeProgramFile = function makeProgramFile(deviceUrl, callback, errorCallback) {
+	//todo: join common code in makeProgramFileLinux and makeProgramFileWindows
+	var osStr = os.type();
+	if (osStr.indexOf("Windows") === 0){
+		makeProgramFileWindows(deviceUrl, callback, errorCallback);
+	} else {
+		makeProgramFileLinux(deviceUrl, callback, errorCallback);
+	}
 };
 
 module.exports.readFile = function readFile(filePath, callback) {

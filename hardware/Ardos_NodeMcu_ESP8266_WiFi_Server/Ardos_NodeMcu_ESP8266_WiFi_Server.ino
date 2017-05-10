@@ -142,7 +142,7 @@ void handlePins(){
               iCol = line.indexOf(':');
               iCom = line.indexOf(',');
               
-              while(iCol>0 && iCom>3)
+              while(iCol>0 && iCom>2)
               {
                 strPin = line.substring(0, iCol);
                 strValue = line.substring(iCol+1, iCom);

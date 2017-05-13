@@ -63,6 +63,8 @@ function doSubmit(){
 	sendObj.name = $('#device-name').val();
 	sendObj.description = $('#device-description').val(); 
 	sendObj.url = $('#device-url').val();
+	sendObj.type = $('#device-type').val();
+	
 	console.log(sendObj);
 
 	sendData(url, sendObj, function(data){
@@ -80,6 +82,7 @@ $(function () {
 		$('#device-name').val(device.name);
 		$('#device-description').text(device.description);
 		$('#device-url').val(device.url);
+		$('#device-type').val(device.type);
 
 		$("#btn-run").click(function() {
 				window.location.href = '/devices/run/' + device.id;

@@ -35,6 +35,10 @@ var DeviceSchema = mongoose.Schema({
 	name: {
 		type: String
 	},
+	type: {
+		type: String
+	},
+	
 	description: {
 		type: String
 	},	

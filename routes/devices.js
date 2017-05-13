@@ -270,7 +270,8 @@ router.get('/register/:deviceID', lib.authenticatePowerUrl, function(req, res){
 					var obj = {id : id,
 						name: device.name,
 						description: device.description,
-						url: device.url
+						url: device.url,
+						type: device.type
 					};
 					var str = JSON.stringify(obj);
 					res.render('register-device', {device:str});
@@ -285,6 +286,7 @@ router.post('/register', lib.authenticatePowerRequest, function(req, res){
 	req.checkBody('name', 'Name is required').notEmpty();
 	req.checkBody('description', 'description is required').notEmpty();
 	req.checkBody('url', 'url is required').notEmpty();
+	req.checkBody('type', 'Device type is required').notEmpty();
 	
 	var errors = req.validationErrors();
 
@@ -295,6 +297,7 @@ router.post('/register', lib.authenticatePowerRequest, function(req, res){
 			name: req.body.name,
 			url:req.body.url,
 			description:req.body.description,
+			type: device.type,
 			owners:[]
 			
 		});
@@ -318,6 +321,7 @@ router.post('/register/:deviceID', lib.authenticatePowerRequest, function(req, r
 	req.checkBody('url', 'url is required').notEmpty();
 	req.checkBody('description', 'description is required').notEmpty();
 	req.checkBody('name', 'Name is required').notEmpty();
+	req.checkBody('type', 'Device type is required').notEmpty();
 	
 	
 
@@ -330,7 +334,8 @@ router.post('/register/:deviceID', lib.authenticatePowerRequest, function(req, r
 				var values = {
 					name		: req.body.name,
 					description : req.body.description,
-					url		: req.body.url
+					url		    : req.body.url,
+					type		: req.body.type
 				};
 				Device.modify(id, values, function(err, result){
 					if(err || result === null || result.ok !== 1) {//(result.ok===1 result.nModified===1)
@@ -363,6 +368,8 @@ router.get('/device-list', lib.authenticatePowerRequest, function(req, res){
 					arr.push({	name:deviceList[i].name, 
 								description:deviceList[i].description,
 								id:deviceList[i]._id,
+								type:deviceList[i]._type,
+								
 								isOwner:isOwner
 							});
 		}
@@ -461,7 +468,9 @@ router.get('/run/:deviceID', lib.authenticateDeviceOwnerUrl, function(req, res){
 			var device = {	id:id,
 							name:retDevice._doc.name,
 							url:retDevice._doc.url,
-							description:retDevice._doc.description
+							description:retDevice._doc.description,
+							type:retDevice._doc.type
+							
 						  };
 			var str = JSON.stringify(device);
 			res.render('run-device', { device:str });
@@ -477,9 +486,19 @@ router.get('/program/:deviceID', lib.authenticatePowerUrl, function(req, res){
 					req.flash('error',	'Could not find device.' );
 					res.redirect('/result');
 				} else{
-
-					lib.makeProgramFile(device.url , function(data){
-						res.writeHead(200, {'Content-Type': 'application/force-download','Content-disposition':'attachment; filename=device_server.ino'});
+					var type = device.type;
+					if (type === undefined ){
+						type = "0";
+					}
+					lib.makeProgramFile(device.url, device.type , function(data){
+						var fileInfo = "attachment; filename=ArdosServerNodeMCU.ino";
+						if (device.type === "1") {
+							fileInfo = "attachment; filename=ArdosServerEsp32DevModule.ino";
+						}	
+						res.writeHead(200, {
+							'Content-Type': 'application/force-download',
+							'Content-disposition':fileInfo});
+							/*'Content-disposition':'attachment; filename=device_server.ino'});*/
 						res.end( data );
 					}, 
 					function(str){

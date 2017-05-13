@@ -516,9 +516,9 @@ function dotsToCommas(str){
 	return out;
 
 }
-var makeProgramFileWindows = function makeProgramFileWindows(deviceUrl, callback, errorCallback) {
-	
-	fs.readFile("./hardware/device_server.ino", "utf-8", function(err, file) {
+var makeProgramFileWindows = function makeProgramFileWindows(deviceUrl, filePath, callback, errorCallback) {
+
+	fs.readFile(filePath, "utf-8", function(err, file) {
 			if (err === null){
 				var config = module.exports.getConfig();
 				//todo: extract these values for linux and windows also by creating a new function that
@@ -611,9 +611,9 @@ var getNetWorkInfoLinux = function getNetWorkInfoLinux(callback) {
 	});
 }
 
-var makeProgramFileLinux = function makeProgramFileLinux(deviceUrl, callback, errorCallback) {
+var makeProgramFileLinux = function makeProgramFileLinux(deviceUrl, filePath, callback, errorCallback) {
 	
-	fs.readFile("./hardware/device_server.ino", "utf-8", function(err, file) {
+	fs.readFile(filePath, "utf-8", function(err, file) {
 			if (err === null){
 				var config = module.exports.getConfig();
 				//todo: extract these values for linux and windows also by creating a new function that
@@ -677,13 +677,17 @@ var makeProgramFileLinux = function makeProgramFileLinux(deviceUrl, callback, er
 	});
 };
 // gets the device-server program
-module.exports.makeProgramFile = function makeProgramFile(deviceUrl, callback, errorCallback) {
+module.exports.makeProgramFile = function makeProgramFile(deviceUrl, deviceType, callback, errorCallback) {
 	//todo: join common code in makeProgramFileLinux and makeProgramFileWindows
 	var osStr = os.type();
+	var filePath = "./hardware/ArdosServerNodeMCU.ino";
+	if (deviceType === "1") {
+		filePath = "./hardware/ArdosServerEsp32DevModule.ino";
+	}
 	if (osStr.indexOf("Windows") === 0){
-		makeProgramFileWindows(deviceUrl, callback, errorCallback);
+		makeProgramFileWindows(deviceUrl, filePath, callback, errorCallback);
 	} else {
-		makeProgramFileLinux(deviceUrl, callback, errorCallback);
+		makeProgramFileLinux(deviceUrl, filePath, callback, errorCallback);
 	}
 };
 

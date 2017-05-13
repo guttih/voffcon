@@ -122,6 +122,7 @@ function setPinValues(data){
 function setDeviceValues(device){
 	$('#device-id').text(device.id);
 	$('#device-name').text(device.name);
+	$('#device-type').text(device.type);
 	$('#device-url').text(device.url);
 	$('#device-description').text(device.description);
 }

@@ -31,6 +31,14 @@ var defaultInterfaces = require('default-network');
 var ipconfig = require('../utils/ipconfigwin.js');
 var router = express.Router();
 
+
+module.exports.getDeviceTypeName = function getDeviceTypeName(type) {
+	switch(type){
+		case "1" : return "Esp32 Development Module";
+	}
+	return "NodeMcu module with ESP8266 on board";
+}
+
 module.exports.authenticateUrl = function authenticateUrl(req, res, next){	
 	if(req.isAuthenticated()){
 		return next();

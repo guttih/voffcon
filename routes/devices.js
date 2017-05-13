@@ -368,8 +368,8 @@ router.get('/device-list', lib.authenticatePowerRequest, function(req, res){
 					arr.push({	name:deviceList[i].name, 
 								description:deviceList[i].description,
 								id:deviceList[i]._id,
-								type:deviceList[i]._type,
-								
+								type:deviceList[i].type,
+								url:deviceList[i].url,
 								isOwner:isOwner
 							});
 		}
@@ -457,7 +457,6 @@ router.post('/useraccess/:deviceID', lib.authenticateDeviceOwnerRequest, functio
 });
 
 /*render a page wich runs a diagnostic device, for a device, if the user is a registered user for that device (has access)*/
-
 router.get('/run/:deviceID', lib.authenticateDeviceOwnerUrl, function(req, res){
 	var id = req.params.deviceID;
 	Device.getById(id, function(err, retDevice){
@@ -465,12 +464,17 @@ router.get('/run/:deviceID', lib.authenticateDeviceOwnerUrl, function(req, res){
 			req.flash('error',	'Could not find device.' );
 			res.redirect('/result');
 		} else{
+			var type = "0";
+			if (retDevice._doc.type!== undefined) {
+				type = retDevice._doc.type;
+			}
+			var nameOfType = lib.getDeviceTypeName(type);
 			var device = {	id:id,
 							name:retDevice._doc.name,
 							url:retDevice._doc.url,
 							description:retDevice._doc.description,
-							type:retDevice._doc.type
-							
+							type:type,
+							typeName:nameOfType
 						  };
 			var str = JSON.stringify(device);
 			res.render('run-device', { device:str });

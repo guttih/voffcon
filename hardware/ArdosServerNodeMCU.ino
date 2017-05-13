@@ -887,7 +887,7 @@ String Gurl::removeLastSpaceIfExists(String str) {
 
 String Gurl::jsonKeyValue(String key, String value) {
     String   str = "\"" + key + "\":" + value;
-    return str;fgv
+    return str;
 }
 
 String Gurl::jsonObjectType(unsigned int uiType) {

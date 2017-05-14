@@ -24,8 +24,7 @@ If there is no file called config.json in the root of the Arduino project, then 
 ```
 
 ## Install the Arduino IDE
-- [Click here](https://www.arduino.cc/en/Main/Software)  and Download the Arduino Software.
-- Install it.
+- [Click here](https://www.arduino.cc/en/Main/Software), download the Arduino Software and install it.
 
 ### ESP32 Arduino Core
 If you will be using the ESP32 Development Module you will need the ESP32 Arduino Core.  The ESP32 is still fairly new so the Arduino IDE Board manager cannot be used, like with the ESP8266.
@@ -68,7 +67,6 @@ We will need to send the Device server program to the device.  We can do that by
  12. Copy all text in the downloaded file and paste it into the new sketch in the arduino IDE.
  13. Change the following values if the Ardos node server has not already done so automaticly for you. 
  14. Find these values and replace them with information about your system. 
- -
         IPV4_IPADDRESS  : (IP) Provide an ip address (IPV4) which you want the device to ask operating system for.
         PORT_NUMBER     : (Port) Provide the port number you want the device to listen and serve from.
         IPV4_GATEWAY    : (Default Gateway) The device needs to know the default gateway it will be using.

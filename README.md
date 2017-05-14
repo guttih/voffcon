@@ -1,6 +1,11 @@
 # Ardos
-<div style="text-align:right">
-  <img src="public/images/logo.png" alt="A video tutorial" width="100" height="100" border="10" title="Click here to view the video tutorial" />
+<div style="text-align:left">
+<a href="https://guttih.github.io/ardos" target="_blank"><img src="public/images/logo.png" 
+  alt="A video tutorial" width="100" height="10" border="0" title="Click to view in nicer format" /></a>
+
+
+
+  <img src="public/images/logo.png" alt="A video tutorial" width="100" height="100" border="0" title="Click to view in nicer format"/>
 </div>
 A System for controlling devices and appliances from anywere.  It is made up by two components.  A node server and A device server.  The main benefits of this system is your ability to create your own controls and cards, which other users logged in to your system can use to control devices you deside to put on your cards.
 

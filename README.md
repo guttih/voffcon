@@ -24,7 +24,7 @@ You will need to install the following if you haven't already.
 + [MongoDb](https://www.mongodb.com) To store users cards, controls and device information. ([installing](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions))
 + [Node.js](https://nodejs.org/en/) To run the Node server
 + [Arduino IDE](https://www.arduino.cc/en/Main/Software)  To program the devices.
-+ [Esp8266 library](https://github.com/esp8266/Arduino/tree/633e48f3aec5f1c3c11d4498fc90d378d49e6e9f/libraries/ESP8266WiFi/src) by [ESP8266 community](https://github.com/esp8266).  See these [instructions](/docs/device-setup.md) for how to setup the device server.  
++ [instructions](/docs/device-setup.md) for how to setup the device server(s).  
 
 ### Run the mongodb server
 #### Windows
@@ -117,8 +117,6 @@ Esp32 Is the next version of the Esp8266 module.  This dual-processor developmen
 ## Setting up the device server.
 [Click here](docs/device-setup.md) to get instructions on how to setup the device server.
 
-
-#### 
 
 ### More about the system
 #### Users

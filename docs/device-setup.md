@@ -4,9 +4,9 @@
  - The **ESP32 DEV Module** which has the Esp32 Wifi and bluetooth chip on board.
 
 <div style="text-align:center">
- <img src="/docs/images/esp8266.png" width="200" alt="The esp8266 module">
+ <img src="images/esp8266.png" width="200" alt="The esp8266 module">
  <div width="100"> </div>
- <img src="/docs/images/esp32DevModule.PNG" width="200" alt="The esp8266 module">
+ <img src="images/esp32DevModule.PNG" width="200" alt="The esp8266 module">
 </div>
 
 ## Why we need to setup a device

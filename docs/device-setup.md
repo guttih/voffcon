@@ -13,9 +13,9 @@
 In order to be able to communicate with the device using Ardos, you will need to setup your computer so you can use it to send a program to the device.  This program is called the Device server.  The device server will allow the Node server to view and change values on the device it self.  To get the device server onto the device you will need to follow the instructions below.  
 
 ## create the file config.json
-If there is no file called config.json in the root of the Arduino project, then you will need to create it.  After that you should provide a ssid and a ssid password.  ssid is the name of your whifi network.  the ssid is the password needed to connect to that network.  Same values you need to connect your smart mobile phone to your wifi. These values will be used by the node server to create the program (the device server) which will be uploaded to your device.
+If there is no file called config.json in the root of the Arduino project, then you will need to create it.  After that you should provide a ssid and a ssid password.  ssid is the name of your whifi network.  the ssid is the password needed to connect to that network.  These are the same values you need to connect your smart mobile phone to your wifi. These values will be used by the node server to create the program (the device server) which will be uploaded to your device.
 
-### config.json content
+#### config.json
 ```json  config.json
 {"port":6100,
 "allowUserRegistration":true,
@@ -79,9 +79,9 @@ We will need to send the Device server program to the device.  We can do that by
   Now the device has been setup and you should be able to connect to it.
 
 
-##The Device server
+## The Device server
 
-###General information
+### General information
 As noted above this program needs to be uploaded on the device you want to control from the node server.
 This server will only allow request to it, if the request comes from a client which is on the same subnet. In fact the Device server will check for the first 3 numbers in the calling ip address and if all 3 match the device ip address numbers then the caller will be considered as save and his requests will be acted upon.  Exeptions to this can be made by whitelisting specific ip addresses.
 

@@ -16,8 +16,9 @@ The server provides connections to many devices and uses passport to make sure t
 ### Overview
 This application is a server intended to run on a computer where it can access esp8266 devices running a special server program which was developed for this server in mind.
 <div style="text-align:center">
-  <img src="docs/images/diagram_ardos.png" width="500" alt="Overnew image of the whole system">
+  <img src="docs/images/diagram_ardos.png" width="500" alt="Overnew image of the whole system" />
 </div>
+
 ### requirements:
 You will need to install the following if you haven't already.
 + [MongoDb](https://www.mongodb.com) To store users cards, controls and device information. ([installing](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions))
@@ -36,8 +37,6 @@ C:\MongoDB\Server\3.2\bin\mongod.exe
 ```shell
 mongod
 ```
-
-
 
 #### Windows 7 problem when installing mongoDB
 If you are having problem installing mongoDB on windows 7, then you could try the following.

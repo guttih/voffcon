@@ -20,7 +20,7 @@ You will need to install the following if you haven't already.
 + [MongoDb](https://www.mongodb.com) To store users cards, controls and device information. ([installing](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions))
 + [Node.js](https://nodejs.org/en/) To run the Node server
 + [Arduino IDE](https://www.arduino.cc/en/Main/Software)  To program the devices.
-+ [Esp8266 library](https://github.com/esp8266/Arduino/tree/633e48f3aec5f1c3c11d4498fc90d378d49e6e9f/libraries/ESP8266WiFi/src) by [ESP8266 community](https://github.com/esp8266).  See these [instructions](https://github.com/guttih/ardos/blob/master/docs/device-setup.md) for how to setup the device server.  
++ [Esp8266 library](https://github.com/esp8266/Arduino/tree/633e48f3aec5f1c3c11d4498fc90d378d49e6e9f/libraries/ESP8266WiFi/src) by [ESP8266 community](https://github.com/esp8266).  See these [instructions](/docs/device-setup.md) for how to setup the device server.  
 
 ### Run the mongodb server
 #### Windows
@@ -108,7 +108,7 @@ grunt
 Is the NodeMcu Module with ESP8266 WiFi on board.  It is a small and cheap device which allows you to control real world devices and appliances via a WiFi connection.  A device server needs to be uploaded to this device so the Node server and the Device can comunicate. 
 
 ## Setting up the device server.
-[Click here](https://github.com/guttih/ardos/blob/master/docs/device-setup.md) to get instructions on how to setup the device server.
+[Click here](/docs/device-setup.md) to get instructions on how to setup the device server.
 
 
 #### 
@@ -169,7 +169,7 @@ If a user wants to access a device then the system will grant him access if the 
         You should have received a copy of the GNU General Public License
         along with this program.  If not, see <http://www.gnu.org/licenses/>.
         
-[Click here](https://github.com/guttih/ardos/blob/master/public/COPYING.txt) for a copy of the licence.
+[Click here](/public/COPYING.txt) for a copy of the licence.
 
 You can contact the author by sending email to gudjonholm@gmail.com or 
 by regular post to the address Haseyla 27, 260 Reykjanesbar, Iceland.

@@ -1,6 +1,8 @@
 # Ardos - How to setup the devices
+<img src="../public/images/logo.png" width="100" height="100" border="0" title="Click to view in nicer format" />
+
  [Readme](https://guttih.github.io/ardos) [Device setup](https://guttih.github.com/ardos/docs/device-setup.html) 
- 
+
  Description on how to setup these devices.  
  - The **NodeMCU 1.0 (ESP-12E Module)** which has the Esp8266 wifi chip on board.
  - The **ESP32 DEV Module** which has the Esp32 Wifi and bluetooth chip on board.

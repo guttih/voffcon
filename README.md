@@ -18,7 +18,7 @@ The server provides connections to many devices and uses passport to make sure t
 
 ## The basics for the node server
 ### Overview
-This application is a server intended to run on a computer where it can access esp8266 devices running a special server program which was developed for this server in mind.
+This application is a server intended to run on a computer where it can access the esp8266 and esp32 devices which run running a special server program which was developed for this server in mind.
 <div style="text-align:center">
   <img src="docs/images/diagram_ardos.png" width="500" alt="Overnew image of the whole system" />
 </div>
@@ -29,8 +29,8 @@ You will need to install the following if you haven't already.
 + [Node.js](https://nodejs.org/en/) To run the Node server
 + [Arduino IDE](https://www.arduino.cc/en/Main/Software)  To program the devices.
 + [Device core install instructions](docs/device-setup.md) on how to setup the device servers for the two devices listed below.
-    - *ESP32 Development Module* will need the [ESP8266 Arduino Core](https://github.com/esp8266/Arduino)  
-    - *NodeMCU 1.0 (ESP-12E Module)* will need the [ESP8266 core for Arduino] (https://github.com/espressif/arduino-esp32) 
+    - *ESP32 Development Module* will need the [ESP32 Arduino Core](https://github.com/espressif/arduino-esp32) 
+    - *NodeMCU 1.0 (ESP-12E Module)* will need the [ESP8266 core for Arduino](https://github.com/esp8266/Arduino)  
  installation [instructions](docs/device-setup.md)
 ### Run the mongodb server
 #### Windows

@@ -1,9 +1,11 @@
 # Ardos
 <img src="public/images/logo.png" width="100" height="100" border="0" title="Click to view in nicer format" />
 
- [Documentation](https://guttih.github.io/ardos) 
+ [Documentation](https://guttih.github.io/ardos) [Device setup](https://guttih.github.com/ardos/docs/device-setup.html) 
+ 
+ [Ardos on github](https://github.com/guttih/ardos)
 
-A System for controlling devices and appliances from anywere.  It is made up by two components.  A node server and A device server.  The main benefits of this system is your ability to create your own controls and cards, which other users logged in to your system can use to control devices you deside to put on your cards.
+Ardos is a system for controlling devices and appliances from anywere.  It is made up by two components.  A node server and A device server.  The main benefits of this system is your ability to create your own controls and cards, which other users logged in to your system can use to control devices you deside to put on your cards.
 
 ## Video intoduction
 

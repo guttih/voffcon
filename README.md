@@ -114,7 +114,7 @@ grunt
 ## Devices
 ### The Esp8266 Developement Module
 <img src="docs/images/esp8266.png" width="200" alt="The esp8266 module">
-Is the NodeMcu Module with ESP8266 WiFi on board.  It is a small and cheap device which allows you to control real world devices and appliances via a WiFi connection.  A device server needs to be uploaded to this device so the Node server and the Device can comunicate.
+NodeMcu Developement Module with ESP8266 is a pretty powerful device compared with the Arduino.  it has a on board WiFi, allowing you to control it with a web-brower or a phone.  It is a small and cheap device which allows you to control real world devices and appliances via a WiFi connection.  A device server needs to be uploaded to this device so the Node server and the Device can comunicate.
 
 ### The Esp32 Developement Module
 <img src="docs/images/esp32DevModule.PNG" width="200" alt="The esp32 development module">

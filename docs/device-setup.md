@@ -16,7 +16,7 @@ In order to be able to communicate with the device using Ardos, you will need to
 If there is no file called config.json in the root of the Arduino project, then you will need to create it.  After that you should provide a ssid and a ssid password.  ssid is the name of your whifi network.  the ssid is the password needed to connect to that network.  These are the same values you need to connect your smart mobile phone to your wifi. These values will be used by the node server to create the program (the device server) which will be uploaded to your device.
 
 #### config.json
-```json  config.json
+```json
 {"port":6100,
 "allowUserRegistration":true,
 "ssid":"nameOfYourWifi",

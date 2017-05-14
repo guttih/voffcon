@@ -1,17 +1,40 @@
-# How to setup the Esp8266
- Description on how to setup the device NodeMcu Module with ESP8266 WiFi on board.
+# How to setup the NodeMCU and the Esp32
+ Description on how to setup these devices.  
+ - The **NodeMCU 1.0 (ESP-12E Module)** which has the Esp8266 wifi chip on board.
+ - The **ESP32 DEV Module** which has the Esp32 Wifi and bluetooth chip on board.
 
-<img src="/docs/images/esp8266.png" width="200" alt="The esp8266 module">
+<div style="text-align:center">
+ <img src="/docs/images/esp8266.png" width="200" alt="The esp8266 module">
+ <div width="100"> </div>
+ <img src="/docs/images/esp32DevModule.PNG" width="200" alt="The esp8266 module">
+</div>
 
-## Why we need to setup the device
+## Why we need to setup a device
 In order to be able to communicate with the device using Ardos, you will need to setup your computer so you can use it to send a program to the device.  This program is called the Device server.  The device server will allow the Node server to view and change values on the device it self.  To get the device server onto the device you will need to follow the instructions below.  
 
+## create the file config.json
+If there is no file called config.json in the root of the Arduino project, then you will need to create it.  After that you should provide a ssid and a ssid password.  ssid is the name of your whifi network.  the ssid is the password needed to connect to that network.  Same values you need to connect your smart mobile phone to your wifi. These values will be used by the node server to create the program (the device server) which will be uploaded to your device.
+
+### config.json content
+```json  config.json
+{"port":6100,
+"allowUserRegistration":true,
+"ssid":"nameOfYourWifi",
+"ssidPwd":"passwordToYourWifi"}
+```
 
 ## Install the Arduino IDE
 - [Click here](https://www.arduino.cc/en/Main/Software)  and Download the Arduino Software.
 - Install it.
 
+### ESP32 Arduino Core
+If you will be using the ESP32 Development Module you will need the ESP32 Arduino Core.  The ESP32 is still fairly new so the Arduino IDE Board manager cannot be used, like with the ESP8266.
+
+[Click here](https://learn.sparkfun.com/tutorials/esp32-thing-hookup-guide/installing-the-esp32-arduino-core) to get information on how get the ESP32 Arduino Core.
+- Follow them to install the Core.
+
 ## ESP8266 core for Arduino
+If you will be using the NodeMCU 1.0 (ESP-12E Module) you will need the ESP8266 Arduino Core.
 
 "Esp8266 by [ESP8266 community](https://github.com/esp8266)" is the [library](https://github.com/esp8266/Arduino/tree/633e48f3aec5f1c3c11d4498fc90d378d49e6e9f/libraries/ESP8266WiFi/src) I used to write the Device server.  You will need to install it.  Easiest way to do that is to use the Arduino IDE Board manager.
 
@@ -35,15 +58,16 @@ We will need to send the Device server program to the device.  We can do that by
  4. Press the "> Run" button and click the "Get program" button.
  5. Save the program to you local hard disk. 
  6. Open the Arduino IDE.
- 7. Select the device shown in sections 7. and 8. in the list above this one.
+ 7. Select the device you will be programming
+    - for **NodeMCU 1.0** select from menu > Tools > Board: "Arduino/Genuino Uno" > NodeMCU 1.0 (ESP-12E Module).
+    - for **ESP32 DEV Module** select from menu > Tools > Board: "Arduino/Genuino Uno" > ESP32 DEV Module
  8. Connect the device to your computer using a USB cable.
  9. Select the COM port the device is connected to.
  10. Select from the menu File -> New to create a new sketch.
- 11. Open the program "device_server.ino"  you downloaded.
+ 11. Open the .ino program you downloaded.
  12. Copy all text in the downloaded file and paste it into the new sketch in the arduino IDE.
- 13. Change the following values (if you are using windows, Ardos will try to change some of the values automaticly for you). 
+ 13. Change the following values if the Ardos node server has not already done so automaticly for you. 
  14. Find these values and replace them with information about your system. 
-
         IPV4_IPADDRESS  : (IP) Provide an ip address (IPV4) which you want the device to ask operating system for.
         PORT_NUMBER     : (Port) Provide the port number you want the device to listen and serve from.
         IPV4_GATEWAY    : (Default Gateway) The device needs to know the default gateway it will be using.

@@ -13,7 +13,7 @@ The server provides connections to many devices and uses passport to make sure t
 ###Overview
 This application is a server intended to run on a computer where it can access esp8266 devices running a special server program which was developed for this server in mind.
 
-  <img src="/docs/images/diagram_ardos.png" width="500" alt="Overnew image of the whole system">
+  <img src="docs/images/diagram_ardos.png" width="500" alt="Overnew image of the whole system">
 
 ###requirements:
 You will need to install the following if you haven't already.
@@ -108,11 +108,11 @@ grunt
 Is the NodeMcu Module with ESP8266 WiFi on board.  It is a small and cheap device which allows you to control real world devices and appliances via a WiFi connection.  A device server needs to be uploaded to this device so the Node server and the Device can comunicate. 
 
 ## Setting up the device server.
-[Click here](/docs/device-setup.md) to get instructions on how to setup the device server.
+[Click here](docs/device-setup.md) to get instructions on how to setup the device server.
 
 
 #### 
-<img src="/docs/images/esp8266.png" width="200" alt="The esp8266 module">
+<img src="docs/images/esp8266.png" width="200" alt="The esp8266 module">
 
 ###The arduino module
 has not been tested or implemented yet

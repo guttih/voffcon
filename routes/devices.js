@@ -39,7 +39,7 @@ router.get('/started/:deviceId', lib.authenticateRequest, function(req, res){
 	//sækja svo urlið úr því til að vista það sem SERVERURL
 	console.log("got: "+deviceId);
 	Device.getById(deviceId, function(err, device){
-		if (err !== null){ 
+		if (err !== null){
 			res.statusCode = 404;
 			var obj = {text:'Error 404: User device not found!'};
 			return res.json(obj); 

@@ -99,10 +99,8 @@ These are possible commands a client (the Node server) can send to the device.
   - __post__ Change the value of a pin, that is, turn off or on or set a pins value from 0 - 1023
 - /whitelist
    - __get__ Get all whitelisted ip addresses
-  - __post__ 
-    - __add__ whitelist a new ip address.
-  - __delete__
-    - __remove__ remove a ip address from the whitelist
+  - __post__ Add a new ip address to the whitelist
+  - __delete__ Remove a existing ip address from the whitelist
 - /started
     - __get__ Get when the server was turned on
 - /status

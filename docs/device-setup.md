@@ -101,6 +101,7 @@ These are possible commands a client (the Node server) can send to the device.
    - __get__ Get all whitelisted ip addresses
   - __post__ 
     - __add__ whitelist a new ip address.
+  - __delete__
     - __remove__ remove a ip address from the whitelist
 - /started
     - __get__ Get when the server was turned on

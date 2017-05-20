@@ -19,21 +19,44 @@ You can contact the author by sending email to gudjonholm@gmail.com or
 by regular post to the address Haseyla 27, 260 Reykjanesbar, Iceland.
 */
 
-var deviceStarted;
-var inputDialog = $('#getNum');
-function getDeviceStartTime(){
-	$elm = $('#status-text');
-	requestData(SERVER+'/devices/started/'+device.id, function(data){
-		var date = data.date;
+//appending put and delete to the jquery send
+jQuery.each( [ "put", "delete" ], function( i, method ) {
+  jQuery[ method ] = function( url, data, callback, type ) {
+    if ( jQuery.isFunction( data ) ) {
+      type = type || callback;
+      callback = data;
+      data = undefined;
+    }
+
+    return jQuery.ajax({
+      url: url,
+      type: method,
+      dataType: type,
+      data: data,
+      success: callback
+    });
+  };
+});
+
+function setStartTime(date) {
+		//var date = data.date;
 		deviceStarted = new Date(date.year, date.month-1, date.day, date.hours, date.minutes, date.seconds, 0);
 		var strDate = formaTima(deviceStarted);
 		$('#server-started').text(strDate);
 		
 		$elm.text("Successfully connected to the device.").removeClass("alert-warning").addClass("alert-success");
+}
+
+var deviceStarted;
+var inputDialog = $('#getNum');
+/*function getDeviceStartTime(){
+	$elm = $('#status-text');
+	requestData(SERVER+'/devices/started/'+device.id, function(data){
+		setStartTime(data.date);
 	},function(data){
 		$elm.text("Unable to connect to this device.").removeClass("alert-warning").addClass("alert-danger");
 	});
-}
+}*/
 
 function getPinoutName(pinOuts, pinNumber){
 	var keys = Object.keys(pinOuts);
@@ -46,24 +69,28 @@ function getPinoutName(pinOuts, pinNumber){
 			}
 
 }
+var setPinoutValues = function setPinoutValues(pins, pinOutdata) {
+	
+			var name;
+			/*for(var i = 0; i < pins.length; i++){
+				if (pinOutdata !== undefined) {
+					name = getPinoutName(pinOutdata, pins[i].pin);
+				} else {
+					if (pins[i].name !== undefined){
+						name pins[i].name;
+					}
+				}
+			}*/
+			console.log(pins);
+			setPinValues(pins);
+			registerOnClickValue(pins);
+}
 
 function getPinout(){
 	requestData(SERVER+'/devices/pinout/'+device.id, function(pinOutdata){
 		console.log(pinOutdata);
 		requestData(SERVER+'/devices/pins/'+device.id, function(data){
-
-			var name;
-			for(var i = 0; i < data.pins.length; i++){
-				name = getPinoutName(pinOutdata, data.pins[i].pin);
-
-				if (name !== undefined){
-					console.log("found it");
-					data.pins[i].name = name;
-				}
-			}
-			console.log(data.pins);
-			setPinValues(data);
-			registerOnClickValue(data);
+			setPinoutValues(data, pinOutdata);
 		});
 		
 	});
@@ -83,8 +110,7 @@ function getModeString(mode){
 }
 
 
-function registerOnClickValue(data){
-	var pins = data.pins;
+function registerOnClickValue(pins){
 	var pin, val;
 	var $elm;
 	for(var i = 0; i < pins.length; i++){
@@ -101,8 +127,8 @@ function registerOnClickValue(data){
 
 
 
-function setPinValues(data){
-	var pins = data.pins;
+function setPinValues(pins){
+	
 	var modeStr;
 	var $elm = $('#table-pins tbody');
 	var row;
@@ -149,6 +175,81 @@ function updatePinValues(pins){
 
 	}
 }
+
+function updateWhitelist(whitelist) {
+	console.log("updateWhitelist");
+	console.log(whitelist);
+	var pin, val, $select, $input, addedIndex = 0;
+	
+	$input = $('#inputIpAddress');
+	var ipAdded = $input.val();
+	$input.removeClass("unknownValue").val("");
+	$select = $('#whitelist');
+	$select.empty();
+
+	for(var i = 0; i<whitelist.length; i++){
+		$select.append('<option value="'+i+'">' +whitelist[i] + '</option>');
+		if (ipAdded === whitelist[i]) {
+			addedIndex = i;
+		}
+	}
+	$('#whitelist option:eq(' + addedIndex +')').prop('selected', true); 
+	
+}
+
+function sendNewIpToWhiteList(){
+		var val = $('#inputIpAddress').val();
+		 $('#inputIpAddress').addClass("unknownValue");
+		var deviceId = $('#device-id').text();
+		
+		var sendObj = {
+			"ipaddress":val
+		};
+		var url = SERVER+'/devices/whitelist/'+deviceId;
+		var posting = $.post( url, sendObj);
+
+		posting.done(function(data){
+			console.log(data);
+			updateWhitelist(data);
+		});
+}
+function sendGetStatus(){
+	console.log("sendGetStatus()");
+	var deviceId = $('#device-id').text();
+	
+	var url = SERVER+'/devices/status/'+deviceId;
+	console.log(url);
+	$elm = $('#status-text');
+
+	requestData(url, function(data){
+		console.log(data);
+		setStartTime(data.date);
+		//getDeviceStartTime();
+		//getPinout();
+		setPinoutValues(data.pins);
+	},function(data){
+		$elm.text("Unable to connect to this device.").removeClass("alert-warning").addClass("alert-danger");
+	});
+}
+
+function RemoveIpFromWhiteList() {
+	console.log("RemoveIpFromWhiteList");
+	var ipAddress = $("#whitelist option:selected").text();
+	var deviceId = $('#device-id').text();
+	console.log("todo: remove :" + ipAddress);
+	var sendObj = {
+			"ipaddress":ipAddress
+		};
+
+	var url = SERVER+'/devices/whitelist/'+deviceId;
+		var deleting = $.delete( url, sendObj);
+
+		deleting.done(function(data){
+			console.log(data);
+			updateWhitelist(data);
+		});
+}
+
 function init(){
 	$('#btn-download-program').click(function() {
 		window.location.assign('/devices/program/'+device.id);
@@ -176,6 +277,18 @@ function init(){
 		});
 
 	});
+
+	$('#btnAddIp').click(function() {
+		sendNewIpToWhiteList();
+	});
+	$('#btnRemoveIp').click(function() {
+		RemoveIpFromWhiteList();
+	});
+
+	
+
+
+
 	inputDialog.hide();
 	$('#btnCancelSetPin').click(function() {
 		$('.overlay').hide();
@@ -191,8 +304,9 @@ function init(){
 $(function () {
 	console.log("device");
 	console.log(device);
-	getDeviceStartTime();
+	
 	setDeviceValues(device);
-	getPinout();
+	sendGetStatus();
 	init();
+	
 });

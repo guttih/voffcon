@@ -282,11 +282,15 @@ module.exports.authenticateAdminRequest = function authenticateAdminRequest(req,
 		return res.send('Error 401: You are not not authorized! ');
 	}
 };
-module.exports.makeRequestPostOptions = function makeRequestOptions(url, formData){
+module.exports.makeRequestPostOptions = function makeRequestOptions(url, formData, method){
+	
 	var byteLength = Buffer.byteLength(formData);
+	if (method === undefined ){
+		method = 'POST';
+	}
 	var options = {
 	url: url,
-	method: 'POST',
+	method: method,
 	form: formData,
 		
 		headers: {

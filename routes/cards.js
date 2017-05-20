@@ -197,6 +197,7 @@ router.get('/run/:cardID', lib.authenticateCardUserUrl, function(req, res){
 		} else{
 
 			var code = card._doc.code;
+			var title = card._doc.name;
 			var template = '<p id="prufa">Þetta er prufa</p>';
 			var using = lib.extractUsingArray(code);
 			var obj = {	template:template,
@@ -214,7 +215,7 @@ router.get('/run/:cardID', lib.authenticateCardUserUrl, function(req, res){
 						ctrlTemplate += controls[i]._doc.template + '\n\n';
 					}
 					ctrlCode+="\n\n//The card\n\n" + code;
-					res.render('run-card', {template:ctrlTemplate,	code:ctrlCode});
+					res.render('run-card', {template:ctrlTemplate,	code:ctrlCode, title:card._doc.name});
 				}
 			});
 		}

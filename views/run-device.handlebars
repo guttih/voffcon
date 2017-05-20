@@ -36,7 +36,33 @@
 			<tr><td>ID</td> 		<td id="device-id"></td></tr>
 			<tr><td>Started</td>	<td id="server-started"></td></tr>
 			<tr><td>Url</td> 		<td id="device-url"></td></tr>
-			<tr><td>Description</td> 		<td id="device-description"></td></tr>
+			<tr><td>Description</td><td id="device-description"></td></tr>
+			<tr>
+				<td>White list</td> 
+				<td>
+					<div class="form-group">
+						 <div class="col-md-10">
+							<select id="whitelist" class="form-control"></select>
+						 </div>
+						<div class="col-md-2">
+							<button id="btnRemoveIp" type="button" id="show-contact-modal-button" class="btn btn-default">Remove </button>
+						 </div>
+						 
+					</div>
+					<div class="form-group">
+						<div class="col-md-10">
+							<input id="inputIpAddress" type="text" 
+							placeholder="Add an ip to the whitelist of this device.  For example 192.1.1.54" class="form-control" />
+						</div>
+						<div class="col-md-2">
+							<button  id="btnAddIp" type="button" class="btn btn-default">Add </button>
+						</div>
+					</div>
+				</td></tr>
+
+
+
+
 		</tbody>
 	</table>
 

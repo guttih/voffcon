@@ -69,6 +69,43 @@ router.get('/started/:deviceId', lib.authenticateRequest, function(req, res){
 		});
 });
 
+router.get('/status/:deviceId', lib.authenticateRequest, function(req, res){
+	var deviceId = req.params.deviceId;
+	//todo: hér þarf kanski að athuga hvort user eigi þetta device.
+	//ef hann hefur aðgang að því þá þarf að sækja það og
+	//sækja svo urlið úr því til að vista það sem SERVERURL
+	console.log("got: "+deviceId);
+	Device.getById(deviceId, function(err, device){
+		if (err !== null){
+			res.statusCode = 404;
+			var obj = {text:'Error 404: User device not found!'};
+			return res.json(obj); 
+		}
+		var SERVERURL = device.url;
+		console.log("SERVERURL:"+SERVERURL);
+		//todo: put below in a sepperate function possible as a middleware
+			request.get(SERVERURL+'/status',
+					function (err, responce, body) {
+						console.log("it ran");
+						if (responce){
+							console.log("statuscode:"+responce.statusCode);
+						}
+						
+						if (err) {
+							res.statusCode = 400;
+							console.error(err);
+							return res.json({text:"Unable to send request to device"});
+							 
+						}
+						if (body){
+							console.log(body);
+						}
+						return body;
+					}
+			).pipe(res);
+		});
+});
+
 //todo: here we have a hardcoded SERVERURL, we need to change this
 //this route needs to take a device ID like so router.get('/pins/:deviceID'...
 router.get('/pins/:deviceId', lib.authenticateRequest, function(req, res){
@@ -91,9 +128,6 @@ router.get('/pins/:deviceId', lib.authenticateRequest, function(req, res){
 
 								if (err) {
 									return console.error(err);
-								}
-								if (body){
-								
 								}
 								return body;
 					}
@@ -209,6 +243,98 @@ router.post('/pins/:deviceId', lib.authenticateRequest, function(req, res){
 				).pipe(res);}
 	);
 });
+
+router.post('/whitelist/:deviceId', lib.authenticatePowerRequest, function(req, res){
+	//var SERVERURL = 'http://192.168.1.154:5100';
+	//var urlid = SERVERURL+'/pins';
+	//var formData = {5: 999, 0: 999, 16: 999, 	4: 999, 	12: 999,	13:999,	15:999 };
+
+	var deviceId = req.params.deviceId;
+	
+	var b = req.body;	
+	Device.getById(deviceId, function(err, device){
+		if (err !== null || device === null) {
+			res.statusCode = 404;
+			var obj = {text:'Error 404: User device not found!'};
+			return res.json(obj);
+		}
+	
+			var urlid = device._doc.url+'/whitelist';					
+			var formData = {};
+			
+			var keys = Object.keys(b);
+			keys.forEach(function(key) {
+					console.log(key+ ':' + b[key]);
+					formData[key] = b[key];
+				}, this);
+			
+			keys = Object.keys(formData);
+
+				formData = JSON.stringify(formData);
+				request(lib.makeRequestPostOptions(urlid, formData),
+					function (err, res, body) {
+							if (res){
+								console.log("statuscode:"+res.statusCode);
+							}
+
+						if (err) {
+							return console.error(err);
+						}
+						if (body){
+							//todo: remvoe this line
+							console.log(body);
+						}
+						return body;
+					}
+				).pipe(res);}
+	);
+});
+router.delete('/whitelist/:deviceId', lib.authenticatePowerRequest, function(req, res){
+	//var SERVERURL = 'http://192.168.1.154:5100';
+	//var urlid = SERVERURL+'/pins';
+	//var formData = {5: 999, 0: 999, 16: 999, 	4: 999, 	12: 999,	13:999,	15:999 };
+
+	var deviceId = req.params.deviceId;
+	
+	var b = req.body;	
+	Device.getById(deviceId, function(err, device){
+		if (err !== null || device === null) {
+			res.statusCode = 404;
+			var obj = {text:'Error 404: User device not found!'};
+			return res.json(obj);
+		}
+	
+			var urlid = device._doc.url+'/whitelist';					
+			var formData = {};
+			
+			var keys = Object.keys(b);
+			keys.forEach(function(key) {
+					console.log(key+ ':' + b[key]);
+					formData[key] = b[key];
+				}, this);
+			
+			keys = Object.keys(formData);
+
+				formData = JSON.stringify(formData);
+				request(lib.makeRequestPostOptions(urlid, formData, 'DELETE'),
+					function (err, res, body) {
+							if (res){
+								console.log("statuscode:"+res.statusCode);
+							}
+
+						if (err) {
+							return console.error(err);
+						}
+						if (body){
+							//todo: remvoe this line
+							console.log(body);
+						}
+						return body;
+					}
+				).pipe(res);}
+	);
+});
+
 
 router.post('/custom/:deviceId', lib.authenticateRequest, function(req, res){
 	//var formData = {5: 999, 0: 999, 16: 999, 	4: 999, 	12: 999,	13:999,	15:999 };

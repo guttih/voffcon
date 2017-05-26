@@ -1,5 +1,11 @@
 <div class="row">
-	<h3 class="page-header pull-right">Running card</h3>
+
+	{{#if title}}	
+				<h3 class="page-header pull-right">{{{title}}}</h3>
+	</script>
+	{{else}}
+		<h3 class="page-header pull-right">Running card</h3>
+	{{/if}}
 </div>
 <!--<div class="row">
 	<p>{{user.name}}</p>

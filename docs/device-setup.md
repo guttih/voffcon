@@ -69,8 +69,7 @@ We will need to send the Device server program to the device.  We can do that by
  10. Select from the menu File -> New to create a new sketch.
  11. Open the .ino program you downloaded.
  12. Copy all text in the downloaded file and paste it into the new sketch in the arduino IDE.
- 13. Change the following values if the Ardos node server has not already done so automaticly for you. 
- 14. Find these values and replace them with information about your system. 
+ 13. If Ardos Node server has not automaticly changed the values below for you in the device server program, you will need to change them manually.
  ```
        IPV4_IPADDRESS  : (IP) Provide an ip address (IPV4) which you want the device to ask operating system for.
        PORT_NUMBER     : (Port) Provide the port number you want the device to listen and serve from.
@@ -99,9 +98,8 @@ These are possible commands a client (the Node server) can send to the device.
   - __post__ Change the value of a pin, that is, turn off or on or set a pins value from 0 - 1023
 - /whitelist
    - __get__ Get all whitelisted ip addresses
-  - __post__ 
-    - __add__ whitelist a new ip address.
-    - __remove__ remove a ip address from the whitelist
+  - __post__ Add a new ip address to the whitelist
+  - __delete__ Remove a existing ip address from the whitelist
 - /started
     - __get__ Get when the server was turned on
 - /status

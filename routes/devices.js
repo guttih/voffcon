@@ -621,9 +621,9 @@ router.get('/program/:deviceID', lib.authenticatePowerUrl, function(req, res){
 						type = "0";
 					}
 					lib.makeProgramFile(device.url, device.type , function(data){
-						var fileInfo = "attachment; filename=ArdosServerNodeMCU.ino";
+						var fileInfo = "attachment; filename=DeviceServerNodeMcu.ino";
 						if (device.type === "1") {
-							fileInfo = "attachment; filename=ArdosServerEsp32DevModule.ino";
+							fileInfo = "attachment; filename=DiviceServerEsp32.ino";
 						}	
 						res.writeHead(200, {
 							'Content-Type': 'application/force-download',

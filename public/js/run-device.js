@@ -102,9 +102,11 @@ function getModeString(mode){
 	var str ='(' + mode + '): ';
 
 	switch (mode){
-		case 0:  str+="INPUT"; break;
-		case 1:  str+="OUTPUT"; break;
-		case 2:  str+="INPUT_PULLUP"; break;
+		case 0:  str+="INPUT_ANALOG"; break;
+		case 1:  str+="INPUT_DIGITAL"; break;
+		case 2:  str+="OUTPUT_ANALOG"; break;
+		case 3:  str+="OUTPUT_DIGITAL"; break;
+		default: str+="invalid type";
 	}
 	return str;
 }
@@ -211,7 +213,10 @@ function sendNewIpToWhiteList(){
 		posting.done(function(data){
 			console.log(data);
 			updateWhitelist(data);
-		});
+		})
+		.fail(function()  {
+    alert("Sorry. Server unavailable. ");
+}); 
 }
 function sendGetStatus(){
 	console.log("sendGetStatus()");
@@ -227,6 +232,7 @@ function sendGetStatus(){
 		//getDeviceStartTime();
 		//getPinout();
 		setPinoutValues(data.pins);
+		updateWhitelist(data.whitelist);
 	},function(data){
 		$elm.text("Unable to connect to this device.").removeClass("alert-warning").addClass("alert-danger");
 	});

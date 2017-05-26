@@ -540,6 +540,7 @@ var makeProgramFileWindows = function makeProgramFileWindows(deviceUrl, filePath
 					//IPV4_IPADDRESS
 					//IPV4_GATEWAY
 					//IPV4_SUBNET
+					var serverIp = module.exports.getAddresses(true)[0];
 					var port, ip, defaultGateWay, subNetMask;
 					if (deviceUrl !== undefined && deviceUrl !== null){
 						var tempPort = getPort(deviceUrl, false);
@@ -593,11 +594,32 @@ var makeProgramFileWindows = function makeProgramFileWindows(deviceUrl, filePath
 						}
 
 						if (config.ssid!== undefined){
-							file = file.replace("WIFI_ACCESSPOINT", config.ssid);
+							file = file.replace("WIFI_ACCESSPOINT", '"' + config.ssid + '"');
 						}
 						if (config.ssidPwd!== undefined){
-							file = file.replace("WIFI_PASSWORD", config.ssidPwd);
+							file = file.replace("WIFI_PASSWORD", '"' + config.ssidPwd + '"');
 						}
+						if (config.serverIp === undefined){
+							config.serverIp = serverIp;
+						}
+						if (config.serverIp!== undefined){
+							var sip = dotsToCommas(config.serverIp);
+							file = file.replace("ARDOS_SERVER_IP", sip);
+						}
+						if (config.port!== undefined){
+							file = file.replace("ARDOS_SERVER_PORT", config.port);
+						}
+
+
+
+
+
+
+
+
+
+
+
 					
 					callback(file);
 				});
@@ -678,6 +700,16 @@ var makeProgramFileLinux = function makeProgramFileLinux(deviceUrl, filePath, ca
 					if (config.ssidPwd!== undefined){
 						file = file.replace("WIFI_PASSWORD", config.ssidPwd);
 					}
+					if (config.serverIp === undefined){
+						config.serverIp = serverIp;
+					}
+					if (config.serverIp!== undefined){
+						var sip = dotsToCommas(config.serverIp);
+						file = file.replace("ARDOS_SERVER_IP", sip);
+					}
+					if (config.port!== undefined){
+						file = file.replace("ARDOS_SERVER_PORT", config.port);
+					}
 					
 					callback(file);
 				});
@@ -692,9 +724,9 @@ var makeProgramFileLinux = function makeProgramFileLinux(deviceUrl, filePath, ca
 module.exports.makeProgramFile = function makeProgramFile(deviceUrl, deviceType, callback, errorCallback) {
 	//todo: join common code in makeProgramFileLinux and makeProgramFileWindows
 	var osStr = os.type();
-	var filePath = "./hardware/ArdosServerNodeMCU.ino";
+	var filePath = "./hardware/DeviceServerNodeMcu.ino";
 	if (deviceType === "1") {
-		filePath = "./hardware/ArdosServerEsp32DevModule.ino";
+		filePath = "./hardware/DiviceServerEsp32.ino";
 	}
 	if (osStr.indexOf("Windows") === 0){
 		makeProgramFileWindows(deviceUrl, filePath, callback, errorCallback);

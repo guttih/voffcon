@@ -127,7 +127,45 @@ function registerOnClickValue(pins){
 	}
 }
 
+function getPinsFromTable(){
+	var pins= [];
+	var item;
+	var table = document.getElementById("table-pins");
+	for (var i = 2; i < table.rows.length -1 ;  i++) {
+		var row = table.rows[i]
+		item = {};
+		item.name = row.cells[0].textContent;
+		item.pin =  Number(row.cells[1].textContent);
+		item.val =  Number(row.cells[2].textContent);
+		e =document.getElementById("m"+item.pin);
+		item.m = Number(e.options[e.selectedIndex].value);
+		pins.push(item);
+	}
+	//pins.push({name: 'D0', pin:0, val: 10, m : 0 });
+	return pins;
+}
 
+function  isCheckboxChecked() {
+	return $('#chkPrepForDownload').is(':checked');
+}
+
+function enableInputSelects(enable){
+	
+		if (enable === true){
+			$(".select-mode").removeAttr('disabled');
+		} else{
+			$(".select-mode").attr('disabled', 'disabled');
+			
+		}
+}
+
+$('#chkPrepForDownload').click(function() {
+	if (!isCheckboxChecked()){
+		//let's just reload the page to be sure to get all current device values
+		location.reload();
+	}
+	enableInputSelects(isCheckboxChecked());
+});
 
 function setPinValues(pins){
 	
@@ -136,8 +174,7 @@ function setPinValues(pins){
 	var row;
 	$('#pin-count').text(pins.length);
 	for(var i = 0; i < pins.length; i++){
-		modeStr = getModeString(pins[i].m);
-		modeStr = '<code style="color:black">'+modeStr+'</code>';
+		modeStr = makeHtmlSelectString(pins[i].pin, pins[i].m);
 		row = '<tr>'+
 			'<td>'+pins[i].name+'</td>'  +
 			'<td>'+pins[i].pin+'</td>'  +
@@ -145,6 +182,7 @@ function setPinValues(pins){
 			'<td>'+modeStr+'</td></tr>';
 		$elm.append(row);
 	}
+	enableInputSelects(isCheckboxChecked());
 }
 
 function setDeviceValues(device){
@@ -255,10 +293,70 @@ function RemoveIpFromWhiteList() {
 			updateWhitelist(data);
 		});
 }
+function downloadFile(filename, data) {
+    var pom = document.createElement('a');
+    pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(data));
+    pom.setAttribute('download', filename);
+
+    if (document.createEvent) {
+        var event = document.createEvent('MouseEvents');
+        event.initEvent('click', true, true);
+        pom.dispatchEvent(event);
+    }
+    else {
+        pom.click();
+    }
+}
+function download(data) {
+    if (device.type == 1){
+		downloadFile("DiviceServerEsp32.ino", data);
+	} else {
+		downloadFile("DeviceServerNodeMcu.ino", data);
+	}
+}
+
+
+function makeHtmlSelectOptionString(value, displayString, selected){
+    var str, selectStr='';
+    if (selected !== undefined && selected === true) {
+        selectStr = ' selected="selected"';
+    }
+    
+    str = '<option value="' + value + '"' + selectStr + '>' + displayString + '</option>';
+    return str;
+
+}
+
+function makeHtmlSelectString(pin, mode){
+	var str ='<select id="m' + pin + '" class="select-mode form-control">';
+    str += makeHtmlSelectOptionString(0, "INPUT_ANALOG", mode === 0);
+    str += makeHtmlSelectOptionString(1, "INPUT_DIGITAL", mode === 1);
+    str += makeHtmlSelectOptionString(2, "OUTPUT_ANALOG", mode === 2);
+    str += makeHtmlSelectOptionString(3, "OUTPUT_DIGITAL", mode === 3);
+    str +='</select>';
+	return str;
+}
+
+
 
 function init(){
 	$('#btn-download-program').click(function() {
-		window.location.assign('/devices/program/'+device.id);
+		//window.location.assign('/devices/program/'+device.id);
+		var sendObj = {};
+		var x=1;
+		if (isCheckboxChecked()){
+			//only add pin values when hardware is selected
+			sendObj["pins"]=JSON.stringify(getPinsFromTable());
+		}
+
+		var url = SERVER+'/devices/program/'+device.id;
+		var posting = $.post( url, sendObj);
+
+		posting.done(function(data){
+			console.log("did get this shit");
+			console.log(data);
+			download(data);
+		});
 	});
 	
 	inputDialog.hide();
@@ -268,9 +366,17 @@ function init(){
 
 		var pin = $('#inputDialogPin').text();
 		var val = $('#inputDialogValue').val();
-		 $('#val'+pin).addClass("unknownValue");
+		var $elmVal = $('#val'+pin);
 		var deviceId = $('#device-id').text();
 		
+		if (isCheckboxChecked()){
+			//not sending any data when checked
+			$elmVal.removeClass("unknownValue");
+			$elmVal.text(val);
+			return;
+		}
+
+		$elmVal.addClass("unknownValue");
 		//pin.active(false); gray the cell
 		var sendObj = {};
 		sendObj[pin]=val;
@@ -281,7 +387,6 @@ function init(){
 			console.log(data);
 			updatePinValues(data.pins);
 		});
-
 	});
 
 	$('#btnAddIp').click(function() {
@@ -291,10 +396,6 @@ function init(){
 		RemoveIpFromWhiteList();
 	});
 
-	
-
-
-
 	inputDialog.hide();
 	$('#btnCancelSetPin').click(function() {
 		$('.overlay').hide();
@@ -303,16 +404,12 @@ function init(){
 	
 	//select all text when control gets focus
 	$('#inputDialogValue').focus(function() { $(this).select(); } );
-	
 }
-
 
 $(function () {
 	console.log("device");
 	console.log(device);
-	
 	setDeviceValues(device);
 	sendGetStatus();
 	init();
-	
 });

@@ -528,8 +528,13 @@ function dotsToCommas(str){
 	return out;
 
 }
-var makeProgramFileWindows = function makeProgramFileWindows(deviceUrl, filePath, callback, errorCallback) {
-
+var makeProgramFileWindows = function makeProgramFileWindows(deviceUrl, filePath, pins, callback, errorCallback) {
+	if (pins === undefined) {
+		console.log("I should ignore pins");
+	} else {
+		console.log("I should set all the pins to what is listed in the pins object");
+		console.log(pins);
+	}
 	fs.readFile(filePath, "utf-8", function(err, file) {
 			if (err === null){
 				var config = module.exports.getConfig();
@@ -610,17 +615,6 @@ var makeProgramFileWindows = function makeProgramFileWindows(deviceUrl, filePath
 							file = file.replace("ARDOS_SERVER_PORT", config.port);
 						}
 
-
-
-
-
-
-
-
-
-
-
-					
 					callback(file);
 				});
 				
@@ -645,7 +639,7 @@ var getNetWorkInfoLinux = function getNetWorkInfoLinux(callback) {
 	});
 }
 
-var makeProgramFileLinux = function makeProgramFileLinux(deviceUrl, filePath, callback, errorCallback) {
+var makeProgramFileLinux = function makeProgramFileLinux(deviceUrl, filePath, pins, callback, errorCallback) {
 	
 	fs.readFile(filePath, "utf-8", function(err, file) {
 			if (err === null){
@@ -721,7 +715,7 @@ var makeProgramFileLinux = function makeProgramFileLinux(deviceUrl, filePath, ca
 	});
 };
 // gets the device-server program
-module.exports.makeProgramFile = function makeProgramFile(deviceUrl, deviceType, callback, errorCallback) {
+module.exports.makeProgramFile = function makeProgramFile(deviceUrl, deviceType, pins, callback, errorCallback) {
 	//todo: join common code in makeProgramFileLinux and makeProgramFileWindows
 	var osStr = os.type();
 	var filePath = "./hardware/DeviceServerNodeMcu.ino";
@@ -729,9 +723,9 @@ module.exports.makeProgramFile = function makeProgramFile(deviceUrl, deviceType,
 		filePath = "./hardware/DiviceServerEsp32.ino";
 	}
 	if (osStr.indexOf("Windows") === 0){
-		makeProgramFileWindows(deviceUrl, filePath, callback, errorCallback);
+		makeProgramFileWindows(deviceUrl, filePath, pins, callback, errorCallback);
 	} else {
-		makeProgramFileLinux(deviceUrl, filePath, callback, errorCallback);
+		makeProgramFileLinux(deviceUrl, filePath, pins, callback, errorCallback);
 	}
 };
 

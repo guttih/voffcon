@@ -608,8 +608,13 @@ router.get('/run/:deviceID', lib.authenticateDeviceOwnerUrl, function(req, res){
 	});
 });
 
-router.get('/program/:deviceID', lib.authenticatePowerUrl, function(req, res){
+router.post('/program/:deviceID', lib.authenticatePowerUrl, function(req, res){
 	var id = req.params.deviceID;
+	var b = req.body;
+	var pins
+	if (req.body.pins !== undefined) {
+		pins = JSON.parse(req.body.pins);
+	}
 	if (id !== undefined){
 		Device.getById(id, function(err, device){
 				if(err || device === null) {
@@ -620,7 +625,7 @@ router.get('/program/:deviceID', lib.authenticatePowerUrl, function(req, res){
 					if (type === undefined ){
 						type = "0";
 					}
-					lib.makeProgramFile(device.url, device.type , function(data){
+					lib.makeProgramFile(device.url, device.type, pins , function(data){
 						var fileInfo = "attachment; filename=DeviceServerNodeMcu.ino";
 						if (device.type === "1") {
 							fileInfo = "attachment; filename=DiviceServerEsp32.ino";

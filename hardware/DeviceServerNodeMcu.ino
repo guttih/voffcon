@@ -1002,18 +1002,17 @@ void setup(void) {
 
     server.begin();
     Serial.println("HTTP server started");
-    int startState = 700;
+    int startState = 0;
     //todo: make client add these pins
-    PINTYPE type = PINTYPE_OUTPUT_ANALOG;
-    pinnar.addPin("D0", type, D0, startState);
-    pinnar.addPin("D1", type, D1, startState);
-    pinnar.addPin("D2", PINTYPE_INPUT_ANALOG, D2, 512);
-    pinnar.addPin("D3", PINTYPE_INPUT_DIGITAL, D3, startState);
-    pinnar.addPin("D4", PINTYPE_OUTPUT_DIGITAL, D4, startState);
-    pinnar.addPin("D5", type, D5, 123);
-    pinnar.addPin("D6", type, D6, startState);
-    pinnar.addPin("D7", type, D7, startState);
-    pinnar.addPin("D8", type, D8, startState);
+    pinnar.addPin("D0", PINTYPE_OUTPUT_ANALOG, D0, 0);
+    pinnar.addPin("D1", PINTYPE_OUTPUT_ANALOG, D1, 0);
+    pinnar.addPin("D2", PINTYPE_OUTPUT_ANALOG, D2, 0);
+    pinnar.addPin("D3", PINTYPE_OUTPUT_ANALOG, D3, 0);
+    pinnar.addPin("D4", PINTYPE_OUTPUT_ANALOG, D4, 0);
+    pinnar.addPin("D5", PINTYPE_OUTPUT_ANALOG, D5, 0);
+    pinnar.addPin("D6", PINTYPE_OUTPUT_ANALOG, D6, 0);
+    pinnar.addPin("D7", PINTYPE_OUTPUT_ANALOG, D7, 0);
+    pinnar.addPin("D8", PINTYPE_OUTPUT_ANALOG, D8, 0);
     Serial.println(pinnar.toJson());
 }
 

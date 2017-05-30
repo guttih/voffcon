@@ -679,24 +679,31 @@ void setupPins() {
     Serial.println(pinnar.toJson());
     Serial.println("----------------------------------------");
         //uint8_t index, uint8_t number, uint8_t value, PINTYPE type = PINTYPE_ANALOG
+    PINTYPE type, type2;
     //type = PINTYPE_ANALOG;
     /*Pins D0 - D7 can be turned compleately off with OUTPUT_ANALOG*/
-    pinnar.addPin("D0", PINTYPE_OUTPUT_ANALOG, 15, 0, 0);
-    pinnar.addPin("D1", PINTYPE_OUTPUT_ANALOG, 2, 0, 1);
-    pinnar.addPin("D2", PINTYPE_OUTPUT_ANALOG, 4, 0, 2);
-    pinnar.addPin("D3", PINTYPE_OUTPUT_ANALOG, 5, 0, 3);
-    pinnar.addPin("D4", PINTYPE_OUTPUT_ANALOG, 18, 0, 4);
-    pinnar.addPin("D5", PINTYPE_OUTPUT_ANALOG, 19, 0, 5);
-    pinnar.addPin("D6", PINTYPE_OUTPUT_ANALOG, 21, 0, 6);
-    pinnar.addPin("D7", PINTYPE_OUTPUT_ANALOG, 23, 0, 7);
-    pinnar.addPin("D8", PINTYPE_OUTPUT_DIGITAL, 13, 0, 8);
-    pinnar.addPin("D9", PINTYPE_OUTPUT_DIGITAL, 12, 0, 9);
-    pinnar.addPin("D10", PINTYPE_OUTPUT_DIGITAL, 14, 0, 10);
-    pinnar.addPin("D11", PINTYPE_OUTPUT_DIGITAL, 27, 0, 11);
-    pinnar.addPin("D12", PINTYPE_OUTPUT_DIGITAL, 26, 0, 12);
-    pinnar.addPin("D13", PINTYPE_OUTPUT_DIGITAL, 25, 0, 13);
-    pinnar.addPin("D14", PINTYPE_OUTPUT_DIGITAL, 33, 0, 14);
-    pinnar.addPin("D15", PINTYPE_OUTPUT_DIGITAL, 32, 0, 15);
+    type = PINTYPE_OUTPUT_ANALOG;
+    type2 = PINTYPE_OUTPUT_DIGITAL;
+
+	//SETTING_UP_PINS_START
+    pinnar.addPin("D0", type, 15, 1, 0);
+    pinnar.addPin("D1", type, 2, 3, 1);
+    pinnar.addPin("D2", type, 4, 6, 2);
+    pinnar.addPin("D3", type, 5, 9, 3);
+    pinnar.addPin("D4", type, 18, 16, 4);
+    pinnar.addPin("D5", type, 19, 25, 5);
+    pinnar.addPin("D6", type, 21, 40, 6);
+    pinnar.addPin("D7", type, 23, 60, 7);
+
+    pinnar.addPin("D8", type2, 13, 80, 8);
+    pinnar.addPin("D9", type2, 12, 90, 9);
+    pinnar.addPin("D10", type2, 14, 100, 10);
+    pinnar.addPin("D11", type2, 27, 130, 11);
+    pinnar.addPin("D12", type2, 26, 150, 12);
+    pinnar.addPin("D13", type2, 25, 180, 13);
+    pinnar.addPin("D14", type2, 33, 210, 14);
+    pinnar.addPin("D15", type2, 32, 255, 15);
+	//SETTING_UP_PINS_END
 }
 
 /// <summary>
@@ -914,7 +921,7 @@ bool connectWifi() {
         iTriesLeft--;
     }
 */
-    if (connectWifiHelper(ssid, password, 230))
+    if (connectWifiHelper(ssid, password, 600))
         return true;
        
     Serial.println("WiFi scanning!");

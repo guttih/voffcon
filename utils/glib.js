@@ -528,13 +528,87 @@ function dotsToCommas(str){
 	return out;
 
 }
-var makeProgramFileWindows = function makeProgramFileWindows(deviceUrl, filePath, pins, callback, errorCallback) {
-	if (pins === undefined) {
-		console.log("I should ignore pins");
-	} else {
-		console.log("I should set all the pins to what is listed in the pins object");
-		console.log(pins);
+
+//Replaces content in the string content, from where the
+//startToken starts, including the startToken
+//and the endToken ends, including the endToken
+//Returns
+//  Success: Returns a new string containing a new string where newSubContent has been replaced.
+//  Fail   : Returns the string content unchanged.  This happens if the function did not find startToken or endToken.
+
+module.exports.ReplaceInFile = function ReplaceInFile(content, newSubContent, startToken, endToken) {
+    if (startToken === undefined) {
+        startToken = "//DO_NOT_INSERT_FROM";
+    }
+    if (endToken === undefined) {
+        endToken = "//DO_NOT_INSERT_TO";
+    }
+
+    var start = content.search(startToken);
+    var end = content.search(endToken);
+    if (start > -1 && end > start) {
+        // getting the first part
+        var out = content.substr(0, start);
+        //adding the new content
+        out += newSubContent;
+        // getting the second part
+        end += endToken.length;
+
+        out += content.substr(end);
+        return out;
+    }
+    return content;//unchanged
+}
+
+
+module.exports.getMode = function getMode(modeNumber) {
+    switch(modeNumber){
+		case 0: return "PINTYPE_INPUT_ANALOG";
+		case 1: return "PINTYPE_INPUT_DIGITAL";
+		case 2: return "PINTYPE_OUTPUT_ANALOG";
+		case 3: return "PINTYPE_OUTPUT_DIGITAL";
+
+		default: "INVALID_PIN_TYPE";
 	}
+}
+
+//The function creates c++ commands to be able to setup the device pins using information from the given object.
+//the function will return undefined if there was an error creating the the c++ commands
+module.exports.makePinSetupString = function makePinSetupString(deviceType, pins) {
+    
+	if (deviceType !== "0" && deviceType !== "1" ) {
+		return;
+	}
+	if (pins === undefined || pins.length < 1 || pins[0].pin === undefined || pins[0].m === undefined || pins[0].val === undefined || pins[0].name === undefined ){
+		return;
+	}
+	
+	var str, ret="";
+	if (deviceType === "1") {
+			ret = "uint8_t channel = 0;\r\n";
+	}
+	 
+	//we should hav a valid array of pins.
+	// pinnar.addPin("D0", type, 15, 1, 0);
+	
+	for(var i = 0; i<pins.length; i++){
+		str ='    pinnar.addPin("' + pins[i].name + '", ' + module.exports.getMode(pins[i].m) + ', ' + pins[i].pin + ', ' + pins[i].val;
+		if (deviceType === "1") {
+			str+= ', channel++';
+		}
+		str+= ');\r\n';
+
+		ret+= str;
+	}
+	return ret;
+}
+
+var makeProgramFileWindows = function makeProgramFileWindows(deviceUrl, deviceType, pins, callback, errorCallback) {
+	var filePath = "./hardware/DeviceServerNodeMcu.ino";
+	if (deviceType === "1") {
+		filePath = "./hardware/DiviceServerEsp32.ino";
+	}
+	
 	fs.readFile(filePath, "utf-8", function(err, file) {
 			if (err === null){
 				var config = module.exports.getConfig();
@@ -615,6 +689,32 @@ var makeProgramFileWindows = function makeProgramFileWindows(deviceUrl, filePath
 							file = file.replace("ARDOS_SERVER_PORT", config.port);
 						}
 
+						if (pins !== undefined) {
+							var strSetPinCppCommands = module.exports.makePinSetupString(deviceType, pins);
+							file = module.exports.ReplaceInFile(file, strSetPinCppCommands, "//SETTING_UP_PINS_START", "//SETTING_UP_PINS_END");
+						}
+						/*
+						var pins = [
+										{name: 'D0', pin:0, val: 10, m : 0 },
+										{name: 'D1', pin:1, val: 11, m : 1 },
+										{name: 'D2', pin:2, val: 12, m : 2 },
+										{name: 'D3', pin:3, val: 13, m : 3 },
+										{name: 'D4', pin:4, val: 14, m : 2 },
+										{name: 'D5', pin:5, val: 15, m : 2 },
+										{name: 'D6', pin:6, val: 16, m : 2 },
+										{name: 'D7', pin:7, val: 17, m : 2 },
+										{name: 'D8', pin:8, val: 18, m : 2 },
+										{name: 'D9', pin:9, val: 19, m : 2 },
+										{name: 'D10', pin:10, val: 20, m : 2 },
+										{name: 'D11', pin:11, val: 21, m : 2 },
+									];
+
+
+						*/
+
+
+
+
 					callback(file);
 				});
 				
@@ -624,6 +724,14 @@ var makeProgramFileWindows = function makeProgramFileWindows(deviceUrl, filePath
 					errorCallback("could read the program temlate");
 				}
 			}
+
+
+
+
+
+
+
+
 	});
 };
 var getNetWorkInfoLinux = function getNetWorkInfoLinux(callback) {
@@ -639,8 +747,12 @@ var getNetWorkInfoLinux = function getNetWorkInfoLinux(callback) {
 	});
 }
 
-var makeProgramFileLinux = function makeProgramFileLinux(deviceUrl, filePath, pins, callback, errorCallback) {
+var makeProgramFileLinux = function makeProgramFileLinux(deviceUrl, deviceType, pins, callback, errorCallback) {
 	
+	var filePath = "./hardware/DeviceServerNodeMcu.ino";
+	if (deviceType === "1") {
+		filePath = "./hardware/DiviceServerEsp32.ino";
+	}
 	fs.readFile(filePath, "utf-8", function(err, file) {
 			if (err === null){
 				var config = module.exports.getConfig();
@@ -704,7 +816,10 @@ var makeProgramFileLinux = function makeProgramFileLinux(deviceUrl, filePath, pi
 					if (config.port!== undefined){
 						file = file.replace("ARDOS_SERVER_PORT", config.port);
 					}
-					
+					if (pins !== undefined) {
+							var strSetPinCppCommands = module.exports.makePinSetupString(deviceType, pins);
+							file = module.exports.ReplaceInFile(file, strSetPinCppCommands, "//SETTING_UP_PINS_START", "//SETTING_UP_PINS_END");
+					}
 					callback(file);
 				});
 			} else{
@@ -718,14 +833,10 @@ var makeProgramFileLinux = function makeProgramFileLinux(deviceUrl, filePath, pi
 module.exports.makeProgramFile = function makeProgramFile(deviceUrl, deviceType, pins, callback, errorCallback) {
 	//todo: join common code in makeProgramFileLinux and makeProgramFileWindows
 	var osStr = os.type();
-	var filePath = "./hardware/DeviceServerNodeMcu.ino";
-	if (deviceType === "1") {
-		filePath = "./hardware/DiviceServerEsp32.ino";
-	}
 	if (osStr.indexOf("Windows") === 0){
-		makeProgramFileWindows(deviceUrl, filePath, pins, callback, errorCallback);
+		makeProgramFileWindows(deviceUrl, deviceType, pins, callback, errorCallback);
 	} else {
-		makeProgramFileLinux(deviceUrl, filePath, pins, callback, errorCallback);
+		makeProgramFileLinux(deviceUrl, deviceType, pins, callback, errorCallback);
 	}
 };
 

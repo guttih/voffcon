@@ -47,6 +47,16 @@ var subnets = lib.getSubnets(true);
 // Init App
 var app = express();
 
+mongoose.connection.on('open', function () {
+    mongoose.connection.db.listCollections().toArray(function (err, names) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(names);
+      }
+    });
+});
+
 mongoose.connection.on('connecting', function(){
 	console.log("trying to establish a connection to mongo");
 });

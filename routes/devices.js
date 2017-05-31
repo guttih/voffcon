@@ -206,7 +206,7 @@ router.post('/pins/:deviceId', lib.authenticateRequest, function(req, res){
 
 	var deviceId = req.params.deviceId;
 	var b = req.body;	
-	Device.getById(deviceId, function(err, device){
+	Device.getById(deviceId, function(err, device) {
 		if (err !== null || device === null){
 			res.statusCode = 404;
 			var obj = {text:'Error 404: User device not found!'};
@@ -240,8 +240,8 @@ router.post('/pins/:deviceId', lib.authenticateRequest, function(req, res){
 						}
 						return body;
 					}
-				).pipe(res);}
-	);
+				).pipe(res);
+	});
 });
 
 router.post('/whitelist/:deviceId', lib.authenticatePowerRequest, function(req, res){
@@ -378,8 +378,6 @@ router.post('/custom/:deviceId', lib.authenticateRequest, function(req, res){
 				).pipe(res);}
 	);
 });
-
-
 
 router.get('/register', lib.authenticatePowerUrl, function(req, res){
 	res.render('register-device');

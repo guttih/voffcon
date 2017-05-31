@@ -45,6 +45,9 @@ var DeviceSchema = mongoose.Schema({
 	helpurl: {
 		type: String
 	},
+	canLog: {
+		type: Boolean
+	},
 	 owners: [{ObjectId}]
 });
 
@@ -59,6 +62,7 @@ module.exports.createDevice = function(newDevice,  callback){
 };
 
 module.exports.getDeviceByDevicename = function(Devicename, callback){
+	//todo: is this query not suppose to be var query = {name: Devicename};
 	var query = {Devicename: Devicename};
 	Device.findOne(query, callback);
 };

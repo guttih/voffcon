@@ -50,6 +50,16 @@ router.get('/licence', function(req, res){
 router.get('/help_development', function(req, res){
 	res.render('help_development');
 });
+router.get('/message', function(req, res){
+	var success = req.flash('success_msg');
+	var krapp = req.session.krapp;
+	success = krapp;
+	if (success != undefined){
+		res.render('message', {success_msg:success});
+	} else {
+		res.render('message');
+	}
+});
 
 
 router.get('/file', lib.authenticateFileRequest, function(req, res){

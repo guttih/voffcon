@@ -35,6 +35,26 @@ var DeviceLogItem = module.exports = mongoose.model('DeviceLogItem', DeviceLogIt
 
 module.exports.DeviceLogTypes = ['information', 'warning' ,'error', 'key-value-json', 'string-array'];
 
+module.exports.logInformation = function logInformation(deviceId, informationString, callback) {
+
+    var type = module.exports.DeviceLogTypes.indexOf('information');
+    //var deviceObjectId = new Schema.Types.ObjectId(deviceId);
+    var deviceObjectId = new mongoose.mongo.ObjectId(deviceId);
+    var newItem = new DeviceLogItem ({
+                                        deviceid : deviceObjectId,
+                                        logtype: (type >= 0 ? type : 0),
+                                        datetime : Date(),
+                                        data     : informationString
+                                    });
+    newItem.save(callback);
+};
+module.exports.isObjectIdStringValid = function (idString) {
+        var ObjectId = mongoose.Types.ObjectId;
+        var ret = ObjectId.isValid(idString);
+        return ret;
+
+}
+
 module.exports.createDeviceLogItem = function(newDeviceLogItem,  callback){
         newDeviceLogItem.save(callback);
 };
@@ -44,5 +64,5 @@ module.exports.getById = function(id, callback){
 
 module.exports.listByDeviceId = function(deviceId, callback){
 	var query = {deviceid: deviceId};
-	DeviceLogItem.findOne(query, callback);
+	DeviceLogItem.find(query, callback);
 };

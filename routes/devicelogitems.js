@@ -25,6 +25,8 @@ var lib = require('../utils/glib');
 
 var DeviceLogItem = require('../models/devicelogitem');
 
+
+
 router.get('/ids/:deviceId', function(req, res){
 	var id = req.params.deviceId;
 	var isValid=false;
@@ -54,6 +56,35 @@ router.get('/ids/:deviceId', function(req, res){
 	} else {
 		req.flash('error',	error );
 		
+	}
+});
+
+router.post('/pins', function(req, res){
+	
+	req.checkBody('pins', 'pins are required').notEmpty();
+	req.checkBody('deviceId', 'deviceId is required').notEmpty();
+	req.checkBody('type', 'type is required').notEmpty();
+	req.checkBody('type', 'type must be OBJECTTYPE_LOG_PINS').isInt();
+	var errors = req.validationErrors();
+	
+	if(!errors){
+		if (req.body.type !== 8 ){ //todo: check how to use the validator to check if a number is 8
+			errors = {error:"type must be OBJECTTYPE_LOG_PINS"};
+		} else if (!DeviceLogItem.isObjectIdStringValid(req.body.deviceId)) {
+			errors = {error:"Invalid device id provided!"};
+		}
+	}
+
+	if(errors){
+		res.status(422).json(errors);
+	} else {
+			var deviceId = req.body.deviceId;
+			var strPins = JSON.stringify(req.body.pins);
+			DeviceLogItem.logInformation(deviceId ,strPins, function(err, item) {
+					if(err) {throw err;}
+					console.log(item);
+					res.status(200).json({message: "logging succeded!"});
+			});
 	}
 });
 

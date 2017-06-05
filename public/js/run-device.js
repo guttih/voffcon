@@ -337,8 +337,6 @@ function makeHtmlSelectString(pin, mode){
 	return str;
 }
 
-
-
 function init(){
 	$('#btn-download-program').click(function() {
 		//window.location.assign('/devices/program/'+device.id);

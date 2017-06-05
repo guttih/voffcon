@@ -37,9 +37,14 @@ $('#btnGetDevices').click(function() {
 
 var serverStartedTime;
 
+//adds '0' in front of all numbers smaller than 10
+function zeroFirst(number){
+	return (number < 10) ? '0'+number : number;
+}
+
 function formaTima(d) {
 var str =  d.getDate() + "." + (d.getMonth()+1) + "." + d.getFullYear() + " " +
-			d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+			zeroFirst(d.getHours()) + ":" + zeroFirst(d.getMinutes()) + ":" + zeroFirst(d.getSeconds());
 
 return str;
 }

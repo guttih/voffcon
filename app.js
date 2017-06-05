@@ -42,7 +42,7 @@ var users = require('./routes/users');
 var devices = require('./routes/devices');
 var controls = require('./routes/controls');
 var cards = require('./routes/cards');
-var devicedogitems = require('./routes/devicelogitems');
+var logs = require('./routes/logs');
 var addresses = lib.getAddresses(true);
 var subnets = lib.getSubnets(true);
 // Init App
@@ -113,20 +113,25 @@ app.use(passport.session());
 
 // Express Validator
 app.use(expressValidator({
-errorFormatter: function(param, msg, value) {
-	var namespace = param.split('.'), 
-	root    = namespace.shift(), 
-	formParam = root;
+	customValidators: {
+		isEqual: (value1, value2) => {
+		return value1 === value2
+		}
+	},
+	errorFormatter: function(param, msg, value) {
+		var namespace = param.split('.'), 
+		root    = namespace.shift(), 
+		formParam = root;
 
-	while(namespace.length) {
-	formParam += '[' + namespace.shift() + ']';
+		while(namespace.length) {
+		formParam += '[' + namespace.shift() + ']';
+		}
+		return {
+		param : formParam,
+		msg   : msg,
+		value : value
+		};
 	}
-	return {
-	param : formParam,
-	msg   : msg,
-	value : value
-	};
-}
 }));
 
 // Connect Flash
@@ -166,7 +171,7 @@ app.use('/users', users);
 app.use('/devices', devices);
 app.use('/controls', controls);
 app.use('/cards', cards);
-app.use('/log', devicedogitems);
+app.use('/logs', logs);
 
 
 app.set('port', config.port);

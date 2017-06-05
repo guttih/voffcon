@@ -1,4 +1,5 @@
 ﻿#include <WiFi.h>
+#include <HTTPClient.h>
 //#include <stddef.h>  //for linked list
 /*
     Board: ESP32 DEV Module
@@ -622,6 +623,7 @@ public:
     String jsonKeyValue(String key, int value);
     String jsonObjectType(unsigned int uiType);
     String makeStatusResponceJson(String jsonPins, String jsonWhitelist, String jsonDate);
+    String makePostLogPinsJson(String deviceId, String jsonPins);
     /// <summary>
     /// Formats a http status code
     /// </summary>
@@ -841,8 +843,6 @@ bool isAuthorized(WiFiClient *client) {
 void handleStatus(WiFiClient *client) {
     
     //if (!isAuthorized()) return;
-    int pin;
-    int val;
     
     if (whiteList.isEmpty()){
         whiteList.add(ardosServerIp);
@@ -850,6 +850,78 @@ void handleStatus(WiFiClient *client) {
     
     String str = lib.makeStatusResponceJson(pinnar.toJson(), whiteList.toJson(), startTime.toJson());
     client->println(makeJsonResponseString(200, str));
+}
+String makeJsonPostString(String host, String url, String jsonString) {
+    String str = "POST "+ url +" HTTP/1.1 " +
+        "\r\nHost: "+ host +
+        "\r\nUser-Agent: Arduino/1.0" +
+        "\r\nConnection: close" +
+        "\r\nContent-Type: application/json" +
+        "\r\nContent-Length: " + jsonString.length() +
+        "\r\n\r\n" +
+        jsonString + "\n";
+    return str;
+}
+
+void logPins() {
+    /*
+    WiFiClient client;
+    uint8_t connectionAttempt = 0;
+    uint8_t RETRYS = 1;
+    //String strUrl = "google.com"; // This will not work because function WiFi.config will disable DHCP, dns lookup will fail
+    String strUrl = ardosServerIp.toString();
+    int port = ardosServerPort;
+    Serial.println(String("LOGGING to " + strUrl + ":" + port + " (Ardos server)"));
+
+    if (client.connect(strUrl.c_str(), port)) {
+        while (client.available()) { Serial.write((char)client.read()); }
+
+        Serial.println("Posting data");
+        String host = ardosServerIp.toString() + ":" + String(ARDOS_SERVER_PORT);
+        String str = lib.makePostLogPinsJson(DEVICE_ID, pinnar.toJson());
+        String sendStr = makeJsonPostString(host, "/log/ids/" + String(DEVICE_ID), "{\"abba\":3}");
+        Serial.println("Posting this content to client");
+        //sendStr = "{\"abba\":3}";
+        Serial.println(sendStr);
+        client.println(sendStr);
+        while (client.available()) { Serial.write((char)client.read()); }
+    }
+    */
+    
+    String data = lib.makePostLogPinsJson(DEVICE_ID, pinnar.toJson());
+    //data = "{\"einn\":\"tveir\"}";
+    //data = pinnar.toJson();
+
+    HTTPClient http;
+    String host = ardosServerIp.toString() + ":" + String(ARDOS_SERVER_PORT);
+    String url = "http://"+ host +"/logs/pins";
+    http.begin(url);  //Specify destination for HTTP request
+    http.addHeader("Content-Type", "application/json");
+    http.addHeader("Connection", "close");
+    //http.addHeader("Content - Length", String(data.length()));
+    
+    Serial.println("sending");
+    Serial.println(data);
+    
+    int httpResponseCode = http.POST(data);   //Send the actual POST request
+
+    if (httpResponseCode>0) {
+
+        String response = http.getString();                       //Get the response to the request
+
+        Serial.println(httpResponseCode);   //Print return code
+        Serial.println(response);           //Print request answer
+
+    }
+    else {
+
+        Serial.print("Error on sending POST: ");
+        Serial.println(httpResponseCode);
+
+    }
+
+    http.end();  //Free resources
+    
 }
 
 /// <summary>
@@ -876,6 +948,8 @@ void printWiFiInfo() {
     //Serial.print  ("WiFi psk       :"); Serial.println(WiFi.psk());  
     Serial.print  ("WiFi.BSSIDstr  :"); Serial.println(WiFi.BSSIDstr());
     Serial.print  ("WiFi status    :"); Serial.println(WiFi.status());
+    Serial.print("ARDOS ip and port:"); Serial.println(ardosServerIp.toString()+":"+ARDOS_SERVER_PORT);
+    
     Serial.println("----------------------------------");
 }
 bool connectWifiHelper(String ssid, String password, uint32_t uiDelay) {
@@ -957,7 +1031,7 @@ void printHeapSize(String strAddInfront=String("")) {
 }
 void test() {
     Serial.println("starting test()");
-    
+    logPins();
     Serial.println("ending test");
     while (true);
 }
@@ -985,6 +1059,7 @@ void setup() {
     String subPath = "://" + WiFi.localIP().toString() + ":" + String(PORT) + "\"";
     Serial.println();
     Serial.println("\"http" + subPath + ".");
+    test();
     server.begin();
 }
 
@@ -1608,6 +1683,14 @@ String GUrl::makeStatusResponceJson(String jsonPins, String jsonWhitelist, Strin
         jsonKeyValue("pins", jsonPins) + "," +
         jsonKeyValue("whitelist", jsonWhitelist) + "," +
         jsonKeyValue("date", jsonDate) +
+        "}";
+    return str;
+}
+String GUrl::makePostLogPinsJson(String deviceId, String jsonPins) {
+    String str = "{" +
+        jsonObjectType(OBJECTTYPE_LOG_PINS) + "," +
+        jsonKeyValue("pins", jsonPins) + "," +
+        jsonKeyValue("deviceId", "\""+deviceId+ "\"") +
         "}";
     return str;
 }

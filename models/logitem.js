@@ -25,26 +25,37 @@ by regular post to the address Haseyla 27, 260 Reykjanesbar, Iceland.
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
-var DeviceLogItemSchema = mongoose.Schema({
+var LogItemSchema = mongoose.Schema({
         deviceid : [Schema.Types.ObjectId],
         logtype  : Number,
         datetime : Date,
         data     : String
 }); 
-var DeviceLogItem = module.exports = mongoose.model('DeviceLogItem', DeviceLogItemSchema);
+var LogItem = module.exports = mongoose.model('LogItem', LogItemSchema);
 
-module.exports.DeviceLogTypes = ['information', 'warning' ,'error', 'key-value-json', 'string-array'];
+module.exports.LogTypes = [
+    'OBJECTTYPE_KEYVALUE_STRING',
+    'OBJECTTYPE_KEYVALUE_INT',
+    'OBJECTTYPE_PINS_ARRAY',
+    'OBJECTTYPE_PIN',
+    'OBJECTTYPE_PINS',
+    'OBJECTTYPE_DATE',
+    'OBJECTTYPE_WHITELIST_ARRAY',
+    'OBJECTTYPE_STATUS',
+    'OBJECTTYPE_LOG_PINS',
+    'OBJECTTYPE_INFORMATION',
+    'OBJECTTYPE_WARNING',
+    'OBJECTTYPE_ERROR'];
 
-module.exports.logInformation = function logInformation(deviceId, informationString, callback) {
-
-    var type = module.exports.DeviceLogTypes.indexOf('information');
-    //var deviceObjectId = new Schema.Types.ObjectId(deviceId);
+module.exports.logJsonAsText = function logJsonAsText(deviceId, logType, json, callback) {
+    var strData = JSON.stringify(json);
+    var type = module.exports.LogTypes.indexOf('OBJECTTYPE_INFORMATION');
     var deviceObjectId = new mongoose.mongo.ObjectId(deviceId);
-    var newItem = new DeviceLogItem ({
+    var newItem = new LogItem ({
                                         deviceid : deviceObjectId,
-                                        logtype: (type >= 0 ? type : 0),
+                                        logtype: logType,
                                         datetime : Date(),
-                                        data     : informationString
+                                        data     : strData
                                     });
     newItem.save(callback);
 };
@@ -52,17 +63,42 @@ module.exports.isObjectIdStringValid = function (idString) {
         var ObjectId = mongoose.Types.ObjectId;
         var ret = ObjectId.isValid(idString);
         return ret;
-
 }
 
-module.exports.createDeviceLogItem = function(newDeviceLogItem,  callback){
-        newDeviceLogItem.save(callback);
+module.exports.delete = function (id, callback){
+	
+	LogItem.findByIdAndRemove(id, callback);
+};
+
+module.exports.modify = function (id, newValues, callback){
+	//$set
+	var val = {$set: newValues};
+	LogItem.update({_id: id}, val, callback);
+};
+
+module.exports.createLogItem = function(newLogItem,  callback){
+        newLogItem.save(callback);
 };
 module.exports.getById = function(id, callback){
-	DeviceLogItem.findById(id, callback);
+	LogItem.findById(id, callback);
 };
 
 module.exports.listByDeviceId = function(deviceId, callback){
 	var query = {deviceid: deviceId};
-	DeviceLogItem.find(query, callback);
+	LogItem.find(query, callback);
 };
+
+//lists all devices which have logs
+module.exports.listAllDevices = function(callback){
+	LogItem.find().distinct( 'deviceid', callback);
+};
+
+module.exports.countDeviceOccurrence = function(deviceId, callback){
+        var query = {deviceid : deviceId};
+	LogItem.count(query, callback);
+};
+
+module.exports.getById = function(id, callback){
+	Device.findById(id, callback);
+};
+

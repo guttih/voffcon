@@ -266,5 +266,30 @@ ul > li.menu-item.dropdown.dropdown-submenu:hover > ul{
 	font-style: italic;
 	
 }
+/*log start*/
+#table-log > tbody{
+	font-size: 10px;
+}
+.datetime-td{
+	min-width:108px;
+}
+.pin-type-0{
+	/*INPUT_ANALOG*/
+	color:black;
+}
+.pin-type-1{
+	/*INPUT_DIGITAL*/
+	color:blue;
+}
+.pin-type-2{
+	/*OUTPUT_ANALOG*/
+	color:darkgreen;
+}
+.pin-type-3{
+	/*OUTPUT_DIGITAL*/
+	color:brown;
+}
+
+/*log end*/
 
 

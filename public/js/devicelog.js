@@ -41,14 +41,26 @@ function getPinIndexByName(strName, pins){
 	}
 	return -1;
 }
+function modeToTypeString(mode) {
+	switch(mode){
+		case 0: return "INPUT_ANALOG";
+		case 1: return "INPUT_DIGITAL";
+		case 2: return "OUTPUT_ANALOG";
+		case 3: return "OUTPUT_DIGITAL";
+	}
+	return "?";
+};
+
 function pinsToTd(headers, pins){
 	var index;
 	var str = "";
 	for(var i = 0; i<headers.length; i++) {
 		index = getPinIndexByName(headers[i], pins);
 		if (index > -1) {
-			str+='<td rel="tooltip" title="Number: '+ pins[index].val +', type: '+ pins[index].m +'">' + pins[index].val;
+			str+='<td class="pin-type-'+pins[index].m+'" rel="tooltip" title="Pin number: '+ pins[index].pin +' , pin type: '+ modeToTypeString(pins[index].m) +'">' + pins[index].val;
 			str+='</td>';
+		} else {
+			str+='<td></td>';
 		}
 	}
 	return str;
@@ -72,17 +84,7 @@ function monthToShortStr(month){
 	return "";
 };
 
-function formatDateTime(orginalDateString){
-	var d = new Date(orginalDateString);
-	/*var dateString = d.getDate()  + ". " + monthToShortStr(d.getMonth()) + " " + d.getFullYear() + " " +
-	d.getHours() + ":" + d.getMinutes()+":" + d.getSeconds();
-	return dateString;*/
-	return formaTima(d);
-}
 function addToTable(headers, logs){
-	console.log('addToTable');
-	console.log(headers);
-	console.log(logs);
 	var i;
 	var $elm = $('#table-log thead');
 	var row = '<tr>';
@@ -99,17 +101,23 @@ function addToTable(headers, logs){
 	$elm = $('#table-log tbody');
 	for(i = 0; i<logs.length; i++){
 		row='<tr id="'+ logs[i].id +'">';
-		row+='<td rel="tooltip" title="'+ logs[i].id + '">'+ formatDateTime(logs[i].datetime) +'</td>';
+		row+='<td class="datetime-td" rel="tooltip" title="log id:'+ logs[i].id + '">'+ formaTima(new Date(logs[i].datetime)); +'</td>';
 		row+=pinsToTd(headers, logs[i].pins);
 		row+='</tr>';
 		$elm.append(row);
 	}
+	$elm = $('#table-log tfoot');
+	row='<tr>';
+	row+='<td>Records</td>'
+	row+='<td colspan="' + (headers.length) + '">'+logs.length+'</td>';
+	row+="</tr>";
+	$elm.append(row);
+	
 
 
 }
 
 function setDeviceLogsToTable(deviceLogs){
-	console.log(deviceLogs);
 	var logs = [];
 	var headers = [];
 	for(var i = 0; i < deviceLogs.length; i++){
@@ -146,8 +154,5 @@ function setDeviceLogsToTable(deviceLogs){
 $(function () {  
 	/* this is the *$( document ).ready(function( $ ) but jshint does not like that*/
 	SERVER = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ':'+window.location.port: '');
-	console.log('devicelog.js');
-	
-	console.log("device");console.log(device);
 	getDeviceLogs();
 });

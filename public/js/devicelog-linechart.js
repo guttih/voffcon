@@ -198,11 +198,39 @@ function addLegend(keys){
 	var LEGENTSTROKEWIDTH = "3",
 		LEGENTSTROKE_ON = 'gray',
 		LEGENTSTROKE_OFF = 'white',
-		posX = 3,
+		posX = 45,
+		allPosX = posX-45,
 		posY = 10,
 		width = 15,
 		height = 15;
 	var leg = d3.select("#legend");
+
+	var strokeColor = (hideAllLines === true)?LEGENTSTROKE_OFF:LEGENTSTROKE_ON;
+		leg.append("rect")
+			.attr("x", (allPosX))
+			.attr("y", posY)
+			.attr("width", width)
+			.attr("height", height)
+			.attr("stroke", strokeColor)
+			.attr("stroke-width", LEGENTSTROKEWIDTH)
+			.attr("fill", 'yellow')
+			.on("click", function(){
+				toggleLegend();
+			});
+
+			leg.append("text")
+			.attr("x", (allPosX + 18))
+			.attr("y", posY+3)
+			.attr("dy", "10px")
+			.text(function(d) { return "All"; });
+
+
+
+
+
+
+
+
 	keys.forEach(function(key, index){
 		var strokeColor = (chartData[key].hideKey === true)?LEGENTSTROKE_OFF:LEGENTSTROKE_ON;
 		leg.append("rect")
@@ -227,12 +255,11 @@ function addLegend(keys){
 				}
 				InitChart(chartData);
 			});
-
-	leg.append("text")
-    .attr("x", (posX + 18 + (index*50)))
-	.attr("y", posY+3)
-    .attr("dy", "10px")
-    .text(function(d) { return key; });
+			leg.append("text")
+			.attr("x", (posX + 18 + (index*50)))
+			.attr("y", posY+3)
+			.attr("dy", "10px")
+			.text(function(d) { return key; });
 	});
 	
 }

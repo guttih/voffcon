@@ -33,6 +33,7 @@ function getDeviceLogs(){
 		});
 }
 
+
 function getPinIndexByName(strName, pins){
 	for(var i = 0; i<pins.length; i++){
 		if (strName === pins[i].name){
@@ -101,7 +102,11 @@ function addToTable(headers, logs){
 	$elm = $('#table-log tbody');
 	for(i = 0; i<logs.length; i++){
 		row='<tr id="'+ logs[i].id +'">';
-		row+='<td class="datetime-td" rel="tooltip" title="log id:'+ logs[i].id + '">'+ formaTima(new Date(logs[i].datetime)); +'</td>';
+		row+='<td class="datetime-td">' + 
+		' <a href="javascript:deleteLogItem(\''+ logs[i].id +'\');"><span class="glyphicon glyphicon glyphicon-remove" rel="tooltip" title="Delete this log record" style="color:red" aria-hidden="true"></span></a>' +
+
+		'<span>' +
+		formaTima(new Date(logs[i].datetime)); +'</span></td>';
 		row+=pinsToTd(headers, logs[i].pins);
 		row+='</tr>';
 		$elm.append(row);
@@ -109,7 +114,7 @@ function addToTable(headers, logs){
 	$elm = $('#table-log tfoot');
 	row='<tr>';
 	row+='<td>Records</td>'
-	row+='<td colspan="' + (headers.length) + '">'+logs.length+'</td>';
+	row+='<td id="record-count" colspan="' + (headers.length) + '">'+logs.length+'</td>';
 	row+="</tr>";
 	$elm.append(row);
 	
@@ -137,18 +142,33 @@ function setDeviceLogsToTable(deviceLogs){
 		}
 	};
 	addToTable(headers, logs);
-	//now when we have the headers we will need to add pin values in the correct column (td)
+}
 
-	/*var id, name, description, isOwner;
-	for(var i = 0; i < deviceList.length; i++){
-		id 		= deviceList[i].id;
-		name 		= deviceList[i].name;
-		description = deviceList[i].description;
-		
-		isOwner     = deviceList[i].isOwner;
-		var str =  createListItem(id, name, description, 'devices', isOwner, isOwner, isOwner, isOwner);
-		$("#device-list").append(str);
-	}*/
+function deleteLogItem(logItemID){
+	var sendObj = {
+			"id":logItemID
+		};
+
+	var url = SERVER+'/logs/'+logItemID;
+		var deleting = $.delete( url, sendObj);
+
+		deleting.done(function(data){
+			if (data.id !== undefined) {
+				$( "#"+data.id ).remove();
+				var elCount = $("#record-count");
+				var number =  Number(elCount.text());
+				if (isNaN(number) || number < 1){
+					number = 0;
+				} else {
+					number--;
+				}
+				elCount.text(number);
+			}
+		});
+}
+
+function openChartPage() {
+	window.location.assign("linechart/"+device.id);
 }
 
 $(function () {  

@@ -1,0 +1,39 @@
+<div class="row">
+	<h3 class="page-header pull-right">device log</h3>
+</div>
+<p>Device: <strong>{{item.name}}</strong></p>
+{{#if errors}}
+      {{#each errors}}
+        <div class="alert alert-danger">{{msg}}</div>
+      {{/each}}
+{{/if}}
+<div class="row">
+	<p> </p>
+</div>
+<div class="row">
+	<div id = "device-list" class="device-list list-group">
+	<!-- listItems will be added here-->
+	</div>
+</div>
+{{#if device}} <!-- if you want to edit a specific user -->
+			<script type="text/javascript">
+			var device = {{{device}}};
+		</script>
+{{/if}}
+
+	<link rel="stylesheet" type="text/css" href="/css/line-chart.css">
+
+
+	<button onclick="toggleLegend()" class="btn btn-xs btn-success"> 
+				<span class="glyphicon glyphicon-asterisk"></span>&nbsp;Toggle Show all
+	</button>
+	<svg id="legend" width="800" height="40"></svg>
+	<svg id="visualisation"></svg>
+	
+
+
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+
+<script src="/js/bootstrap.min.js"></script>	
+<script src="/js/devicelog-linechart.js"></script>	

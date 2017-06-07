@@ -19,34 +19,6 @@ You can contact the author by sending email to gudjonholm@gmail.com or
 by regular post to the address Haseyla 27, 260 Reykjanesbar, Iceland.
 */
 
-//appending put and delete to the jquery send
-jQuery.each( [ "put", "delete" ], function( i, method ) {
-  jQuery[ method ] = function( url, data, callback, type ) {
-    if ( jQuery.isFunction( data ) ) {
-      type = type || callback;
-      callback = data;
-      data = undefined;
-    }
-
-    return jQuery.ajax({
-      url: url,
-      type: method,
-      dataType: type,
-      data: data,
-      success: callback
-    });
-  };
-});
-
-function setStartTime(date) {
-		//var date = data.date;
-		deviceStarted = new Date(date.year, date.month-1, date.day, date.hours, date.minutes, date.seconds, 0);
-		var strDate = formaTima(deviceStarted);
-		$('#server-started').text(strDate);
-		
-		$elm.text("Successfully connected to the device.").removeClass("alert-warning").addClass("alert-success");
-}
-
 var deviceStarted;
 var inputDialog = $('#getNum');
 /*function getDeviceStartTime(){

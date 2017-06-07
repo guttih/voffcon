@@ -97,7 +97,7 @@ router.post('/pins', function(req, res) {
 router.get('/list', lib.authenticateUrl, function(req, res){
 	res.render('list-log');
 });
-//opens a page which shows logs for a specific device
+//opens a page which shows logs as a table for a specific device
 router.get('/device/:deviceID', lib.authenticateRequest, function(req, res){
 	// todo: how to authenticate? now a logged in user can use all devices
 	var deviceId = req.params.deviceID;
@@ -119,27 +119,40 @@ router.get('/device/:deviceID', lib.authenticateRequest, function(req, res){
 						res.render('devicelog', { item:device, device:JSON.stringify(device) });
 					}
 				});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-			
 			/*LogItem.listByDeviceId(deviceId, function(err, data){
 				res.json(data);
 	});*/
 	}
 });
+
+//opens a page which shows logs as a linechart for a specific device
+router.get('/device/linechart/:deviceID', lib.authenticateRequest, function(req, res){
+	// todo: how to authenticate? now a logged in user can use all devices
+	var deviceId = req.params.deviceID;
+
+	if (deviceId === undefined){ 
+		res.status(422).json({"error":"No device id provided!"});
+	}
+	else{
+
+			Device.getById(deviceId, function(err, retDevice){
+					if(err || retDevice === null) {
+						req.flash('error',	'Could not find device.' );
+						res.redirect('/result');
+					} else{
+						var device = {
+							id:deviceId,
+							name:retDevice._doc.name
+						};
+						res.render('devicelog-linechart', { item:device, device:JSON.stringify(device) });
+					}
+				});
+			/*LogItem.listByDeviceId(deviceId, function(err, data){
+				res.json(data);
+	});*/
+	}
+});
+
 //returns a Json object with all logs from the specific device
 router.get('/list/:deviceID', lib.authenticateRequest, function(req, res){
 	// todo: how to authenticate? now a logged in user can use all devices
@@ -209,9 +222,9 @@ router.delete('/:logID', lib.authenticateDeviceOwnerRequest, function(req, res){
 	var id = req.params.logID;
 	LogItem.delete(id, function(err, result){
 		if(err !== null){
-			res.status(404).send('unable to delete log "' + id + '".');
+			res.status(404).send({message:'unable to delete logItem', id:id});
 		} else {
-			res.status(200).send('Log deleted.');
+			res.status(200).send({id:id});
 		}
 	});
 	

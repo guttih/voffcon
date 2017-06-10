@@ -617,7 +617,27 @@ module.exports.makePinSetupString = function makePinSetupString(deviceType, pins
 	return ret;
 }
 
-var makeProgramFileWindows = function makeProgramFileWindows(id, deviceUrl, deviceType, pins, callback, errorCallback) {
+//The function creates c++ commands to be able to setup the device whitelist using information from the given object.
+//the function will return undefined if there was an error creating the the c++ commands
+module.exports.makeWhiteListSetupString = function makeWhiteListSetupString(whiteList) {
+    
+	if (whiteList === undefined || whiteList.length < 1 || whiteList[0].length < 0){
+		return;
+	}
+	
+	var bAdded=false, str, ret="\r\n";
+	for(var i = 0; i<whiteList.length; i++){
+		bAdded = true;
+		str ='    whiteList.add("'+whiteList[i]+ '");\r\n';
+		ret+= str;
+	}
+		
+	return (bAdded)? ret: undefined; //return undefined if nothing was added
+}
+
+
+
+var makeProgramFileWindows = function makeProgramFileWindows(id, whitelist, deviceUrl, deviceType, pins, callback, errorCallback) {
 	var filePath = "./hardware/DeviceServerNodeMcu.ino";
 	if (deviceType === "1") {
 		filePath = "./hardware/DiviceServerEsp32.ino";
@@ -709,28 +729,11 @@ var makeProgramFileWindows = function makeProgramFileWindows(id, deviceUrl, devi
 							var strSetPinCppCommands = module.exports.makePinSetupString(deviceType, pins);
 							file = module.exports.ReplaceInFile(file, strSetPinCppCommands, "//SETTING_UP_PINS_START", "//SETTING_UP_PINS_END");
 						}
-						/*
-						var pins = [
-										{name: 'D0', pin:0, val: 10, m : 0 },
-										{name: 'D1', pin:1, val: 11, m : 1 },
-										{name: 'D2', pin:2, val: 12, m : 2 },
-										{name: 'D3', pin:3, val: 13, m : 3 },
-										{name: 'D4', pin:4, val: 14, m : 2 },
-										{name: 'D5', pin:5, val: 15, m : 2 },
-										{name: 'D6', pin:6, val: 16, m : 2 },
-										{name: 'D7', pin:7, val: 17, m : 2 },
-										{name: 'D8', pin:8, val: 18, m : 2 },
-										{name: 'D9', pin:9, val: 19, m : 2 },
-										{name: 'D10', pin:10, val: 20, m : 2 },
-										{name: 'D11', pin:11, val: 21, m : 2 },
-									];
-
-
-						*/
-
-
-
-
+						if (whitelist !== undefined) {
+							var strWhiteListAddCppCommands = module.exports.makeWhiteListSetupString(whitelist);
+							file = module.exports.ReplaceInFile(file, strWhiteListAddCppCommands, "//SETTING_UP_WHITELIST_START", "//SETTING_UP_WHITELIST_END");
+						}
+						
 					callback(file);
 				});
 				
@@ -763,7 +766,7 @@ var getNetWorkInfoLinux = function getNetWorkInfoLinux(callback) {
 	});
 }
 
-var makeProgramFileLinux = function makeProgramFileLinux(deviceId, deviceUrl, deviceType, pins, callback, errorCallback) {
+var makeProgramFileLinux = function makeProgramFileLinux(deviceId, whitelist, deviceUrl, deviceType, pins, callback, errorCallback) {
 	
 	var filePath = "./hardware/DeviceServerNodeMcu.ino";
 	if (deviceType === "1") {
@@ -838,6 +841,10 @@ var makeProgramFileLinux = function makeProgramFileLinux(deviceId, deviceUrl, de
 							var strSetPinCppCommands = module.exports.makePinSetupString(deviceType, pins);
 							file = module.exports.ReplaceInFile(file, strSetPinCppCommands, "//SETTING_UP_PINS_START", "//SETTING_UP_PINS_END");
 					}
+					if (whitelist !== undefined) {
+							var strWhiteListAddCppCommands = module.exports.makeWhiteListSetupString(whitelist);
+							file = module.exports.ReplaceInFile(file, strWhiteListAddCppCommands, "//SETTING_UP_WHITELIST_START", "//SETTING_UP_WHITELIST_END");
+					}
 					callback(file);
 				});
 			} else{
@@ -852,9 +859,9 @@ module.exports.makeProgramFile = function makeProgramFile(device, callback, erro
 	//todo: join common code in makeProgramFileLinux and makeProgramFileWindows
 	var osStr = os.type();
 	if (osStr.indexOf("Windows") === 0){
-		makeProgramFileWindows(device.id, device. url, device.type, device.pins, callback, errorCallback);
+		makeProgramFileWindows(device.id, device.whitelist, device. url, device.type, device.pins, callback, errorCallback);
 	} else {
-		makeProgramFileLinux(device.id, device.url, device.type, device.pins, callback, errorCallback);
+		makeProgramFileLinux(device.id, device.whitelist, device.url, device.type, device.pins, callback, errorCallback);
 	}
 };
 

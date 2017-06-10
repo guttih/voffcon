@@ -308,6 +308,15 @@ function makeHtmlSelectString(pin, mode){
     str +='</select>';
 	return str;
 }
+function getWhiteListFromSelect(){
+	var ret = [];
+	$("#whitelist option").each(function(){
+		var text = $(this).text();
+		console.log(text);
+		ret.push(text);
+	});
+	return ret;
+}
 
 function init(){
 	$('#btn-download-program').click(function() {
@@ -317,6 +326,7 @@ function init(){
 		if (isCheckboxChecked()){
 			//only add pin values when hardware is selected
 			sendObj["pins"]=JSON.stringify(getPinsFromTable());
+			sendObj["whitelist"]=JSON.stringify(getWhiteListFromSelect());
 		}
 
 		var url = SERVER+'/devices/program/'+device.id;

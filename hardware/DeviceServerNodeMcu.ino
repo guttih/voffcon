@@ -508,7 +508,7 @@ public:
     /// <param name="uiStatusCode">Number of the http status code to format</param>
     /// <returns>A string with the http statuscode number and the status text.</returns>
     String makeHttpStatusCodeString(unsigned int uiStatusCode);
-    const char * extractAndReturnIPaddress(const char *unParsedJson);
+    String extractAndReturnIPaddress(const char *unParsedJson);
     String jsonRoot(unsigned int uiType, String key, String value);
 };
 
@@ -992,6 +992,10 @@ void setup(void) {
         Serial.println("MDNS responder started");
     }*/
 
+    //SETTING_UP_WHITELIST_START
+    //Do not remove line, here whitelist ip's will be added by Ardos Node server
+    //SETTING_UP_WHITELIST_END
+
     startTime.setTime(getTime());
     
     server.on("/", handleRoot);
@@ -1406,7 +1410,7 @@ boolean GUrl::extractAndSetPinsAndValues(const char *unParsedJson, GPins *pinnar
     return ret;
 }
 
-const char * GUrl::extractAndReturnIPaddress(const char *unParsedJson) {
+String GUrl::extractAndReturnIPaddress(const char *unParsedJson) {
 
     String line = String(unParsedJson);
     int iStart, iEnd;
@@ -1419,7 +1423,7 @@ const char * GUrl::extractAndReturnIPaddress(const char *unParsedJson) {
     line = line.substring(iStart, iEnd);
     if (line.length() < 7 || line.length() > 15) return ""; // longest ip address 255.255.255.255
     Serial.println("Processed \"" + line + "\" len=" + String(line.length()));
-    return line.c_str();
+    return line;
 }
 
 String GUrl::jsonRoot(unsigned int uiType, String key, String value) {

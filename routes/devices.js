@@ -609,9 +609,12 @@ router.get('/run/:deviceID', lib.authenticateDeviceOwnerUrl, function(req, res){
 router.post('/program/:deviceID', lib.authenticatePowerUrl, function(req, res){
 	var id = req.params.deviceID;
 	var b = req.body;
-	var pins
+	var pins, whitelist;
 	if (req.body.pins !== undefined) {
 		pins = JSON.parse(req.body.pins);
+	}
+	if (req.body.whitelist !== undefined) {
+		whitelist = JSON.parse(req.body.whitelist);
 	}
 	if (id !== undefined){
 		Device.getById(id, function(err, device){
@@ -627,7 +630,8 @@ router.post('/program/:deviceID', lib.authenticatePowerUrl, function(req, res){
 						id:  id,
 						url:  device.url,
 						type: device.type,
-						pins: pins
+						pins: pins, 
+						whitelist: whitelist
 					}
 					lib.makeProgramFile(dev , function(data){
 						var fileInfo = "attachment; filename=DeviceServerNodeMcu.ino";

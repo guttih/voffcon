@@ -656,7 +656,7 @@ public:
     /// <param name="uiStatusCode">Number of the http status code to format</param>
     /// <returns>A string with the http statuscode number and the status text.</returns>
     String makeHttpStatusCodeString(unsigned int uiStatusCode);
-    const char * extractAndReturnIPaddress(const char *unParsedJson);
+    String extractAndReturnIPaddress(const char *unParsedJson);
     String jsonRoot(unsigned int uiType, String key, String value);
 };
 
@@ -691,9 +691,7 @@ int charcount = 0;
 /// Setup all pins by selecting their index/channel, number, initial value and type.
 /// </summary>
 void setupPins() {    
-    Serial.println("----------------------------------------");
-    Serial.println(pinnar.toJson());
-    Serial.println("----------------------------------------");
+   
         //uint8_t index, uint8_t number, uint8_t value, PINTYPE type = PINTYPE_ANALOG
     PINTYPE type, type2;
     //type = PINTYPE_ANALOG;
@@ -720,6 +718,9 @@ void setupPins() {
     pinnar.addPin("D14", type2, 33, 210);
     pinnar.addPin("D15", type2, 32, 255);
 	//SETTING_UP_PINS_END
+    Serial.println("----------------------------------------");
+    Serial.println(pinnar.toJson());
+    Serial.println("----------------------------------------");
 }
 
 /// <summary>
@@ -814,11 +815,11 @@ String getTime() {
 /// <returns></returns>
 void extractAndAddToWhitelist(const char *unParsedJson) {
     
-    whiteList.add(lib.extractAndReturnIPaddress(unParsedJson));
+    whiteList.add(lib.extractAndReturnIPaddress(unParsedJson).c_str());
 }
 void extractAndRemoveFromWhitelist(const char *unParsedJson) {
     
-    whiteList.remove(lib.extractAndReturnIPaddress(unParsedJson));
+    whiteList.remove(lib.extractAndReturnIPaddress(unParsedJson).c_str());
 }
 
 /// <summary>
@@ -857,7 +858,6 @@ bool isAuthorized(WiFiClient *client) {
 void handleStatus(WiFiClient *client) {
     
     //if (!isAuthorized()) return;
-    
     if (whiteList.isEmpty()){
         whiteList.add(ardosServerIp);
     }
@@ -1094,7 +1094,10 @@ void setup() {
     while (!Serial) {
         ; // wait for serial port to connect. Needed for native USB port only
     }
-    Serial.println(whiteList.toJson());
+    //SETTING_UP_WHITELIST_START
+        //Do not remove line, here whitelist ip's will be added by Ardos Node server
+    //SETTING_UP_WHITELIST_END
+    Serial.println("Whitelist: "+ whiteList.toJson());
     
      Serial.println("");
     if (connectWifi())
@@ -1814,7 +1817,7 @@ boolean GUrl::extractAndSetPinsAndValues(const char *unParsedJson, GPins *pinnar
     return ret;
 }
 
-const char * GUrl::extractAndReturnIPaddress(const char *unParsedJson) {
+String GUrl::extractAndReturnIPaddress(const char *unParsedJson) {
 
     String line = String(unParsedJson);
     int iStart, iEnd;
@@ -1827,7 +1830,7 @@ const char * GUrl::extractAndReturnIPaddress(const char *unParsedJson) {
     line = line.substring(iStart, iEnd);
     if (line.length() < 7 || line.length() > 15) return ""; // longest ip address 255.255.255.255
     Serial.println("Processed \"" + line + "\" len=" + String(line.length()));
-    return line.c_str();
+    return line;
 }
 
 String GUrl::jsonRoot(unsigned int uiType, String key, String value) {

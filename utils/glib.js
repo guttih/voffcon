@@ -30,6 +30,7 @@ const exec = require('child_process').exec;
 var defaultInterfaces = require('default-network'); 
 var ipconfig = require('../utils/ipconfigwin.js');
 var router = express.Router();
+var bcrypt = require('bcryptjs');
 
 
 module.exports.getDeviceTypeName = function getDeviceTypeName(type) {
@@ -38,6 +39,24 @@ module.exports.getDeviceTypeName = function getDeviceTypeName(type) {
 	}
 	return "NodeMcu module with ESP8266 on board";
 }
+
+//returns undefined if not successful.
+module.exports.makeHash = function makeHash(strHashMe) {
+	
+	if (strHashMe === undefined){
+		return; 
+	}
+	var salt, hash;
+	salt = bcrypt.genSaltSync(10);
+	if (salt){
+		hash = bcrypt.hashSync(strHashMe, salt);
+	}
+	return hash;
+}
+
+module.exports.compareHash = function(candidateId, hash){
+	return bcrypt.compareSync(candidateId, hash);
+};
 
 module.exports.authenticateUrl = function authenticateUrl(req, res, next){	
 	if(req.isAuthenticated()){
@@ -592,18 +611,13 @@ module.exports.makePinSetupString = function makePinSetupString(deviceType, pins
 	// pinnar.addPin("D0", type, 15, 1, 0);
 	
 	for(var i = 0; i<pins.length; i++){
-		str ='    pinnar.addPin("' + pins[i].name + '", ' + module.exports.getMode(pins[i].m) + ', ' + pins[i].pin + ', ' + pins[i].val;
-		if (deviceType === "1") {
-			str+= ', channel++';
-		}
-		str+= ');\r\n';
-
+		str ='    pinnar.addPin("' + pins[i].name + '", ' + module.exports.getMode(pins[i].m) + ', ' + pins[i].pin + ', ' + pins[i].val + ');\r\n';
 		ret+= str;
 	}
 	return ret;
 }
 
-var makeProgramFileWindows = function makeProgramFileWindows(deviceUrl, deviceType, pins, callback, errorCallback) {
+var makeProgramFileWindows = function makeProgramFileWindows(id, deviceUrl, deviceType, pins, callback, errorCallback) {
 	var filePath = "./hardware/DeviceServerNodeMcu.ino";
 	if (deviceType === "1") {
 		filePath = "./hardware/DiviceServerEsp32.ino";
@@ -655,7 +669,9 @@ var makeProgramFileWindows = function makeProgramFileWindows(deviceUrl, deviceTy
 							console.log("\t"+subkey+ '\t : \t' + item[key][subkey]);
 							*/
 						};
-
+						if (id!== undefined){
+							file = file.replace('DEVICE_ID', '"'+id+'"');
+						}
 						if (port!== undefined){
 							file = file.replace("PORT_NUMBER", port);
 						}
@@ -747,7 +763,7 @@ var getNetWorkInfoLinux = function getNetWorkInfoLinux(callback) {
 	});
 }
 
-var makeProgramFileLinux = function makeProgramFileLinux(deviceUrl, deviceType, pins, callback, errorCallback) {
+var makeProgramFileLinux = function makeProgramFileLinux(deviceId, deviceUrl, deviceType, pins, callback, errorCallback) {
 	
 	var filePath = "./hardware/DeviceServerNodeMcu.ino";
 	if (deviceType === "1") {
@@ -783,7 +799,9 @@ var makeProgramFileLinux = function makeProgramFileLinux(deviceUrl, deviceType, 
 						}
 					}
 				
-				
+					if (id!== undefined){
+						file = file.replace("DEVICE_ID", id);
+					}
 					if (port!== undefined){
 						file = file.replace("PORT_NUMBER", port);
 					}
@@ -830,13 +848,13 @@ var makeProgramFileLinux = function makeProgramFileLinux(deviceUrl, deviceType, 
 	});
 };
 // gets the device-server program
-module.exports.makeProgramFile = function makeProgramFile(deviceUrl, deviceType, pins, callback, errorCallback) {
+module.exports.makeProgramFile = function makeProgramFile(device, callback, errorCallback) {
 	//todo: join common code in makeProgramFileLinux and makeProgramFileWindows
 	var osStr = os.type();
 	if (osStr.indexOf("Windows") === 0){
-		makeProgramFileWindows(deviceUrl, deviceType, pins, callback, errorCallback);
+		makeProgramFileWindows(device.id, device. url, device.type, device.pins, callback, errorCallback);
 	} else {
-		makeProgramFileLinux(deviceUrl, deviceType, pins, callback, errorCallback);
+		makeProgramFileLinux(device.id, device.url, device.type, device.pins, callback, errorCallback);
 	}
 };
 

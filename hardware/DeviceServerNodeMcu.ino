@@ -41,6 +41,10 @@ enum OBJECTTYPE {
     OBJECTTYPE_DATE,
     OBJECTTYPE_WHITELIST_ARRAY,
     OBJECTTYPE_STATUS,
+    OBJECTTYPE_LOG_PINS,
+    OBJECTTYPE_INFORMATION,
+    OBJECTTYPE_WARNING,
+    OBJECTTYPE_ERROR,
     /*add next type above this line*/
     OBJECTTYPE_COUNT
 };
@@ -114,7 +118,7 @@ public:
     GPins() { mLength = 0; }
     //todo: I' don't need a deconstructur but I should make one
 #ifdef ESP32 
-    int addPin(const char *strPinName, PINTYPE pinType, int pinNumber, int pinValue, uint8_t pinChannel);
+    int addPin(const char *strPinName, PINTYPE pinType, int pinNumber, int pinValue);
 #else
     int addPin(const char *strName, PINTYPE pinType, int pinNumber, int pinValue);
 #endif
@@ -497,6 +501,7 @@ public:
     String jsonKeyValue(String key, int value);
     String jsonObjectType(unsigned int uiType);
     String makeStatusResponceJson(String jsonPins, String jsonWhitelist, String jsonDate);
+    String makePostLogPinsJson(String deviceId, String jsonPins);
     /// <summary>
     /// Formats a http status code
     /// </summary>
@@ -731,10 +736,10 @@ boolean grantAccessToEverybody = true;
 //in a client IP address are the same same as myIp (this server IP address).
 //
 boolean grantAccessToAllClientsOnSameSubnet = true;
+
 // boolean grantAccessToFirstCaller:
 // set to true if you want to allow the first client to call the "/setup" method
 // to be automaticly granted access.  that is, client IP address will be whitelisted.
-
 boolean grantAccessToFirstCaller = true;
 
 ESP8266WebServer server(PORT);
@@ -963,8 +968,13 @@ void setup(void) {
     Serial.begin(115200);
     Serial.println("Connecting to : " + String(ssid));
     //WiFi.begin(ssid);
+   
+     
+    //WiFi.config(myIp, gateway, subnet); //this line can be skipped.  only use if you want a specific ip address
+    
+    
+    WiFi.mode(WIFI_STA);
     WiFi.begin(ssid, password);
-    WiFi.config(myIp, gateway, subnet); //this line can be skipped.  only use if you want a specific ip address
     Serial.println("");
     // Wait for connectionc
     while (WiFi.status() != WL_CONNECTED) {
@@ -978,9 +988,9 @@ void setup(void) {
     Serial.print("IP  address: "); Serial.println(WiFi.localIP());
     Serial.print("Mac address: "); Serial.println(WiFi.macAddress());
 
-    if (MDNS.begin("esp8266")) {
+    /*if (MDNS.begin("esp8266")) {
         Serial.println("MDNS responder started");
-    }
+    }*/
 
     startTime.setTime(getTime());
     
@@ -1050,10 +1060,7 @@ void GPin::analogWriteEsp32() {
 }
 GPin::GPin(const char*strPinName, PINTYPE pinType, int pinNumber, int pinValue, uint8_t pinChannel) {
     mChannel = pinChannel;
-    
     init(strPinName, pinType, pinNumber, pinValue);
-    
-
 }
 #else
 GPin::GPin(const char*strPinName, PINTYPE pinType, int pinNumber, int pinValue) {
@@ -1191,8 +1198,12 @@ boolean GPins::setValue(int pinNumber, int newValue) {
 }
 // todo: will we need a removePIn function?
 #ifdef ESP32 
-int GPins::addPin(const char *strPinName, PINTYPE pinType, int pinNumber, int pinValue, uint8_t pinChannel) {
-    mPins[mLength] = new GPin(strPinName, pinType, pinNumber, pinValue, mChannelCount++);
+int GPins::addPin(const char *strPinName, PINTYPE pinType, int pinNumber, int pinValue) {
+
+    if (pinType == PINTYPE_OUTPUT_ANALOG) {
+        mChannelCount++; //mChannel is only used when pin is of type PINTYPE_OUTPUT_ANALOG
+    }
+    mPins[mLength] = new GPin(strPinName, pinType, pinNumber, pinValue, mChannelCount - 1);
     mLength++;
     return mLength - 1;
 }
@@ -1319,6 +1330,14 @@ String GUrl::makeStatusResponceJson(String jsonPins, String jsonWhitelist, Strin
         jsonKeyValue("pins", jsonPins) + "," +
         jsonKeyValue("whitelist", jsonWhitelist) + "," +
         jsonKeyValue("date", jsonDate) +
+        "}";
+    return str;
+}
+String GUrl::makePostLogPinsJson(String deviceId, String jsonPins) {
+    String str = "{" +
+        jsonObjectType(OBJECTTYPE_LOG_PINS) + "," +
+        jsonKeyValue("pins", jsonPins) + "," +
+        jsonKeyValue("deviceId", "\""+deviceId+ "\"") +
         "}";
     return str;
 }

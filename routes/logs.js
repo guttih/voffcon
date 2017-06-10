@@ -60,6 +60,7 @@ router.get('/ids/:deviceId', function(req, res){
 	}
 });
 
+//logs device pin status to the database
 router.post('/pins', function(req, res) {
 	
 	req.checkBody('pins', 'pins are required').notEmpty();

@@ -623,7 +623,13 @@ router.post('/program/:deviceID', lib.authenticatePowerUrl, function(req, res){
 					if (type === undefined ){
 						type = "0";
 					}
-					lib.makeProgramFile(device.url, device.type, pins , function(data){
+					var dev = {
+						id:  id,
+						url:  device.url,
+						type: device.type,
+						pins: pins
+					}
+					lib.makeProgramFile(dev , function(data){
 						var fileInfo = "attachment; filename=DeviceServerNodeMcu.ino";
 						if (device.type === "1") {
 							fileInfo = "attachment; filename=DiviceServerEsp32.ino";
@@ -648,5 +654,45 @@ router.post('/program/:deviceID', lib.authenticatePowerUrl, function(req, res){
 	}
 });
 
+router.post('/reportin', function(req, res) {
+
+	req.checkBody('id', 'id is required').notEmpty();
+	req.checkBody('ip', 'ip is required').notEmpty();
+	req.checkBody('port', 'port is required').notEmpty();
+	var id = req.body.id;
+	var errors = req.validationErrors();
+	if(errors){
+		res.status(422).json(errors);
+	} else {
+			var newUrl = "http://"+req.body.ip+":"+req.body.port;
+
+				Device.getById(id, function(err, device){
+							if(err || device === null) {
+								res.status(412).json({message:"device not found!"});
+							} else{
+								if (newUrl !== device.url) {
+									//url is change so let's update the device in the database
+									var obj = {id : device.id,
+										name: device.name,
+										description: device.description,
+										url: newUrl,
+										type: device.type
+									};
+									Device.modify(id, obj, function(err, result){
+										if(err || result === null || result.ok !== 1) {//(result.ok===1 result.nModified===1)
+												res.status(500).json({message:"Unable to update!"});
+										} else{
+												var date = new Date();
+												res.status(200).send(date.toUTCString());
+										}
+									});
+								} else { //url is unchanged
+									var date = new Date();
+									res.status(200).send(date.toUTCString());
+								}
+							}
+				});
+	}
+});
 
 module.exports = router;

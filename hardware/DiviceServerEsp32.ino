@@ -5,6 +5,7 @@
     Board: ESP32 DEV Module
 */
 
+const char* deviceId = DEVICE_ID;
 // Name of the wifi (accesspoint)network
 // example: "guttisWiFi"
 const char* ssid = WIFI_ACCESSPOINT;
@@ -49,6 +50,31 @@ boolean grantAccessToAllClientsOnSameSubnet = true;
 .*/
 
 WiFiServer server(PORT);
+
+const int ERROR_NUMBER = -9999;
+
+enum OBJECTTYPE {
+    OBJECTTYPE_KEYVALUE_STRING,
+    OBJECTTYPE_KEYVALUE_INT,
+    OBJECTTYPE_PINS_ARRAY,
+    OBJECTTYPE_PIN,
+    OBJECTTYPE_PINS,
+    OBJECTTYPE_DATE,
+    OBJECTTYPE_WHITELIST_ARRAY,
+    OBJECTTYPE_STATUS,
+    OBJECTTYPE_LOG_PINS,
+    OBJECTTYPE_INFORMATION,
+    OBJECTTYPE_WARNING,
+    OBJECTTYPE_ERROR,
+    /*add next type above this line*/
+    OBJECTTYPE_COUNT
+};
+
+enum JSONTYPE {
+    KEYVALUE_STRING,
+    KEYVALUE_INT,
+    KEYVALUE_DOUBLE
+};
 
 #ifndef CODE_BLOCK_LinkedList
 /*
@@ -511,7 +537,7 @@ public:
     GPins() { mLength = 0; }
     //todo: I' don't need a deconstructur but I should make one
 #ifdef ESP32 
-    int addPin(const char *strPinName, PINTYPE pinType, int pinNumber, int pinValue, uint8_t pinChannel);
+    int addPin(const char *strPinName, PINTYPE pinType, int pinNumber, int pinValue);
 #else
     int addPin(const char *strName, PINTYPE pinType, int pinNumber, int pinValue);
 #endif
@@ -647,19 +673,7 @@ enum COMMANDS {
     COMMANDS_POST_WHITELIST,
     COMMANDS_DELETE_WHITELIST
 };
-
-enum OBJECTTYPE {
-    OBJECTTYPE_KEYVALUE_STRING,
-    OBJECTTYPE_KEYVALUE_INT,
-    OBJECTTYPE_PINS_ARRAY,
-    OBJECTTYPE_PIN,
-    OBJECTTYPE_PINS,
-    OBJECTTYPE_DATE,
-    OBJECTTYPE_WHITELIST_ARRAY,
-    OBJECTTYPE_STATUS,
-    /*add next type above this line*/
-    OBJECTTYPE_COUNT
-};
+//INSERT_FROM_FILE_first.h
 
 int contentLength = 0;
 METHODS method = METHOD_NOTSET;
@@ -688,23 +702,23 @@ void setupPins() {
     type2 = PINTYPE_OUTPUT_DIGITAL;
 
 	//SETTING_UP_PINS_START
-    pinnar.addPin("D0", type, 15, 1, 0);
-    pinnar.addPin("D1", type, 2, 3, 1);
-    pinnar.addPin("D2", type, 4, 6, 2);
-    pinnar.addPin("D3", type, 5, 9, 3);
-    pinnar.addPin("D4", type, 18, 16, 4);
-    pinnar.addPin("D5", type, 19, 25, 5);
-    pinnar.addPin("D6", type, 21, 40, 6);
-    pinnar.addPin("D7", type, 23, 60, 7);
+    pinnar.addPin("D0", type, 15, 1);
+    pinnar.addPin("D1", type, 2, 3);
+    pinnar.addPin("D2", type, 4, 6);
+    pinnar.addPin("D3", type, 5, 9);
+    pinnar.addPin("D4", type, 18, 16);
+    pinnar.addPin("D5", type, 19, 25);
+    pinnar.addPin("D6", type, 21, 40);
+    pinnar.addPin("D7", type, 23, 60);
 
-    pinnar.addPin("D8", type2, 13, 80, 8);
-    pinnar.addPin("D9", type2, 12, 90, 9);
-    pinnar.addPin("D10", type2, 14, 100, 10);
-    pinnar.addPin("D11", type2, 27, 130, 11);
-    pinnar.addPin("D12", type2, 26, 150, 12);
-    pinnar.addPin("D13", type2, 25, 180, 13);
-    pinnar.addPin("D14", type2, 33, 210, 14);
-    pinnar.addPin("D15", type2, 32, 255, 15);
+    pinnar.addPin("D8", type2, 13, 80);
+    pinnar.addPin("D9", type2, 12, 90);
+    pinnar.addPin("D10", type2, 14, 100);
+    pinnar.addPin("D11", type2, 27, 130);
+    pinnar.addPin("D12", type2, 26, 150);
+    pinnar.addPin("D13", type2, 25, 180);
+    pinnar.addPin("D14", type2, 33, 210);
+    pinnar.addPin("D15", type2, 32, 255);
 	//SETTING_UP_PINS_END
 }
 
@@ -888,12 +902,12 @@ void logPins() {
     }
     */
     
-    String data = lib.makePostLogPinsJson(DEVICE_ID, pinnar.toJson());
+    String data = lib.makePostLogPinsJson(deviceId, pinnar.toJson());
     //data = "{\"einn\":\"tveir\"}";
     //data = pinnar.toJson();
 
     HTTPClient http;
-    String host = ardosServerIp.toString() + ":" + String(ARDOS_SERVER_PORT);
+    String host = ardosServerIp.toString() + ":" + String(ardosServerPort);
     String url = "http://"+ host +"/logs/pins";
     http.begin(url);  //Specify destination for HTTP request
     http.addHeader("Content-Type", "application/json");
@@ -923,6 +937,45 @@ void logPins() {
     http.end();  //Free resources
     
 }
+String reportIn() {
+    Serial.println("Reporting in ");
+    String ret = "Fri, 1 Jan 1971 00:00:00 GMT";
+    String data = "{" +
+        lib.jsonKeyValue("id", "\"" + String(deviceId) + "\",") +
+        lib.jsonKeyValue("ip", "\""+WiFi.localIP().toString()+"\",") + 
+        lib.jsonKeyValue("port", PORT) +
+        "}";
+
+    HTTPClient http;
+    String host = ardosServerIp.toString() + ":" + String(ardosServerPort);
+    String url = "http://" + host + "/devices/reportin";
+    http.begin(url);  //Specify destination for HTTP request
+    http.addHeader("Content-Type", "application/json");
+    http.addHeader("Connection", "close");
+    Serial.println("sending");
+    Serial.println(data);
+
+    int httpResponseCode = http.POST(data);   //Send the actual POST request
+
+    if (httpResponseCode>0) {
+
+        String response = http.getString();                       //Get the response to the request
+
+        Serial.println(httpResponseCode);   //Print return code
+        Serial.println(response);           //Print request answer
+        ret = response; //responce should contain date.toUTCString()
+
+    }
+    else {
+
+        Serial.print("Error on sending POST: ");
+        Serial.println(httpResponseCode);
+
+    }
+
+    http.end();  //Free resources
+    return ret;
+}
 
 /// <summary>
 /// Sends a JSON message with all pins name and number to a client
@@ -948,7 +1001,7 @@ void printWiFiInfo() {
     //Serial.print  ("WiFi psk       :"); Serial.println(WiFi.psk());  
     Serial.print  ("WiFi.BSSIDstr  :"); Serial.println(WiFi.BSSIDstr());
     Serial.print  ("WiFi status    :"); Serial.println(WiFi.status());
-    Serial.print("ARDOS ip and port:"); Serial.println(ardosServerIp.toString()+":"+ARDOS_SERVER_PORT);
+    Serial.print("ARDOS ip and port:"); Serial.println(ardosServerIp.toString()+":"+ ardosServerPort);
     
     Serial.println("----------------------------------");
 }
@@ -1052,14 +1105,15 @@ void setup() {
         while (true);
     }
     printWiFiInfo();
-    startTime.setTime(getTime());
+    startTime.setTime(reportIn());
+    //startTime.setTime(getTime());
     Serial.println("Start time:" + startTime.toString());
     setupPins();
     Serial.println("The device can be accessed at this path ");
     String subPath = "://" + WiFi.localIP().toString() + ":" + String(PORT) + "\"";
     Serial.println();
     Serial.println("\"http" + subPath + ".");
-    test();
+    //test();
     server.begin();
 }
 
@@ -1313,10 +1367,7 @@ void GPin::analogWriteEsp32() {
 }
 GPin::GPin(const char*strPinName, PINTYPE pinType, int pinNumber, int pinValue, uint8_t pinChannel) {
     mChannel = pinChannel;
-    
     init(strPinName, pinType, pinNumber, pinValue);
-    
-
 }
 #else
 GPin::GPin(const char*strPinName, PINTYPE pinType, int pinNumber, int pinValue) {
@@ -1454,8 +1505,12 @@ boolean GPins::setValue(int pinNumber, int newValue) {
 }
 // todo: will we need a removePIn function?
 #ifdef ESP32 
-int GPins::addPin(const char *strPinName, PINTYPE pinType, int pinNumber, int pinValue, uint8_t pinChannel) {
-    mPins[mLength] = new GPin(strPinName, pinType, pinNumber, pinValue, mChannelCount++);
+int GPins::addPin(const char *strPinName, PINTYPE pinType, int pinNumber, int pinValue) {
+
+    if (pinType == PINTYPE_OUTPUT_ANALOG) {
+        mChannelCount++; //mChannel is only used when pin is of type PINTYPE_OUTPUT_ANALOG
+    }
+    mPins[mLength] = new GPin(strPinName, pinType, pinNumber, pinValue, mChannelCount - 1);
     mLength++;
     return mLength - 1;
 }

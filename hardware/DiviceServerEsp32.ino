@@ -16,7 +16,7 @@ const char* password = WIFI_PASSWORD;
 // example: 5100
 const int   PORT = PORT_NUMBER;
 // example: 6100
-const int   ardosServerPort = ARDOS_SERVER_PORT;
+const int   voffconServerPort = VOFFCON_SERVER_PORT;
 
 IPAddress
 
@@ -35,7 +35,7 @@ gateway(IPV4_GATEWAY),
 subnet(IPV4_SUBNET),
 
 // example: "192.168.1.127"
-ardosServerIp(ARDOS_SERVER_IP);
+voffconServerIp(VOFFCON_SERVER_IP);
 
 /*boolean grantAccessToEverybody:
 * Set to true if you want to allow all clients where the first 3 numbers
@@ -758,9 +758,9 @@ String getTime() {
     uint8_t connectionAttempt = 0;
     uint8_t RETRYS = 1;
     //String strUrl = "google.com"; // This will not work because function WiFi.config will disable DHCP, dns lookup will fail
-    String strUrl = ardosServerIp.toString();
-    int port = ardosServerPort;
-    Serial.println(String("Getting current date and time from " + strUrl +":" + port +" (Ardos server)"));
+    String strUrl = voffconServerIp.toString();
+    int port = voffconServerPort;
+    Serial.println(String("Getting current date and time from " + strUrl +":" + port +" (VoffCon server)"));
     
     while (!client.connect(strUrl.c_str(), port) && connectionAttempt < RETRYS) {
         ++connectionAttempt;
@@ -859,7 +859,7 @@ void handleStatus(WiFiClient *client) {
     
     //if (!isAuthorized()) return;
     if (whiteList.isEmpty()){
-        whiteList.add(ardosServerIp);
+        whiteList.add(voffconServerIp);
     }
     
     String str = lib.makeStatusResponceJson(pinnar.toJson(), whiteList.toJson(), startTime.toJson());
@@ -883,15 +883,15 @@ void logPins() {
     uint8_t connectionAttempt = 0;
     uint8_t RETRYS = 1;
     //String strUrl = "google.com"; // This will not work because function WiFi.config will disable DHCP, dns lookup will fail
-    String strUrl = ardosServerIp.toString();
-    int port = ardosServerPort;
-    Serial.println(String("LOGGING to " + strUrl + ":" + port + " (Ardos server)"));
+    String strUrl = voffconServerIp.toString();
+    int port = voffconServerPort;
+    Serial.println(String("LOGGING to " + strUrl + ":" + port + " (VoffCon server)"));
 
     if (client.connect(strUrl.c_str(), port)) {
         while (client.available()) { Serial.write((char)client.read()); }
 
         Serial.println("Posting data");
-        String host = ardosServerIp.toString() + ":" + String(ARDOS_SERVER_PORT);
+        String host = voffconServerIp.toString() + ":" + String(VOFFCON_SERVER_PORT);
         String str = lib.makePostLogPinsJson(DEVICE_ID, pinnar.toJson());
         String sendStr = makeJsonPostString(host, "/log/ids/" + String(DEVICE_ID), "{\"abba\":3}");
         Serial.println("Posting this content to client");
@@ -907,7 +907,7 @@ void logPins() {
     //data = pinnar.toJson();
 
     HTTPClient http;
-    String host = ardosServerIp.toString() + ":" + String(ardosServerPort);
+    String host = voffconServerIp.toString() + ":" + String(voffconServerPort);
     String url = "http://"+ host +"/logs/pins";
     http.begin(url);  //Specify destination for HTTP request
     http.addHeader("Content-Type", "application/json");
@@ -947,7 +947,7 @@ String reportIn() {
         "}";
 
     HTTPClient http;
-    String host = ardosServerIp.toString() + ":" + String(ardosServerPort);
+    String host = voffconServerIp.toString() + ":" + String(voffconServerPort);
     String url = "http://" + host + "/devices/reportin";
     http.begin(url);  //Specify destination for HTTP request
     http.addHeader("Content-Type", "application/json");
@@ -1001,7 +1001,7 @@ void printWiFiInfo() {
     //Serial.print  ("WiFi psk       :"); Serial.println(WiFi.psk());  
     Serial.print  ("WiFi.BSSIDstr  :"); Serial.println(WiFi.BSSIDstr());
     Serial.print  ("WiFi status    :"); Serial.println(WiFi.status());
-    Serial.print("ARDOS ip and port:"); Serial.println(ardosServerIp.toString()+":"+ ardosServerPort);
+    Serial.print("VOFFCON ip and port:"); Serial.println(voffconServerIp.toString()+":"+ voffconServerPort);
     
     Serial.println("----------------------------------");
 }
@@ -1095,7 +1095,7 @@ void setup() {
         ; // wait for serial port to connect. Needed for native USB port only
     }
     //SETTING_UP_WHITELIST_START
-        //Do not remove line, here whitelist ip's will be added by Ardos Node server
+        //Do not remove line, here whitelist ip's will be added by VoffCon Node server
     //SETTING_UP_WHITELIST_END
     Serial.println("Whitelist: "+ whiteList.toJson());
     

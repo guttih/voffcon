@@ -1,5 +1,5 @@
 /*
-        Ardos is a system for controlling devices and appliances from anywhere.
+        VoffCon is a system for controlling devices and appliances from anywhere.
         It consists of two programs.  A “node server” and a “device server”.
         Copyright (C) 2016  Gudjon Holm Sigurdsson
 
@@ -719,10 +719,10 @@ var makeProgramFileWindows = function makeProgramFileWindows(id, whitelist, devi
 						}
 						if (config.serverIp!== undefined){
 							var sip = dotsToCommas(config.serverIp);
-							file = file.replace("ARDOS_SERVER_IP", sip);
+							file = file.replace("VOFFCON_SERVER_IP", sip);
 						}
 						if (config.port!== undefined){
-							file = file.replace("ARDOS_SERVER_PORT", config.port);
+							file = file.replace("VOFFCON_SERVER_PORT", config.port);
 						}
 
 						if (pins !== undefined) {
@@ -832,10 +832,10 @@ var makeProgramFileLinux = function makeProgramFileLinux(deviceId, whitelist, de
 					}
 					if (config.serverIp!== undefined){
 						var sip = dotsToCommas(config.serverIp);
-						file = file.replace("ARDOS_SERVER_IP", sip);
+						file = file.replace("VOFFCON_SERVER_IP", sip);
 					}
 					if (config.port!== undefined){
-						file = file.replace("ARDOS_SERVER_PORT", config.port);
+						file = file.replace("VOFFCON_SERVER_PORT", config.port);
 					}
 					if (pins !== undefined) {
 							var strSetPinCppCommands = module.exports.makePinSetupString(deviceType, pins);

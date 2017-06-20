@@ -1,5 +1,5 @@
 ﻿/*
-Ardos is a system for controlling devices and appliances from anywhere.
+VoffCon is a system for controlling devices and appliances from anywhere.
 It consists of two programs.  A “node server” and a “device server”.
 Copyright (C) 2016  Gudjon Holm Sigurdsson
 
@@ -696,7 +696,7 @@ const char* password = WIFI_PASSWORD;
 // example: 5100
 const int   PORT = PORT_NUMBER;
 // example: 6100
-const int   ardosServerPort = ARDOS_SERVER_PORT;
+const int   voffconServerPort = VOFFCON_SERVER_PORT;
 
 IPAddress   
 
@@ -715,7 +715,7 @@ gateway(IPV4_GATEWAY),
 subnet(IPV4_SUBNET),
 
 // example: "192.168.1.127"
-ardosServerIp(ARDOS_SERVER_IP);
+voffconServerIp(VOFFCON_SERVER_IP);
 // Additional information
 
 // If the device is NOT connected, it's light is faint.
@@ -993,7 +993,7 @@ void setup(void) {
     }*/
 
     //SETTING_UP_WHITELIST_START
-    //Do not remove line, here whitelist ip's will be added by Ardos Node server
+    //Do not remove line, here whitelist ip's will be added by VoffCon Node server
     //SETTING_UP_WHITELIST_END
 
     startTime.setTime(getTime());

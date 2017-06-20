@@ -1,5 +1,5 @@
 /*
-        Ardos is a system for controlling devices and appliances from anywhere.
+        VoffCon is a system for controlling devices and appliances from anywhere.
         It consists of two programs.  A “node server” and a “device server”.
         Copyright (C) 2016  Gudjon Holm Sigurdsson
 
@@ -247,7 +247,7 @@ router.get('/export/:controlID', lib.authenticatePowerUrl, function(req, res){
 						template    : control._doc.template
 					};
 						var data = JSON.stringify(obj);
-						res.writeHead(200, {'Content-Type': 'application/force-download','Content-disposition':'attachment; filename=' + lib.makeValidFilename(control.name) + '.ardos.ctrl'});
+						res.writeHead(200, {'Content-Type': 'application/force-download','Content-disposition':'attachment; filename=' + lib.makeValidFilename(control.name) + '.voffcon.ctrl'});
 						res.end( data );
 					
 					

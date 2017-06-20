@@ -1,5 +1,5 @@
 /*
-        Ardos is a system for controlling devices and appliances from anywhere.
+        VoffCon is a system for controlling devices and appliances from anywhere.
         It consists of two programs.  A “node server” and a “device server”.
         Copyright (C) 2016  Gudjon Holm Sigurdsson
 
@@ -34,7 +34,7 @@ var config = lib.getConfig();
 ///////////////////// start mongo /////////////////////////
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/ardos');
+mongoose.connect('mongodb://localhost/voffcon');
 var db = mongoose.connection;
 
 var routes = require('./routes/index');
@@ -42,10 +42,21 @@ var users = require('./routes/users');
 var devices = require('./routes/devices');
 var controls = require('./routes/controls');
 var cards = require('./routes/cards');
+var logs = require('./routes/logs');
 var addresses = lib.getAddresses(true);
 var subnets = lib.getSubnets(true);
 // Init App
 var app = express();
+
+mongoose.connection.on('open', function () {
+    mongoose.connection.db.listCollections().toArray(function (err, names) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(names);
+      }
+    });
+});
 
 mongoose.connection.on('connecting', function(){
 	console.log("trying to establish a connection to mongo");
@@ -102,20 +113,25 @@ app.use(passport.session());
 
 // Express Validator
 app.use(expressValidator({
-errorFormatter: function(param, msg, value) {
-	var namespace = param.split('.'), 
-	root    = namespace.shift(), 
-	formParam = root;
+	customValidators: {
+		isEqual: (value1, value2) => {
+		return value1 === value2
+		}
+	},
+	errorFormatter: function(param, msg, value) {
+		var namespace = param.split('.'), 
+		root    = namespace.shift(), 
+		formParam = root;
 
-	while(namespace.length) {
-	formParam += '[' + namespace.shift() + ']';
+		while(namespace.length) {
+		formParam += '[' + namespace.shift() + ']';
+		}
+		return {
+		param : formParam,
+		msg   : msg,
+		value : value
+		};
 	}
-	return {
-	param : formParam,
-	msg   : msg,
-	value : value
-	};
-}
 }));
 
 // Connect Flash
@@ -155,6 +171,8 @@ app.use('/users', users);
 app.use('/devices', devices);
 app.use('/controls', controls);
 app.use('/cards', cards);
+app.use('/logs', logs);
+
 
 app.set('port', config.port);
 
@@ -188,4 +206,5 @@ app.listen(app.get('port'), function(){
 	subnets.forEach(function(entry) {
 		console.log("subnet: " + entry);
 	});
+
 });

@@ -1,5 +1,5 @@
 ﻿/*
-Ardos is a system for controlling devices and appliances from anywhere.
+VoffCon is a system for controlling devices and appliances from anywhere.
 It consists of two programs.  A “node server” and a “device server”.
 Copyright (C) 2016  Gudjon Holm Sigurdsson
 
@@ -41,6 +41,10 @@ enum OBJECTTYPE {
     OBJECTTYPE_DATE,
     OBJECTTYPE_WHITELIST_ARRAY,
     OBJECTTYPE_STATUS,
+    OBJECTTYPE_LOG_PINS,
+    OBJECTTYPE_INFORMATION,
+    OBJECTTYPE_WARNING,
+    OBJECTTYPE_ERROR,
     /*add next type above this line*/
     OBJECTTYPE_COUNT
 };
@@ -114,7 +118,7 @@ public:
     GPins() { mLength = 0; }
     //todo: I' don't need a deconstructur but I should make one
 #ifdef ESP32 
-    int addPin(const char *strPinName, PINTYPE pinType, int pinNumber, int pinValue, uint8_t pinChannel);
+    int addPin(const char *strPinName, PINTYPE pinType, int pinNumber, int pinValue);
 #else
     int addPin(const char *strName, PINTYPE pinType, int pinNumber, int pinValue);
 #endif
@@ -497,13 +501,14 @@ public:
     String jsonKeyValue(String key, int value);
     String jsonObjectType(unsigned int uiType);
     String makeStatusResponceJson(String jsonPins, String jsonWhitelist, String jsonDate);
+    String makePostLogPinsJson(String deviceId, String jsonPins);
     /// <summary>
     /// Formats a http status code
     /// </summary>
     /// <param name="uiStatusCode">Number of the http status code to format</param>
     /// <returns>A string with the http statuscode number and the status text.</returns>
     String makeHttpStatusCodeString(unsigned int uiStatusCode);
-    const char * extractAndReturnIPaddress(const char *unParsedJson);
+    String extractAndReturnIPaddress(const char *unParsedJson);
     String jsonRoot(unsigned int uiType, String key, String value);
 };
 
@@ -691,7 +696,7 @@ const char* password = WIFI_PASSWORD;
 // example: 5100
 const int   PORT = PORT_NUMBER;
 // example: 6100
-const int   ardosServerPort = ARDOS_SERVER_PORT;
+const int   voffconServerPort = VOFFCON_SERVER_PORT;
 
 IPAddress   
 
@@ -710,7 +715,7 @@ gateway(IPV4_GATEWAY),
 subnet(IPV4_SUBNET),
 
 // example: "192.168.1.127"
-ardosServerIp(ARDOS_SERVER_IP);
+voffconServerIp(VOFFCON_SERVER_IP);
 // Additional information
 
 // If the device is NOT connected, it's light is faint.
@@ -731,10 +736,10 @@ boolean grantAccessToEverybody = true;
 //in a client IP address are the same same as myIp (this server IP address).
 //
 boolean grantAccessToAllClientsOnSameSubnet = true;
+
 // boolean grantAccessToFirstCaller:
 // set to true if you want to allow the first client to call the "/setup" method
 // to be automaticly granted access.  that is, client IP address will be whitelisted.
-
 boolean grantAccessToFirstCaller = true;
 
 ESP8266WebServer server(PORT);
@@ -963,8 +968,13 @@ void setup(void) {
     Serial.begin(115200);
     Serial.println("Connecting to : " + String(ssid));
     //WiFi.begin(ssid);
+   
+     
+    //WiFi.config(myIp, gateway, subnet); //this line can be skipped.  only use if you want a specific ip address
+    
+    
+    WiFi.mode(WIFI_STA);
     WiFi.begin(ssid, password);
-    WiFi.config(myIp, gateway, subnet); //this line can be skipped.  only use if you want a specific ip address
     Serial.println("");
     // Wait for connectionc
     while (WiFi.status() != WL_CONNECTED) {
@@ -978,9 +988,13 @@ void setup(void) {
     Serial.print("IP  address: "); Serial.println(WiFi.localIP());
     Serial.print("Mac address: "); Serial.println(WiFi.macAddress());
 
-    if (MDNS.begin("esp8266")) {
+    /*if (MDNS.begin("esp8266")) {
         Serial.println("MDNS responder started");
-    }
+    }*/
+
+    //SETTING_UP_WHITELIST_START
+    //Do not remove line, here whitelist ip's will be added by VoffCon Node server
+    //SETTING_UP_WHITELIST_END
 
     startTime.setTime(getTime());
     
@@ -1003,7 +1017,7 @@ void setup(void) {
     server.begin();
     Serial.println("HTTP server started");
     int startState = 700;
-    //todo: make client add these pins
+	//SETTING_UP_PINS_START
     PINTYPE type = PINTYPE_OUTPUT_ANALOG;
     pinnar.addPin("D0", type, D0, startState);
     pinnar.addPin("D1", type, D1, startState);
@@ -1014,6 +1028,7 @@ void setup(void) {
     pinnar.addPin("D6", type, D6, startState);
     pinnar.addPin("D7", type, D7, startState);
     pinnar.addPin("D8", type, D8, startState);
+	//SETTING_UP_PINS_END
     Serial.println(pinnar.toJson());
 }
 
@@ -1049,10 +1064,7 @@ void GPin::analogWriteEsp32() {
 }
 GPin::GPin(const char*strPinName, PINTYPE pinType, int pinNumber, int pinValue, uint8_t pinChannel) {
     mChannel = pinChannel;
-    
     init(strPinName, pinType, pinNumber, pinValue);
-    
-
 }
 #else
 GPin::GPin(const char*strPinName, PINTYPE pinType, int pinNumber, int pinValue) {
@@ -1190,8 +1202,12 @@ boolean GPins::setValue(int pinNumber, int newValue) {
 }
 // todo: will we need a removePIn function?
 #ifdef ESP32 
-int GPins::addPin(const char *strPinName, PINTYPE pinType, int pinNumber, int pinValue, uint8_t pinChannel) {
-    mPins[mLength] = new GPin(strPinName, pinType, pinNumber, pinValue, mChannelCount++);
+int GPins::addPin(const char *strPinName, PINTYPE pinType, int pinNumber, int pinValue) {
+
+    if (pinType == PINTYPE_OUTPUT_ANALOG) {
+        mChannelCount++; //mChannel is only used when pin is of type PINTYPE_OUTPUT_ANALOG
+    }
+    mPins[mLength] = new GPin(strPinName, pinType, pinNumber, pinValue, mChannelCount - 1);
     mLength++;
     return mLength - 1;
 }
@@ -1321,6 +1337,14 @@ String GUrl::makeStatusResponceJson(String jsonPins, String jsonWhitelist, Strin
         "}";
     return str;
 }
+String GUrl::makePostLogPinsJson(String deviceId, String jsonPins) {
+    String str = "{" +
+        jsonObjectType(OBJECTTYPE_LOG_PINS) + "," +
+        jsonKeyValue("pins", jsonPins) + "," +
+        jsonKeyValue("deviceId", "\""+deviceId+ "\"") +
+        "}";
+    return str;
+}
 /// <summary>
 /// Formats a http status code
 /// </summary>
@@ -1386,7 +1410,7 @@ boolean GUrl::extractAndSetPinsAndValues(const char *unParsedJson, GPins *pinnar
     return ret;
 }
 
-const char * GUrl::extractAndReturnIPaddress(const char *unParsedJson) {
+String GUrl::extractAndReturnIPaddress(const char *unParsedJson) {
 
     String line = String(unParsedJson);
     int iStart, iEnd;
@@ -1399,7 +1423,7 @@ const char * GUrl::extractAndReturnIPaddress(const char *unParsedJson) {
     line = line.substring(iStart, iEnd);
     if (line.length() < 7 || line.length() > 15) return ""; // longest ip address 255.255.255.255
     Serial.println("Processed \"" + line + "\" len=" + String(line.length()));
-    return line.c_str();
+    return line;
 }
 
 String GUrl::jsonRoot(unsigned int uiType, String key, String value) {

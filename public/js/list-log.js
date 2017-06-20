@@ -21,29 +21,51 @@ by regular post to the address Haseyla 27, 260 Reykjanesbar, Iceland.
 /*client javascript file for the list-device page*/
 var SERVER;
 
-function getUserDeviceList(){
-	var url = SERVER+'/devices/device-list';
+function getUserDeviceLogList(){
+	var url = SERVER+'/logs/device-list';
 		var request = $.get(url);
 	request.done(function( data ) {
 		setDevicelistValues(data);
 		}).fail(function( data ) {
 			if (data.status===401){
+				console.err(data);
 				showModal("You need to be logged in!", data.responseText);
 			}
 		});
 }
 
+/*Creates an item for a list which shows which devices have logs and how many logs*/
+function createDevicesLogList(id, name, description, logRecordCount, routeText){
+	var url = SERVER+'/'+ routeText +'/register/'+ id;
+	var strElm = 
+'<div id="listItem'+ id +'" class="list-group-item clearfix">' +
+	'<p class="list-group-item-heading">' + name + '</p>' + 
+	'<span class="list-group-item-text">' +description + '</span>'+
+	'<span class="pull-right">';
+	strElm +='<button onclick="deviceLogs(\''+id+'\');" class="btn btn-xs btn-success"> <span class="glyphicon glyphicon-play"></span>&nbsp;Logs('+ logRecordCount +') </button>';
+	
+	strElm +='</span>' +'</div>';
+
+	return strElm; 
+}
+
+//opens the page for logs for the the specified device.
+function deviceLogs(id){
+	window.location.assign("device/"+id);
+}
+
 function setDevicelistValues(deviceList){
-	var id, name, description, isOwner;
+	var id, name, description, isOwner,recordCount;
 	for(var i = 0; i < deviceList.length; i++){
 		id 		= deviceList[i].id;
 		name 		= deviceList[i].name;
 		description = deviceList[i].description;
 		
 		isOwner     = deviceList[i].isOwner;
+		recordCount = deviceList[i].recordCount;
 		/*type = deviceList[i].type;
 		  url  = deviceList[i].url;*/
-		var str =  createListItem(id, name, description, 'devices', isOwner, isOwner, isOwner, isOwner);
+		var str =  createDevicesLogList(id, name, description, recordCount, 'logs');
 		$("#device-list").append(str);
 	}
 }
@@ -54,5 +76,5 @@ $(function () {
 	/* this is the *$( document ).ready(function( $ ) but jshint does not like that*/
 	SERVER = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ':'+window.location.port: '');
 	
-	getUserDeviceList();
+	getUserDeviceLogList();
 });

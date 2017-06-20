@@ -1,5 +1,5 @@
 /*
-        Ardos is a system for controlling devices and appliances from anywhere.
+        VoffCon is a system for controlling devices and appliances from anywhere.
         It consists of two programs.  A “node server” and a “device server”.
         Copyright (C) 2016  Gudjon Holm Sigurdsson
 
@@ -206,7 +206,7 @@ router.post('/pins/:deviceId', lib.authenticateRequest, function(req, res){
 
 	var deviceId = req.params.deviceId;
 	var b = req.body;	
-	Device.getById(deviceId, function(err, device){
+	Device.getById(deviceId, function(err, device) {
 		if (err !== null || device === null){
 			res.statusCode = 404;
 			var obj = {text:'Error 404: User device not found!'};
@@ -240,8 +240,8 @@ router.post('/pins/:deviceId', lib.authenticateRequest, function(req, res){
 						}
 						return body;
 					}
-				).pipe(res);}
-	);
+				).pipe(res);
+	});
 });
 
 router.post('/whitelist/:deviceId', lib.authenticatePowerRequest, function(req, res){
@@ -379,8 +379,6 @@ router.post('/custom/:deviceId', lib.authenticateRequest, function(req, res){
 	);
 });
 
-
-
 router.get('/register', lib.authenticatePowerUrl, function(req, res){
 	res.render('register-device');
 });
@@ -423,7 +421,7 @@ router.post('/register', lib.authenticatePowerRequest, function(req, res){
 			name: req.body.name,
 			url:req.body.url,
 			description:req.body.description,
-			type: device.type,
+			type: req.body.type,
 			owners:[]
 			
 		});
@@ -608,8 +606,16 @@ router.get('/run/:deviceID', lib.authenticateDeviceOwnerUrl, function(req, res){
 	});
 });
 
-router.get('/program/:deviceID', lib.authenticatePowerUrl, function(req, res){
+router.post('/program/:deviceID', lib.authenticatePowerUrl, function(req, res){
 	var id = req.params.deviceID;
+	var b = req.body;
+	var pins, whitelist;
+	if (req.body.pins !== undefined) {
+		pins = JSON.parse(req.body.pins);
+	}
+	if (req.body.whitelist !== undefined) {
+		whitelist = JSON.parse(req.body.whitelist);
+	}
 	if (id !== undefined){
 		Device.getById(id, function(err, device){
 				if(err || device === null) {
@@ -620,7 +626,14 @@ router.get('/program/:deviceID', lib.authenticatePowerUrl, function(req, res){
 					if (type === undefined ){
 						type = "0";
 					}
-					lib.makeProgramFile(device.url, device.type , function(data){
+					var dev = {
+						id:  id,
+						url:  device.url,
+						type: device.type,
+						pins: pins, 
+						whitelist: whitelist
+					}
+					lib.makeProgramFile(dev , function(data){
 						var fileInfo = "attachment; filename=DeviceServerNodeMcu.ino";
 						if (device.type === "1") {
 							fileInfo = "attachment; filename=DiviceServerEsp32.ino";
@@ -645,5 +658,45 @@ router.get('/program/:deviceID', lib.authenticatePowerUrl, function(req, res){
 	}
 });
 
+router.post('/reportin', function(req, res) {
+
+	req.checkBody('id', 'id is required').notEmpty();
+	req.checkBody('ip', 'ip is required').notEmpty();
+	req.checkBody('port', 'port is required').notEmpty();
+	var id = req.body.id;
+	var errors = req.validationErrors();
+	if(errors){
+		res.status(422).json(errors);
+	} else {
+			var newUrl = "http://"+req.body.ip+":"+req.body.port;
+
+				Device.getById(id, function(err, device){
+							if(err || device === null) {
+								res.status(412).json({message:"device not found!"});
+							} else{
+								if (newUrl !== device.url) {
+									//url is change so let's update the device in the database
+									var obj = {id : device.id,
+										name: device.name,
+										description: device.description,
+										url: newUrl,
+										type: device.type
+									};
+									Device.modify(id, obj, function(err, result){
+										if(err || result === null || result.ok !== 1) {//(result.ok===1 result.nModified===1)
+												res.status(500).json({message:"Unable to update!"});
+										} else{
+												var date = new Date();
+												res.status(200).send(date.toUTCString());
+										}
+									});
+								} else { //url is unchanged
+									var date = new Date();
+									res.status(200).send(date.toUTCString());
+								}
+							}
+				});
+	}
+});
 
 module.exports = router;

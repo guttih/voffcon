@@ -1,9 +1,9 @@
-# Ardos
+# VoffCon
 <img src="public/images/logo.png" width="100" height="100" border="0" title="Click to view in nicer format" />
 
- [Documentation](https://guttih.github.io/ardos) [Device setup](https://guttih.github.com/ardos/docs/device-setup.html) 
+ [Documentation](https://guttih.github.io/voffcon) [Device setup](https://guttih.github.com/voffcon/docs/device-setup.html) 
 
-Ardos is a system for controlling devices and appliances from anywere.  It is made up by two components.  A node server and A device server.  The main benefits of this system is your ability to create your own controls and cards, which other users logged in to your system can use to control devices you deside to put on your cards.
+VoffCon is a system for controlling devices and appliances from anywere.  It is made up by two components.  A node server and A device server.  The main benefits of this system is your ability to create your own controls and cards, which other users logged in to your system can use to control devices you deside to put on your cards.
 
 ## Video intoduction
 
@@ -20,7 +20,7 @@ The server provides connections to many devices and uses passport to make sure t
 ### Overview
 This application is a server intended to run on a computer where it can access the esp8266 and esp32 devices which run running a special server program which was developed for this server in mind.
 <div style="text-align:center">
-  <img src="docs/images/diagram_ardos.png" width="500" alt="Overnew image of the whole system" />
+  <img src="docs/images/diagram_voffcon.png" width="500" alt="Overnew image of the whole system" />
 </div>
 
 ### requirements:
@@ -61,7 +61,7 @@ cd bin
 mongod.exe --directoryperdb --dbpath C:\MongoDB\Server\3.2\data\db --logpath C:\MongoDB\Server\3.2\log\mongodb.log --logappend
 ```
 
-#### Installing Ardos node server on Ubuntu 16.04 (Linux) when all prerequisites are missing
+#### Installing VoffCon node server on Ubuntu 16.04 (Linux) when all prerequisites are missing
 Assuming that you do not have Mongodb, nodejs or npm installed.  This would be the process you would follow.
 
 ##### Reload local package database
@@ -86,7 +86,7 @@ sudo apt install npm
 
 ```
 
-#### Install packages which the Ardos app server uses and running the server
+#### Install packages which the VoffCon app server uses and running the server
 ```shell
 npm install
 node app
@@ -154,11 +154,11 @@ If a user wants to access a device then the system will grant him access if the 
 ### Later additions to the system / nice to have
 - Create a visual/drag'n drop editor, allowing power users create cards more easier.
 - Create a visual/drag'n drop editor, allowing power users create controls more easier.
-- Show running cards without the Ardos menu.
+- Show running cards without the VoffCon menu.
 
 
 # Licence  
-        Ardos is a system for controlling devices and appliances from anywhere.
+        VoffCon is a system for controlling devices and appliances from anywhere.
         It consists of two programs.  A “node server” and a “device server”.
         Copyright (C) 2016  Gudjon Holm Sigurdsson
 

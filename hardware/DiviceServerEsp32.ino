@@ -1,9 +1,11 @@
 ﻿#include <WiFi.h>
+#include <HTTPClient.h>
 //#include <stddef.h>  //for linked list
 /*
     Board: ESP32 DEV Module
 */
 
+const char* deviceId = DEVICE_ID;
 // Name of the wifi (accesspoint)network
 // example: "guttisWiFi"
 const char* ssid = WIFI_ACCESSPOINT;
@@ -14,7 +16,7 @@ const char* password = WIFI_PASSWORD;
 // example: 5100
 const int   PORT = PORT_NUMBER;
 // example: 6100
-const int   ardosServerPort = ARDOS_SERVER_PORT;
+const int   voffconServerPort = VOFFCON_SERVER_PORT;
 
 IPAddress
 
@@ -33,7 +35,7 @@ gateway(IPV4_GATEWAY),
 subnet(IPV4_SUBNET),
 
 // example: "192.168.1.127"
-ardosServerIp(ARDOS_SERVER_IP);
+voffconServerIp(VOFFCON_SERVER_IP);
 
 /*boolean grantAccessToEverybody:
 * Set to true if you want to allow all clients where the first 3 numbers
@@ -48,6 +50,31 @@ boolean grantAccessToAllClientsOnSameSubnet = true;
 .*/
 
 WiFiServer server(PORT);
+
+const int ERROR_NUMBER = -9999;
+
+enum OBJECTTYPE {
+    OBJECTTYPE_KEYVALUE_STRING,
+    OBJECTTYPE_KEYVALUE_INT,
+    OBJECTTYPE_PINS_ARRAY,
+    OBJECTTYPE_PIN,
+    OBJECTTYPE_PINS,
+    OBJECTTYPE_DATE,
+    OBJECTTYPE_WHITELIST_ARRAY,
+    OBJECTTYPE_STATUS,
+    OBJECTTYPE_LOG_PINS,
+    OBJECTTYPE_INFORMATION,
+    OBJECTTYPE_WARNING,
+    OBJECTTYPE_ERROR,
+    /*add next type above this line*/
+    OBJECTTYPE_COUNT
+};
+
+enum JSONTYPE {
+    KEYVALUE_STRING,
+    KEYVALUE_INT,
+    KEYVALUE_DOUBLE
+};
 
 #ifndef CODE_BLOCK_LinkedList
 /*
@@ -510,7 +537,7 @@ public:
     GPins() { mLength = 0; }
     //todo: I' don't need a deconstructur but I should make one
 #ifdef ESP32 
-    int addPin(const char *strPinName, PINTYPE pinType, int pinNumber, int pinValue, uint8_t pinChannel);
+    int addPin(const char *strPinName, PINTYPE pinType, int pinNumber, int pinValue);
 #else
     int addPin(const char *strName, PINTYPE pinType, int pinNumber, int pinValue);
 #endif
@@ -622,13 +649,14 @@ public:
     String jsonKeyValue(String key, int value);
     String jsonObjectType(unsigned int uiType);
     String makeStatusResponceJson(String jsonPins, String jsonWhitelist, String jsonDate);
+    String makePostLogPinsJson(String deviceId, String jsonPins);
     /// <summary>
     /// Formats a http status code
     /// </summary>
     /// <param name="uiStatusCode">Number of the http status code to format</param>
     /// <returns>A string with the http statuscode number and the status text.</returns>
     String makeHttpStatusCodeString(unsigned int uiStatusCode);
-    const char * extractAndReturnIPaddress(const char *unParsedJson);
+    String extractAndReturnIPaddress(const char *unParsedJson);
     String jsonRoot(unsigned int uiType, String key, String value);
 };
 
@@ -645,19 +673,7 @@ enum COMMANDS {
     COMMANDS_POST_WHITELIST,
     COMMANDS_DELETE_WHITELIST
 };
-
-enum OBJECTTYPE {
-    OBJECTTYPE_KEYVALUE_STRING,
-    OBJECTTYPE_KEYVALUE_INT,
-    OBJECTTYPE_PINS_ARRAY,
-    OBJECTTYPE_PIN,
-    OBJECTTYPE_PINS,
-    OBJECTTYPE_DATE,
-    OBJECTTYPE_WHITELIST_ARRAY,
-    OBJECTTYPE_STATUS,
-    /*add next type above this line*/
-    OBJECTTYPE_COUNT
-};
+//INSERT_FROM_FILE_first.h
 
 int contentLength = 0;
 METHODS method = METHOD_NOTSET;
@@ -675,32 +691,36 @@ int charcount = 0;
 /// Setup all pins by selecting their index/channel, number, initial value and type.
 /// </summary>
 void setupPins() {    
-    Serial.println("----------------------------------------");
-    Serial.println(pinnar.toJson());
-    Serial.println("----------------------------------------");
+   
         //uint8_t index, uint8_t number, uint8_t value, PINTYPE type = PINTYPE_ANALOG
     PINTYPE type, type2;
     //type = PINTYPE_ANALOG;
     /*Pins D0 - D7 can be turned compleately off with OUTPUT_ANALOG*/
     type = PINTYPE_OUTPUT_ANALOG;
     type2 = PINTYPE_OUTPUT_DIGITAL;
-    pinnar.addPin("D0", type, 15, 1, 0);
-    pinnar.addPin("D1", type, 2, 3, 1);
-    pinnar.addPin("D2", type, 4, 6, 2);
-    pinnar.addPin("D3", type, 5, 9, 3);
-    pinnar.addPin("D4", type, 18, 16, 4);
-    pinnar.addPin("D5", type, 19, 25, 5);
-    pinnar.addPin("D6", type, 21, 40, 6);
-    pinnar.addPin("D7", type, 23, 60, 7);
 
-    pinnar.addPin("D8", type2, 13, 80, 8);
-    pinnar.addPin("D9", type2, 12, 90, 9);
-    pinnar.addPin("D10", type2, 14, 100, 10);
-    pinnar.addPin("D11", type2, 27, 130, 11);
-    pinnar.addPin("D12", type2, 26, 150, 12);
-    pinnar.addPin("D13", type2, 25, 180, 13);
-    pinnar.addPin("D14", type2, 33, 210, 14);
-    pinnar.addPin("D15", type2, 32, 255, 15);
+	//SETTING_UP_PINS_START
+    pinnar.addPin("D0", type, 15, 1);
+    pinnar.addPin("D1", type, 2, 3);
+    pinnar.addPin("D2", type, 4, 6);
+    pinnar.addPin("D3", type, 5, 9);
+    pinnar.addPin("D4", type, 18, 16);
+    pinnar.addPin("D5", type, 19, 25);
+    pinnar.addPin("D6", type, 21, 40);
+    pinnar.addPin("D7", type, 23, 60);
+
+    pinnar.addPin("D8", type2, 13, 80);
+    pinnar.addPin("D9", type2, 12, 90);
+    pinnar.addPin("D10", type2, 14, 100);
+    pinnar.addPin("D11", type2, 27, 130);
+    pinnar.addPin("D12", type2, 26, 150);
+    pinnar.addPin("D13", type2, 25, 180);
+    pinnar.addPin("D14", type2, 33, 210);
+    pinnar.addPin("D15", type2, 32, 255);
+	//SETTING_UP_PINS_END
+    Serial.println("----------------------------------------");
+    Serial.println(pinnar.toJson());
+    Serial.println("----------------------------------------");
 }
 
 /// <summary>
@@ -738,9 +758,9 @@ String getTime() {
     uint8_t connectionAttempt = 0;
     uint8_t RETRYS = 1;
     //String strUrl = "google.com"; // This will not work because function WiFi.config will disable DHCP, dns lookup will fail
-    String strUrl = ardosServerIp.toString();
-    int port = ardosServerPort;
-    Serial.println(String("Getting current date and time from " + strUrl +":" + port +" (Ardos server)"));
+    String strUrl = voffconServerIp.toString();
+    int port = voffconServerPort;
+    Serial.println(String("Getting current date and time from " + strUrl +":" + port +" (VoffCon server)"));
     
     while (!client.connect(strUrl.c_str(), port) && connectionAttempt < RETRYS) {
         ++connectionAttempt;
@@ -795,11 +815,11 @@ String getTime() {
 /// <returns></returns>
 void extractAndAddToWhitelist(const char *unParsedJson) {
     
-    whiteList.add(lib.extractAndReturnIPaddress(unParsedJson));
+    whiteList.add(lib.extractAndReturnIPaddress(unParsedJson).c_str());
 }
 void extractAndRemoveFromWhitelist(const char *unParsedJson) {
     
-    whiteList.remove(lib.extractAndReturnIPaddress(unParsedJson));
+    whiteList.remove(lib.extractAndReturnIPaddress(unParsedJson).c_str());
 }
 
 /// <summary>
@@ -838,15 +858,123 @@ bool isAuthorized(WiFiClient *client) {
 void handleStatus(WiFiClient *client) {
     
     //if (!isAuthorized()) return;
-    int pin;
-    int val;
-    
     if (whiteList.isEmpty()){
-        whiteList.add(ardosServerIp);
+        whiteList.add(voffconServerIp);
     }
     
     String str = lib.makeStatusResponceJson(pinnar.toJson(), whiteList.toJson(), startTime.toJson());
     client->println(makeJsonResponseString(200, str));
+}
+String makeJsonPostString(String host, String url, String jsonString) {
+    String str = "POST "+ url +" HTTP/1.1 " +
+        "\r\nHost: "+ host +
+        "\r\nUser-Agent: Arduino/1.0" +
+        "\r\nConnection: close" +
+        "\r\nContent-Type: application/json" +
+        "\r\nContent-Length: " + jsonString.length() +
+        "\r\n\r\n" +
+        jsonString + "\n";
+    return str;
+}
+
+void logPins() {
+    /*
+    WiFiClient client;
+    uint8_t connectionAttempt = 0;
+    uint8_t RETRYS = 1;
+    //String strUrl = "google.com"; // This will not work because function WiFi.config will disable DHCP, dns lookup will fail
+    String strUrl = voffconServerIp.toString();
+    int port = voffconServerPort;
+    Serial.println(String("LOGGING to " + strUrl + ":" + port + " (VoffCon server)"));
+
+    if (client.connect(strUrl.c_str(), port)) {
+        while (client.available()) { Serial.write((char)client.read()); }
+
+        Serial.println("Posting data");
+        String host = voffconServerIp.toString() + ":" + String(VOFFCON_SERVER_PORT);
+        String str = lib.makePostLogPinsJson(DEVICE_ID, pinnar.toJson());
+        String sendStr = makeJsonPostString(host, "/log/ids/" + String(DEVICE_ID), "{\"abba\":3}");
+        Serial.println("Posting this content to client");
+        //sendStr = "{\"abba\":3}";
+        Serial.println(sendStr);
+        client.println(sendStr);
+        while (client.available()) { Serial.write((char)client.read()); }
+    }
+    */
+    
+    String data = lib.makePostLogPinsJson(deviceId, pinnar.toJson());
+    //data = "{\"einn\":\"tveir\"}";
+    //data = pinnar.toJson();
+
+    HTTPClient http;
+    String host = voffconServerIp.toString() + ":" + String(voffconServerPort);
+    String url = "http://"+ host +"/logs/pins";
+    http.begin(url);  //Specify destination for HTTP request
+    http.addHeader("Content-Type", "application/json");
+    http.addHeader("Connection", "close");
+    //http.addHeader("Content - Length", String(data.length()));
+    
+    Serial.println("sending");
+    Serial.println(data);
+    
+    int httpResponseCode = http.POST(data);   //Send the actual POST request
+
+    if (httpResponseCode>0) {
+
+        String response = http.getString();                       //Get the response to the request
+
+        Serial.println(httpResponseCode);   //Print return code
+        Serial.println(response);           //Print request answer
+
+    }
+    else {
+
+        Serial.print("Error on sending POST: ");
+        Serial.println(httpResponseCode);
+
+    }
+
+    http.end();  //Free resources
+    
+}
+String reportIn() {
+    Serial.println("Reporting in ");
+    String ret = "Fri, 1 Jan 1971 00:00:00 GMT";
+    String data = "{" +
+        lib.jsonKeyValue("id", "\"" + String(deviceId) + "\",") +
+        lib.jsonKeyValue("ip", "\""+WiFi.localIP().toString()+"\",") + 
+        lib.jsonKeyValue("port", PORT) +
+        "}";
+
+    HTTPClient http;
+    String host = voffconServerIp.toString() + ":" + String(voffconServerPort);
+    String url = "http://" + host + "/devices/reportin";
+    http.begin(url);  //Specify destination for HTTP request
+    http.addHeader("Content-Type", "application/json");
+    http.addHeader("Connection", "close");
+    Serial.println("sending");
+    Serial.println(data);
+
+    int httpResponseCode = http.POST(data);   //Send the actual POST request
+
+    if (httpResponseCode>0) {
+
+        String response = http.getString();                       //Get the response to the request
+
+        Serial.println(httpResponseCode);   //Print return code
+        Serial.println(response);           //Print request answer
+        ret = response; //responce should contain date.toUTCString()
+
+    }
+    else {
+
+        Serial.print("Error on sending POST: ");
+        Serial.println(httpResponseCode);
+
+    }
+
+    http.end();  //Free resources
+    return ret;
 }
 
 /// <summary>
@@ -873,6 +1001,8 @@ void printWiFiInfo() {
     //Serial.print  ("WiFi psk       :"); Serial.println(WiFi.psk());  
     Serial.print  ("WiFi.BSSIDstr  :"); Serial.println(WiFi.BSSIDstr());
     Serial.print  ("WiFi status    :"); Serial.println(WiFi.status());
+    Serial.print("VOFFCON ip and port:"); Serial.println(voffconServerIp.toString()+":"+ voffconServerPort);
+    
     Serial.println("----------------------------------");
 }
 bool connectWifiHelper(String ssid, String password, uint32_t uiDelay) {
@@ -918,7 +1048,7 @@ bool connectWifi() {
         iTriesLeft--;
     }
 */
-    if (connectWifiHelper(ssid, password, 230))
+    if (connectWifiHelper(ssid, password, 600))
         return true;
        
     Serial.println("WiFi scanning!");
@@ -954,7 +1084,7 @@ void printHeapSize(String strAddInfront=String("")) {
 }
 void test() {
     Serial.println("starting test()");
-    
+    logPins();
     Serial.println("ending test");
     while (true);
 }
@@ -964,7 +1094,10 @@ void setup() {
     while (!Serial) {
         ; // wait for serial port to connect. Needed for native USB port only
     }
-    Serial.println(whiteList.toJson());
+    //SETTING_UP_WHITELIST_START
+        //Do not remove line, here whitelist ip's will be added by VoffCon Node server
+    //SETTING_UP_WHITELIST_END
+    Serial.println("Whitelist: "+ whiteList.toJson());
     
      Serial.println("");
     if (connectWifi())
@@ -975,13 +1108,15 @@ void setup() {
         while (true);
     }
     printWiFiInfo();
-    startTime.setTime(getTime());
+    startTime.setTime(reportIn());
+    //startTime.setTime(getTime());
     Serial.println("Start time:" + startTime.toString());
     setupPins();
     Serial.println("The device can be accessed at this path ");
     String subPath = "://" + WiFi.localIP().toString() + ":" + String(PORT) + "\"";
     Serial.println();
     Serial.println("\"http" + subPath + ".");
+    //test();
     server.begin();
 }
 
@@ -1235,10 +1370,7 @@ void GPin::analogWriteEsp32() {
 }
 GPin::GPin(const char*strPinName, PINTYPE pinType, int pinNumber, int pinValue, uint8_t pinChannel) {
     mChannel = pinChannel;
-    
     init(strPinName, pinType, pinNumber, pinValue);
-    
-
 }
 #else
 GPin::GPin(const char*strPinName, PINTYPE pinType, int pinNumber, int pinValue) {
@@ -1376,8 +1508,12 @@ boolean GPins::setValue(int pinNumber, int newValue) {
 }
 // todo: will we need a removePIn function?
 #ifdef ESP32 
-int GPins::addPin(const char *strPinName, PINTYPE pinType, int pinNumber, int pinValue, uint8_t pinChannel) {
-    mPins[mLength] = new GPin(strPinName, pinType, pinNumber, pinValue, mChannelCount++);
+int GPins::addPin(const char *strPinName, PINTYPE pinType, int pinNumber, int pinValue) {
+
+    if (pinType == PINTYPE_OUTPUT_ANALOG) {
+        mChannelCount++; //mChannel is only used when pin is of type PINTYPE_OUTPUT_ANALOG
+    }
+    mPins[mLength] = new GPin(strPinName, pinType, pinNumber, pinValue, mChannelCount - 1);
     mLength++;
     return mLength - 1;
 }
@@ -1608,6 +1744,14 @@ String GUrl::makeStatusResponceJson(String jsonPins, String jsonWhitelist, Strin
         "}";
     return str;
 }
+String GUrl::makePostLogPinsJson(String deviceId, String jsonPins) {
+    String str = "{" +
+        jsonObjectType(OBJECTTYPE_LOG_PINS) + "," +
+        jsonKeyValue("pins", jsonPins) + "," +
+        jsonKeyValue("deviceId", "\""+deviceId+ "\"") +
+        "}";
+    return str;
+}
 /// <summary>
 /// Formats a http status code
 /// </summary>
@@ -1673,7 +1817,7 @@ boolean GUrl::extractAndSetPinsAndValues(const char *unParsedJson, GPins *pinnar
     return ret;
 }
 
-const char * GUrl::extractAndReturnIPaddress(const char *unParsedJson) {
+String GUrl::extractAndReturnIPaddress(const char *unParsedJson) {
 
     String line = String(unParsedJson);
     int iStart, iEnd;
@@ -1686,7 +1830,7 @@ const char * GUrl::extractAndReturnIPaddress(const char *unParsedJson) {
     line = line.substring(iStart, iEnd);
     if (line.length() < 7 || line.length() > 15) return ""; // longest ip address 255.255.255.255
     Serial.println("Processed \"" + line + "\" len=" + String(line.length()));
-    return line.c_str();
+    return line;
 }
 
 String GUrl::jsonRoot(unsigned int uiType, String key, String value) {

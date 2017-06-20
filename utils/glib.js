@@ -1,5 +1,5 @@
 /*
-        Ardos is a system for controlling devices and appliances from anywhere.
+        VoffCon is a system for controlling devices and appliances from anywhere.
         It consists of two programs.  A “node server” and a “device server”.
         Copyright (C) 2016  Gudjon Holm Sigurdsson
 
@@ -30,6 +30,7 @@ const exec = require('child_process').exec;
 var defaultInterfaces = require('default-network'); 
 var ipconfig = require('../utils/ipconfigwin.js');
 var router = express.Router();
+var bcrypt = require('bcryptjs');
 
 
 module.exports.getDeviceTypeName = function getDeviceTypeName(type) {
@@ -38,6 +39,24 @@ module.exports.getDeviceTypeName = function getDeviceTypeName(type) {
 	}
 	return "NodeMcu module with ESP8266 on board";
 }
+
+//returns undefined if not successful.
+module.exports.makeHash = function makeHash(strHashMe) {
+	
+	if (strHashMe === undefined){
+		return; 
+	}
+	var salt, hash;
+	salt = bcrypt.genSaltSync(10);
+	if (salt){
+		hash = bcrypt.hashSync(strHashMe, salt);
+	}
+	return hash;
+}
+
+module.exports.compareHash = function(candidateId, hash){
+	return bcrypt.compareSync(candidateId, hash);
+};
 
 module.exports.authenticateUrl = function authenticateUrl(req, res, next){	
 	if(req.isAuthenticated()){
@@ -528,8 +547,102 @@ function dotsToCommas(str){
 	return out;
 
 }
-var makeProgramFileWindows = function makeProgramFileWindows(deviceUrl, filePath, callback, errorCallback) {
 
+//Replaces content in the string content, from where the
+//startToken starts, including the startToken
+//and the endToken ends, including the endToken
+//Returns
+//  Success: Returns a new string containing a new string where newSubContent has been replaced.
+//  Fail   : Returns the string content unchanged.  This happens if the function did not find startToken or endToken.
+
+module.exports.ReplaceInFile = function ReplaceInFile(content, newSubContent, startToken, endToken) {
+    if (startToken === undefined) {
+        startToken = "//DO_NOT_INSERT_FROM";
+    }
+    if (endToken === undefined) {
+        endToken = "//DO_NOT_INSERT_TO";
+    }
+
+    var start = content.search(startToken);
+    var end = content.search(endToken);
+    if (start > -1 && end > start) {
+        // getting the first part
+        var out = content.substr(0, start);
+        //adding the new content
+        out += newSubContent;
+        // getting the second part
+        end += endToken.length;
+
+        out += content.substr(end);
+        return out;
+    }
+    return content;//unchanged
+}
+
+
+module.exports.getMode = function getMode(modeNumber) {
+    switch(modeNumber){
+		case 0: return "PINTYPE_INPUT_ANALOG";
+		case 1: return "PINTYPE_INPUT_DIGITAL";
+		case 2: return "PINTYPE_OUTPUT_ANALOG";
+		case 3: return "PINTYPE_OUTPUT_DIGITAL";
+
+		default: "INVALID_PIN_TYPE";
+	}
+}
+
+//The function creates c++ commands to be able to setup the device pins using information from the given object.
+//the function will return undefined if there was an error creating the the c++ commands
+module.exports.makePinSetupString = function makePinSetupString(deviceType, pins) {
+    
+	if (deviceType !== "0" && deviceType !== "1" ) {
+		return;
+	}
+	if (pins === undefined || pins.length < 1 || pins[0].pin === undefined || pins[0].m === undefined || pins[0].val === undefined || pins[0].name === undefined ){
+		return;
+	}
+	
+	var str, ret="";
+	if (deviceType === "1") {
+			ret = "uint8_t channel = 0;\r\n";
+	}
+	 
+	//we should hav a valid array of pins.
+	// pinnar.addPin("D0", type, 15, 1, 0);
+	
+	for(var i = 0; i<pins.length; i++){
+		str ='    pinnar.addPin("' + pins[i].name + '", ' + module.exports.getMode(pins[i].m) + ', ' + pins[i].pin + ', ' + pins[i].val + ');\r\n';
+		ret+= str;
+	}
+	return ret;
+}
+
+//The function creates c++ commands to be able to setup the device whitelist using information from the given object.
+//the function will return undefined if there was an error creating the the c++ commands
+module.exports.makeWhiteListSetupString = function makeWhiteListSetupString(whiteList) {
+    
+	if (whiteList === undefined || whiteList.length < 1 || whiteList[0].length < 0){
+		return;
+	}
+	
+	var bAdded=false, str, ret="\r\n";
+	for(var i = 0; i<whiteList.length; i++){
+		bAdded = true;
+		str ='    whiteList.add("'+whiteList[i]+ '");\r\n';
+		ret+= str;
+	}
+		
+	return (bAdded)? ret: undefined; //return undefined if nothing was added
+}
+
+
+
+var makeProgramFileWindows = function makeProgramFileWindows(id, whitelist, deviceUrl, deviceType, pins, callback, errorCallback) {
+	var filePath = "./hardware/DeviceServerNodeMcu.ino";
+	if (deviceType === "1") {
+		filePath = "./hardware/DiviceServerEsp32.ino";
+	}
+	
 	fs.readFile(filePath, "utf-8", function(err, file) {
 			if (err === null){
 				var config = module.exports.getConfig();
@@ -576,7 +689,9 @@ var makeProgramFileWindows = function makeProgramFileWindows(deviceUrl, filePath
 							console.log("\t"+subkey+ '\t : \t' + item[key][subkey]);
 							*/
 						};
-
+						if (id!== undefined){
+							file = file.replace('DEVICE_ID', '"'+id+'"');
+						}
 						if (port!== undefined){
 							file = file.replace("PORT_NUMBER", port);
 						}
@@ -604,23 +719,21 @@ var makeProgramFileWindows = function makeProgramFileWindows(deviceUrl, filePath
 						}
 						if (config.serverIp!== undefined){
 							var sip = dotsToCommas(config.serverIp);
-							file = file.replace("ARDOS_SERVER_IP", sip);
+							file = file.replace("VOFFCON_SERVER_IP", sip);
 						}
 						if (config.port!== undefined){
-							file = file.replace("ARDOS_SERVER_PORT", config.port);
+							file = file.replace("VOFFCON_SERVER_PORT", config.port);
 						}
 
-
-
-
-
-
-
-
-
-
-
-					
+						if (pins !== undefined) {
+							var strSetPinCppCommands = module.exports.makePinSetupString(deviceType, pins);
+							file = module.exports.ReplaceInFile(file, strSetPinCppCommands, "//SETTING_UP_PINS_START", "//SETTING_UP_PINS_END");
+						}
+						if (whitelist !== undefined) {
+							var strWhiteListAddCppCommands = module.exports.makeWhiteListSetupString(whitelist);
+							file = module.exports.ReplaceInFile(file, strWhiteListAddCppCommands, "//SETTING_UP_WHITELIST_START", "//SETTING_UP_WHITELIST_END");
+						}
+						
 					callback(file);
 				});
 				
@@ -630,6 +743,14 @@ var makeProgramFileWindows = function makeProgramFileWindows(deviceUrl, filePath
 					errorCallback("could read the program temlate");
 				}
 			}
+
+
+
+
+
+
+
+
 	});
 };
 var getNetWorkInfoLinux = function getNetWorkInfoLinux(callback) {
@@ -645,8 +766,12 @@ var getNetWorkInfoLinux = function getNetWorkInfoLinux(callback) {
 	});
 }
 
-var makeProgramFileLinux = function makeProgramFileLinux(deviceUrl, filePath, callback, errorCallback) {
+var makeProgramFileLinux = function makeProgramFileLinux(deviceId, whitelist, deviceUrl, deviceType, pins, callback, errorCallback) {
 	
+	var filePath = "./hardware/DeviceServerNodeMcu.ino";
+	if (deviceType === "1") {
+		filePath = "./hardware/DiviceServerEsp32.ino";
+	}
 	fs.readFile(filePath, "utf-8", function(err, file) {
 			if (err === null){
 				var config = module.exports.getConfig();
@@ -677,7 +802,9 @@ var makeProgramFileLinux = function makeProgramFileLinux(deviceUrl, filePath, ca
 						}
 					}
 				
-				
+					if (id!== undefined){
+						file = file.replace("DEVICE_ID", id);
+					}
 					if (port!== undefined){
 						file = file.replace("PORT_NUMBER", port);
 					}
@@ -705,12 +832,19 @@ var makeProgramFileLinux = function makeProgramFileLinux(deviceUrl, filePath, ca
 					}
 					if (config.serverIp!== undefined){
 						var sip = dotsToCommas(config.serverIp);
-						file = file.replace("ARDOS_SERVER_IP", sip);
+						file = file.replace("VOFFCON_SERVER_IP", sip);
 					}
 					if (config.port!== undefined){
-						file = file.replace("ARDOS_SERVER_PORT", config.port);
+						file = file.replace("VOFFCON_SERVER_PORT", config.port);
 					}
-					
+					if (pins !== undefined) {
+							var strSetPinCppCommands = module.exports.makePinSetupString(deviceType, pins);
+							file = module.exports.ReplaceInFile(file, strSetPinCppCommands, "//SETTING_UP_PINS_START", "//SETTING_UP_PINS_END");
+					}
+					if (whitelist !== undefined) {
+							var strWhiteListAddCppCommands = module.exports.makeWhiteListSetupString(whitelist);
+							file = module.exports.ReplaceInFile(file, strWhiteListAddCppCommands, "//SETTING_UP_WHITELIST_START", "//SETTING_UP_WHITELIST_END");
+					}
 					callback(file);
 				});
 			} else{
@@ -721,17 +855,13 @@ var makeProgramFileLinux = function makeProgramFileLinux(deviceUrl, filePath, ca
 	});
 };
 // gets the device-server program
-module.exports.makeProgramFile = function makeProgramFile(deviceUrl, deviceType, callback, errorCallback) {
+module.exports.makeProgramFile = function makeProgramFile(device, callback, errorCallback) {
 	//todo: join common code in makeProgramFileLinux and makeProgramFileWindows
 	var osStr = os.type();
-	var filePath = "./hardware/DeviceServerNodeMcu.ino";
-	if (deviceType === "1") {
-		filePath = "./hardware/DiviceServerEsp32.ino";
-	}
 	if (osStr.indexOf("Windows") === 0){
-		makeProgramFileWindows(deviceUrl, filePath, callback, errorCallback);
+		makeProgramFileWindows(device.id, device.whitelist, device. url, device.type, device.pins, callback, errorCallback);
 	} else {
-		makeProgramFileLinux(deviceUrl, filePath, callback, errorCallback);
+		makeProgramFileLinux(device.id, device.whitelist, device.url, device.type, device.pins, callback, errorCallback);
 	}
 };
 

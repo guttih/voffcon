@@ -1,7 +1,7 @@
-# Ardos - How to setup the devices
+# VoffCon - How to setup the devices
 <img src="../public/images/logo.png" width="100" height="100" border="0" title="Click to view in nicer format" />
 
- [Readme](https://guttih.github.io/ardos) [Device setup](https://guttih.github.com/ardos/docs/device-setup.html) 
+ [Readme](https://guttih.github.io/voffcon) [Device setup](https://guttih.github.com/voffcon/docs/device-setup.html) 
 
  Description on how to setup these two devices
  - The **NodeMCU 1.0 (ESP-12E Module)** which has the Esp8266 wifi chip on board.
@@ -14,7 +14,7 @@
 </div>
 
 ## Why we need to setup a device
-In order to be able to communicate with the device using Ardos, you will need to setup your computer so you can use it to send a program to the device.  This program is called the Device server.  The device server will allow the Node server to view and change values on the device it self.  To get the device server onto the device you will need to follow the instructions below.  
+In order to be able to communicate with the device using VoffCon, you will need to setup your computer so you can use it to send a program to the device.  This program is called the Device server.  The device server will allow the Node server to view and change values on the device it self.  To get the device server onto the device you will need to follow the instructions below.  
 
 ## create the file config.json
 If there is no file called config.json in the root of the Arduino project, then you will need to create it.  After that you should provide a ssid and a ssid password.  ssid is the name of your whifi network.  the ssid is the password needed to connect to that network.  These are the same values you need to connect your smart mobile phone to your wifi. These values will be used by the node server to create the program (the device server) which will be uploaded to your device.
@@ -55,9 +55,9 @@ Now we should be able to send our device server program to the device via a usb 
 
 ## Programming the device
 We will need to send the Device server program to the device.  We can do that by doing the following
- 1. Browse to the the Ardos system.
+ 1. Browse to the the VoffCon system.
  2. Create a device, by going to menu -> Devices ->  Register a new device.
- 3. Save the device, to add it to the Ardos database.
+ 3. Save the device, to add it to the VoffCon database.
  4. Press the "> Run" button and click the "Get program" button.
  5. Save the program to you local hard disk. 
  6. Open the Arduino IDE.
@@ -69,7 +69,7 @@ We will need to send the Device server program to the device.  We can do that by
  10. Select from the menu File -> New to create a new sketch.
  11. Open the .ino program you downloaded.
  12. Copy all text in the downloaded file and paste it into the new sketch in the arduino IDE.
- 13. If Ardos Node server has not automaticly changed the values below for you in the device server program, you will need to change them manually.
+ 13. If VoffCon Node server has not automaticly changed the values below for you in the device server program, you will need to change them manually.
  ```
        IPV4_IPADDRESS  : (IP) Provide an ip address (IPV4) which you want the device to ask operating system for.
        PORT_NUMBER     : (Port) Provide the port number you want the device to listen and serve from.

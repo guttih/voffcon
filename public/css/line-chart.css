@@ -1,0 +1,75 @@
+.axis path {
+    fill: none;
+    stroke: #777;
+    shape-rendering: crispEdges;
+}
+.axis text {
+    font-family: Lato;
+    font-size: 13px;
+}
+
+#visualisation{
+    left:-150px;
+    width:1000px;
+    height:610px;
+    position:relative;
+}
+#visualisation > g.x.axis > g > text {
+    -ms-transform: translate(-5px, 62px) rotate(-90deg); /* IE 9 */
+    -webkit-transform: translate(-5px, 62px) rotate(-90deg); /* Safari */
+    transform: translate(-13px, 67px) rotate(-90deg);
+}
+
+path {
+    /*stroke: steelblue;*/
+    stroke-width: 2;
+    fill: none;
+}
+
+.axis path, .axis line {
+    fill: none;
+    stroke: grey;
+    stroke-width: 1;
+    shape-rendering: crispEdges;
+}
+
+.d3-tip {
+    line-height: 1;
+    font-weight: bold;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    border-radius: 2px;
+    font-size: 14px;
+}
+
+/* Creates a small triangle extender for the tooltip */
+.d3-tip:after {
+    box-sizing: border-box;
+    display: inline;
+    font-size: 10px;
+    width: 100%;
+    line-height: 1;
+    color: rgba(0, 0, 0, 0.8);
+    content: "\25BC";
+    position: absolute;
+    text-align: center;
+}
+
+/* Style northward tooltips differently */
+.d3-tip.n:after {
+    margin: -1px 0 0 0;
+    top: 100%;
+    left: 0;
+}
+
+.tip-key {
+    color: wheat;
+    min-width: 35px;
+    display: inline-block;
+}
+
+.tip-value {
+    color: white;
+    margin-left: 6px;
+}

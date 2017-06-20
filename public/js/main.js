@@ -1,5 +1,5 @@
 /*
-        Ardos is a system for controlling devices and appliances from anywhere.
+        VoffCon is a system for controlling devices and appliances from anywhere.
         It consists of two programs.  A “node server” and a “device server”.
         Copyright (C) 2016  Gudjon Holm Sigurdsson
 
@@ -23,6 +23,34 @@ var CONFIG = {};
 var SERVER = "";
 // www.guttih.com ip 89.17.157.231
 
+//appending put and delete to the jquery send
+jQuery.each( [ "put", "delete" ], function( i, method ) {
+  jQuery[ method ] = function( url, data, callback, type ) {
+    if ( jQuery.isFunction( data ) ) {
+      type = type || callback;
+      callback = data;
+      data = undefined;
+    }
+
+    return jQuery.ajax({
+      url: url,
+      type: method,
+      dataType: type,
+      data: data,
+      success: callback
+    });
+  };
+});
+
+function setStartTime(date) {
+		//var date = data.date;
+		deviceStarted = new Date(date.year, date.month-1, date.day, date.hours, date.minutes, date.seconds, 0);
+		var strDate = formaTima(deviceStarted);
+		$('#server-started').text(strDate);
+		
+		$elm.text("Successfully connected to the device.").removeClass("alert-warning").addClass("alert-success");
+}
+
 
 function logger(str){
 	console.log("Logger : "+ str);
@@ -37,9 +65,14 @@ $('#btnGetDevices').click(function() {
 
 var serverStartedTime;
 
+//adds '0' in front of all numbers smaller than 10
+function zeroFirst(number){
+	return (number < 10) ? '0'+number : number;
+}
+
 function formaTima(d) {
 var str =  d.getDate() + "." + (d.getMonth()+1) + "." + d.getFullYear() + " " +
-			d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+			zeroFirst(d.getHours()) + ":" + zeroFirst(d.getMinutes()) + ":" + zeroFirst(d.getSeconds());
 
 return str;
 }

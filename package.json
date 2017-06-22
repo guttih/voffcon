@@ -1,7 +1,7 @@
 {
-  "name": "ardos",
+  "name": "voffcon",
   "version": "1.0.0",
-  "description": "An access controlled system to control or get data from Arduino or arduino-like devices.",
+  "description": "A system to allow users to control electric devices from anywere.",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -43,10 +43,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/guttih/ardos.git"
+    "url": "git+https://github.com/guttih/voffcon.git"
   },
   "bugs": {
-    "url": "https://github.com/guttih/ardos/issues"
+    "url": "https://github.com/guttih/voffcon/issues"
   },
-  "homepage": "https://github.com/guttih/ardos#readme"
+  "homepage": "https://github.com/guttih/voffcon#readme"
 }

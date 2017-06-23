@@ -28,9 +28,11 @@ You will need to install the following if you haven't already.
 + [MongoDb](https://www.mongodb.com) To store users cards, controls and device information. ([Install tutorials](https://docs.mongodb.com/manual/installation/) or [installing with package manager](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions) ) 
 + [Node.js](https://nodejs.org/en/) To run the Node server
 + [Arduino IDE](https://www.arduino.cc/en/Main/Software)  To program the devices.
-+ Device Core for libraries for the device servers for the two devices listed below. ([Install instructions](docs/device-setup.md))
++ **Device Core** libraries for the device servers running on the two devices listed below. ([Install instructions](docs/device-setup.md))
     - *ESP32 Development Module* will need the [ESP32 Arduino Core](https://github.com/espressif/arduino-esp32) 
     - *NodeMCU 1.0 (ESP-12E Module)* will need the [ESP8266 core for Arduino](https://github.com/esp8266/Arduino)  
+    
+## Getting up and running
 ### Run the mongodb server
 #### Windows
 Do not have spaces in the installation folder for example do NOT install to "C:\Program Files\MongoDB", better would be "C:\MongoDB"

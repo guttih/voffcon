@@ -93,25 +93,8 @@ npm install
 node app
 
 ```
-
-### Setting up the node server
-```shell
-npm install
-```
-### Runing the node server
-```shell
-node app
-```
 And the go to a modern web browser and visit the url [http://localhost:6100](http://localhost:6100)
 
-### developing the app (Node server)
-I use the Visual Studio Code editor for debugging and developing.  
-
-But you can use grunt if you want, and to use grunt you just type grunt.
-```shell
-grunt
-```
-  
 ## Devices
 ### The Esp8266 Developement Module
 <img src="docs/images/esp8266.png" width="200" alt="The esp8266 module">

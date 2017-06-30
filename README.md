@@ -12,6 +12,7 @@ VoffCon is a system for controlling devices and appliances from anywere.  It is 
   " target="_blank"><img src="http://img.youtube.com/vi/NCrnYc6dx2E/0.jpg" 
   alt="A video tutorial" width="600" height="400" border="10" title="Click here to view the video tutorial" /></a>
 </div>
+
 ## The node server
 Is a server created with node.js.  This server creates webpages which can be viewed in a web browser like Google Chrome, Microsoft Edge and Internet Explorer. If you portforward the server out to the internet you will be able to accsess your devices from anywhere.  It uses the  [Passport](http://passportjs.org/docs) authentication middleware to keep your devices from being controlled by everyone. 
 The server provides connections to many devices and uses passport to make sure that the user is authenticated before he is able to give commands to the server running on the devices.

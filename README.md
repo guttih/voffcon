@@ -8,8 +8,8 @@ VoffCon is a system for controlling devices and appliances from anywere.  It is 
 ## Video intoduction
 
 <div style="text-align:center">
-  <a href="http://www.youtube.com/watch?feature=player_embedded&v=NCrnYc6dx2E
-  " target="_blank"><img src="http://img.youtube.com/vi/NCrnYc6dx2E/0.jpg" 
+  <a href="http://www.youtube.com/watch?feature=player_embedded&v=zGagaUuTqe0
+  " target="_blank"><img src="http://img.youtube.com/vi/zGagaUuTqe0/0.jpg" 
   alt="A video tutorial" width="600" height="400" border="10" title="Click here to view the video tutorial" /></a>
 </div>
 

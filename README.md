@@ -36,7 +36,12 @@ You will need to install the following if you haven't already.
 ## Getting up and running
 ### Run the mongodb server
 #### Windows
-Use windows file explorer to create the folders C:\data and C:\data\db. Then Run the mongo server by Double-clicking on the file "C:\Program Files\MongoDB\Server\3.4\bin\mongod.exe“.
+##### Install MongoDb
+If MongoDb is not installed you will need to install it.  See this instructions how to do that [here](https://docs.mongodb.com/manual/installation/).
+
+Use windows file explorer to:
+- Create the folders "C:\data" and "C:\data\db". 
+- Then Run the mongo server by Double-clicking on the file "C:\Program Files\MongoDB\Server\3.4\bin\mongod.exe“.
 
 Or just use the windows command shell, by typing the following commands.
 ```shell

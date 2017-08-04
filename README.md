@@ -38,7 +38,7 @@ You will need to install the following if you haven't already.
 #### Windows
 Use windows file explorer to create the folders C:\data and C:\data\db. Then Run the mongo server by Double-clicking on the file "C:\Program Files\MongoDB\Server\3.4\bin\mongod.exe“.
 
-Or just use the windows command shell do this, by typing the following commands.
+Or just use the windows command shell, by typing the following commands.
 ```shell
 mkdir C:\data
 mkdir C:\data\db

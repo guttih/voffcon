@@ -36,31 +36,18 @@ You will need to install the following if you haven't already.
 ## Getting up and running
 ### Run the mongodb server
 #### Windows
-Do not have spaces in the installation folder for example do NOT install to "C:\Program Files\MongoDB", better would be "C:\MongoDB"
+Use windows file explorer to create the folders C:\data and C:\data\db. Then Run the mongo server by Double-clicking on the file "C:\Program Files\MongoDB\Server\3.4\bin\mongod.exe“.
+
+Or just use the windows command shell do this, by typing the following commands.
 ```shell
-C:\MongoDB\Server\3.2\bin\mongod.exe
+mkdir C:\data
+mkdir C:\data\db
+"C:\Program Files\MongoDB\mongod.exe"
 ```
 
 #### Linux
 ```shell
 mongod
-```
-
-#### Windows 7 problem when installing mongoDB
-If you are having problem installing mongoDB on windows 7, then you could try the following.
-
-1. Do not have spaces in the installation folder for example do NOT install to "C:\Program Files\MongoDB", better would be "C:\MongoDB"
-2. Try to run Run : "C:\MongoDB\Server\3.2\bin\mongod.exe"
-3. If you get a hotfix error when running Mongo, install this [Hotifx](http://hotfixv4.microsoft.com/Windows%207/Windows%20Server2008%20R2%20SP1/sp2/Fix405791/7600/free/451413_intl_x64_zip.exe)  and goto step 2.
-4. if you are still having problems then this worked for me.  Open the command window (cmd) and do the following.
-```shell
-C:
-cd C:\MongoDB\Server\3.2
-mkdir data
-mkdir data\db
-mkdir log
-cd bin
-mongod.exe --directoryperdb --dbpath C:\MongoDB\Server\3.2\data\db --logpath C:\MongoDB\Server\3.2\log\mongodb.log --logappend
 ```
 
 #### Installing VoffCon node server on Ubuntu 16.04 (Linux) when all prerequisites are missing
@@ -94,8 +81,7 @@ npm install
 node app
 
 ```
-And the go to a modern web browser and visit the url [http://localhost:6100](http://localhost:6100)
-
+And the go to a modern web browser and visit the url [http://localhost:6100](http://localhost:6100) to see VoffCon running.
 ## Devices
 ### The Esp8266 Developement Module
 <img src="docs/images/esp8266.png" width="200" alt="The esp8266 module">

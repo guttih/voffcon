@@ -24,6 +24,7 @@ class Pin {
 		this.controls = [];
 		this.number = number;
 		this.value = value;
+		this.mode = 1;
 		this.savedDeviceID = host;
 		this.higestValue = higestValue;
 		this.deviceID = deviceID;
@@ -31,6 +32,12 @@ class Pin {
 	//adds or attaches a pin control to this pin
 	addControl(control){
 		this.controls.push(control);
+	}
+	toSendObject(){
+		return {	"m":this.mode,
+					"pin":this.number,
+					"val":this.value
+		};
 	}
 	getNumber(){
 		return this.number;

@@ -57,6 +57,15 @@ class Device {
 		callback();
 	}
 	isFirefox(){return (window.navigator.userAgent.toLowerCase().indexOf('firefox') > -1);}
+	pinsToSendArray(){
+		var pin, sendArr = [];
+
+		for(var i = 0; i < this.pins.length; i++) {
+			pin    = this.pins[i];
+			sendArr.push(pin.toSendObject());
+		}
+		return sendArr;
+	}
 	get(number){
 		var pin;
 		

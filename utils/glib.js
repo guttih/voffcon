@@ -822,10 +822,10 @@ var makeProgramFileLinux = function makeProgramFileLinux(deviceId, whitelist, de
 					}
 
 					if (config.ssid!== undefined){
-						file = file.replace("WIFI_ACCESSPOINT", config.ssid);
+						file = file.replace("WIFI_ACCESSPOINT", '"' + config.ssid + '"');
 					}
 					if (config.ssidPwd!== undefined){
-						file = file.replace("WIFI_PASSWORD", config.ssidPwd);
+						file = file.replace("WIFI_PASSWORD", '"' + config.ssidPwd + '"');
 					}
 					if (config.serverIp === undefined){
 						config.serverIp = serverIp;

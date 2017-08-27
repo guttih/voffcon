@@ -637,7 +637,7 @@ module.exports.makeWhiteListSetupString = function makeWhiteListSetupString(whit
 
 
 
-var makeProgramFileWindows = function makeProgramFileWindows(id, whitelist, deviceUrl, deviceType, pins, callback, errorCallback) {
+var makeProgramFileWindows = function makeProgramFileWindows(deviceId, whitelist, deviceUrl, deviceType, pins, callback, errorCallback) {
 	var filePath = "./hardware/DeviceServerNodeMcu.ino";
 	if (deviceType === "1") {
 		filePath = "./hardware/DiviceServerEsp32.ino";
@@ -689,8 +689,8 @@ var makeProgramFileWindows = function makeProgramFileWindows(id, whitelist, devi
 							console.log("\t"+subkey+ '\t : \t' + item[key][subkey]);
 							*/
 						};
-						if (id!== undefined){
-							file = file.replace('DEVICE_ID', '"'+id+'"');
+						if (deviceId!== undefined){
+							file = file.replace('DEVICE_ID', '"'+deviceId+'"');
 						}
 						if (port!== undefined){
 							file = file.replace("PORT_NUMBER", port);
@@ -802,8 +802,8 @@ var makeProgramFileLinux = function makeProgramFileLinux(deviceId, whitelist, de
 						}
 					}
 				
-					if (id!== undefined){
-						file = file.replace("DEVICE_ID", id);
+					if (deviceId!== undefined){
+						file = file.replace("DEVICE_ID", deviceId);
 					}
 					if (port!== undefined){
 						file = file.replace("PORT_NUMBER", port);

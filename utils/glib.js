@@ -638,6 +638,7 @@ module.exports.makeWhiteListSetupString = function makeWhiteListSetupString(whit
 
 
 var makeProgramFileWindows = function makeProgramFileWindows(deviceId, whitelist, deviceUrl, deviceType, pins, callback, errorCallback) {
+	
 	var filePath = "./hardware/DeviceServerNodeMcu.ino";
 	if (deviceType === "1") {
 		filePath = "./hardware/DiviceServerEsp32.ino";
@@ -729,7 +730,7 @@ var makeProgramFileWindows = function makeProgramFileWindows(deviceId, whitelist
 							var strSetPinCppCommands = module.exports.makePinSetupString(deviceType, pins);
 							file = module.exports.ReplaceInFile(file, strSetPinCppCommands, "//SETTING_UP_PINS_START", "//SETTING_UP_PINS_END");
 						}
-						if (whitelist !== undefined) {
+						if (whitelist !== undefined && whitelist.length  > 0) {
 							var strWhiteListAddCppCommands = module.exports.makeWhiteListSetupString(whitelist);
 							file = module.exports.ReplaceInFile(file, strWhiteListAddCppCommands, "//SETTING_UP_WHITELIST_START", "//SETTING_UP_WHITELIST_END");
 						}
@@ -841,7 +842,7 @@ var makeProgramFileLinux = function makeProgramFileLinux(deviceId, whitelist, de
 							var strSetPinCppCommands = module.exports.makePinSetupString(deviceType, pins);
 							file = module.exports.ReplaceInFile(file, strSetPinCppCommands, "//SETTING_UP_PINS_START", "//SETTING_UP_PINS_END");
 					}
-					if (whitelist !== undefined) {
+					if (whitelist !== undefined && whitelist.length  > 0) {
 							var strWhiteListAddCppCommands = module.exports.makeWhiteListSetupString(whitelist);
 							file = module.exports.ReplaceInFile(file, strWhiteListAddCppCommands, "//SETTING_UP_WHITELIST_START", "//SETTING_UP_WHITELIST_END");
 					}

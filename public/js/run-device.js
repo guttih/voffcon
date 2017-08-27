@@ -125,8 +125,10 @@ function enableInputSelects(enable){
 	
 		if (enable === true){
 			$(".select-mode").removeAttr('disabled');
+			$('#btn-download-program').removeAttr('disabled');
 		} else{
 			$(".select-mode").attr('disabled', 'disabled');
+			$('#btn-download-program').attr('disabled', 'disabled');
 			
 		}
 }

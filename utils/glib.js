@@ -804,7 +804,7 @@ var makeProgramFileLinux = function makeProgramFileLinux(deviceId, whitelist, de
 					}
 				
 					if (deviceId!== undefined){
-						file = file.replace("DEVICE_ID", deviceId);
+						file = file.replace('DEVICE_ID', '"'+deviceId+'"');
 					}
 					if (port!== undefined){
 						file = file.replace("PORT_NUMBER", port);

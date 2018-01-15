@@ -1491,7 +1491,7 @@ String GPin::toJsonPinout() {
 String GPin::toJson() {
     //todo: use jsonKeyValue function here
     String str = "{\"pin\":" + String(mNumber) + "," +
-        "\"val\":" + String(mValue) + "," +
+        "\"val\":" + String(getValue()) + "," +
         "\"m\":" + String(mType) + "," +
         "\"name\":\"" + getName() + "\"}";
     return str;

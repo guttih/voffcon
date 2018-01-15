@@ -433,7 +433,7 @@ class GPin {
     //String toJson() {                   String str = "{\"" + String(mNumber) + "\":" + String(mValue) + "}";
     String toJson() {
       String str = "{\"pin\":" + String(mNumber) + "," +
-                    "\"val\":" + String(mValue)  + "," +
+                    "\"val\":" + String(getValue())  + "," +
                     "\"m\":"   + String(mMode)   + "}";
              return str;
    }

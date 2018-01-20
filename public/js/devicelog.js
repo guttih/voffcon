@@ -21,11 +21,11 @@ by regular post to the address Haseyla 27, 260 Reykjanesbar, Iceland.
 
 var SERVER;
 
-function getDeviceLogs(){
+function getDeviceLogs(clearOldValues){
 	var url = SERVER+'/logs/list/'+device.id;
 		var request = $.get(url);
 	request.done(function( data ) {
-		setDeviceLogsToTable(data);
+		setDeviceLogsToTable(data, clearOldValues);
 		}).fail(function( data ) {
 			if (data.status===401){
 				showModal("You need to be logged in!", data.responseText);
@@ -85,9 +85,14 @@ function monthToShortStr(month){
 	return "";
 };
 
-function addToTable(headers, logs){
+function addToTable(headers, logs, clearOldValues){
 	var i;
 	var $elm = $('#table-log thead');
+	if (clearOldValues !== undefined && clearOldValues === true) {
+		$elm.empty();
+		$('#table-log tbody').empty();
+		$('#table-log tfoot').empty();
+	}
 	var row = '<tr>';
 	
 	//	adding header
@@ -122,7 +127,7 @@ function addToTable(headers, logs){
 
 }
 
-function setDeviceLogsToTable(deviceLogs){
+function setDeviceLogsToTable(deviceLogs, clearOldValues){
 	var logs = [];
 	var headers = [];
 	for(var i = 0; i < deviceLogs.length; i++){
@@ -141,7 +146,7 @@ function setDeviceLogsToTable(deviceLogs){
 			}
 		}
 	};
-	addToTable(headers, logs);
+	addToTable(headers, logs, clearOldValues);
 }
 
 function deleteLogItem(logItemID){
@@ -175,4 +180,30 @@ $(function () {
 	/* this is the *$( document ).ready(function( $ ) but jshint does not like that*/
 	SERVER = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ':'+window.location.port: '');
 	getDeviceLogs();
+
+	$('button.btn-log-pins').click(function() {
+		var url = SERVER+'/logs/pins/'+device.id;
+		var request = $.get(url);
+		request.done(function( data ) {
+			console.log(data);
+			getDeviceLogs(true);
+		}).fail(function( data ) {
+			showModalErrorText("Logging error", "Unable to save device pin values to the log.");
+		});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		
+	});
 });

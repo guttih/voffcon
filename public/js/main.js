@@ -277,7 +277,12 @@ function showModalError(title, responce){
 	showModal(title, 
 			'Error ' + responce.status + ' : ' + responce.statusText + 
 			'\n\n<p class="error-response-text">' + responce.responseText + '</p>');
-	
+}
+function showModalErrorText(title, errorMessage){
+
+	showModal(title, 
+			'Error ' + 
+			'\n\n<p class="error-response-text">' + errorMessage + '</p>');
 }
 function showModal(title, message){
 	$(".modal-title").text(title);

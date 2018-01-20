@@ -290,6 +290,11 @@ ul > li.menu-item.dropdown.dropdown-submenu:hover > ul{
 	color:brown;
 }
 
+button.btn-log-pins {
+	margin-right: 15px;
+	margin-left: 15px;
+}
+
 /*log end*/
 
 

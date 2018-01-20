@@ -157,6 +157,9 @@ function setPinValues(pins){
 		$elm.append(row);
 	}
 	enableInputSelects(isCheckboxChecked());
+	if (pins.length > 0 )
+		{$("button.btn-log-pins").removeAttr('disabled');
+	}
 }
 
 function setDeviceValues(device){
@@ -340,7 +343,22 @@ function init(){
 			download(data);
 		});
 	});
-	
+
+	$('button.btn-log-pins').click(function() {
+		var url = SERVER+'/logs/pins/'+device.id;
+		
+		var request = $.get(url);
+		request.done(function( data ) {
+			var message = "Device pin values have been successfully saved to the log";
+			message+="\n\n";
+			message+='<a href="'+SERVER+'/logs/device/'+device.id+'">View logs for this device</a>';
+			showModal("Success", message);
+			console.log(data);
+		}).fail(function( data ) {
+			showModalErrorText("Logging error", "Unable to save device pin values to the log.");
+		});
+	});
+		
 	inputDialog.hide();
 	$('#btnSetPinValue').click(function() {
 		$('.overlay').hide();

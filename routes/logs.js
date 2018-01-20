@@ -249,54 +249,31 @@ router.get('/pins/:deviceId', lib.authenticateRequest, function(req, res){
 
 		var urlid = device._doc.url+'/pins';
 		console.log(urlid);
-		request.get(urlid,
-					function (err, res, body) {
-									if (res){
-										console.log("get pins statuscode:"+res.statusCode);
-										//we got the pinvalues, so let's save them
-										var logType = LogItem.LogTypes.indexOf('OBJECTTYPE_LOG_PINS');
-										var obj, pins;
-										obj = JSON.parse(body);
-											pins = obj.pins; 
-										LogItem.logJsonAsText(
-											deviceId,
-											LogItem.LogTypes.indexOf('OBJECTTYPE_PINS'),
-											pins, 
-											function(err, item) {
-												if(err) {throw err;}
-												console.log(item);
-												//res.status(200).json({message: "logging succeded!"});
-												//todo what to send to ores?
-										});
+		request.get(urlid,	function (err, res, body) {
+			if (res) {
+				console.log("get pins statuscode:"+res.statusCode);
+				//we got the pinvalues, so let's save them
+				var logType = LogItem.LogTypes.indexOf('OBJECTTYPE_LOG_PINS');
+				var obj, pins;
+				obj = JSON.parse(body);
+					pins = obj.pins; 
+				LogItem.logJsonAsText(
+					deviceId,
+					LogItem.LogTypes.indexOf('OBJECTTYPE_PINS'),
+					pins, 
+					function(err, item) {
+						if(err) {throw err;}
+						console.log(item);
+						//res.status(200).json({message: "logging succeded!"});
+						//todo what to send to client?
+				});
+			}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-									}
-
-								if (err) {
-									return console.error(err);
-								}
-								return body;
-					}
+			if (err) {
+				return console.error(err);
+			}
+			return body;
+		}
 			).pipe(res);
 	});
 });

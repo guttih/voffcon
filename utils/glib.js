@@ -359,8 +359,10 @@ module.exports.getConfig = function getConfig(){
 
 //create a helper function, remove dubicates from ipaddresses
 //create a helper function, remove prefix
+// if putFirstLanAddressAtTop is false then addresses will be returned in an unchanged order
+// if putFirstLanAddressAtTop is undefined or true the the first address that starts with "192.1" will be moved to index 0 in the returned array 
 
-module.exports.getAddresses = function getAddresses(removeDublicates){
+module.exports.getAddresses = function getAddresses(removeDublicates, putFirstLanAddressAtTop){
 	var addresses = [];
 	for (var k in interfaces) {
 		for (var k2 in interfaces[k]) {
@@ -379,7 +381,26 @@ module.exports.getAddresses = function getAddresses(removeDublicates){
 			}
 		}
 	}
-	return addresses;
+	if ( ( putFirstLanAddressAtTop === undefined || putFirstLanAddressAtTop === true ) && addresses.length > 1) {
+		//lets put the first ip address which starts with 192. at the top of the address index
+			
+		var firstLanIndex = -1;
+		for(var i = 0; i < addresses.length; i++){
+				if (addresses[i].indexOf("192.") === 0){
+					firstLanIndex = i;
+					break; //break the for loop
+				}
+		}
+
+		if (firstLanIndex > 0) {
+			//the first ip address is not an lan address but i found another ip which is an lan address so I will
+			//put the first first lan address in furst position
+			var lanAddress = addresses[firstLanIndex];
+			addresses[firstLanIndex] = addresses[0];
+			addresses[0] = lanAddress;
+		}
+		return addresses;
+		}
 };
 
 // if you pass true as the parameter the function will remove all 

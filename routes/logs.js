@@ -231,4 +231,74 @@ router.delete('/:logID', lib.authenticateDeviceOwnerRequest, function(req, res){
 	
 });
 
+
+/*
+	todo: get pinstatus from device
+	save pinout to logs
+
+*/
+router.get('/pins/:deviceId', lib.authenticateRequest, function(req, res){
+	var deviceId = req.params.deviceId;
+
+	Device.getById(deviceId, function(err, device){
+		if (err !== null || device === null){
+			res.statusCode = 404;
+			var obj = {text:'Error 404: User device not found!'};
+			return res.json(obj);
+		}
+
+		var urlid = device._doc.url+'/pins';
+		console.log(urlid);
+		request.get(urlid,
+					function (err, res, body) {
+									if (res){
+										console.log("get pins statuscode:"+res.statusCode);
+										//we got the pinvalues, so let's save them
+										var logType = LogItem.LogTypes.indexOf('OBJECTTYPE_LOG_PINS');
+										var obj, pins;
+										obj = JSON.parse(body);
+											pins = obj.pins; 
+										LogItem.logJsonAsText(
+											deviceId,
+											LogItem.LogTypes.indexOf('OBJECTTYPE_PINS'),
+											pins, 
+											function(err, item) {
+												if(err) {throw err;}
+												console.log(item);
+												//res.status(200).json({message: "logging succeded!"});
+												//todo what to send to ores?
+										});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+									}
+
+								if (err) {
+									return console.error(err);
+								}
+								return body;
+					}
+			).pipe(res);
+	});
+});
+
 module.exports = router;

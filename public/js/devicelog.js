@@ -180,7 +180,7 @@ $(function () {
 	/* this is the *$( document ).ready(function( $ ) but jshint does not like that*/
 	SERVER = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ':'+window.location.port: '');
 	getDeviceLogs();
-
+	$.ajaxSetup({timeout:5000});
 	$('button.btn-log-pins').click(function() {
 		var url = SERVER+'/logs/pins/'+device.id;
 		var request = $.get(url);

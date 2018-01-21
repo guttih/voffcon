@@ -346,7 +346,7 @@ function init(){
 
 	$('button.btn-log-pins').click(function() {
 		var url = SERVER+'/logs/pins/'+device.id;
-		
+		$.ajaxSetup({timeout:5000});
 		var request = $.get(url);
 		request.done(function( data ) {
 			var message = "Device pin values have been successfully saved to the log";

@@ -399,8 +399,8 @@ module.exports.getAddresses = function getAddresses(removeDublicates, putFirstLa
 			addresses[firstLanIndex] = addresses[0];
 			addresses[0] = lanAddress;
 		}
-		return addresses;
-		}
+	}
+	return addresses;
 };
 
 // if you pass true as the parameter the function will remove all 

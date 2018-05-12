@@ -1,4 +1,4 @@
-# VoffCon - How to setup the devices
+# VoffCon - How to setup the devices 
 <img src="../public/images/logo.png" width="100" height="100" border="0" title="Click to view in nicer format" />
 
  [Readme](https://guttih.github.io/voffcon) [Device setup](https://guttih.github.com/voffcon/docs/device-setup.html) 

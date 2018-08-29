@@ -153,9 +153,9 @@ router.get('/custom/:deviceId', lib.authenticateRequest, function(req, res){
 										console.log("get pins statuscode:"+res.statusCode);
 									}
 
-								if (err) {
-									return console.error(err);
-								}
+									if (err) {
+										return console.error(err);
+									}
 								if (body){
 								
 								}
@@ -215,35 +215,55 @@ router.post('/pins/:deviceId', lib.authenticateRequest, function(req, res){
 	
 			var urlid = device._doc.url+'/pins';					
 			var formData = {};
+			var contentType = 'application/json';
 			
-			var keys = Object.keys(b);
-			keys.forEach(function(key) {
-					console.log(key+ ':' + b[key]);
-					formData[key] = Number(b[key]);
-				}, this);
-			
-			keys = Object.keys(formData);
-
-				formData = JSON.stringify(formData);
-				request(lib.makeRequestPostOptions(urlid, formData),
-					function (err, res, body) {
-							if (res){
-								console.log("statuscode:"+res.statusCode);
+					var keys = Object.keys(b);
+					
+		
+						
+					if (device.type === "0") {
+						//NodeMcu we need key=value (form)
+						contentType = 'application/x-www-form-urlencoded';
+						var formData = "";
+						for (var i = 0; i<keys.length; i++) {
+							if (i > 0) {
+								formData+= '\n';
 							}
-
-						if (err) {
-							return console.error(err);
+							formData+= keys[i] + '=' + b[ keys[i] ];
 						}
-						if (body){
-							//todo: remvoe this line
-							console.log(body);
-						}
-						return body;
 					}
-				).pipe(res);
-	});
-});
-
+					else {
+						var formData = {};
+						//esp32
+						//we use key:value
+						keys.forEach(function(key) {
+							console.log(key+ ':' + b[key]);
+							formData[key] = Number(b[key]);
+						}, this);
+					
+						keys = Object.keys(formData);
+						formData = JSON.stringify(formData);
+					}
+					
+						request(lib.makeRequestPostOptions(urlid, formData, 'POST', contentType),
+							function (err, res, body) {
+									if (res){
+										console.log("statuscode:"+res.statusCode);
+									}
+		
+								if (err) {
+									return console.error(err);
+								}
+								if (body){
+									//todo: remvoe this line
+									console.log(body);
+								}
+								return body;
+							}
+						).pipe(res);
+			});
+		});
+			
 router.post('/whitelist/:deviceId', lib.authenticatePowerRequest, function(req, res){
 	//var SERVERURL = 'http://192.168.1.154:5100';
 	//var urlid = SERVERURL+'/pins';
@@ -376,7 +396,7 @@ router.post('/custom/:deviceId', lib.authenticateRequest, function(req, res){
 						return body;
 					}
 				).pipe(res);}
-	);
+		);
 });
 
 router.get('/register', lib.authenticatePowerUrl, function(req, res){

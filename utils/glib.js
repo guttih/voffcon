@@ -301,11 +301,14 @@ module.exports.authenticateAdminRequest = function authenticateAdminRequest(req,
 		return res.send('Error 401: You are not not authorized! ');
 	}
 };
-module.exports.makeRequestPostOptions = function makeRequestOptions(url, formData, method){
+module.exports.makeRequestPostOptions = function makeRequestOptions(url, formData, method, ContentType){
 	
 	var byteLength = Buffer.byteLength(formData);
 	if (method === undefined ){
 		method = 'POST';
+	}
+	if (ContentType === undefined ){
+		ContentType = 'application/json';
 	}
 	var options = {
 	url: url,
@@ -313,7 +316,7 @@ module.exports.makeRequestPostOptions = function makeRequestOptions(url, formDat
 	form: formData,
 		
 		headers: {
-			'Content-Type': 'application/json',
+			'Content-Type': ContentType,
 			/*'Content-Type': 'application/x-www-form-urlencoded',*/
 			'Content-Length': byteLength
 		}

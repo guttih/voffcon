@@ -25,6 +25,7 @@ by regular post to the address Haseyla 27, 260 Reykjanesbar, Iceland.
 
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
+#include <ESP8266HTTPClient.h>
 #include <ESP8266WebServer.h>
 #include <ESP8266mDNS.h>
 
@@ -130,6 +131,8 @@ public:
     boolean exists(int pinNumber);
     //returns NULL if pin is not found at a given index
     GPin *get(int pinNumber);
+    //returns the value of the given pin.  Returns -1 if pinNumber was not found
+    int getValue(int pinNumber);
     int count() { return mLength; }
 
     /// <summary>
@@ -478,6 +481,13 @@ void LinkedList<T>::clear() {
 }
 #endif //CODE_BLOCK_LinkedList
 
+struct PinValue
+{
+    int pinNumber;
+    int pinValue;
+
+};
+
 class GUrl {
 private:
     int mLength = 0;
@@ -486,6 +496,7 @@ public:
     String getAfter(String str, String afterMe);
     int toNumber(String str);
     boolean extractAndSetPinsAndValues(const char *unParsedJson, GPins *pinnar);
+    uint8_t extractPinValues(const char *unParsedJson, PinValue pinValuesArray[], uint8_t arrayLength);
     String removeLastSpaceIfExists(String str);
     String jsonKeyValue(String key, String value);
     /// <summary>
@@ -685,7 +696,7 @@ IPAddressList whiteList;
 //             T H E   V A L U E S   T H A T   M U S T   B E   C H A N G E D                //
 //                                                                                          //
 //////////////////////////////////////////////////////////////////////////////////////////////
-
+const char* deviceId = DEVICE_ID;
 // Name of the wifi (accesspoint)network
 // example: "guttisWiFi"
 const char* ssid = WIFI_ACCESSPOINT;
@@ -962,6 +973,47 @@ void handleSetup() {
     sendText(200, "Todo: this function, maybe allow add pins later");
 }
 
+String reportIn() {
+    GUrl lib;
+    Serial.println("Reporting in ");
+    String ret = "Fri, 1 Jan 1971 00:00:00 GMT";
+    String data = "{" +
+        lib.jsonKeyValue("id", "\"" + String(deviceId) + "\",") +
+        lib.jsonKeyValue("ip", "\"" + WiFi.localIP().toString() + "\",") +
+        lib.jsonKeyValue("port", PORT) +
+        "}";
+
+    HTTPClient http;
+    String host = voffconServerIp.toString() + ":" + String(voffconServerPort);
+    String url = "http://" + host + "/devices/reportin";
+    http.begin(url);  //Specify destination for HTTP request
+    http.addHeader("Content-Type", "application/json");
+    http.addHeader("Connection", "close");
+    Serial.println("sending");
+    Serial.println(data);
+
+    int httpResponseCode = http.POST(data);   //Send the actual POST request
+
+    if (httpResponseCode>0) {
+
+        String response = http.getString();                       //Get the response to the request
+
+        Serial.println(httpResponseCode);   //Print return code
+        Serial.println(response);           //Print request answer
+        ret = response; //responce should contain date.toUTCString()
+
+    }
+    else {
+
+        Serial.print("Error on sending POST: ");
+        Serial.println(httpResponseCode);
+
+    }
+
+    http.end();  //Free resources
+    return ret;
+}
+
 void setup(void) {
     
 
@@ -996,7 +1048,7 @@ void setup(void) {
     //Do not remove line, here whitelist ip's will be added by VoffCon Node server
     //SETTING_UP_WHITELIST_END
 
-    startTime.setTime(getTime());
+    startTime.setTime(reportIn());
     
     server.on("/", handleRoot);
     server.on("/pins", handlePins);
@@ -1245,6 +1297,14 @@ GPin *GPins::get(int pinNumber) {
     return mPins[i];
 }
 
+// returns a pin value with a specific number
+int GPins::getValue(int pinNumber) {
+    
+    GPin *pin = this->get(pinNumber);
+    if (pin == NULL) return -1;
+    return pin->getValue();
+}
+
 //returns all values of the GPins as an JSON array
 String GPins::toJson() {
     String str = "[";
@@ -1408,6 +1468,52 @@ boolean GUrl::extractAndSetPinsAndValues(const char *unParsedJson, GPins *pinnar
         iCom = line.indexOf(',');
     }
     return ret;
+}
+
+/// <summary>
+/// Extracts pin numbers and values from the given string
+/// and adds theyr number to the 
+/// </summary>
+/// <param name="unParsedJson">A endline seperated json values on the form { "3":220}</param>
+/// <param name="pinValues">A container to use when storing pinValues</param>
+/// <returns>The number of PinValues saved to the Array</returns>
+    uint8_t GUrl::extractPinValues(const char *unParsedJson, PinValue pinValuesArray[], uint8_t arrayLength) {
+    uint8_t index = 0;
+    String line = String(unParsedJson);
+    String strPin, strValue;
+    int pin, val, iCol, iCom;
+    Serial.println("extractPinValues");
+    Serial.println("0" + line);
+    line = line.substring(1, line.length() - 1);
+    Serial.println("1:" + line);
+    line += ",";
+    Serial.println("2:" + line);
+    line.replace("\"", "");
+    line.replace("\"", "");
+    Serial.println("3:Line:" + line);
+    iCol = line.indexOf(':');
+    iCom = line.indexOf(',');
+    Serial.println("iCol:" + String(iCol) + "iCom:" + String(iCom));
+    while (iCol>0 && iCom>2)
+    {
+        strPin = line.substring(0, iCol);
+        strValue = line.substring(iCol + 1, iCom);
+        line.remove(0, iCom + 1);
+        Serial.print("Pin  :" + strPin);
+        Serial.print("    Value:" + strValue);
+        pin = toNumber(strPin);
+        val = toNumber(strValue);
+
+        if (pin > -1 && val > -1) {
+            pinValuesArray[index].pinNumber = pin;
+            pinValuesArray[index].pinValue = val;
+            index++;
+        }
+        Serial.println();
+        iCol = line.indexOf(':');
+        iCom = line.indexOf(',');
+    }
+    return index;
 }
 
 String GUrl::extractAndReturnIPaddress(const char *unParsedJson) {

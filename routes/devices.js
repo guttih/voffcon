@@ -214,7 +214,6 @@ router.post('/pins/:deviceId', lib.authenticateRequest, function(req, res){
 		}
 	
 			var urlid = device._doc.url+'/pins';					
-			var formData = {};
 			var contentType = 'application/json';
 			
 					var keys = Object.keys(b);
@@ -227,7 +226,7 @@ router.post('/pins/:deviceId', lib.authenticateRequest, function(req, res){
 						var formData = "";
 						for (var i = 0; i<keys.length; i++) {
 							if (i > 0) {
-								formData+= '\n';
+								formData+= '&';
 							}
 							formData+= keys[i] + '=' + b[ keys[i] ];
 						}
@@ -369,18 +368,34 @@ router.post('/custom/:deviceId', lib.authenticateRequest, function(req, res){
 		}
 	
 			var urlid = device._doc.url+'/custom';					
-			var formData = {};
+			var contentType = 'application/json';
 			
-			var keys = Object.keys(b);
-			keys.forEach(function(key) {
-					console.log(key+ ':' + b[key]);
-					formData[key] = Number(b[key]);
-				}, this);
-			
-			keys = Object.keys(formData);
-
-				formData = JSON.stringify(formData);
-				request(lib.makeRequestPostOptions(urlid, formData),
+					var keys = Object.keys(b);
+					if (device.type === "0") {
+						//NodeMcu we need key=value (form)
+						contentType = 'application/x-www-form-urlencoded';
+						var formData = "";
+						for (var i = 0; i<keys.length; i++) {
+							if (i > 0) {
+								formData+= '&';
+							}
+							formData+= keys[i] + '=' + b[ keys[i] ];
+						}
+					}
+					else {
+						var formData = {};
+						//esp32
+						//we use key:value
+						keys.forEach(function(key) {
+							console.log(key+ ':' + b[key]);
+							formData[key] = Number(b[key]);
+						}, this);
+					
+						keys = Object.keys(formData);
+						formData = JSON.stringify(formData);
+					}
+					
+						request(lib.makeRequestPostOptions(urlid, formData, 'POST', contentType),
 					function (err, res, body) {
 							if (res){
 								console.log("statuscode:"+res.statusCode);

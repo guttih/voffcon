@@ -1,7 +1,7 @@
 # VoffCon - Todo
 ________________
 ## Allow devices to save data 
- - Log data
+ - Log device data
  - Control access to logged data
      - Grant devie 1 access to data from device 2 via voffcon page
      - Grant everybody access to data from device 1

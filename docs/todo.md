@@ -9,14 +9,12 @@ ________________
  - On Device diagnostic card page, create a sceduler for when to log device data
      - something like:
          - when pin values change more than X
-         - every X seconds
-         - every x minutes
-         - every x hours
-         - daly at h:mm:ss 
-         - weekly every monday, tuesday, friday at h:mm:ss
-         - every x week at at h:mm:ss 
-         - monthly at d h:mm:ss
-         - every x month at at h:mm:ss
+         - every hh:mm:ss where h is hour mm is minute and ss is seconds
+         - daly at hh:mm:ss 
+         - weekly every monday, tuesday, friday at hh:mm:ss
+         - every x week at at hh:mm:ss 
+         - monthly at d hh:mm:ss
+         - every x month at at hh:mm:ss
          
      
      

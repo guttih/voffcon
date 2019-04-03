@@ -610,6 +610,7 @@ module.exports.getMode = function getMode(modeNumber) {
 		case 1: return "PINTYPE_INPUT_DIGITAL";
 		case 2: return "PINTYPE_OUTPUT_ANALOG";
 		case 3: return "PINTYPE_OUTPUT_DIGITAL";
+		case 4: return "PINTYPE_OUTPUT_VIRTUAL";
 
 		default: "INVALID_PIN_TYPE";
 	}

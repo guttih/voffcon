@@ -78,6 +78,7 @@ function getModeString(mode){
 		case 1:  str+="INPUT_DIGITAL"; break;
 		case 2:  str+="OUTPUT_ANALOG"; break;
 		case 3:  str+="OUTPUT_DIGITAL"; break;
+		case 4:  str+="OUTPUT_VIRTUAL"; break;
 		default: str+="invalid type";
 	}
 	return str;
@@ -309,7 +310,9 @@ function makeHtmlSelectString(pin, mode){
     str += makeHtmlSelectOptionString(0, "INPUT_ANALOG", mode === 0);
     str += makeHtmlSelectOptionString(1, "INPUT_DIGITAL", mode === 1);
     str += makeHtmlSelectOptionString(2, "OUTPUT_ANALOG", mode === 2);
-    str += makeHtmlSelectOptionString(3, "OUTPUT_DIGITAL", mode === 3);
+	str += makeHtmlSelectOptionString(3, "OUTPUT_DIGITAL", mode === 3);
+	str += makeHtmlSelectOptionString(4, "OUTPUT_VIRTUAL", mode === 4);
+	
     str +='</select>';
 	return str;
 }

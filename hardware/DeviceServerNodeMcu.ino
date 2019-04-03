@@ -60,10 +60,11 @@ enum JSONTYPE {
 /// Possible types of a pin
 /// </summary>
 enum PINTYPE {
-    PINTYPE_INPUT_ANALOG,   /*Read method analogRead shall be used*/
-    PINTYPE_INPUT_DIGITAL,  /*Read method digitalRead shall be used*/
-    PINTYPE_OUTPUT_ANALOG,  /*Write method analogWrite shall be used*/
-    PINTYPE_OUTPUT_DIGITAL /*Write method digitalWrite shall be used*/
+    PINTYPE_INPUT_ANALOG,   /* Read method analogRead shall be used    */
+    PINTYPE_INPUT_DIGITAL,  /* Read method digitalRead shall be used   */
+    PINTYPE_OUTPUT_ANALOG,  /* Write method analogWrite shall be used  */
+    PINTYPE_OUTPUT_DIGITAL, /* Write method digitalWrite shall be used */
+    PINTYPE_OUTPUT_VIRTUAL  /* A pin not connected to hardware         */
 };
 
 class GPin {
@@ -1079,7 +1080,7 @@ void setup(void) {
     pinnar.addPin("D5", type, D5, 123);
     pinnar.addPin("D6", type, D6, startState);
     pinnar.addPin("D7", type, D7, startState);
-    pinnar.addPin("D8", type, D8, startState);
+    pinnar.addPin("D8", PINTYPE_OUTPUT_VIRTUAL, D8, 456);
 	//SETTING_UP_PINS_END
     Serial.println(pinnar.toJson());
 }
@@ -1142,8 +1143,9 @@ void GPin::init(const char*strPinName, PINTYPE pinType, int pinNumber, int pinVa
             set(pinNumber, pinValue);
         }
 #endif
-        else { //TYPE IS PINTYPE_OUTPUT_DIGITAL or it is (ESP8266 && PINTYPE_OUTPUT_ANALOG)
-            pinMode(pinNumber, OUTPUT);
+        else { //TYPE IS PINTYPE_OUTPUT_DIGITAL or it is (ESP8266 && PINTYPE_OUTPUT_ANALOG) or PINTYPE_OUTPUT_VIRTUAL
+            if (mType != PINTYPE_OUTPUT_VIRTUAL)
+                pinMode(pinNumber, OUTPUT);
             set(pinNumber, pinValue);
         }
         
@@ -1189,6 +1191,9 @@ void GPin::setValue(int value) {
 
     mValue = value; 
 
+    if (mType == PINTYPE_OUTPUT_VIRTUAL)
+        return;
+
 #ifdef ESP32 
     analogWriteEsp32();
 #else
@@ -1201,7 +1206,7 @@ void GPin::setValue(int value) {
 //If input type is PINTYPE_INPUT_DIGITAL or PINTYPE_INPUT_ANALOG and readValueFromHardware is true
 //then a read will be maid directly to the hardwarepin. otherwise the old member value will be returned.
 int GPin::getValue(bool readValueFromHardware) {
-    if (readValueFromHardware){
+    if (readValueFromHardware && mType != PINTYPE_OUTPUT_VIRTUAL) {
         if (mType == PINTYPE_INPUT_DIGITAL)
             mValue = digitalRead(mNumber);
         else if (mType == PINTYPE_INPUT_ANALOG)

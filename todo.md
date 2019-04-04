@@ -1,4 +1,22 @@
 
+##Log when variable as changed much enough or log when a specific time has passed 
+```c
+struct pinWatch
+{
+     int pinNumber;
+     unsigned long sampleSum;        // Sum of pin value samples
+     unsigned int pinValueLastLogged // The pin value which was last logged.
+     unsigned int pinValueMargin     // How much must a sampleSum / sampleCount change from pinValueLastLogged to trigger a log.
+     int sampleCount;                // How many times has the pinValueSum been summerized.
+     int sampleTotalCount;           // How many samples before we can average sampleSum and compare with pinValueLastLogged
+     unsigned long nextSampleTime;   // When should we get the next sample
+     unsigned long sampleInterval;   // How long between samples
+     unsigned long minLogInterval;   // The minimum time allowed to pass between logs. Set to 0 to disable
+     unsigned long nextLogTime;      // If minLogInterval is > 0 then this will be the time when we must log
+                                     // This time must be reset after each log. 
+};
+```
+
 	
 þegar card krassar þá má það alls ekki krassa servernum, eins og gerist þegtar 
 	device4 = new Device('57e2a6f74a43074811a0720f', maxValue);

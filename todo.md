@@ -17,7 +17,7 @@ struct pinWatch
 };
 ```
 
-	
+## other stuff	
 þegar card krassar þá má það alls ekki krassa servernum, eins og gerist þegtar 
 	device4 = new Device('57e2a6f74a43074811a0720f', maxValue);
 	hefur rangt id á device-i.

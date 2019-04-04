@@ -1,5 +1,5 @@
 
-##Log when variable as changed much enough or log when a specific time has passed 
+## Log when variable as changed much enough or log when a specific time has passed 
 ```c
 struct pinWatch
 {

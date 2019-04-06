@@ -26,7 +26,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
 var LogItemSchema = mongoose.Schema({
-        deviceid : [Schema.Types.ObjectId],
+        deviceid : Schema.Types.ObjectId,
         logtype  : Number,
         datetime : Date,
         data     : String
@@ -88,9 +88,29 @@ module.exports.listByDeviceId = function(deviceId, callback){
 	LogItem.find(query, callback);
 };
 
+module.exports.countLogsByDeviceId = function(deviceId, callback){
+	var query = {deviceid: deviceId};
+	LogItem.find(query).count(callback);
+};
+
 //lists all devices which have logs
 module.exports.listAllDevices = function(callback){
 	LogItem.find().distinct( 'deviceid', callback);
+};
+
+// Finds all devices with logs and returns their ID 
+// and how many log items belong to them
+module.exports.devicesLogCount = function(callback){
+        // more about aggregate
+        // http://excellencenodejsblog.com/mongoose-aggregation-count-group-match-project/
+        LogItem.aggregate([
+                {
+                    $group: {
+                        _id: '$deviceid',  //$region is the column name in collection
+                        count: {$sum: 1}
+                    }
+                }
+            ], callback);
 };
 
 module.exports.countDeviceOccurrence = function(deviceId, callback){

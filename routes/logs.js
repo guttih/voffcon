@@ -170,52 +170,44 @@ router.get('/list/:deviceID', lib.authenticateRequest, function(req, res){
 });
 
 //listing all devices and which have logs and return them as a json array
-router.get('/device-list', lib.authenticatePowerRequest, function(req, res){
-		
-		var logDevices = [];
-		var saveData;
-		LogItem.listAllDevices(function(err, data){
-			if(err) {throw err;}
-			logDevices = [];
-			var id;
-			var i = 0;
-			for(i = 0; i < data.length; i++){
-				id = data[i];
-				var strId = id.toString();
-				LogItem.countDeviceOccurrence(strId, function(err, count){
-					logDevices.push({
-						id:id.toString(),
-						count:count
-					});
-				if (data.length == logDevices.length) {
+router.get('/device-list', lib.authenticatePowerRequest, function(req, res) {
+
+	var logDevices = [];
+	var saveData;
+	LogItem.devicesLogCount(function(err, data) {
+		if(err) {throw err;}
+		logDevices = [];
+		var i = 0;
+		for(i = 0; i < data.length; i++) {
+			logDevices.push({ id:data[i]._id.toString(), count:data[i].count});
+			if (data.length == logDevices.length) {
 
 				//now let's get device information about the devices
 				Device.listByOwnerId(req.user._id, function(err, deviceList){
-						var arr = [];
-						var item;
-						var isOwner;
-						for(var i = 0; i < deviceList.length; i++){
-							item = deviceList[i];
-							var findId = deviceList[i]._id.toString(); 
-							var logIndex = logDevices.map(function(e) {return e.id;}).indexOf(findId);
-							if (logIndex > -1) {
-								isOwner = lib.findObjectID(item._doc.owners, req.user._id);
-								arr.push({	name:deviceList[i].name, 
-											description:deviceList[i].description,
-											id:deviceList[i]._id,
-											type:deviceList[i].type,
-											url:deviceList[i].url,
-											isOwner:isOwner,
-											recordCount:logDevices[logIndex].count
-										});
-							}
+					var arr = [];
+					var item;
+					var isOwner;
+					for(var i = 0; i < deviceList.length; i++){
+						item = deviceList[i];
+						var findId = item._id.toString(); 
+						var logIndex = logDevices.map(function(e) {return e.id;}).indexOf(findId);
+						if (logIndex > -1) {
+							isOwner = lib.findObjectID(item._doc.owners, req.user._id);
+							arr.push({	name:deviceList[i].name, 
+										description:deviceList[i].description,
+										id:deviceList[i]._id,
+										type:deviceList[i].type,
+										url:deviceList[i].url,
+										isOwner:isOwner,
+										recordCount:logDevices[logIndex].count
+									});
 						}
-						res.json(arr);
-					});
-				}
+					}
+					res.json(arr);
 				});
 			}
-		});
+		} //for
+	});
 });
 
 

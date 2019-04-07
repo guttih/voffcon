@@ -283,6 +283,19 @@ module.exports.authenticateRequest = function authenticateRequest(req, res, next
 		return res.send('Error 401: You are not not authorized! ');
 	}
 };
+module.exports.isUserOrDeviceAuthenticated = function isUserOrDeviceAuthenticated(req, deviceIp) {
+	if(req.isAuthenticated()) {
+		return true;
+	} 
+	
+	if (req.connection !== undefined && req.connection !== null) {
+		if (req.connection.remoteAddress !== undefined && req.connection.remoteAddress !== null) {
+				return req.connection.remoteAddress.indexOf(deviceIp) > -1 ;
+		}
+	}
+
+	return false;
+};
 module.exports.authenticatePowerRequest = function authenticatePowerRequest(req, res, next){
 
 	if(req.isAuthenticated() && req.user._doc.level > 0){
@@ -544,6 +557,21 @@ function getPort(url, assumePortIfMissing) {
 		return 80;
 	}
     return port;
+}
+
+
+//returns undefined on error
+module.exports.removeSchemaAndPortFromUrl = function removeSchemaAndPortFromUrl(url) {
+	var retUrl;
+	var to = url.lastIndexOf(':');
+	var from = url.lastIndexOf('/');
+	if (from < 0) { return; }
+	if (to > -1 && to > from)
+		retUrl = url.substring(from+1, to);
+	else
+		retUrl = url.substring(from+1);
+
+	return retUrl;
 }
 
 //returns a valid ipv4 ip address

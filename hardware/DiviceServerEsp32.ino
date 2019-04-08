@@ -1,4 +1,27 @@
-﻿#include <WiFi.h>
+﻿/*
+VoffCon is a system for controlling devices and appliances from anywhere.
+It consists of two programs.  A "node server" and a "device server".
+Copyright (C) 2016  Gudjon Holm Sigurdsson
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, version 3 of the License.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+You can contact the author by sending email to gudjonholm@gmail.com or
+by regular post to the address Haseyla 27, 260 Reykjanesbar, Iceland.
+
+    Program for Board: ESP32 Dev Module
+*/
+
+#include <WiFi.h>
 #include <HTTPClient.h>
 //#include <stddef.h>  //for linked list
 /*
@@ -77,24 +100,17 @@ enum JSONTYPE {
 };
 
 #ifndef CODE_BLOCK_LinkedList
-/*
-LinkedList.h - V1.1 - Generic LinkedList implementation
-For instructions, go to https://github.com/ivanseidel/LinkedList
-
-Created by Ivan Seidel Gomes, March, 2013.
-Released into the public domain.
-*/
 
 //do not remove the comment below this line
 //INSERT_FROM_HERE
 
-/*
-    LinkedList.h - V1.1 - Generic LinkedList implementation
-    For instructions, go to https://github.com/ivanseidel/LinkedList
+//   ---------------------------------------------------------------
+//  LinkedList.h - V1.1 - Generic LinkedList implementation
+//  For instructions, go to https://github.com/ivanseidel/LinkedList
 
-    Created by Ivan Seidel Gomes, March, 2013.
-    Released into the public domain.
-*/
+//  Created by Ivan Seidel Gomes, March, 2013.
+//  Released into the public domain.
+//   ---------------------------------------------------------------
 
 template<class T>
 struct ListNode
@@ -238,7 +254,7 @@ ListNode<T>* LinkedList<T>::getNode(int index) {
         return current;
     }
 
-    return false;
+    return NULL;
 }
 
 template<typename T>
@@ -584,6 +600,31 @@ public:
     /// <summary>
     /// Sets time values from a given string
     /// </summary>
+    /// <example>
+    /// GTime x, y;
+    /// x = y;
+    /// </example>
+    GTime(const GTime& gTime);
+    /// <summary>
+    /// Converts milliseconds to GTime 
+    /// But note this is not a real GTime because this is more like a counter
+    /// so if milliseconds are less than one day year, month and day will all be 0
+    /// </summary>
+    GTime(unsigned long milliSeconds);
+    /// <summary>
+    /// Sets a new GTime by converting milliseconds to GTime 
+    /// Largest possible unsigned long is 4294967295, which is 49 days, 17:02:47
+    /// If there are more than 28 days then the month not be increased so days can grow up to 49
+    /// But note this is not a real GTime because this is more like a counter
+    /// so if milliseconds are less than one day year, month and day will all be 0
+    /// </summary>
+    /// <param name="milliSeconds">
+    /// There are 1000 milliSeconds in a second
+    /// </param>
+    void setTime(unsigned long milliSeconds);
+    /// <summary>
+    /// Sets time values from a given string
+    /// </summary>
     /// <param name="strTime">
     /// A string with date and time.
     /// The string needs to be formatted like this: 
@@ -591,6 +632,7 @@ public:
     /// </param>
     /// <returns></returns>
     boolean setTime(String strTime);
+
     /// <summary>
     /// Converts a 3 letter english month name to the number of the month in the year.
     /// </summary>
@@ -627,6 +669,12 @@ public:
     /// </summary>
     /// <returns>A String formatted as an JSON object</returns>
     String toJson();
+    int getYear() {return mYear;}
+    int getMonth() { return mMonth;}
+    int getDay() { return mDay;}
+    int getHours() { return mHours;}
+    int getMinutes() { return mMinutes;}
+    int getSeconds(){ return mSeconds;}
 };
 
 struct PinValue
@@ -671,6 +719,304 @@ public:
     String jsonRoot(unsigned int uiType, String key, String value);
 };
 
+class PinWatch
+{
+    private:
+        GPin* pin;
+        unsigned long sampleSum = 0;     // Sum of pin value samples
+        unsigned int pinValueLast = 0;   // The pin value which was last logged.
+        unsigned int pinValueMargin = 0; // How much must a sampleSum / sampleCount change from pinValueLast to trigger a log.
+        int sampleCount = 0;         // How many times has the pinValueSum been summerized.
+        int sampleTotalCount = 0;        // How many samples before we can average sampleSum and compare with pinValueLast
+        unsigned long nextSampleTime;  // When should we get the next sample
+        unsigned long sampleInterval;  // How long between samples
+        unsigned long minLogInterval;  // The minimum time allowed to pass between logs. Set to 0 to disable
+        unsigned long nextLogTime;     // If minLogInterval is > 0 then this will be the time when we must log
+                                       // This time must be reset after each log. 
+
+        void resetAllValues() {
+            pin = NULL;
+            sampleSum = 0;
+            pinValueLast = 0;
+            pinValueMargin = 0;
+            sampleCount = 0;
+            sampleTotalCount = 0;
+            nextSampleTime = 0;
+            sampleInterval = 0;
+            minLogInterval = 0;
+            nextLogTime = 0;
+        }
+
+        void init(GPin* gPin, int pinValueMargin, int sampleTotalCount, unsigned long sampleInterval, unsigned long minLogInterval) {
+            resetAllValues();
+            pin = gPin;
+            this->pinValueMargin = pinValueMargin;
+            this->sampleTotalCount = sampleTotalCount;
+            this->sampleInterval = sampleInterval;
+            this->minLogInterval = minLogInterval;
+            this->reset(millis());
+            serialPrintLnValues();
+        }
+    public:
+        /// <summary>
+         /// Constructor for a PinWatch
+         /// </summary>
+         /// <param name="gPin">Valid GPin to watch</param>
+         /// <param name="pinValueMargin">How much must a value of a pin change to recive a positive check</param>
+         /// <param name="sampleTotalCount">How many samples of a pin value should be averaged</param>
+         /// <param name="sampleInterval">How many milliseconds must pass between a sample is taken from a pin value</param>
+         /// <param name="minLogInterval">How many milliseconds between forsed positive checks (f.example how many milliseconds between logs)  Pin values are not taken into account here</param>
+         /// <returns>True if a PinWatch is added to the list, otherwise false</returns>
+        PinWatch(GPin* gPin, int pinValueMargin, int sampleTotalCount, unsigned long sampleInterval, unsigned long minLogInterval)
+        {
+            init(gPin, pinValueMargin, sampleTotalCount, sampleInterval, minLogInterval);
+        }
+        // Copy constructor, not used by default
+        PinWatch(const PinWatch &pinWatch) {
+            pin              = pinWatch.pin;
+            sampleSum        = pinWatch.sampleSum;
+            pinValueLast     = pinWatch.pinValueLast;
+            pinValueMargin   = pinWatch.pinValueMargin;
+            sampleCount      = pinWatch.sampleCount;
+            sampleTotalCount = pinWatch.sampleTotalCount;
+            nextSampleTime   = pinWatch.nextSampleTime;
+            sampleInterval   = pinWatch.sampleInterval;
+            minLogInterval   = pinWatch.minLogInterval;
+            nextLogTime      = pinWatch.nextLogTime;
+        }
+
+        void serialPrintValues() {
+            
+            Serial.print(" getPinNumber="); Serial.print(getPinNumber());
+            Serial.print(" getPinValue="); Serial.print(getPinValue());
+            Serial.print(" sampleCount="); Serial.print(sampleCount);
+            Serial.print(" sampleSum="); Serial.print(sampleSum);
+            Serial.print(" pinValueLast="); Serial.print(pinValueLast);
+            Serial.print(" pinValueMargin="); Serial.print(pinValueMargin);
+            Serial.print(" nextSampleTime="); Serial.print(nextSampleTime);
+            Serial.print(" sampleTotalCount="); Serial.print(sampleTotalCount);
+            Serial.print(" sampleInterval="); Serial.print(sampleInterval);
+            Serial.print(" minLogInterval="); Serial.print(minLogInterval); 
+            Serial.print(" nextLogTime="); Serial.print(nextLogTime);
+        }
+        void serialPrintLnValues() {
+            serialPrintValues(); Serial.println();
+        }
+        
+        bool check(unsigned long currentTimeInMillis) {
+            
+            if (minLogInterval > 0 && currentTimeInMillis > nextLogTime) {
+                reset(currentTimeInMillis, true, true);
+                return true;
+            }
+
+            if (sampleInterval > 0) {
+                
+                if (currentTimeInMillis > nextSampleTime) {
+                    
+                    nextSampleTime = currentTimeInMillis + sampleInterval;
+                    sampleSum += getPinValue();
+                    sampleCount++;
+                    if (sampleCount >= sampleTotalCount) {
+                        int avg = sampleSum / sampleCount;
+                        int diff = abs(avg - pinValueLast);
+                       
+                        reset(currentTimeInMillis, false, false);
+                        if (diff >= pinValueMargin) {
+                            return true;
+                        }
+                    }
+                } //if (currentTimeInMillis > nextSampleTime) {
+            } //if (sampleInterval > 0)
+
+            return false;
+        }
+
+        /// <summary>
+        /// Resets the timer sampleInterva
+        /// and if update parameters are both true, update the last pin value and the minLogInterval timer as well.
+        /// </summary>
+        /// <param name="currentTimeInMillis">Current time usually gotten with the millis() function</param>
+        /// <param name="updateLastPinValue">If true, the last pin value is updated with the current one and reset the minLogInterval as well </param>
+        /// <param name="updateMinLogInterval">If True, reset the minLogInterval as well </param>
+        /// <returns>
+        /// Success:The index of the pinWatch in the list.  
+        /// fail   : -1 if the pin number was not found.</returns>
+        void reset(unsigned long currentTimeInMillis, bool updateLastPinValue = true, bool updateMinLogInterval = true) {
+            
+            if (updateLastPinValue){
+                pinValueLast = getPinValue();
+            }
+
+            if (updateMinLogInterval) {
+                if (minLogInterval > 0)
+                    nextLogTime = currentTimeInMillis + minLogInterval;
+            }
+            sampleSum = 0;
+            sampleCount = 0;
+
+            if (sampleInterval > 0)
+                nextSampleTime = currentTimeInMillis + sampleInterval;
+        }
+
+        int getPinNumber() { return pin == NULL ? -1 : pin->getNumber(); }
+        int getPinValue()  { return pin == NULL ? -1 : pin->getValue(); }
+        int getPinType()   { return pin == NULL ? -1 : pin->getType(); }
+        int isValidPin()   { return pin != NULL; }
+        String toJson() {
+
+           String str =    "{\"pin\":"              + String(getPinNumber()  ) + "," +
+                            "\"sampleSum\":"        + String(sampleSum       ) + "," +
+                            "\"pinValueLast\":"     + String(pinValueLast    ) + "," +
+                            "\"pinValueMargin\":"   + String(pinValueMargin  ) + "," +
+                            "\"sampleCount\":"      + String(sampleCount     ) + "," +
+                            "\"sampleTotalCount\":" + String(sampleTotalCount) + "," +
+                            "\"nextSampleTime\":"   + String(nextSampleTime  ) + "," +
+                            "\"sampleInterval\":"   + String(sampleInterval  ) + "," +
+                            "\"minLogInterval\":"   + String(minLogInterval  ) + "," +
+                            "\"nextLogTime\":"      + String(nextLogTime     ) + "}";
+            return str;
+        }
+};
+
+/// <summary>
+///  PinWatchList allows you to add one or more timers and/or monitor value changes on multiple pins
+/// </summary>
+/// <example>
+///     PinWatchList watchList;
+///     void setup(void) {
+///         watchList.addPinValueMonitoring(devicePins.get(D0), 1, 1, 1000);
+///         watchList.addPinValueMonitoringAndTimer(devicePins.get(D1), 2, 2, 1000, 1000 * 60 * 3);
+///         watchList.addTimer(1000 * 30 * 9);
+///     }
+///     
+///     void loop(void) {
+///         if (watchList.isAnyPinWatchDo()) {
+///             // One item did trigger so you could log
+///             watchList.resetAllChecks();
+///         }
+///     }
+/// </example>
+class PinWatchList : public LinkedList<PinWatch*> {
+
+private:
+        /// <summary>
+        /// //The cleanup function used by the list's deconstructor;
+        /// </summary>
+        void destory();
+        bool removeByIndex(int index);
+        bool add(GPin* gPin, int pinValueMargin, int sampleTotalCount, unsigned long sampleInterval, unsigned long minLogInterval);
+
+    public:
+    
+        /// <summary>
+        /// Add an pinWatch to the list
+        /// </summary>
+        /// <param name="pinWatch">The PinWatch object to be added to the list</param>
+        /// <returns>True if the add succeded, otherwise false</returns>
+        bool add(PinWatch pinWatch);
+        /// <summary>
+        /// Adds a timer with a specific interval
+        /// </summary>
+        /// <param name="minLogInterval">How many milliseconds between positive checks (f.example how many milliseconds between logs)</param>
+        /// <returns>True if a PinWatch is added to the list, otherwise false</returns>
+        bool addTimer(unsigned long minLogInterval);
+        /// <summary>
+        /// Adds and a pinWatch that monitors the value of the pin and checks if it changes same or more than 
+        /// is specified in the pinValueMargin parameter
+        /// </summary>
+        /// <param name="gPin">Valid GPin to watch</param>
+        /// <returns>True if the add succeded, otherwise false</returns>
+        /// <param name="pinValueMargin">How mutch must a value of a pin change to recive a positive check</param>
+        /// <param name="sampleTotalCount">How many samples of a pin value should be averaged</param>
+        /// <param name="sampleInterval">How many milliseconds must pass between a sample is taken from a pin value</param>
+        /// <returns>True if a PinWatch is added to the list, otherwise false</returns>
+        bool addPinValueMonitoring(GPin* gPin, int pinValueMargin, int sampleTotalCount, unsigned long sampleInterval);
+        /// <summary>
+        /// Adds and a pinWatch that monitors the value of the pin and checks if it changes same or more than 
+        /// is specified in the pinValueMargin parameter
+        /// </summary>
+        /// <param name="gPin">Valid GPin to watch</param>
+        /// <returns>True if the add succeded, otherwise false</returns>
+        /// <param name="pinValueMargin">How mutch must a value of a pin change to recive a positive check</param>
+        /// <param name="sampleTotalCount">How many samples of a pin value should be averaged</param>
+        /// <param name="sampleInterval">How many milliseconds must pass between a sample is taken from a pin value</param>
+        /// <param name="minLogInterval">How many milliseconds between forsed positive checks (f.example how many milliseconds between logs)  Pin values are not taken into account here</param>
+        /// <returns>True if a PinWatch is added to the list, otherwise false</returns>
+        bool addPinValueMonitoringAndTimer(GPin* gPin, int pinValueMargin, int sampleTotalCount, unsigned long sampleInterval, unsigned long minLogInterval);
+        
+        /// <summary>
+        /// Checks if a pinWatch with pinNumber exists in the list
+        /// </summary>
+        /// <param name="pinNumber">The pin number search for</param>
+        /// <returns>True if a pinWatch with the given pin number was found in the list, otherwise false.</returns>
+        bool exists(int pinNumber);
+        /// <summary>
+        /// Searches for the index of pinWatch with a given pin number in the list.
+        /// </summary>
+        /// <param name="pinNumber">The pin number to search for.</param>
+        /// <returns>
+        /// Success:The index of the pinWatch in the list.  
+        /// fail   : -1 if the pin number was not found.</returns>
+        int indexOfPin(int pinNumber);
+        bool isEmpty();
+        bool removePin(int pinNumber);
+        /// <summary>
+        /// Checks if the value of of any pin in the list has changed enough.
+        /// Checks also if any PinWatch for a pin has reached minimum time beetween checks.
+        /// The function stops checking after the first PinWatch is do.
+        /// </summary>
+        /// <returns>
+        /// true    : At least one PinWatch is do
+        /// false   : No PinWatch is do.
+        ///</returns>
+        bool isAnyPinWatchDo();
+        /// <summary>
+        /// Checks if the value of of any pin in the list has changed enough.
+        /// Checks also if any PinWatch for a pin has reached minimum time beetween checks.
+        /// The function stops checking after the first PinWatch is do and returns 
+        /// the index of that pin.
+        /// </summary>
+        /// <returns>
+        /// success   : Returns the index of the first PinWatch which is do
+        /// fail      : When No PinWatch is do, the return value is -1
+        ///</returns>
+        int getFirstPinWatchDo();
+        /// <summary>
+       /// Checks if the value of of any pin in the list has changed enough.
+       /// Checks also if any PinWatch for a pin has reached minimum time beetween checks.
+       /// The function stops checking after the first PinWatch is do and returns 
+       /// the index of that pin.
+       /// </summary>
+       /// <param name="index">Where to start the search from</param>
+       /// <returns>
+       /// success   : Returns the index of the first PinWatch which is do
+       /// fail      : When No PinWatch is do, the return value is -1
+       ///</returns>
+        int getNextPinWatchDo(int index);
+        /// <summary>
+        /// Resets all checks by updateing timers and resetting sampleSum and sampleCounts
+        /// </summary>
+        void resetAllChecks();
+    
+
+        //returns the list as a jsonObject array
+
+        /// <summary>
+        /// Bundles all Ip pinWatches into a JSON array
+        /// </summary>
+        /// <returns>
+        /// A string containing a valid JSON array of ip pinWatches.
+        /// Example of a returned string: ["192.168.1.54","10.1.1.15","10.1.1.1","255.255.255.0"]</returns>
+        String toJson();
+
+        /// <summary>
+        /// The deconstructor, which cleans up when the list is no longer needed.
+        /// </summary>
+        ~PinWatchList();
+        
+};
+
 enum METHODS {
     METHOD_NOTSET,
     METHOD_GET,
@@ -691,10 +1037,11 @@ METHODS method = METHOD_NOTSET;
 COMMANDS command = COMMANDS_NOTSET;
 
 ////////   GLOBAL VARIABLES   /////////////////////////////////////////////////////
-GPins pinnar;
+GPins devicePins;
 IPAddressList whiteList;
 GTime startTime;
-GUrl lib;
+GUrl urlTool;
+PinWatchList monitors;
 char linebuf[580];
 int charcount = 0;
 
@@ -711,27 +1058,27 @@ void setupPins() {
     type2 = PINTYPE_OUTPUT_DIGITAL;
 
 	//SETTING_UP_PINS_START
-    pinnar.addPin("D0", type, 15, 1);
-    pinnar.addPin("D1", type, 2, 3);
-    pinnar.addPin("D2", type, 4, 6);
-    pinnar.addPin("D3", type, 5, 9);
-    pinnar.addPin("D4", type, 18, 16);
-    pinnar.addPin("D5", type, 19, 25);
-    pinnar.addPin("D6", type, 21, 40);
-    pinnar.addPin("D7", type, 23, 60);
+    devicePins.addPin("D0", type, 15, 1);
+    devicePins.addPin("D1", type, 2, 3);
+    devicePins.addPin("D2", type, 4, 6);
+    devicePins.addPin("D3", type, 5, 9);
+    devicePins.addPin("D4", type, 18, 16);
+    devicePins.addPin("D5", type, 19, 25);
+    devicePins.addPin("D6", type, 21, 40);
+    devicePins.addPin("D7", type, 23, 60);
 
-    pinnar.addPin("D8", type2, 13, 80);
-    pinnar.addPin("D9", type2, 12, 90);
-    pinnar.addPin("D10", type2, 14, 100);
-    pinnar.addPin("D11", type2, 27, 130);
-    pinnar.addPin("D12", type2, 26, 150);
-    pinnar.addPin("D13", type2, 25, 180);
-    pinnar.addPin("D14", type2, 33, 210);
+    devicePins.addPin("D8", type2, 13, 80);
+    devicePins.addPin("D9", type2, 12, 90);
+    devicePins.addPin("D10", type2, 14, 100);
+    devicePins.addPin("D11", type2, 27, 130);
+    devicePins.addPin("D12", type2, 26, 150);
+    devicePins.addPin("D13", type2, 25, 180);
+    devicePins.addPin("D14", type2, 33, 210);
     //pinnar.addPin("D15", type2, 32, 255);
-    pinnar.addPin("D15", PINTYPE_OUTPUT_VIRTUAL, 32, 32767);
+    devicePins.addPin("D15", PINTYPE_OUTPUT_VIRTUAL, 32, 32767);
 	//SETTING_UP_PINS_END
     Serial.println("----------------------------------------");
-    Serial.println(pinnar.toJson());
+    Serial.println(devicePins.toJson());
     Serial.println("----------------------------------------");
 }
 
@@ -744,7 +1091,7 @@ void setupPins() {
 /// <returns></returns>
 String makeJsonResponseString(unsigned int uiCode, String jsonString) {
     String str = "HTTP/1.1 " +
-        lib.makeHttpStatusCodeString(uiCode) +
+        urlTool.makeHttpStatusCodeString(uiCode) +
         "\r\nContent-Length: " + jsonString.length() +
         "\r\nAccess-Control-Allow-Origin:*\r\nContent-Type: application/json\r\n\r\n" +
         jsonString + "\n";
@@ -752,7 +1099,7 @@ String makeJsonResponseString(unsigned int uiCode, String jsonString) {
 }
 String makeTextResponseString(unsigned int uiCode, String textString) {
     String str = "HTTP/1.1 " +
-        lib.makeHttpStatusCodeString(uiCode) +
+        urlTool.makeHttpStatusCodeString(uiCode) +
         "\r\nContent-Length: " + textString.length() +
         "\r\nAccess-Control-Allow-Origin:*\r\nContent-Type: text/plain\r\n\r\n" +
         textString + "\n";
@@ -827,11 +1174,11 @@ String getTime() {
 /// <returns></returns>
 void extractAndAddToWhitelist(const char *unParsedJson) {
     
-    whiteList.add(lib.extractAndReturnIPaddress(unParsedJson).c_str());
+    whiteList.add(urlTool.extractAndReturnIPaddress(unParsedJson).c_str());
 }
 void extractAndRemoveFromWhitelist(const char *unParsedJson) {
     
-    whiteList.remove(lib.extractAndReturnIPaddress(unParsedJson).c_str());
+    whiteList.remove(urlTool.extractAndReturnIPaddress(unParsedJson).c_str());
 }
 
 /// <summary>
@@ -840,9 +1187,17 @@ void extractAndRemoveFromWhitelist(const char *unParsedJson) {
 /// </summary>
 /// <param name="client">The client which this message should be sent to.</param>
 void handlePins(WiFiClient *client) {
-    String str = "{\"type\": 2, \"pins\":" + pinnar.toJson() + "}";
+    String str = "{\"type\": 2, \"pins\":" + devicePins.toJson() + "}";
     client->println(makeJsonResponseString(200, str));
     Serial.println("did handlePins my man -----");
+    Serial.println(str);
+    Serial.println("---------------------------");
+}
+
+void handleMonitors(WiFiClient* client) {
+    String str = monitors.toJson();
+    client->println(makeJsonResponseString(200, str));
+    Serial.println("Sending monitors -----");
     Serial.println(str);
     Serial.println("---------------------------");
 }
@@ -874,7 +1229,7 @@ void handleStatus(WiFiClient *client) {
         whiteList.add(voffconServerIp);
     }
     
-    String str = lib.makeStatusResponceJson(pinnar.toJson(), whiteList.toJson(), startTime.toJson());
+    String str = urlTool.makeStatusResponceJson(devicePins.toJson(), whiteList.toJson(), startTime.toJson());
     client->println(makeJsonResponseString(200, str));
 }
 String makeJsonPostString(String host, String url, String jsonString) {
@@ -890,41 +1245,15 @@ String makeJsonPostString(String host, String url, String jsonString) {
 }
 
 void logPins() {
-    /*
-    WiFiClient client;
-    uint8_t connectionAttempt = 0;
-    uint8_t RETRYS = 1;
-    //String strUrl = "google.com"; // This will not work because function WiFi.config will disable DHCP, dns lookup will fail
-    String strUrl = voffconServerIp.toString();
-    int port = voffconServerPort;
-    Serial.println(String("LOGGING to " + strUrl + ":" + port + " (VoffCon server)"));
-
-    if (client.connect(strUrl.c_str(), port)) {
-        while (client.available()) { Serial.write((char)client.read()); }
-
-        Serial.println("Posting data");
-        String host = voffconServerIp.toString() + ":" + String(VOFFCON_SERVER_PORT);
-        String str = lib.makePostLogPinsJson(DEVICE_ID, pinnar.toJson());
-        String sendStr = makeJsonPostString(host, "/log/ids/" + String(DEVICE_ID), "{\"abba\":3}");
-        Serial.println("Posting this content to client");
-        //sendStr = "{\"abba\":3}";
-        Serial.println(sendStr);
-        client.println(sendStr);
-        while (client.available()) { Serial.write((char)client.read()); }
-    }
-    */
     
-    String data = lib.makePostLogPinsJson(deviceId, pinnar.toJson());
-    //data = "{\"einn\":\"tveir\"}";
-    //data = pinnar.toJson();
+    String data = urlTool.makePostLogPinsJson(deviceId, devicePins.toJson());
 
     HTTPClient http;
     String host = voffconServerIp.toString() + ":" + String(voffconServerPort);
     String url = "http://"+ host +"/logs/pins";
-    http.begin(url);  //Specify destination for HTTP request
+    http.begin(url); 
     http.addHeader("Content-Type", "application/json");
     http.addHeader("Connection", "close");
-    //http.addHeader("Content - Length", String(data.length()));
     
     Serial.println("sending");
     Serial.println(data);
@@ -933,10 +1262,10 @@ void logPins() {
 
     if (httpResponseCode>0) {
 
-        String response = http.getString();                       //Get the response to the request
+        String response = http.getString();   //Get the response to the request
 
-        Serial.println(httpResponseCode);   //Print return code
-        Serial.println(response);           //Print request answer
+        Serial.println(httpResponseCode);     //Print return code
+        Serial.println(response);             //Print request answer
 
     }
     else {
@@ -948,45 +1277,6 @@ void logPins() {
 
     http.end();  //Free resources
     
-}
-String reportIn() {
-    Serial.println("Reporting in ");
-    String ret = "Fri, 1 Jan 1971 00:00:00 GMT";
-    String data = "{" +
-        lib.jsonKeyValue("id", "\"" + String(deviceId) + "\",") +
-        lib.jsonKeyValue("ip", "\""+WiFi.localIP().toString()+"\",") + 
-        lib.jsonKeyValue("port", PORT) +
-        "}";
-
-    HTTPClient http;
-    String host = voffconServerIp.toString() + ":" + String(voffconServerPort);
-    String url = "http://" + host + "/devices/reportin";
-    http.begin(url);  //Specify destination for HTTP request
-    http.addHeader("Content-Type", "application/json");
-    http.addHeader("Connection", "close");
-    Serial.println("sending");
-    Serial.println(data);
-
-    int httpResponseCode = http.POST(data);   //Send the actual POST request
-
-    if (httpResponseCode>0) {
-
-        String response = http.getString();                       //Get the response to the request
-
-        Serial.println(httpResponseCode);   //Print return code
-        Serial.println(response);           //Print request answer
-        ret = response; //responce should contain date.toUTCString()
-
-    }
-    else {
-
-        Serial.print("Error on sending POST: ");
-        Serial.println(httpResponseCode);
-
-    }
-
-    http.end();  //Free resources
-    return ret;
 }
 
 /// <summary>
@@ -995,7 +1285,7 @@ String reportIn() {
 /// <param name="client">The client which this message should be sent to.</param>
 void handleGetPinout(WiFiClient *client) {
     Serial.println("handleGetPinout");
-    client->println(makeJsonResponseString(200, pinnar.JsonPinout()));
+    client->println(makeJsonResponseString(200, devicePins.JsonPinout()));
 }
 
 void sendText(WiFiClient *client, int statusCode, const char *strSend) {
@@ -1106,7 +1396,7 @@ bool extractAndSetPinValues(const char *unParsedJson, GPins *pinnar) {
     int count;
     bool ret = false;
     PinValue arr[30];
-    count = lib.extractPinValues(unParsedJson, arr, 30);
+    count = urlTool.extractPinValues(unParsedJson, arr, 30);
     for (uint8_t i = 0; i < count; i++) {
         if (pinnar->setValue(arr[i].pinNumber, arr[i].pinValue)){
             Serial.print("    new values set");
@@ -1145,6 +1435,64 @@ static void timerTwoSeconds(void) {
     }
 }
 
+String reportIn() {
+    Serial.println("Reporting in ");
+    String ret = "Fri, 1 Jan 1971 00:00:00 GMT";
+    String data = "{" +
+        urlTool.jsonKeyValue("id", "\"" + String(deviceId) + "\",") +
+        urlTool.jsonKeyValue("ip", "\"" + WiFi.localIP().toString() + "\",") +
+        urlTool.jsonKeyValue("port", PORT) +
+        "}";
+
+    HTTPClient http;
+    String host = voffconServerIp.toString() + ":" + String(voffconServerPort);
+    String url = "http://" + host + "/devices/reportin";
+    http.begin(url);  //Specify destination for HTTP request
+    http.addHeader("Content-Type", "application/json");
+    http.addHeader("Connection", "close");
+    Serial.println("sending");
+    Serial.println(data);
+
+    int httpResponseCode = http.POST(data);   //Send the actual POST request
+
+    if (httpResponseCode>0) {
+
+        String response = http.getString(); //Get the response to the request
+
+        Serial.println(httpResponseCode);   //Print return code
+        Serial.println(response);           //Print request answer
+        ret = response; //responce should contain date.toUTCString()
+
+    }
+    else {
+
+        Serial.print("Error on sending POST: ");
+        Serial.println(httpResponseCode);
+
+    }
+
+    http.end();  //Free resources
+    return ret;
+}
+
+void tellServerToSaveLog() {
+    Serial.println("Telling server to log the device pins");
+
+    HTTPClient http;
+    String host = voffconServerIp.toString() + ":" + String(voffconServerPort);
+    String url = "http://" + host + "/logs/pins/" + deviceId;
+    http.begin(url);  //Specify destination for HTTP request
+    //http.addHeader("Content-Type", "application/json");
+    http.addHeader("Connection", "close");
+    Serial.print("Calling : "); Serial.println(url);
+
+    int httpResponseCode = http.GET();   //make the request to server
+   
+    Serial.print("Responce code: "); Serial.println(httpResponseCode);   //return code
+    Serial.println(http.getString());   //The response to the request
+    http.end();  //Free resources
+}
+
 void setup() {
     //Initialize serial and wait for port to open:
     Serial.begin(115200);
@@ -1167,7 +1515,6 @@ void setup() {
     }
     printWiFiInfo();
     startTime.setTime(reportIn());
-    //startTime.setTime(getTime());
     Serial.println("Start time:" + startTime.toString());
     setupPins();
     Serial.println("The device can be accessed at this path ");
@@ -1176,6 +1523,8 @@ void setup() {
     Serial.println("\"http" + subPath + ".");
     //test();
     server.begin();
+    monitors.addTimer(1000 * 60 * 60 * 24); //ones per day
+    monitors.addPinValueMonitoringAndTimer(devicePins.get(15), 2, 4, 250, (1000 * 60 * 60 * 24 * 16));//the 16 day timer will never ve triggered because of the other 1 day timer
 }
 
 /// <summary>
@@ -1185,6 +1534,13 @@ void setup() {
 void loop() {
 
     timerTwoSeconds();
+
+    
+    if (monitors.isAnyPinWatchDo()) {
+        // One item did trigger so you could log
+        tellServerToSaveLog();
+        monitors.resetAllChecks();
+    }
 
     // listen for incoming clients
     WiFiClient client = server.available();
@@ -1220,7 +1576,7 @@ void loop() {
 
                             //if ( command == COMMANDS_POST_PINS && lib.extractAndSetPinsAndValues(linebuf, &pinnar)) {
                             if (command == COMMANDS_POST_PINS) {
-                                extractAndSetPinValues(linebuf, &pinnar);
+                                extractAndSetPinValues(linebuf, &devicePins);
                                 handlePins(&client);
                             } else if (command == COMMANDS_POST_WHITELIST) {
                                 if ( isAuthorized(&client) )
@@ -1241,33 +1597,37 @@ void loop() {
                     // you're starting a new line
                     currentLineIsBlank = true;
                     if (strstr(linebuf, "GET /started") > 0) {
+                        method == METHOD_GET;
+                        
                         Serial.println(" /started");
-
                         String str = "{\"date\":";
                         String itemJson = startTime.toJson();
                         str += itemJson;
                         str += "}";
-
                         Serial.println("timi");
                         Serial.println(str);
                         client.println(makeJsonResponseString(200, str));
-                        method == METHOD_GET;
                         break;
                     }
 
                     else if (strstr(linebuf, "GET /pinout") > 0) {
-                        handleGetPinout(&client);
                         method = METHOD_GET;
+                        handleGetPinout(&client);
                         break;
                     }
                     else if (strstr(linebuf, "GET /pins") > 0) {
-                        handlePins(&client);
                         method == METHOD_GET;
+                        handlePins(&client);
                         break;
                     }
                     else if (strstr(linebuf, "GET /status") > 0) {
-                        handleStatus(&client);
                         method == METHOD_GET;
+                        handleStatus(&client);
+                        break;
+                    }
+                    else if (strstr(linebuf, "GET /monitors") > 0) {
+                        method == METHOD_GET;
+                        handleMonitors(&client);
                         break;
                     }
                     else if (strstr(linebuf, "POST /pins") > 0) {
@@ -1655,6 +2015,45 @@ String GPins::JsonPinout() {
 #endif //CODE_BLOCK_GPins_impl
 
 #ifndef CODE_BLOCK_Gtime
+
+GTime::GTime(const GTime& gTime) {
+    mYear    = gTime.mYear;
+    mMonth   = gTime.mMonth;
+    mDay     = gTime.mDay;
+    mHours   = gTime.mHours;
+    mMinutes = gTime.mMinutes;
+    mSeconds = gTime.mSeconds;
+}
+
+// Converts milliseconds to GTime 
+// Largest possible ULONG is 4294967295, which is 49 days, 17:02:47
+// if there are more than 28 days then them month will NOT be increased
+void GTime::setTime(unsigned long milliSeconds) {
+    unsigned long d=0, y, s, m, h, mi;
+    y = ((unsigned long)60 * (unsigned long)60 * (unsigned long)1000);
+    h = milliSeconds / y;
+    m = (milliSeconds - (h * y)) / (y / 60);
+    s = (milliSeconds - (h * y) - (m * (y / 60))) / 1000;
+    mi = milliSeconds - (h * y) - (m * (y / 60)) - (s * 1000);
+
+    if (h > 23)
+    {
+        d = h / 24;
+        h -= (d * 24);
+    }
+    mYear = 0;
+    mMonth = 0;
+    mDay = d;
+
+    mHours = h;
+    mMinutes = m;
+    mSeconds = s;
+}
+
+GTime::GTime(unsigned long milliSeconds) {
+    setTime(milliSeconds);
+}
+
 boolean GTime::setTime(String strTime) {
     String str;
     String num;
@@ -1966,3 +2365,124 @@ String GUrl::jsonRoot(unsigned int uiType, String key, String value) {
 }
 #endif //#ifndef CODE_BLOCK_GUrl_impl
 
+#ifndef CODE_BLOCK_PinWatchList
+
+PinWatchList::~PinWatchList() {
+    destory();
+}
+
+bool PinWatchList::add(GPin* gPin, int pinValueMargin, int sampleTotalCount, unsigned long sampleInterval, unsigned long minLogInterval) {
+   
+    PinWatch * p = new PinWatch(gPin, pinValueMargin, sampleTotalCount, sampleInterval, minLogInterval);
+    return LinkedList<PinWatch*>::add(p);
+}
+bool PinWatchList::addPinValueMonitoringAndTimer(GPin* gPin, int pinValueMargin, int sampleTotalCount, unsigned long sampleInterval, unsigned long minLogInterval) {
+    if (gPin == NULL || exists(gPin->getNumber()))
+        return false;
+    return add(gPin, pinValueMargin, sampleTotalCount, sampleInterval, minLogInterval);
+}
+bool PinWatchList::addTimer(unsigned long minLogInterval) {
+    return add(NULL, 0, 0, 0, minLogInterval);
+}
+
+bool PinWatchList::addPinValueMonitoring(GPin* gPin, int pinValueMargin, int sampleTotalCount, unsigned long sampleInterval) {
+    if (gPin == NULL || exists(gPin->getNumber()))
+        return false;
+    return addPinValueMonitoringAndTimer(gPin, pinValueMargin, sampleTotalCount, sampleInterval, 0);
+}
+bool PinWatchList::add(PinWatch pinWatch) {
+    if (!pinWatch.isValidPin() || exists(pinWatch.getPinNumber()))
+        return false;
+    return LinkedList<PinWatch*>::add(new PinWatch(pinWatch));
+}
+bool PinWatchList::exists(int pinNumber) {
+
+    return indexOfPin(pinNumber) > -1;
+}
+
+bool PinWatchList::removePin(int pinNumber) {
+    int i = indexOfPin(pinNumber);
+    if (i < 0)
+        return false;
+    return removeByIndex(i);
+}
+
+bool PinWatchList::isAnyPinWatchDo()
+{
+    
+    return getFirstPinWatchDo() > -1;
+}
+int PinWatchList::getFirstPinWatchDo()
+{
+    return getNextPinWatchDo(0);
+}
+int PinWatchList::getNextPinWatchDo(int index)
+{
+    if (index < 0)
+        return -1;
+
+    unsigned long time = millis();
+    for (int i = index; i < size(); i++) {
+        if (get(i)->check(time)) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+void PinWatchList::resetAllChecks()
+{
+    unsigned long time = millis();
+    for (int i = 0; i < size(); i++) {
+        get(i)->reset(time, true);
+    }
+
+}
+bool PinWatchList::removeByIndex(int index) {
+    if (index < 0)
+        return false;
+    
+    delete get(index);
+    set(index, NULL);
+    return LinkedList<PinWatch*>::remove(index);
+}
+
+bool PinWatchList::isEmpty() {
+    PinWatch* p = get(0);
+    bool bRet = (p == NULL);
+    return bRet;
+}
+
+int PinWatchList::indexOfPin(int pinNumber) {
+
+    for (int i = 0; i < size(); i++) {
+        if (get(i)->getPinNumber() == pinNumber)
+            return i;
+    }
+    return -1;
+}
+
+void PinWatchList::destory() {
+    PinWatch* p;
+    for (int i = 0; i < size(); i++) {
+        p = get(i);
+        if (p != NULL)
+        {
+            delay(10);
+            delete p;
+            set(i, NULL);
+        }
+    }
+    clear();
+}
+String PinWatchList::toJson() {
+    String str = "[";
+    for (int i = 0; i < size(); i++) {
+        if (i > 0)
+            str += ",";
+        str = str + get(i)->toJson();
+
+    }
+    return str + "]";
+}
+#endif //CODE_BLOCK_PinWatchList

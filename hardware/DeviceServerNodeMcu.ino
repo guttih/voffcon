@@ -1,6 +1,6 @@
 ﻿/*
 VoffCon is a system for controlling devices and appliances from anywhere.
-It consists of two programs.  A “node server” and a “device server”.
+It consists of two programs.  A "node server" and a "device server".
 Copyright (C) 2016  Gudjon Holm Sigurdsson
 
 This program is free software: you can redistribute it and/or modify
@@ -17,10 +17,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 You can contact the author by sending email to gudjonholm@gmail.com or
 by regular post to the address Haseyla 27, 260 Reykjanesbar, Iceland.
-*/
 
-/*
-    Board: NodeMCU 1.0 (ESP-12E Module)
+    Program for Board: NodeMCU 1.0 (ESP-12E Module)
 */
 
 #include <ESP8266WiFi.h>
@@ -153,24 +151,17 @@ public:
 };
 
 #ifndef CODE_BLOCK_LinkedList
-/*
-LinkedList.h - V1.1 - Generic LinkedList implementation
-For instructions, go to https://github.com/ivanseidel/LinkedList
-
-Created by Ivan Seidel Gomes, March, 2013.
-Released into the public domain.
-*/
 
 //do not remove the comment below this line
 //INSERT_FROM_HERE
 
-/*
-    LinkedList.h - V1.1 - Generic LinkedList implementation
-    For instructions, go to https://github.com/ivanseidel/LinkedList
+//   ---------------------------------------------------------------
+//  LinkedList.h - V1.1 - Generic LinkedList implementation
+//  For instructions, go to https://github.com/ivanseidel/LinkedList
 
-    Created by Ivan Seidel Gomes, March, 2013.
-    Released into the public domain.
-*/
+//  Created by Ivan Seidel Gomes, March, 2013.
+//  Released into the public domain.
+//   ---------------------------------------------------------------
 
 template<class T>
 struct ListNode
@@ -314,7 +305,7 @@ ListNode<T>* LinkedList<T>::getNode(int index) {
         return current;
     }
 
-    return false;
+    return NULL;
 }
 
 template<typename T>
@@ -573,6 +564,31 @@ public:
     /// <summary>
     /// Sets time values from a given string
     /// </summary>
+    /// <example>
+    /// GTime x, y;
+    /// x = y;
+    /// </example>
+    GTime(const GTime& gTime);
+    /// <summary>
+    /// Converts milliseconds to GTime 
+    /// But note this is not a real GTime because this is more like a counter
+    /// so if milliseconds are less than one day year, month and day will all be 0
+    /// </summary>
+    GTime(unsigned long milliSeconds);
+    /// <summary>
+    /// Sets a new GTime by converting milliseconds to GTime 
+    /// Largest possible unsigned long is 4294967295, which is 49 days, 17:02:47
+    /// If there are more than 28 days then the month not be increased so days can grow up to 49
+    /// But note this is not a real GTime because this is more like a counter
+    /// so if milliseconds are less than one day year, month and day will all be 0
+    /// </summary>
+    /// <param name="milliSeconds">
+    /// There are 1000 milliSeconds in a second
+    /// </param>
+    void setTime(unsigned long milliSeconds);
+    /// <summary>
+    /// Sets time values from a given string
+    /// </summary>
     /// <param name="strTime">
     /// A string with date and time.
     /// The string needs to be formatted like this: 
@@ -580,6 +596,7 @@ public:
     /// </param>
     /// <returns></returns>
     boolean setTime(String strTime);
+
     /// <summary>
     /// Converts a 3 letter english month name to the number of the month in the year.
     /// </summary>
@@ -616,6 +633,12 @@ public:
     /// </summary>
     /// <returns>A String formatted as an JSON object</returns>
     String toJson();
+    int getYear() {return mYear;}
+    int getMonth() { return mMonth;}
+    int getDay() { return mDay;}
+    int getHours() { return mHours;}
+    int getMinutes() { return mMinutes;}
+    int getSeconds(){ return mSeconds;}
 };
 
 class IPAddressList : public LinkedList<IPAddress*> {
@@ -686,11 +709,310 @@ public:
     ~IPAddressList();
 };
 
+class PinWatch
+{
+    private:
+        GPin* pin;
+        unsigned long sampleSum = 0;     // Sum of pin value samples
+        unsigned int pinValueLast = 0;   // The pin value which was last logged.
+        unsigned int pinValueMargin = 0; // How much must a sampleSum / sampleCount change from pinValueLast to trigger a log.
+        int sampleCount = 0;         // How many times has the pinValueSum been summerized.
+        int sampleTotalCount = 0;        // How many samples before we can average sampleSum and compare with pinValueLast
+        unsigned long nextSampleTime;  // When should we get the next sample
+        unsigned long sampleInterval;  // How long between samples
+        unsigned long minLogInterval;  // The minimum time allowed to pass between logs. Set to 0 to disable
+        unsigned long nextLogTime;     // If minLogInterval is > 0 then this will be the time when we must log
+                                       // This time must be reset after each log. 
+
+        void resetAllValues() {
+            pin = NULL;
+            sampleSum = 0;
+            pinValueLast = 0;
+            pinValueMargin = 0;
+            sampleCount = 0;
+            sampleTotalCount = 0;
+            nextSampleTime = 0;
+            sampleInterval = 0;
+            minLogInterval = 0;
+            nextLogTime = 0;
+        }
+
+        void init(GPin* gPin, int pinValueMargin, int sampleTotalCount, unsigned long sampleInterval, unsigned long minLogInterval) {
+            resetAllValues();
+            pin = gPin;
+            this->pinValueMargin = pinValueMargin;
+            this->sampleTotalCount = sampleTotalCount;
+            this->sampleInterval = sampleInterval;
+            this->minLogInterval = minLogInterval;
+            this->reset(millis());
+            serialPrintLnValues();
+        }
+    public:
+        /// <summary>
+         /// Constructor for a PinWatch
+         /// </summary>
+         /// <param name="gPin">Valid GPin to watch</param>
+         /// <param name="pinValueMargin">How much must a value of a pin change to recive a positive check</param>
+         /// <param name="sampleTotalCount">How many samples of a pin value should be averaged</param>
+         /// <param name="sampleInterval">How many milliseconds must pass between a sample is taken from a pin value</param>
+         /// <param name="minLogInterval">How many milliseconds between forsed positive checks (f.example how many milliseconds between logs)  Pin values are not taken into account here</param>
+         /// <returns>True if a PinWatch is added to the list, otherwise false</returns>
+        PinWatch(GPin* gPin, int pinValueMargin, int sampleTotalCount, unsigned long sampleInterval, unsigned long minLogInterval)
+        {
+            init(gPin, pinValueMargin, sampleTotalCount, sampleInterval, minLogInterval);
+        }
+        // Copy constructor, not used by default
+        PinWatch(const PinWatch &pinWatch) {
+            pin              = pinWatch.pin;
+            sampleSum        = pinWatch.sampleSum;
+            pinValueLast     = pinWatch.pinValueLast;
+            pinValueMargin   = pinWatch.pinValueMargin;
+            sampleCount      = pinWatch.sampleCount;
+            sampleTotalCount = pinWatch.sampleTotalCount;
+            nextSampleTime   = pinWatch.nextSampleTime;
+            sampleInterval   = pinWatch.sampleInterval;
+            minLogInterval   = pinWatch.minLogInterval;
+            nextLogTime      = pinWatch.nextLogTime;
+        }
+
+        void serialPrintValues() {
+            
+            Serial.print(" getPinNumber="); Serial.print(getPinNumber());
+            Serial.print(" getPinValue="); Serial.print(getPinValue());
+            Serial.print(" sampleCount="); Serial.print(sampleCount);
+            Serial.print(" sampleSum="); Serial.print(sampleSum);
+            Serial.print(" pinValueLast="); Serial.print(pinValueLast);
+            Serial.print(" pinValueMargin="); Serial.print(pinValueMargin);
+            Serial.print(" nextSampleTime="); Serial.print(nextSampleTime);
+            Serial.print(" sampleTotalCount="); Serial.print(sampleTotalCount);
+            Serial.print(" sampleInterval="); Serial.print(sampleInterval);
+            Serial.print(" minLogInterval="); Serial.print(minLogInterval); 
+            Serial.print(" nextLogTime="); Serial.print(nextLogTime);
+        }
+        void serialPrintLnValues() {
+            serialPrintValues(); Serial.println();
+        }
+        
+        bool check(unsigned long currentTimeInMillis) {
+            
+            if (minLogInterval > 0 && currentTimeInMillis > nextLogTime) {
+                reset(currentTimeInMillis, true, true);
+                return true;
+            }
+
+            if (sampleInterval > 0) {
+                
+                if (currentTimeInMillis > nextSampleTime) {
+                    
+                    nextSampleTime = currentTimeInMillis + sampleInterval;
+                    sampleSum += getPinValue();
+                    sampleCount++;
+                    if (sampleCount >= sampleTotalCount) {
+                        int avg = sampleSum / sampleCount;
+                        int diff = abs(avg - pinValueLast);
+                       
+                        reset(currentTimeInMillis, false, false);
+                        if (diff >= pinValueMargin) {
+                            return true;
+                        }
+                    }
+                } //if (currentTimeInMillis > nextSampleTime) {
+            } //if (sampleInterval > 0)
+
+            return false;
+        }
+
+        /// <summary>
+        /// Resets the timer sampleInterva
+        /// and if update parameters are both true, update the last pin value and the minLogInterval timer as well.
+        /// </summary>
+        /// <param name="currentTimeInMillis">Current time usually gotten with the millis() function</param>
+        /// <param name="updateLastPinValue">If true, the last pin value is updated with the current one and reset the minLogInterval as well </param>
+        /// <param name="updateMinLogInterval">If True, reset the minLogInterval as well </param>
+        /// <returns>
+        /// Success:The index of the pinWatch in the list.  
+        /// fail   : -1 if the pin number was not found.</returns>
+        void reset(unsigned long currentTimeInMillis, bool updateLastPinValue = true, bool updateMinLogInterval = true) {
+            
+            if (updateLastPinValue){
+                pinValueLast = getPinValue();
+            }
+
+            if (updateMinLogInterval) {
+                if (minLogInterval > 0)
+                    nextLogTime = currentTimeInMillis + minLogInterval;
+            }
+            sampleSum = 0;
+            sampleCount = 0;
+
+            if (sampleInterval > 0)
+                nextSampleTime = currentTimeInMillis + sampleInterval;
+        }
+
+        int getPinNumber() { return pin == NULL ? -1 : pin->getNumber(); }
+        int getPinValue()  { return pin == NULL ? -1 : pin->getValue(); }
+        int getPinType()   { return pin == NULL ? -1 : pin->getType(); }
+        int isValidPin()   { return pin != NULL; }
+        String toJson() {
+
+           String str =    "{\"pin\":"              + String(getPinNumber()  ) + "," +
+                            "\"sampleSum\":"        + String(sampleSum       ) + "," +
+                            "\"pinValueLast\":"     + String(pinValueLast    ) + "," +
+                            "\"pinValueMargin\":"   + String(pinValueMargin  ) + "," +
+                            "\"sampleCount\":"      + String(sampleCount     ) + "," +
+                            "\"sampleTotalCount\":" + String(sampleTotalCount) + "," +
+                            "\"nextSampleTime\":"   + String(nextSampleTime  ) + "," +
+                            "\"sampleInterval\":"   + String(sampleInterval  ) + "," +
+                            "\"minLogInterval\":"   + String(minLogInterval  ) + "," +
+                            "\"nextLogTime\":"      + String(nextLogTime     ) + "}";
+            return str;
+        }
+};
+
+/// <summary>
+///  PinWatchList allows you to add one or more timers and/or monitor value changes on multiple pins
+/// </summary>
+/// <example>
+///     PinWatchList watchList;
+///     void setup(void) {
+///         watchList.addPinValueMonitoring(devicePins.get(D0), 1, 1, 1000);
+///         watchList.addPinValueMonitoringAndTimer(devicePins.get(D1), 2, 2, 1000, 1000 * 60 * 3);
+///         watchList.addTimer(1000 * 30 * 9);
+///     }
+///     
+///     void loop(void) {
+///         if (watchList.isAnyPinWatchDo()) {
+///             // One item did trigger so you could log
+///             watchList.resetAllChecks();
+///         }
+///     }
+/// </example>
+class PinWatchList : public LinkedList<PinWatch*> {
+
+private:
+        /// <summary>
+        /// //The cleanup function used by the list's deconstructor;
+        /// </summary>
+        void destory();
+        bool removeByIndex(int index);
+        bool add(GPin* gPin, int pinValueMargin, int sampleTotalCount, unsigned long sampleInterval, unsigned long minLogInterval);
+
+    public:
+    
+        /// <summary>
+        /// Add an pinWatch to the list
+        /// </summary>
+        /// <param name="pinWatch">The PinWatch object to be added to the list</param>
+        /// <returns>True if the add succeded, otherwise false</returns>
+        bool add(PinWatch pinWatch);
+        /// <summary>
+        /// Adds a timer with a specific interval
+        /// </summary>
+        /// <param name="minLogInterval">How many milliseconds between positive checks (f.example how many milliseconds between logs)</param>
+        /// <returns>True if a PinWatch is added to the list, otherwise false</returns>
+        bool addTimer(unsigned long minLogInterval);
+        /// <summary>
+        /// Adds and a pinWatch that monitors the value of the pin and checks if it changes same or more than 
+        /// is specified in the pinValueMargin parameter
+        /// </summary>
+        /// <param name="gPin">Valid GPin to watch</param>
+        /// <returns>True if the add succeded, otherwise false</returns>
+        /// <param name="pinValueMargin">How mutch must a value of a pin change to recive a positive check</param>
+        /// <param name="sampleTotalCount">How many samples of a pin value should be averaged</param>
+        /// <param name="sampleInterval">How many milliseconds must pass between a sample is taken from a pin value</param>
+        /// <returns>True if a PinWatch is added to the list, otherwise false</returns>
+        bool addPinValueMonitoring(GPin* gPin, int pinValueMargin, int sampleTotalCount, unsigned long sampleInterval);
+        /// <summary>
+        /// Adds and a pinWatch that monitors the value of the pin and checks if it changes same or more than 
+        /// is specified in the pinValueMargin parameter
+        /// </summary>
+        /// <param name="gPin">Valid GPin to watch</param>
+        /// <returns>True if the add succeded, otherwise false</returns>
+        /// <param name="pinValueMargin">How mutch must a value of a pin change to recive a positive check</param>
+        /// <param name="sampleTotalCount">How many samples of a pin value should be averaged</param>
+        /// <param name="sampleInterval">How many milliseconds must pass between a sample is taken from a pin value</param>
+        /// <param name="minLogInterval">How many milliseconds between forsed positive checks (f.example how many milliseconds between logs)  Pin values are not taken into account here</param>
+        /// <returns>True if a PinWatch is added to the list, otherwise false</returns>
+        bool addPinValueMonitoringAndTimer(GPin* gPin, int pinValueMargin, int sampleTotalCount, unsigned long sampleInterval, unsigned long minLogInterval);
+        
+        /// <summary>
+        /// Checks if a pinWatch with pinNumber exists in the list
+        /// </summary>
+        /// <param name="pinNumber">The pin number search for</param>
+        /// <returns>True if a pinWatch with the given pin number was found in the list, otherwise false.</returns>
+        bool exists(int pinNumber);
+        /// <summary>
+        /// Searches for the index of pinWatch with a given pin number in the list.
+        /// </summary>
+        /// <param name="pinNumber">The pin number to search for.</param>
+        /// <returns>
+        /// Success:The index of the pinWatch in the list.  
+        /// fail   : -1 if the pin number was not found.</returns>
+        int indexOfPin(int pinNumber);
+        bool isEmpty();
+        bool removePin(int pinNumber);
+        /// <summary>
+        /// Checks if the value of of any pin in the list has changed enough.
+        /// Checks also if any PinWatch for a pin has reached minimum time beetween checks.
+        /// The function stops checking after the first PinWatch is do.
+        /// </summary>
+        /// <returns>
+        /// true    : At least one PinWatch is do
+        /// false   : No PinWatch is do.
+        ///</returns>
+        bool isAnyPinWatchDo();
+        /// <summary>
+        /// Checks if the value of of any pin in the list has changed enough.
+        /// Checks also if any PinWatch for a pin has reached minimum time beetween checks.
+        /// The function stops checking after the first PinWatch is do and returns 
+        /// the index of that pin.
+        /// </summary>
+        /// <returns>
+        /// success   : Returns the index of the first PinWatch which is do
+        /// fail      : When No PinWatch is do, the return value is -1
+        ///</returns>
+        int getFirstPinWatchDo();
+        /// <summary>
+       /// Checks if the value of of any pin in the list has changed enough.
+       /// Checks also if any PinWatch for a pin has reached minimum time beetween checks.
+       /// The function stops checking after the first PinWatch is do and returns 
+       /// the index of that pin.
+       /// </summary>
+       /// <param name="index">Where to start the search from</param>
+       /// <returns>
+       /// success   : Returns the index of the first PinWatch which is do
+       /// fail      : When No PinWatch is do, the return value is -1
+       ///</returns>
+        int getNextPinWatchDo(int index);
+        /// <summary>
+        /// Resets all checks by updateing timers and resetting sampleSum and sampleCounts
+        /// </summary>
+        void resetAllChecks();
+    
+
+        //returns the list as a jsonObject array
+
+        /// <summary>
+        /// Bundles all Ip pinWatches into a JSON array
+        /// </summary>
+        /// <returns>
+        /// A string containing a valid JSON array of ip pinWatches.
+        /// Example of a returned string: ["192.168.1.54","10.1.1.15","10.1.1.1","255.255.255.0"]</returns>
+        String toJson();
+
+        /// <summary>
+        /// The deconstructor, which cleans up when the list is no longer needed.
+        /// </summary>
+        ~PinWatchList();
+        
+};
+
 GTime startTime;
-GPins pinnar;
-GUrl  urlTool;
+GPins devicePins;
 ///StringList whiteList; //todo: maybe whiteList should be a IPAddress not String
 IPAddressList whiteList;
+GUrl  urlTool;
+PinWatchList monitors;
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                                          //
@@ -805,7 +1127,7 @@ void handlePins() {
             pin = urlTool.toNumber(server.argName(i));
             val = urlTool.toNumber(server.arg(i));
             if (pin > -1 && val > -1) {
-                pinnar.setValue(pin, val);
+                devicePins.setValue(pin, val);
             }
             else
             {
@@ -817,12 +1139,12 @@ void handlePins() {
                     line.indexOf('}') + 1 == line.length()// We will not handle nested objects
                     )
                 {
-                    urlTool.extractAndSetPinsAndValues(line.c_str(), &pinnar);
+                    urlTool.extractAndSetPinsAndValues(line.c_str(), &devicePins);
                 }
             }
         }
     }
-    String itemJson = urlTool.jsonRoot(OBJECTTYPE_PINS_ARRAY, "pins", pinnar.toJson());
+    String itemJson = urlTool.jsonRoot(OBJECTTYPE_PINS_ARRAY, "pins", devicePins.toJson());
     server.send(200, "application/json", itemJson);
 }
 
@@ -837,7 +1159,7 @@ void handleStatus() {
         return;
     }
 
-    String str = urlTool.makeStatusResponceJson(pinnar.toJson(), whiteList.toJson(), startTime.toJson());
+    String str = urlTool.makeStatusResponceJson(devicePins.toJson(), whiteList.toJson(), startTime.toJson());
     sendJson(200, str.c_str());
     Serial.println("Sending back");
     Serial.println(str);
@@ -926,7 +1248,11 @@ void handleStarted() {
 // show the mappings of the pins
 void handlePinout() {
     Serial.println("client IP: " + server.client().remoteIP().toString());
-    server.send(200, "application/json", pinnar.JsonPinout());
+    server.send(200, "application/json", devicePins.JsonPinout());
+}
+void handleMonitors() {
+    Serial.println("client IP: " + server.client().remoteIP().toString());
+    server.send(200, "application/json", monitors.toJson());
 }
 
 //returns:
@@ -975,13 +1301,12 @@ void handleSetup() {
 }
 
 String reportIn() {
-    GUrl lib;
     Serial.println("Reporting in ");
     String ret = "Fri, 1 Jan 1971 00:00:00 GMT";
     String data = "{" +
-        lib.jsonKeyValue("id", "\"" + String(deviceId) + "\",") +
-        lib.jsonKeyValue("ip", "\"" + WiFi.localIP().toString() + "\",") +
-        lib.jsonKeyValue("port", PORT) +
+        urlTool.jsonKeyValue("id", "\"" + String(deviceId) + "\",") +
+        urlTool.jsonKeyValue("ip", "\"" + WiFi.localIP().toString() + "\",") +
+        urlTool.jsonKeyValue("port", PORT) +
         "}";
 
     HTTPClient http;
@@ -997,7 +1322,7 @@ String reportIn() {
 
     if (httpResponseCode>0) {
 
-        String response = http.getString();                       //Get the response to the request
+        String response = http.getString(); //Get the response to the request
 
         Serial.println(httpResponseCode);   //Print return code
         Serial.println(response);           //Print request answer
@@ -1015,9 +1340,26 @@ String reportIn() {
     return ret;
 }
 
+void tellServerToSaveLog() {
+    Serial.println("Telling server to log the device pins");
+
+    HTTPClient http;
+    String host = voffconServerIp.toString() + ":" + String(voffconServerPort);
+    String url = "http://" + host + "/logs/pins/" + deviceId;
+    http.begin(url);  //Specify destination for HTTP request
+    //http.addHeader("Content-Type", "application/json");
+    http.addHeader("Connection", "close");
+    Serial.print("Calling : "); Serial.println(url);
+
+    int httpResponseCode = http.GET();   //make the request to server
+   
+    Serial.print("Responce code: "); Serial.println(httpResponseCode);   //return code
+    Serial.println(http.getString());   //The response to the request
+    http.end();  //Free resources
+}
+
 void setup(void) {
     
-
     Serial.begin(115200);
     Serial.println("Connecting to : " + String(ssid));
     //WiFi.begin(ssid);
@@ -1058,6 +1400,8 @@ void setup(void) {
     server.on("/status", handleStatus);
     server.on("/setup", handleSetup);
     server.on("/pinout", handlePinout);
+    server.on("/monitors", handleMonitors);
+    
     //todo: spurning um hvort við bætum við /addpins eða    /add
     //todo: spurning um hvort við bætum við /removepins eða /remove
 
@@ -1072,20 +1416,27 @@ void setup(void) {
     int startState = 700;
 	//SETTING_UP_PINS_START
     PINTYPE type = PINTYPE_OUTPUT_ANALOG;
-    pinnar.addPin("D0", type, D0, startState);
-    pinnar.addPin("D1", type, D1, startState);
-    pinnar.addPin("D2", PINTYPE_INPUT_ANALOG, D2, 512);
-    pinnar.addPin("D3", PINTYPE_INPUT_DIGITAL, D3, startState);
-    pinnar.addPin("D4", PINTYPE_OUTPUT_DIGITAL, D4, startState);
-    pinnar.addPin("D5", type, D5, 123);
-    pinnar.addPin("D6", type, D6, startState);
-    pinnar.addPin("D7", type, D7, startState);
-    pinnar.addPin("D8", PINTYPE_OUTPUT_VIRTUAL, D8, 456);
+    devicePins.addPin("D0", type, D0, startState);
+    devicePins.addPin("D1", type, D1, startState);
+    devicePins.addPin("D2", PINTYPE_INPUT_ANALOG, D2, 512);
+    devicePins.addPin("D3", PINTYPE_INPUT_DIGITAL, D3, startState);
+    devicePins.addPin("D4", PINTYPE_OUTPUT_DIGITAL, D4, startState);
+    devicePins.addPin("D5", type, D5, 123);
+    devicePins.addPin("D6", type, D6, startState);
+    devicePins.addPin("D7", type, D7, startState);
+    devicePins.addPin("D8", PINTYPE_OUTPUT_VIRTUAL, D8, 456);
 	//SETTING_UP_PINS_END
-    Serial.println(pinnar.toJson());
+    Serial.println(devicePins.toJson());
+    monitors.addTimer(1000 * 60 * 60 * 24); //ones per day
+    monitors.addPinValueMonitoringAndTimer(devicePins.get(D1), 1, 2, 500, (1000 * 60 * 60 * 24 * 6));//the 6 day timer will never ve triggered because of the other 1 day timer
 }
 
 void loop(void) {
+    if (monitors.isAnyPinWatchDo()) {
+        // One item did trigger so you could log
+        tellServerToSaveLog();
+        monitors.resetAllChecks();
+    }
     server.handleClient();
 }
 
@@ -1626,6 +1977,45 @@ void Json::destory() {
 #endif //CODE_BLOCK_Json_impl
 
 #ifndef CODE_BLOCK_Gtime
+
+GTime::GTime(const GTime& gTime) {
+    mYear    = gTime.mYear;
+    mMonth   = gTime.mMonth;
+    mDay     = gTime.mDay;
+    mHours   = gTime.mHours;
+    mMinutes = gTime.mMinutes;
+    mSeconds = gTime.mSeconds;
+}
+
+// Converts milliseconds to GTime 
+// Largest possible ULONG is 4294967295, which is 49 days, 17:02:47
+// if there are more than 28 days then them month will NOT be increased
+void GTime::setTime(unsigned long milliSeconds) {
+    unsigned long d=0, y, s, m, h, mi;
+    y = ((unsigned long)60 * (unsigned long)60 * (unsigned long)1000);
+    h = milliSeconds / y;
+    m = (milliSeconds - (h * y)) / (y / 60);
+    s = (milliSeconds - (h * y) - (m * (y / 60))) / 1000;
+    mi = milliSeconds - (h * y) - (m * (y / 60)) - (s * 1000);
+
+    if (h > 23)
+    {
+        d = h / 24;
+        h -= (d * 24);
+    }
+    mYear = 0;
+    mMonth = 0;
+    mDay = d;
+
+    mHours = h;
+    mMinutes = m;
+    mSeconds = s;
+}
+
+GTime::GTime(unsigned long milliSeconds) {
+    setTime(milliSeconds);
+}
+
 boolean GTime::setTime(String strTime) {
     String str;
     String num;
@@ -1815,3 +2205,125 @@ void IPAddressList::destory() {
     clear();
 }
 #endif //CODE_BLOCK_IPAddressList
+
+#ifndef CODE_BLOCK_PinWatchList
+
+PinWatchList::~PinWatchList() {
+    destory();
+}
+
+bool PinWatchList::add(GPin* gPin, int pinValueMargin, int sampleTotalCount, unsigned long sampleInterval, unsigned long minLogInterval) {
+   
+    PinWatch * p = new PinWatch(gPin, pinValueMargin, sampleTotalCount, sampleInterval, minLogInterval);
+    return LinkedList<PinWatch*>::add(p);
+}
+bool PinWatchList::addPinValueMonitoringAndTimer(GPin* gPin, int pinValueMargin, int sampleTotalCount, unsigned long sampleInterval, unsigned long minLogInterval) {
+    if (gPin == NULL || exists(gPin->getNumber()))
+        return false;
+    return add(gPin, pinValueMargin, sampleTotalCount, sampleInterval, minLogInterval);
+}
+bool PinWatchList::addTimer(unsigned long minLogInterval) {
+    return add(NULL, 0, 0, 0, minLogInterval);
+}
+
+bool PinWatchList::addPinValueMonitoring(GPin* gPin, int pinValueMargin, int sampleTotalCount, unsigned long sampleInterval) {
+    if (gPin == NULL || exists(gPin->getNumber()))
+        return false;
+    return addPinValueMonitoringAndTimer(gPin, pinValueMargin, sampleTotalCount, sampleInterval, 0);
+}
+bool PinWatchList::add(PinWatch pinWatch) {
+    if (!pinWatch.isValidPin() || exists(pinWatch.getPinNumber()))
+        return false;
+    return LinkedList<PinWatch*>::add(new PinWatch(pinWatch));
+}
+bool PinWatchList::exists(int pinNumber) {
+
+    return indexOfPin(pinNumber) > -1;
+}
+
+bool PinWatchList::removePin(int pinNumber) {
+    int i = indexOfPin(pinNumber);
+    if (i < 0)
+        return false;
+    return removeByIndex(i);
+}
+
+bool PinWatchList::isAnyPinWatchDo()
+{
+    
+    return getFirstPinWatchDo() > -1;
+}
+int PinWatchList::getFirstPinWatchDo()
+{
+    return getNextPinWatchDo(0);
+}
+int PinWatchList::getNextPinWatchDo(int index)
+{
+    if (index < 0)
+        return -1;
+
+    unsigned long time = millis();
+    for (int i = index; i < size(); i++) {
+        if (get(i)->check(time)) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+void PinWatchList::resetAllChecks()
+{
+    unsigned long time = millis();
+    for (int i = 0; i < size(); i++) {
+        get(i)->reset(time, true);
+    }
+
+}
+bool PinWatchList::removeByIndex(int index) {
+    if (index < 0)
+        return false;
+    
+    delete get(index);
+    set(index, NULL);
+    return LinkedList<PinWatch*>::remove(index);
+}
+
+bool PinWatchList::isEmpty() {
+    PinWatch* p = get(0);
+    bool bRet = (p == NULL);
+    return bRet;
+}
+
+int PinWatchList::indexOfPin(int pinNumber) {
+
+    for (int i = 0; i < size(); i++) {
+        if (get(i)->getPinNumber() == pinNumber)
+            return i;
+    }
+    return -1;
+}
+
+void PinWatchList::destory() {
+    PinWatch* p;
+    for (int i = 0; i < size(); i++) {
+        p = get(i);
+        if (p != NULL)
+        {
+            delay(10);
+            delete p;
+            set(i, NULL);
+        }
+    }
+    clear();
+}
+String PinWatchList::toJson() {
+    String str = "[";
+    for (int i = 0; i < size(); i++) {
+        if (i > 0)
+            str += ",";
+        str = str + get(i)->toJson();
+
+    }
+    return str + "]";
+}
+#endif //CODE_BLOCK_PinWatchList

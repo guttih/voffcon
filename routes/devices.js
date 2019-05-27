@@ -135,8 +135,8 @@ router.get('/pins/:deviceId', lib.authenticateRequest, function(req, res){
 			).pipe(res);
 	});
 });
-//this route needs to take a device ID like so router.get('/custom/:deviceID'...
-router.get('/custom/:deviceId', lib.authenticateRequest, function(req, res){
+
+router.get('/monitors/:deviceId', lib.authenticateRequest, function(req, res){
 	var deviceId = req.params.deviceId;
 
 	Device.getById(deviceId, function(err, device){
@@ -146,17 +146,17 @@ router.get('/custom/:deviceId', lib.authenticateRequest, function(req, res){
 			return res.json(obj);
 		}
 
-		var urlid = device._doc.url+'/custom';
+		var urlid = device._doc.url+'/monitors';
 		console.log(urlid);
 		request.get(urlid,
 					function (err, res, body) {
 									if (res){
-										console.log("get pins statuscode:"+res.statusCode);
+										console.log("get monitors statuscode:"+res.statusCode);
 									}
 
-									if (err) {
-										return console.error(err);
-									}
+								if (err) {
+									return console.error(err);
+								}
 								if (body){
 								
 								}
@@ -165,8 +165,6 @@ router.get('/custom/:deviceId', lib.authenticateRequest, function(req, res){
 			).pipe(res);
 	});
 });
-
-
 
 router.get('/pinout/:deviceId', lib.authenticateRequest, function(req, res){
 	var deviceId = req.params.deviceId;
@@ -189,6 +187,37 @@ router.get('/pinout/:deviceId', lib.authenticateRequest, function(req, res){
 								if (err) {
 									return console.error(err);
 								}
+								if (body){
+								
+								}
+								return body;
+					}
+			).pipe(res);
+	});
+});
+
+//this route needs to take a device ID like so router.get('/custom/:deviceID'...
+router.get('/custom/:deviceId', lib.authenticateRequest, function(req, res){
+	var deviceId = req.params.deviceId;
+
+	Device.getById(deviceId, function(err, device){
+		if (err !== null || device === null){
+			res.statusCode = 404;
+			var obj = {text:'Error 404: User device not found!'};
+			return res.json(obj);
+		}
+
+		var urlid = device._doc.url+'/custom';
+		console.log(urlid);
+		request.get(urlid,
+					function (err, res, body) {
+									if (res){
+										console.log("get pins statuscode:"+res.statusCode);
+									}
+
+									if (err) {
+										return console.error(err);
+									}
 								if (body){
 								
 								}

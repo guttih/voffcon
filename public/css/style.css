@@ -290,7 +290,7 @@ ul > li.menu-item.dropdown.dropdown-submenu:hover > ul{
 	color:brown;
 }
 
-button.btn-log-pins {
+button.btn-log-pins, button.btn-log-monitors {
 	margin-right: 15px;
 	margin-left: 15px;
 }

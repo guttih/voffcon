@@ -229,18 +229,22 @@ router.delete('/:logID', lib.authenticateDeviceOwnerRequest, function(req, res){
 	save pinout to logs
 
 */
-router.get('/pins/:deviceId', lib.authenticateRequest, function(req, res){
+router.get('/pins/:deviceId', function(req, res){
 	var deviceId = req.params.deviceId;
 
 	Device.getById(deviceId, function(err, device){
-		if (err !== null || device === null){
+		if (err !== null || device === null) {
 			res.statusCode = 404;
-			var obj = {text:'Error 404: User device not found!'};
-			return res.json(obj);
+			return res.json({text:'Error 404: User device not found!'});
 		}
-
-		var urlid = device._doc.url+'/pins';
+		var ipAddress = device._doc.url;
+		ipAddress = lib.removeSchemaAndPortFromUrl(ipAddress);
+		if (!lib.isUserOrDeviceAuthenticated(req, ipAddress)){
+			res.statusCode = 404;
+			return res.json({text:'Error 404: You are not not authorized'});
+		}
 		console.log(urlid);
+		var urlid = device._doc.url+'/pins';
 		request.get(urlid,	function (err, res, body) {
 			if (res) {
 				console.log("get pins statuscode:"+res.statusCode);
@@ -256,8 +260,6 @@ router.get('/pins/:deviceId', lib.authenticateRequest, function(req, res){
 					function(err, item) {
 						if(err) {throw err;}
 						console.log(item);
-						//res.status(200).json({message: "logging succeded!"});
-						//todo what to send to client?
 				});
 			}
 

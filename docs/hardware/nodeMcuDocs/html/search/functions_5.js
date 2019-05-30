@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['makehttpstatuscodestring',['makeHttpStatusCodeString',['../class_g_url.html#a6444e418d255f534983b48f54343e746',1,'GUrl']]]
+  ['jsonkeyvalue',['jsonKeyValue',['../class_g_url.html#a1cfba2abd6110205a35c51651b7c293e',1,'GUrl']]],
+  ['jsonpinout',['JsonPinout',['../class_g_pins.html#ac8714225dd92a9c32a26aab409d1b298',1,'GPins']]]
 ];

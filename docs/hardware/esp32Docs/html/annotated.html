@@ -107,16 +107,16 @@ $(document).ready(function(){initNavTree('annotated.html','');});
 <div class="contents">
 <div class="textblock">Here are the classes, structs, unions and interfaces with brief descriptions:</div><div class="directory">
 <table class="directory">
-<tr id="row_0_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="class_g_pin.html" target="_self">GPin</a></td><td class="desc"></td></tr>
-<tr id="row_1_"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="class_g_pins.html" target="_self">GPins</a></td><td class="desc">This class stores all pins </td></tr>
-<tr id="row_2_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="class_g_time.html" target="_self">GTime</a></td><td class="desc"></td></tr>
+<tr id="row_0_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="class_g_pin.html" target="_self">GPin</a></td><td class="desc">Class for handling GPIO pins Use it to read from or write to a pin </td></tr>
+<tr id="row_1_"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="class_g_pins.html" target="_self">GPins</a></td><td class="desc">This class stores <a class="el" href="class_g_pin.html" title="Class for handling GPIO pins Use it to read from or write to a pin ">GPin</a> objects which connect the server to device hardware pins para/&gt; </td></tr>
+<tr id="row_2_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="class_g_time.html" target="_self">GTime</a></td><td class="desc">Used to store time. Depended on which constuctor is used, values can be eather a "date and time" or a "counter" up to 49 days. </td></tr>
 <tr id="row_3_"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="class_g_url.html" target="_self">GUrl</a></td><td class="desc"></td></tr>
-<tr id="row_4_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="class_i_p_address_list.html" target="_self">IPAddressList</a></td><td class="desc"></td></tr>
+<tr id="row_4_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="class_i_p_address_list.html" target="_self">IPAddressList</a></td><td class="desc">A list to store IP addresses </td></tr>
 <tr id="row_5_"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="struct_key_val.html" target="_self">KeyVal</a></td><td class="desc"></td></tr>
-<tr id="row_6_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="class_linked_list.html" target="_self">LinkedList</a></td><td class="desc"></td></tr>
+<tr id="row_6_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="class_linked_list.html" target="_self">LinkedList</a></td><td class="desc">A general linked list ready to be used or Inherited </td></tr>
 <tr id="row_7_"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="struct_list_node.html" target="_self">ListNode</a></td><td class="desc"></td></tr>
-<tr id="row_8_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="struct_pin_value.html" target="_self">PinValue</a></td><td class="desc"></td></tr>
-<tr id="row_9_"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="class_pin_watch.html" target="_self">PinWatch</a></td><td class="desc"></td></tr>
+<tr id="row_8_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="struct_pin_value.html" target="_self">PinValue</a></td><td class="desc">Used to store only Number and value of a pin </td></tr>
+<tr id="row_9_"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="class_pin_watch.html" target="_self">PinWatch</a></td><td class="desc">Used to monitor a pin. Can monitor if a pin value changes more or less than something and can monitor if a certain amount of time has passed. </td></tr>
 <tr id="row_10_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="class_pin_watch_list.html" target="_self">PinWatchList</a></td><td class="desc"><a class="el" href="class_pin_watch_list.html" title="PinWatchList allows you to add one or more timers and/or monitor value changes on multiple pins ...">PinWatchList</a> allows you to add one or more timers and/or monitor value changes on multiple pins </td></tr>
 </table>
 </div><!-- directory -->
@@ -125,7 +125,7 @@ $(document).ready(function(){initNavTree('annotated.html','');});
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Thu May 30 2019 09:59:54 for Voffcon Esp32 device server by
+    <li class="footer">Generated on Thu May 30 2019 14:07:56 for Voffcon Esp32 device server by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

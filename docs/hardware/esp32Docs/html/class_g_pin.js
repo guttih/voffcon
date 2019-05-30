@@ -9,5 +9,5 @@ var class_g_pin =
     [ "setName", "class_g_pin.html#a4ebe1b73f933005897f43dd7bb76970d", null ],
     [ "setValue", "class_g_pin.html#a0d0e096fb1dc7a81de7cf31ff2bdb1f1", null ],
     [ "toJson", "class_g_pin.html#aa9970fbce06a45ac04495ed3e2981758", null ],
-    [ "toJsonPinout", "class_g_pin.html#ab8fe62fa9985349a2b23378fffdab630", null ]
+    [ "toJsonKeyValue", "class_g_pin.html#a7019fa992b11b934b3f7f037a1379d8f", null ]
 ];

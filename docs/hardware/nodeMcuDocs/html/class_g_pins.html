@@ -109,31 +109,28 @@ $(document).ready(function(){initNavTree('class_g_pins.html','');});
 </div><!--header-->
 <div class="contents">
 
-<p>This class stores all pins  
+<p>This class stores <a class="el" href="class_g_pin.html" title="Class for handling GPIO pins Use it to read from or write to a pin ">GPin</a> objects which connect the server to device hardware pins para/&gt;  
  <a href="class_g_pins.html#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a5143b8f725cbbff49ef4cb2fc950a3bb"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5143b8f725cbbff49ef4cb2fc950a3bb"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>addPin</b> (const char *strName, PINTYPE pinType, int pinNumber, int pinValue)</td></tr>
-<tr class="separator:a5143b8f725cbbff49ef4cb2fc950a3bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a10f478e492d936aa70a110e6d9cfb731"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a10f478e492d936aa70a110e6d9cfb731"></a>
-boolean&#160;</td><td class="memItemRight" valign="bottom"><b>setValue</b> (int pinNumber, int newValue)</td></tr>
+<tr class="memitem:a573d40831376ac83fdfd866e646fe126"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_pins.html#a573d40831376ac83fdfd866e646fe126">addPin</a> (const char *strPinName, PINTYPE pinType, int pinNumber, int pinValue)</td></tr>
+<tr class="memdesc:a573d40831376ac83fdfd866e646fe126"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a pin  <a href="#a573d40831376ac83fdfd866e646fe126">More...</a><br /></td></tr>
+<tr class="separator:a573d40831376ac83fdfd866e646fe126"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a10f478e492d936aa70a110e6d9cfb731"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_pins.html#a10f478e492d936aa70a110e6d9cfb731">setValue</a> (int pinNumber, int newValue)</td></tr>
+<tr class="memdesc:a10f478e492d936aa70a110e6d9cfb731"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the value of a pin with the given number.  <a href="#a10f478e492d936aa70a110e6d9cfb731">More...</a><br /></td></tr>
 <tr class="separator:a10f478e492d936aa70a110e6d9cfb731"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7082c2ab022ca9b9297bc9355513882c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7082c2ab022ca9b9297bc9355513882c"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>indexOf</b> (int pinNumber)</td></tr>
-<tr class="separator:a7082c2ab022ca9b9297bc9355513882c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aac532dbb60a4f6e4c341e0a1126eccc2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aac532dbb60a4f6e4c341e0a1126eccc2"></a>
-boolean&#160;</td><td class="memItemRight" valign="bottom"><b>exists</b> (int pinNumber)</td></tr>
+<tr class="memitem:aac532dbb60a4f6e4c341e0a1126eccc2"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_pins.html#aac532dbb60a4f6e4c341e0a1126eccc2">exists</a> (int pinNumber)</td></tr>
+<tr class="memdesc:aac532dbb60a4f6e4c341e0a1126eccc2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if a pin with a given number exits.  <a href="#aac532dbb60a4f6e4c341e0a1126eccc2">More...</a><br /></td></tr>
 <tr class="separator:aac532dbb60a4f6e4c341e0a1126eccc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9697d2ff4ac416d3d18a5ffa2f7a26f3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9697d2ff4ac416d3d18a5ffa2f7a26f3"></a>
-<a class="el" href="class_g_pin.html">GPin</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>get</b> (int pinNumber)</td></tr>
+<tr class="memitem:a9697d2ff4ac416d3d18a5ffa2f7a26f3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_g_pin.html">GPin</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_pins.html#a9697d2ff4ac416d3d18a5ffa2f7a26f3">get</a> (int pinNumber)</td></tr>
+<tr class="memdesc:a9697d2ff4ac416d3d18a5ffa2f7a26f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a pointer to a <a class="el" href="class_g_pin.html" title="Class for handling GPIO pins Use it to read from or write to a pin ">GPin</a>  <a href="#a9697d2ff4ac416d3d18a5ffa2f7a26f3">More...</a><br /></td></tr>
 <tr class="separator:a9697d2ff4ac416d3d18a5ffa2f7a26f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a062e76704494808060014551c5541d1b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a062e76704494808060014551c5541d1b"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>getValue</b> (int pinNumber)</td></tr>
+<tr class="memitem:a062e76704494808060014551c5541d1b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_pins.html#a062e76704494808060014551c5541d1b">getValue</a> (int pinNumber)</td></tr>
+<tr class="memdesc:a062e76704494808060014551c5541d1b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a value of a pin  <a href="#a062e76704494808060014551c5541d1b">More...</a><br /></td></tr>
 <tr class="separator:a062e76704494808060014551c5541d1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afa7bdb48188b3919c65ac612b498e1df"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afa7bdb48188b3919c65ac612b498e1df"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>count</b> ()</td></tr>
+<tr class="memitem:afa7bdb48188b3919c65ac612b498e1df"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_pins.html#afa7bdb48188b3919c65ac612b498e1df">count</a> ()</td></tr>
+<tr class="memdesc:afa7bdb48188b3919c65ac612b498e1df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the number of pins.  <a href="#afa7bdb48188b3919c65ac612b498e1df">More...</a><br /></td></tr>
 <tr class="separator:afa7bdb48188b3919c65ac612b498e1df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a00dce0858e444a8d88d870177aeb8673"><td class="memItemLeft" align="right" valign="top">String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_pins.html#a00dce0858e444a8d88d870177aeb8673">toJson</a> ()</td></tr>
 <tr class="memdesc:a00dce0858e444a8d88d870177aeb8673"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns all pin values in a json array a key-value <a class="el" href="class_json.html">Json</a> object with the '{' and '}' around it. where first key is the first in the index with the key as the GPO key and the value is the last value set to that key.  <a href="#a00dce0858e444a8d88d870177aeb8673">More...</a><br /></td></tr>
@@ -143,8 +140,172 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>count</b> ()</td></tr>
 <tr class="separator:ac8714225dd92a9c32a26aab409d1b298"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>This class stores all pins </p>
+<div class="textblock"><p>This class stores <a class="el" href="class_g_pin.html" title="Class for handling GPIO pins Use it to read from or write to a pin ">GPin</a> objects which connect the server to device hardware pins para/&gt; </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a573d40831376ac83fdfd866e646fe126"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int GPins::addPin </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>strPinName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">PINTYPE&#160;</td>
+          <td class="paramname"><em>pinType</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>pinNumber</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>pinValue</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Adds a pin </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">strPinName</td><td>The name of the pin</td></tr>
+    <tr><td class="paramname">pinType</td><td>Type of the pin </td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Possible types of a pin are: </p>
+<p>PINTYPE_INPUT_ANALOG : "Read method analogRead shall be used" </p>
+<p>PINTYPE_INPUT_DIGITAL : "Read method digitalRead shall be used" </p>
+<p>PINTYPE_OUTPUT_ANALOG : "Write method analogWrite shall be used" </p>
+<p>PINTYPE_OUTPUT_DIGITAL : "Write method digitalWrite shall be used" </p>
+<p>PINTYPE_OUTPUT_VIRTUAL : "A pin not connected to hardware, but can store values" </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pinNumber</td><td>Number of the pin (GPIO number)</td></tr>
+    <tr><td class="paramname">pinValue</td><td>Starting value of the pin. If the pin type is an input pin then the value will be read from the hardware and this value ignored.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The number of pins after the pin was added.</dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="afa7bdb48188b3919c65ac612b498e1df"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int GPins::count </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Gets the number of pins. </p>
+<dl class="section return"><dt>Returns</dt><dd>Number of <a class="el" href="class_g_pin.html" title="Class for handling GPIO pins Use it to read from or write to a pin ">GPin</a> objects in the <a class="el" href="class_g_pins.html" title="This class stores GPin objects which connect the server to device hardware pins para/> ...">GPins</a> object</dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="aac532dbb60a4f6e4c341e0a1126eccc2"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">boolean GPins::exists </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>pinNumber</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Checks if a pin with a given number exits. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pinNumber</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if a pin was found otherwise false</dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a9697d2ff4ac416d3d18a5ffa2f7a26f3"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_g_pin.html">GPin</a> * GPins::get </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>pinNumber</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Gets a pointer to a <a class="el" href="class_g_pin.html" title="Class for handling GPIO pins Use it to read from or write to a pin ">GPin</a> </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pinNumber</td><td>The pin number to search for</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A pointer to the <a class="el" href="class_g_pin.html" title="Class for handling GPIO pins Use it to read from or write to a pin ">GPin</a> ojbect. Returns NULL if pin is not found</dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a062e76704494808060014551c5541d1b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int GPins::getValue </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>pinNumber</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Gets a value of a pin </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pinNumber</td><td>The pin to get the value from</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><p class="startdd">The value of the given pin.</p>
+<p class="enddd">Returns -1 if pinNumber was not found</p>
+</dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="ac8714225dd92a9c32a26aab409d1b298"></a>
 <div class="memitem">
 <div class="memproto">
@@ -165,6 +326,42 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>count</b> ()</td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a10f478e492d936aa70a110e6d9cfb731"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">boolean GPins::setValue </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>pinNumber</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>newValue</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets the value of a pin with the given number. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pinNumber</td><td>The number of the pin to search for</td></tr>
+    <tr><td class="paramname">newValue</td><td>The new value to be set</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if value was set. False if value was not set because no pin with given pin number was not found.</dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a00dce0858e444a8d88d870177aeb8673"></a>
 <div class="memitem">
 <div class="memproto">
@@ -179,7 +376,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>count</b> ()</td></tr>
 </div><div class="memdoc">
 
 <p>Returns all pin values in a json array a key-value <a class="el" href="class_json.html">Json</a> object with the '{' and '}' around it. where first key is the first in the index with the key as the GPO key and the value is the last value set to that key. </p>
-<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A <a class="el" href="class_json.html">Json</a> object string containing status of all pins in the <a class="el" href="class_g_pins.html" title="This class stores GPin objects which connect the server to device hardware pins para/> ...">GPins</a> object</dd></dl>
 
 </div>
 </div>
@@ -192,7 +389,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>count</b> ()</td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_g_pins.html">GPins</a></li>
-    <li class="footer">Generated on Thu May 30 2019 09:59:34 for Voffcon NodeMcu device server by
+    <li class="footer">Generated on Thu May 30 2019 14:08:01 for Voffcon NodeMcu device server by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['settime',['setTime',['../class_g_time.html#ab72425a2570304484b21564a7bbb0a90',1,'GTime::setTime(unsigned long milliSeconds)'],['../class_g_time.html#a8af1804c9d4e951d8591a0d2b322f8cf',1,'GTime::setTime(String strTime)']]],
-  ['strtomonth',['strToMonth',['../class_g_time.html#a69b75dc7cd1ac52d8389a12deb662958',1,'GTime']]]
+  ['reset',['reset',['../class_pin_watch.html#a19ee960c4477d34a04b1431803bfd04e',1,'PinWatch']]],
+  ['resetallchecks',['resetAllChecks',['../class_pin_watch_list.html#abedf32964ab15c41b4d6f115c6deedc9',1,'PinWatchList']]]
 ];

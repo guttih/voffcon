@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['tojson',['toJson',['../class_g_pins.html#a00dce0858e444a8d88d870177aeb8673',1,'GPins::toJson()'],['../class_g_time.html#a5666ab896e25cf3674a60f7b292a4369',1,'GTime::toJson()'],['../class_i_p_address_list.html#a278ae502095b6f45868c896858c9ba41',1,'IPAddressList::toJson()'],['../class_pin_watch_list.html#ac3af3d488bdc27f8f6503884d049f97e',1,'PinWatchList::toJson()']]],
-  ['tonumber',['toNumber',['../class_g_time.html#a19f73f42d36bb8de37ccb2409098d7b1',1,'GTime']]],
-  ['tostreng',['toStreng',['../class_g_time.html#a6269ddc4c7fe133f7ab573944e132c8c',1,'GTime']]],
-  ['tostring',['toString',['../class_g_time.html#a73fa833d8f79f3de2fa14ef93c92be86',1,'GTime']]]
+  ['setname',['setName',['../class_g_pin.html#a4ebe1b73f933005897f43dd7bb76970d',1,'GPin']]],
+  ['settime',['setTime',['../class_g_time.html#ab72425a2570304484b21564a7bbb0a90',1,'GTime::setTime(unsigned long milliSeconds)'],['../class_g_time.html#a8af1804c9d4e951d8591a0d2b322f8cf',1,'GTime::setTime(String strTime)']]],
+  ['setvalue',['setValue',['../class_g_pin.html#a0d0e096fb1dc7a81de7cf31ff2bdb1f1',1,'GPin::setValue()'],['../class_g_pins.html#a10f478e492d936aa70a110e6d9cfb731',1,'GPins::setValue()']]],
+  ['strtomonth',['strToMonth',['../class_g_time.html#a69b75dc7cd1ac52d8389a12deb662958',1,'GTime']]]
 ];

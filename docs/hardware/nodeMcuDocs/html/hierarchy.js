@@ -4,6 +4,7 @@ var hierarchy =
     [ "GPins", "class_g_pins.html", null ],
     [ "GTime", "class_g_time.html", null ],
     [ "GUrl", "class_g_url.html", null ],
+    [ "KeyVal", "struct_key_val.html", null ],
     [ "KeyValue", "class_key_value.html", null ],
     [ "LinkedList< T >", "class_linked_list.html", null ],
     [ "LinkedList< IPAddress * >", "class_linked_list.html", [

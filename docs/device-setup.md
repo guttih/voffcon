@@ -113,10 +113,11 @@ Todo: make timed commands.  That is allow a client to send a command which is a 
 
 ### Classes available from the device server
 - NodeMcu
+  - - [VoffCon device server classes](http://voffcon.com/docs/hardware/nodeMcuDocs/html/annotated.html)
   - If you want to develop the Device server further you can get [esp8266 documentation](http://esp8266.github.io/Arduino/versions/2.2.0/doc/libraries.html) for the ESP8266 Community libraries.
   - See also: [ESP8266 Class libary](https://links2004.github.io/Arduino/annotated.html) from the [ESP8266 core](https://github.com/esp8266/Arduino)
 - Esp32
-  - [VoffCon device server classes](http://voffcon.com/docs/hardware/esp32/html/annotated.html)
+  - [VoffCon device server classes](http://voffcon.com/docs/hardware/esp32Docs/html/annotated.html)
   
 
 

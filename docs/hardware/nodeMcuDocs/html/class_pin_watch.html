@@ -114,10 +114,11 @@ $(document).ready(function(){initNavTree('class_pin_watch.html','');});
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aa26d0f1dce87c0d2c2ee9186b4f8aca7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_watch.html#aa26d0f1dce87c0d2c2ee9186b4f8aca7">PinWatch</a> (<a class="el" href="class_g_pin.html">GPin</a> *gPin, int pinValueMargin, int sampleTotalCount, unsigned long sampleInterval, unsigned long minLogInterval)</td></tr>
-<tr class="separator:aa26d0f1dce87c0d2c2ee9186b4f8aca7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad8c92970089e2675e7f944beacf54020"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad8c92970089e2675e7f944beacf54020"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>PinWatch</b> (const <a class="el" href="class_pin_watch.html">PinWatch</a> &amp;pinWatch)</td></tr>
+<tr class="memitem:a0f852861aa4e2fea27b597bf2a729062"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_watch.html#a0f852861aa4e2fea27b597bf2a729062">PinWatch</a> (<a class="el" href="class_g_pin.html">GPin</a> *gPin, unsigned int pinValueMargin, int sampleTotalCount, unsigned long sampleInterval, unsigned long minLogInterval)</td></tr>
+<tr class="memdesc:a0f852861aa4e2fea27b597bf2a729062"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_pin_watch.html" title="Used to monitor a pin. Can monitor if a pin value changes more or less than something and can monitor...">PinWatch</a>.  <a href="#a0f852861aa4e2fea27b597bf2a729062">More...</a><br /></td></tr>
+<tr class="separator:a0f852861aa4e2fea27b597bf2a729062"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8c92970089e2675e7f944beacf54020"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_watch.html#ad8c92970089e2675e7f944beacf54020">PinWatch</a> (const <a class="el" href="class_pin_watch.html">PinWatch</a> &amp;pinWatch)</td></tr>
+<tr class="memdesc:ad8c92970089e2675e7f944beacf54020"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy constructor, not used by default  <a href="#ad8c92970089e2675e7f944beacf54020">More...</a><br /></td></tr>
 <tr class="separator:ad8c92970089e2675e7f944beacf54020"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad538aaa50b3589fbbc8eb40dbc8a4465"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad538aaa50b3589fbbc8eb40dbc8a4465"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>serialPrintValues</b> ()</td></tr>
@@ -125,37 +126,34 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>serialPrintValues</b>
 <tr class="memitem:af0d00af1ef7ce32f27331abb6bc0ae58"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af0d00af1ef7ce32f27331abb6bc0ae58"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>serialPrintLnValues</b> ()</td></tr>
 <tr class="separator:af0d00af1ef7ce32f27331abb6bc0ae58"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7d44d36ae6903a6701b718b11f2c8da9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7d44d36ae6903a6701b718b11f2c8da9"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>check</b> (unsigned long currentTimeInMillis)</td></tr>
+<tr class="memitem:a7d44d36ae6903a6701b718b11f2c8da9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_watch.html#a7d44d36ae6903a6701b718b11f2c8da9">check</a> (unsigned long currentTimeInMillis)</td></tr>
+<tr class="memdesc:a7d44d36ae6903a6701b718b11f2c8da9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if enough time has passed sinse the last check  <a href="#a7d44d36ae6903a6701b718b11f2c8da9">More...</a><br /></td></tr>
 <tr class="separator:a7d44d36ae6903a6701b718b11f2c8da9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a19ee960c4477d34a04b1431803bfd04e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_watch.html#a19ee960c4477d34a04b1431803bfd04e">reset</a> (unsigned long currentTimeInMillis, bool updateLastPinValue=true, bool updateMinLogInterval=true)</td></tr>
 <tr class="memdesc:a19ee960c4477d34a04b1431803bfd04e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resets the timer sampleInterva and if update parameters are both true, update the last pin value and the minLogInterval timer as well.  <a href="#a19ee960c4477d34a04b1431803bfd04e">More...</a><br /></td></tr>
 <tr class="separator:a19ee960c4477d34a04b1431803bfd04e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2fc18ff5c618aa1801cb117388f5f356"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2fc18ff5c618aa1801cb117388f5f356"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>getPinNumber</b> ()</td></tr>
+<tr class="memitem:a2fc18ff5c618aa1801cb117388f5f356"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_watch.html#a2fc18ff5c618aa1801cb117388f5f356">getPinNumber</a> ()</td></tr>
+<tr class="memdesc:a2fc18ff5c618aa1801cb117388f5f356"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a number of the pin (not the index of a pin)  <a href="#a2fc18ff5c618aa1801cb117388f5f356">More...</a><br /></td></tr>
 <tr class="separator:a2fc18ff5c618aa1801cb117388f5f356"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad2b40a10a8212b065250a66d5a3b10d0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad2b40a10a8212b065250a66d5a3b10d0"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>getPinValue</b> ()</td></tr>
+<tr class="memitem:ad2b40a10a8212b065250a66d5a3b10d0"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_watch.html#ad2b40a10a8212b065250a66d5a3b10d0">getPinValue</a> ()</td></tr>
+<tr class="memdesc:ad2b40a10a8212b065250a66d5a3b10d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a value of a pin  <a href="#ad2b40a10a8212b065250a66d5a3b10d0">More...</a><br /></td></tr>
 <tr class="separator:ad2b40a10a8212b065250a66d5a3b10d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af4ff4cba3c96940080b88a64a4fec2a3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af4ff4cba3c96940080b88a64a4fec2a3"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>getPinType</b> ()</td></tr>
+<tr class="memitem:af4ff4cba3c96940080b88a64a4fec2a3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_watch.html#af4ff4cba3c96940080b88a64a4fec2a3">getPinType</a> ()</td></tr>
+<tr class="memdesc:af4ff4cba3c96940080b88a64a4fec2a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a pin type (PINTYPE) as a integer  <a href="#af4ff4cba3c96940080b88a64a4fec2a3">More...</a><br /></td></tr>
 <tr class="separator:af4ff4cba3c96940080b88a64a4fec2a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeeadc4cce30b646a0709c4d46074146d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aeeadc4cce30b646a0709c4d46074146d"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>isValidPin</b> ()</td></tr>
-<tr class="separator:aeeadc4cce30b646a0709c4d46074146d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acd92b97bec879b74c745bf955da53310"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acd92b97bec879b74c745bf955da53310"></a>
-String&#160;</td><td class="memItemRight" valign="bottom"><b>toJson</b> ()</td></tr>
+<tr class="memitem:a6e27eca29af17b27f641ad4fce6b43ea"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_watch.html#a6e27eca29af17b27f641ad4fce6b43ea">isValidPin</a> ()</td></tr>
+<tr class="memdesc:a6e27eca29af17b27f641ad4fce6b43ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if a pin is valid  <a href="#a6e27eca29af17b27f641ad4fce6b43ea">More...</a><br /></td></tr>
+<tr class="separator:a6e27eca29af17b27f641ad4fce6b43ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd92b97bec879b74c745bf955da53310"><td class="memItemLeft" align="right" valign="top">String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_watch.html#acd92b97bec879b74c745bf955da53310">toJson</a> ()</td></tr>
+<tr class="memdesc:acd92b97bec879b74c745bf955da53310"><td class="mdescLeft">&#160;</td><td class="mdescRight">Exports the object to a <a class="el" href="class_json.html" title="A class for parsing json strings ">Json</a> string  <a href="#acd92b97bec879b74c745bf955da53310">More...</a><br /></td></tr>
 <tr class="separator:acd92b97bec879b74c745bf955da53310"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Used to monitor a pin. Can monitor if a pin value changes more or less than something and can monitor if a certain amount of time has passed. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="aa26d0f1dce87c0d2c2ee9186b4f8aca7"></a>
+<a class="anchor" id="a0f852861aa4e2fea27b597bf2a729062"></a>
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">PinWatch::PinWatch </td>
@@ -166,7 +164,7 @@ String&#160;</td><td class="memItemRight" valign="bottom"><b>toJson</b> ()</td><
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int&#160;</td>
+          <td class="paramtype">unsigned int&#160;</td>
           <td class="paramname"><em>pinValueMargin</em>, </td>
         </tr>
         <tr>
@@ -193,14 +191,9 @@ String&#160;</td><td class="memItemRight" valign="bottom"><b>toJson</b> ()</td><
           <td></td><td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
-<p></p>
+<p><a class="el" href="class_pin_watch.html" title="Used to monitor a pin. Can monitor if a pin value changes more or less than something and can monitor...">PinWatch</a>. </p>
 <p>Constructor for a <a class="el" href="class_pin_watch.html" title="Used to monitor a pin. Can monitor if a pin value changes more or less than something and can monitor...">PinWatch</a> </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -216,13 +209,130 @@ String&#160;</td><td class="memItemRight" valign="bottom"><b>toJson</b> ()</td><
 
 </div>
 </div>
+<a class="anchor" id="ad8c92970089e2675e7f944beacf54020"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">PinWatch::PinWatch </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_pin_watch.html">PinWatch</a> &amp;&#160;</td>
+          <td class="paramname"><em>pinWatch</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Copy constructor, not used by default </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pinWatch</td><td>The other object to copy values from</td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a7d44d36ae6903a6701b718b11f2c8da9"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool PinWatch::check </td>
+          <td>(</td>
+          <td class="paramtype">unsigned long&#160;</td>
+          <td class="paramname"><em>currentTimeInMillis</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Checks if enough time has passed sinse the last check </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">currentTimeInMillis</td><td>The time that must pass before a check returns true</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if enough time has passed. false if not. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a2fc18ff5c618aa1801cb117388f5f356"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int PinWatch::getPinNumber </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get a number of the pin (not the index of a pin) </p>
+<dl class="section return"><dt>Returns</dt><dd>Success: Returns the number of the pin. Fail: Returns -1</dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="af4ff4cba3c96940080b88a64a4fec2a3"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int PinWatch::getPinType </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get a pin type (PINTYPE) as a integer </p>
+<dl class="section return"><dt>Returns</dt><dd>Success: Returns a positive integer value. Fail: Returns -1</dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ad2b40a10a8212b065250a66d5a3b10d0"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int PinWatch::getPinValue </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get a value of a pin </p>
+<dl class="section return"><dt>Returns</dt><dd>Success: Returns the value of the pin. Fail: Returns -1</dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a6e27eca29af17b27f641ad4fce6b43ea"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool PinWatch::isValidPin </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Checks if a pin is valid </p>
+
+</div>
+</div>
 <a class="anchor" id="a19ee960c4477d34a04b1431803bfd04e"></a>
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void PinWatch::reset </td>
@@ -248,11 +358,6 @@ String&#160;</td><td class="memItemRight" valign="bottom"><b>toJson</b> ()</td><
           <td></td><td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>Resets the timer sampleInterva and if update parameters are both true, update the last pin value and the minLogInterval timer as well. </p>
@@ -268,6 +373,24 @@ String&#160;</td><td class="memItemRight" valign="bottom"><b>toJson</b> ()</td><
 
 </div>
 </div>
+<a class="anchor" id="acd92b97bec879b74c745bf955da53310"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">String PinWatch::toJson </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Exports the object to a <a class="el" href="class_json.html" title="A class for parsing json strings ">Json</a> string </p>
+<dl class="section return"><dt>Returns</dt><dd>A json object String</dd></dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>DeviceServerNodeMcu.cpp</li>
 </ul>
@@ -277,7 +400,7 @@ String&#160;</td><td class="memItemRight" valign="bottom"><b>toJson</b> ()</td><
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_pin_watch.html">PinWatch</a></li>
-    <li class="footer">Generated on Thu May 30 2019 14:08:02 for Voffcon NodeMcu device server by
+    <li class="footer">Generated on Mon Jun 3 2019 20:41:23 for Voffcon NodeMcu device server by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

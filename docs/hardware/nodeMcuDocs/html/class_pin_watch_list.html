@@ -126,9 +126,15 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a5c442358e56e4db112e29426c98b21fd"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_watch_list.html#a5c442358e56e4db112e29426c98b21fd">add</a> (<a class="el" href="class_pin_watch.html">PinWatch</a> pinWatch)</td></tr>
 <tr class="memdesc:a5c442358e56e4db112e29426c98b21fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add an pinWatch to the list  <a href="#a5c442358e56e4db112e29426c98b21fd">More...</a><br /></td></tr>
 <tr class="separator:a5c442358e56e4db112e29426c98b21fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2bb164a25b68bedeaa991b5657e08c0a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2bb164a25b68bedeaa991b5657e08c0a"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>add</b> (<a class="el" href="class_pin_watch.html">PinWatch</a> *ptrPinWatch)</td></tr>
+<tr class="memitem:a2bb164a25b68bedeaa991b5657e08c0a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_watch_list.html#a2bb164a25b68bedeaa991b5657e08c0a">add</a> (<a class="el" href="class_pin_watch.html">PinWatch</a> *ptrPinWatch)</td></tr>
+<tr class="memdesc:a2bb164a25b68bedeaa991b5657e08c0a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a T object in the end of the <a class="el" href="class_linked_list.html" title="A general linked list ready to be used or Inherited ">LinkedList</a>; Increment _size;  <a href="#a2bb164a25b68bedeaa991b5657e08c0a">More...</a><br /></td></tr>
 <tr class="separator:a2bb164a25b68bedeaa991b5657e08c0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaefcdaf1e7c906065b633f4a68f90b86"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_watch_list.html#aaefcdaf1e7c906065b633f4a68f90b86">update</a> (int index, <a class="el" href="class_pin_watch.html">PinWatch</a> pinWatch)</td></tr>
+<tr class="memdesc:aaefcdaf1e7c906065b633f4a68f90b86"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates an existing <a class="el" href="class_pin_watch.html" title="Used to monitor a pin. Can monitor if a pin value changes more or less than something and can monitor...">PinWatch</a>  <a href="#aaefcdaf1e7c906065b633f4a68f90b86">More...</a><br /></td></tr>
+<tr class="separator:aaefcdaf1e7c906065b633f4a68f90b86"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad00f7de274ad60b7df8daa8a662cfedc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_watch_list.html#ad00f7de274ad60b7df8daa8a662cfedc">addOrUpdate</a> (<a class="el" href="class_pin_watch.html">PinWatch</a> pinWatch)</td></tr>
+<tr class="memdesc:ad00f7de274ad60b7df8daa8a662cfedc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds or Updates <a class="el" href="class_pin_watch.html" title="Used to monitor a pin. Can monitor if a pin value changes more or less than something and can monitor...">PinWatch</a> If a <a class="el" href="class_pin_watch.html" title="Used to monitor a pin. Can monitor if a pin value changes more or less than something and can monitor...">PinWatch</a> with a specific <a class="el" href="class_g_pin.html" title="Class for handling GPIO pins Use it to read from or write to a pin ">GPin</a> number already exists in the list the values of the existing <a class="el" href="class_pin_watch.html" title="Used to monitor a pin. Can monitor if a pin value changes more or less than something and can monitor...">PinWatch</a> are updated. If a <a class="el" href="class_pin_watch.html" title="Used to monitor a pin. Can monitor if a pin value changes more or less than something and can monitor...">PinWatch</a> with a specific <a class="el" href="class_g_pin.html" title="Class for handling GPIO pins Use it to read from or write to a pin ">GPin</a> number does NOT exist in the list a new <a class="el" href="class_pin_watch.html" title="Used to monitor a pin. Can monitor if a pin value changes more or less than something and can monitor...">PinWatch</a> is added to the list.  <a href="#ad00f7de274ad60b7df8daa8a662cfedc">More...</a><br /></td></tr>
+<tr class="separator:ad00f7de274ad60b7df8daa8a662cfedc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afb3e77efaa71b7024860ca23f5795507"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_watch_list.html#afb3e77efaa71b7024860ca23f5795507">addTimer</a> (unsigned long minLogInterval)</td></tr>
 <tr class="memdesc:afb3e77efaa71b7024860ca23f5795507"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a timer with a specific interval  <a href="#afb3e77efaa71b7024860ca23f5795507">More...</a><br /></td></tr>
 <tr class="separator:afb3e77efaa71b7024860ca23f5795507"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -144,11 +150,11 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>add</b> (<a class="el
 <tr class="memitem:a39642732c014952e460354b4b83c2972"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_watch_list.html#a39642732c014952e460354b4b83c2972">indexOfPin</a> (int pinNumber)</td></tr>
 <tr class="memdesc:a39642732c014952e460354b4b83c2972"><td class="mdescLeft">&#160;</td><td class="mdescRight">Searches for the index of pinWatch with a given pin number in the list.  <a href="#a39642732c014952e460354b4b83c2972">More...</a><br /></td></tr>
 <tr class="separator:a39642732c014952e460354b4b83c2972"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3e3b6c9b9e20d8efeabc13ccdbe817ce"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3e3b6c9b9e20d8efeabc13ccdbe817ce"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>isEmpty</b> ()</td></tr>
+<tr class="memitem:a3e3b6c9b9e20d8efeabc13ccdbe817ce"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_watch_list.html#a3e3b6c9b9e20d8efeabc13ccdbe817ce">isEmpty</a> ()</td></tr>
+<tr class="memdesc:a3e3b6c9b9e20d8efeabc13ccdbe817ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Is the list empty?  <a href="#a3e3b6c9b9e20d8efeabc13ccdbe817ce">More...</a><br /></td></tr>
 <tr class="separator:a3e3b6c9b9e20d8efeabc13ccdbe817ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a24d129c0bbd6f80373060e7ecc0255fa"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a24d129c0bbd6f80373060e7ecc0255fa"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>removePin</b> (int pinNumber)</td></tr>
+<tr class="memitem:a24d129c0bbd6f80373060e7ecc0255fa"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_watch_list.html#a24d129c0bbd6f80373060e7ecc0255fa">removePin</a> (int pinNumber)</td></tr>
+<tr class="memdesc:a24d129c0bbd6f80373060e7ecc0255fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes a <a class="el" href="class_pin_watch.html" title="Used to monitor a pin. Can monitor if a pin value changes more or less than something and can monitor...">PinWatch</a> for a pin with a specific number from the list.  <a href="#a24d129c0bbd6f80373060e7ecc0255fa">More...</a><br /></td></tr>
 <tr class="separator:a24d129c0bbd6f80373060e7ecc0255fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad9ab6fe4b86dbac73cc43dc2b3fee7aa"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_watch_list.html#ad9ab6fe4b86dbac73cc43dc2b3fee7aa">isAnyPinWatchDo</a> ()</td></tr>
 <tr class="memdesc:ad9ab6fe4b86dbac73cc43dc2b3fee7aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if the value of of any pin in the list has changed enough. Checks also if any <a class="el" href="class_pin_watch.html" title="Used to monitor a pin. Can monitor if a pin value changes more or less than something and can monitor...">PinWatch</a> for a pin has reached minimum time beetween checks. The function stops checking after the first <a class="el" href="class_pin_watch.html" title="Used to monitor a pin. Can monitor if a pin value changes more or less than something and can monitor...">PinWatch</a> is do.  <a href="#ad9ab6fe4b86dbac73cc43dc2b3fee7aa">More...</a><br /></td></tr>
@@ -157,43 +163,53 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>removePin</b> (int pi
 <tr class="memdesc:a503835612e22e1e2f328a9cbfa28248c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if the value of of any pin in the list has changed enough. Checks also if any <a class="el" href="class_pin_watch.html" title="Used to monitor a pin. Can monitor if a pin value changes more or less than something and can monitor...">PinWatch</a> for a pin has reached minimum time beetween checks. The function stops checking after the first <a class="el" href="class_pin_watch.html" title="Used to monitor a pin. Can monitor if a pin value changes more or less than something and can monitor...">PinWatch</a> is do and returns the index of that pin.  <a href="#a503835612e22e1e2f328a9cbfa28248c">More...</a><br /></td></tr>
 <tr class="separator:a503835612e22e1e2f328a9cbfa28248c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3353d2c905c8ebd96752c10b005b0608"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_watch_list.html#a3353d2c905c8ebd96752c10b005b0608">getNextPinWatchDo</a> (int index)</td></tr>
+<tr class="memdesc:a3353d2c905c8ebd96752c10b005b0608"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if the value of of any pin in the list has changed enough. Checks also if any <a class="el" href="class_pin_watch.html" title="Used to monitor a pin. Can monitor if a pin value changes more or less than something and can monitor...">PinWatch</a> for a pin has reached minimum time beetween checks. The function stops checking after the first <a class="el" href="class_pin_watch.html" title="Used to monitor a pin. Can monitor if a pin value changes more or less than something and can monitor...">PinWatch</a> is do and returns the index of that pin.  <a href="#a3353d2c905c8ebd96752c10b005b0608">More...</a><br /></td></tr>
 <tr class="separator:a3353d2c905c8ebd96752c10b005b0608"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abedf32964ab15c41b4d6f115c6deedc9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_watch_list.html#abedf32964ab15c41b4d6f115c6deedc9">resetAllChecks</a> ()</td></tr>
 <tr class="memdesc:abedf32964ab15c41b4d6f115c6deedc9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resets all checks by updateing timers and resetting sampleSum and sampleCounts  <a href="#abedf32964ab15c41b4d6f115c6deedc9">More...</a><br /></td></tr>
 <tr class="separator:abedf32964ab15c41b4d6f115c6deedc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a21d780c26cbecb5d1dbd335b4c6712f0"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_watch_list.html#a21d780c26cbecb5d1dbd335b4c6712f0">updateMonitorFromJsonObject</a> (<a class="el" href="class_json_data.html">JsonData</a> *root, <a class="el" href="class_g_pins.html">GPins</a> *devicePins)</td></tr>
+<tr class="memdesc:a21d780c26cbecb5d1dbd335b4c6712f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">updates the list with values from <a class="el" href="class_json.html" title="A class for parsing json strings ">Json</a>  <a href="#a21d780c26cbecb5d1dbd335b4c6712f0">More...</a><br /></td></tr>
+<tr class="separator:a21d780c26cbecb5d1dbd335b4c6712f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4577e01e56e712449c1e733700bc88c3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4577e01e56e712449c1e733700bc88c3"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>deleteMonitorFromJsonObject</b> (<a class="el" href="class_json_data.html">JsonData</a> *root)</td></tr>
+<tr class="separator:a4577e01e56e712449c1e733700bc88c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac3af3d488bdc27f8f6503884d049f97e"><td class="memItemLeft" align="right" valign="top">String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_watch_list.html#ac3af3d488bdc27f8f6503884d049f97e">toJson</a> ()</td></tr>
-<tr class="memdesc:ac3af3d488bdc27f8f6503884d049f97e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Bundles all Ip pinWatches into a JSON array  <a href="#ac3af3d488bdc27f8f6503884d049f97e">More...</a><br /></td></tr>
+<tr class="memdesc:ac3af3d488bdc27f8f6503884d049f97e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Exports all pinWatch values of the list to A <a class="el" href="class_json.html" title="A class for parsing json strings ">Json</a> array string.  <a href="#ac3af3d488bdc27f8f6503884d049f97e">More...</a><br /></td></tr>
 <tr class="separator:ac3af3d488bdc27f8f6503884d049f97e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac70826b00572366ed677a33c4d84c15e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_watch_list.html#ac70826b00572366ed677a33c4d84c15e">~PinWatchList</a> ()</td></tr>
 <tr class="memdesc:ac70826b00572366ed677a33c4d84c15e"><td class="mdescLeft">&#160;</td><td class="mdescRight">The deconstructor, which cleans up when the list is no longer needed.  <a href="#ac70826b00572366ed677a33c4d84c15e">More...</a><br /></td></tr>
 <tr class="separator:ac70826b00572366ed677a33c4d84c15e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_class_linked_list"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_linked_list')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_linked_list.html">LinkedList&lt; PinWatch * &gt;</a></td></tr>
-<tr class="memitem:ab8388ea027c2de8125f5d1e5901c2b2e inherit pub_methods_class_linked_list"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab8388ea027c2de8125f5d1e5901c2b2e"></a>
-virtual int&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> ()</td></tr>
+<tr class="memitem:a3c20fcfec867e867f541061a09fc640c inherit pub_methods_class_linked_list"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_linked_list.html#a3c20fcfec867e867f541061a09fc640c">LinkedList</a> ()</td></tr>
+<tr class="memdesc:a3c20fcfec867e867f541061a09fc640c inherit pub_methods_class_linked_list"><td class="mdescLeft">&#160;</td><td class="mdescRight">The list constructor  <a href="#a3c20fcfec867e867f541061a09fc640c">More...</a><br /></td></tr>
+<tr class="separator:a3c20fcfec867e867f541061a09fc640c inherit pub_methods_class_linked_list"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab8388ea027c2de8125f5d1e5901c2b2e inherit pub_methods_class_linked_list"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_linked_list.html#ab8388ea027c2de8125f5d1e5901c2b2e">size</a> ()</td></tr>
+<tr class="memdesc:ab8388ea027c2de8125f5d1e5901c2b2e inherit pub_methods_class_linked_list"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns current size of <a class="el" href="class_linked_list.html" title="A general linked list ready to be used or Inherited ">LinkedList</a>  <a href="#ab8388ea027c2de8125f5d1e5901c2b2e">More...</a><br /></td></tr>
 <tr class="separator:ab8388ea027c2de8125f5d1e5901c2b2e inherit pub_methods_class_linked_list"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3307f9b9ecf90a18c270b3b6bc7a7e04 inherit pub_methods_class_linked_list"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3307f9b9ecf90a18c270b3b6bc7a7e04"></a>
-virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>add</b> (int index, <a class="el" href="class_pin_watch.html">PinWatch</a> *)</td></tr>
+<tr class="memitem:a3307f9b9ecf90a18c270b3b6bc7a7e04 inherit pub_methods_class_linked_list"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_linked_list.html#a3307f9b9ecf90a18c270b3b6bc7a7e04">add</a> (int index, <a class="el" href="class_pin_watch.html">PinWatch</a> *)</td></tr>
+<tr class="memdesc:a3307f9b9ecf90a18c270b3b6bc7a7e04 inherit pub_methods_class_linked_list"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a T object in the specified index; Unlinkand link the <a class="el" href="class_linked_list.html" title="A general linked list ready to be used or Inherited ">LinkedList</a> correcly; Increment _size  <a href="#a3307f9b9ecf90a18c270b3b6bc7a7e04">More...</a><br /></td></tr>
 <tr class="separator:a3307f9b9ecf90a18c270b3b6bc7a7e04 inherit pub_methods_class_linked_list"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a55ba7f61737011f2b684d59154543e6e inherit pub_methods_class_linked_list"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a55ba7f61737011f2b684d59154543e6e"></a>
-virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>unshift</b> (<a class="el" href="class_pin_watch.html">PinWatch</a> *)</td></tr>
+<tr class="memitem:a55ba7f61737011f2b684d59154543e6e inherit pub_methods_class_linked_list"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_linked_list.html#a55ba7f61737011f2b684d59154543e6e">unshift</a> (<a class="el" href="class_pin_watch.html">PinWatch</a> *)</td></tr>
+<tr class="memdesc:a55ba7f61737011f2b684d59154543e6e inherit pub_methods_class_linked_list"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a T object in the start of the <a class="el" href="class_linked_list.html" title="A general linked list ready to be used or Inherited ">LinkedList</a>; Increment _size;  <a href="#a55ba7f61737011f2b684d59154543e6e">More...</a><br /></td></tr>
 <tr class="separator:a55ba7f61737011f2b684d59154543e6e inherit pub_methods_class_linked_list"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a08ce5b6527cefbd221324569fdb10969 inherit pub_methods_class_linked_list"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a08ce5b6527cefbd221324569fdb10969"></a>
-virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>set</b> (int index, <a class="el" href="class_pin_watch.html">PinWatch</a> *)</td></tr>
+<tr class="memitem:a08ce5b6527cefbd221324569fdb10969 inherit pub_methods_class_linked_list"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_linked_list.html#a08ce5b6527cefbd221324569fdb10969">set</a> (int index, <a class="el" href="class_pin_watch.html">PinWatch</a> *)</td></tr>
+<tr class="memdesc:a08ce5b6527cefbd221324569fdb10969 inherit pub_methods_class_linked_list"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the object at index, with T; Increment _size;  <a href="#a08ce5b6527cefbd221324569fdb10969">More...</a><br /></td></tr>
 <tr class="separator:a08ce5b6527cefbd221324569fdb10969 inherit pub_methods_class_linked_list"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af331637727b3ada2f806c29b9f4cc6fe inherit pub_methods_class_linked_list"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af331637727b3ada2f806c29b9f4cc6fe"></a>
-virtual <a class="el" href="class_pin_watch.html">PinWatch</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>remove</b> (int index)</td></tr>
+<tr class="memitem:af331637727b3ada2f806c29b9f4cc6fe inherit pub_methods_class_linked_list"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_pin_watch.html">PinWatch</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_linked_list.html#af331637727b3ada2f806c29b9f4cc6fe">remove</a> (int index)</td></tr>
+<tr class="memdesc:af331637727b3ada2f806c29b9f4cc6fe inherit pub_methods_class_linked_list"><td class="mdescLeft">&#160;</td><td class="mdescRight">Remove object at index; If index is not reachable, returns false; else, decrement _size  <a href="#af331637727b3ada2f806c29b9f4cc6fe">More...</a><br /></td></tr>
 <tr class="separator:af331637727b3ada2f806c29b9f4cc6fe inherit pub_methods_class_linked_list"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a00a70f924d76dcbfa3b05503caad40e6 inherit pub_methods_class_linked_list"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a00a70f924d76dcbfa3b05503caad40e6"></a>
-virtual <a class="el" href="class_pin_watch.html">PinWatch</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>pop</b> ()</td></tr>
+<tr class="memitem:a00a70f924d76dcbfa3b05503caad40e6 inherit pub_methods_class_linked_list"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_pin_watch.html">PinWatch</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_linked_list.html#a00a70f924d76dcbfa3b05503caad40e6">pop</a> ()</td></tr>
+<tr class="memdesc:a00a70f924d76dcbfa3b05503caad40e6 inherit pub_methods_class_linked_list"><td class="mdescLeft">&#160;</td><td class="mdescRight">Remove last object;  <a href="#a00a70f924d76dcbfa3b05503caad40e6">More...</a><br /></td></tr>
 <tr class="separator:a00a70f924d76dcbfa3b05503caad40e6 inherit pub_methods_class_linked_list"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaf7239844a9d745b6dd11249ff4990c8 inherit pub_methods_class_linked_list"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aaf7239844a9d745b6dd11249ff4990c8"></a>
-virtual <a class="el" href="class_pin_watch.html">PinWatch</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>shift</b> ()</td></tr>
+<tr class="memitem:aaf7239844a9d745b6dd11249ff4990c8 inherit pub_methods_class_linked_list"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_pin_watch.html">PinWatch</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_linked_list.html#aaf7239844a9d745b6dd11249ff4990c8">shift</a> ()</td></tr>
+<tr class="memdesc:aaf7239844a9d745b6dd11249ff4990c8 inherit pub_methods_class_linked_list"><td class="mdescLeft">&#160;</td><td class="mdescRight">Remove first object;  <a href="#aaf7239844a9d745b6dd11249ff4990c8">More...</a><br /></td></tr>
 <tr class="separator:aaf7239844a9d745b6dd11249ff4990c8 inherit pub_methods_class_linked_list"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a25079ed9b408efad63a1522c818d8705 inherit pub_methods_class_linked_list"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a25079ed9b408efad63a1522c818d8705"></a>
-virtual <a class="el" href="class_pin_watch.html">PinWatch</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>get</b> (int index)</td></tr>
+<tr class="memitem:a25079ed9b408efad63a1522c818d8705 inherit pub_methods_class_linked_list"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_pin_watch.html">PinWatch</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_linked_list.html#a25079ed9b408efad63a1522c818d8705">get</a> (int index)</td></tr>
+<tr class="memdesc:a25079ed9b408efad63a1522c818d8705 inherit pub_methods_class_linked_list"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the index'th element on the list; Return Element if accessible, else, return false;  <a href="#a25079ed9b408efad63a1522c818d8705">More...</a><br /></td></tr>
 <tr class="separator:a25079ed9b408efad63a1522c818d8705 inherit pub_methods_class_linked_list"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a50c26292740c964ac7bef0e072868be1 inherit pub_methods_class_linked_list"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a50c26292740c964ac7bef0e072868be1"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>clear</b> ()</td></tr>
+<tr class="memitem:a50c26292740c964ac7bef0e072868be1 inherit pub_methods_class_linked_list"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_linked_list.html#a50c26292740c964ac7bef0e072868be1">clear</a> ()</td></tr>
+<tr class="memdesc:a50c26292740c964ac7bef0e072868be1 inherit pub_methods_class_linked_list"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clear the entire array That is remove all objects from the list and delete them from memory  <a href="#a50c26292740c964ac7bef0e072868be1">More...</a><br /></td></tr>
 <tr class="separator:a50c26292740c964ac7bef0e072868be1 inherit pub_methods_class_linked_list"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
@@ -278,6 +294,65 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>isCached</b></td></tr
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if the add succeded, otherwise false</dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a2bb164a25b68bedeaa991b5657e08c0a"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool PinWatchList::add </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_pin_watch.html">PinWatch</a> *&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Adds a T object in the end of the <a class="el" href="class_linked_list.html" title="A general linked list ready to be used or Inherited ">LinkedList</a>; Increment _size; </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">T</td><td>The object</td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented from <a class="el" href="class_linked_list.html#a9c3c4f3f527bde2e1572a43f3fb26ea3">LinkedList&lt; PinWatch * &gt;</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad00f7de274ad60b7df8daa8a662cfedc"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool PinWatchList::addOrUpdate </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_pin_watch.html">PinWatch</a>&#160;</td>
+          <td class="paramname"><em>pinWatch</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Adds or Updates <a class="el" href="class_pin_watch.html" title="Used to monitor a pin. Can monitor if a pin value changes more or less than something and can monitor...">PinWatch</a> If a <a class="el" href="class_pin_watch.html" title="Used to monitor a pin. Can monitor if a pin value changes more or less than something and can monitor...">PinWatch</a> with a specific <a class="el" href="class_g_pin.html" title="Class for handling GPIO pins Use it to read from or write to a pin ">GPin</a> number already exists in the list the values of the existing <a class="el" href="class_pin_watch.html" title="Used to monitor a pin. Can monitor if a pin value changes more or less than something and can monitor...">PinWatch</a> are updated. If a <a class="el" href="class_pin_watch.html" title="Used to monitor a pin. Can monitor if a pin value changes more or less than something and can monitor...">PinWatch</a> with a specific <a class="el" href="class_g_pin.html" title="Class for handling GPIO pins Use it to read from or write to a pin ">GPin</a> number does NOT exist in the list a new <a class="el" href="class_pin_watch.html" title="Used to monitor a pin. Can monitor if a pin value changes more or less than something and can monitor...">PinWatch</a> is added to the list. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pinWatch</td><td>the <a class="el" href="class_pin_watch.html" title="Used to monitor a pin. Can monitor if a pin value changes more or less than something and can monitor...">PinWatch</a> values</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Success: returns true if a <a class="el" href="class_pin_watch.html" title="Used to monitor a pin. Can monitor if a pin value changes more or less than something and can monitor...">PinWatch</a> was added or updated. Fail: Returns false if unable to update or add.</dd></dl>
 
 </div>
 </div>
@@ -383,12 +458,6 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>isCached</b></td></tr
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">gPin</td><td>Valid <a class="el" href="class_g_pin.html" title="Class for handling GPIO pins Use it to read from or write to a pin ">GPin</a> to watch</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>True if the add succeded, otherwise false</dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
     <tr><td class="paramname">pinValueMargin</td><td>How mutch must a value of a pin change to recive a positive check</td></tr>
     <tr><td class="paramname">sampleTotalCount</td><td>How many samples of a pin value should be averaged</td></tr>
     <tr><td class="paramname">sampleInterval</td><td>How many milliseconds must pass between a sample is taken from a pin value</td></tr>
@@ -396,7 +465,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>isCached</b></td></tr
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True if a <a class="el" href="class_pin_watch.html" title="Used to monitor a pin. Can monitor if a pin value changes more or less than something and can monitor...">PinWatch</a> is added to the list, otherwise false</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>true if a <a class="el" href="class_pin_watch.html" title="Used to monitor a pin. Can monitor if a pin value changes more or less than something and can monitor...">PinWatch</a> is added to the list, otherwise false</dd></dl>
 
 </div>
 </div>
@@ -482,7 +551,6 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>isCached</b></td></tr
       </table>
 </div><div class="memdoc">
 
-<p></p>
 <p>Checks if the value of of any pin in the list has changed enough. Checks also if any <a class="el" href="class_pin_watch.html" title="Used to monitor a pin. Can monitor if a pin value changes more or less than something and can monitor...">PinWatch</a> for a pin has reached minimum time beetween checks. The function stops checking after the first <a class="el" href="class_pin_watch.html" title="Used to monitor a pin. Can monitor if a pin value changes more or less than something and can monitor...">PinWatch</a> is do and returns the index of that pin. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -533,7 +601,49 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>isCached</b></td></tr
 </div><div class="memdoc">
 
 <p>Checks if the value of of any pin in the list has changed enough. Checks also if any <a class="el" href="class_pin_watch.html" title="Used to monitor a pin. Can monitor if a pin value changes more or less than something and can monitor...">PinWatch</a> for a pin has reached minimum time beetween checks. The function stops checking after the first <a class="el" href="class_pin_watch.html" title="Used to monitor a pin. Can monitor if a pin value changes more or less than something and can monitor...">PinWatch</a> is do. </p>
-<dl class="section return"><dt>Returns</dt><dd>true : At least one <a class="el" href="class_pin_watch.html" title="Used to monitor a pin. Can monitor if a pin value changes more or less than something and can monitor...">PinWatch</a> is do false : No <a class="el" href="class_pin_watch.html" title="Used to monitor a pin. Can monitor if a pin value changes more or less than something and can monitor...">PinWatch</a> is do. /returns&gt; </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>true : At least one <a class="el" href="class_pin_watch.html" title="Used to monitor a pin. Can monitor if a pin value changes more or less than something and can monitor...">PinWatch</a> is do. false : No <a class="el" href="class_pin_watch.html" title="Used to monitor a pin. Can monitor if a pin value changes more or less than something and can monitor...">PinWatch</a> is do. /returns&gt; </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a3e3b6c9b9e20d8efeabc13ccdbe817ce"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool PinWatchList::isEmpty </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Is the list empty? </p>
+
+</div>
+</div>
+<a class="anchor" id="a24d129c0bbd6f80373060e7ecc0255fa"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool PinWatchList::removePin </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>pinNumber</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Removes a <a class="el" href="class_pin_watch.html" title="Used to monitor a pin. Can monitor if a pin value changes more or less than something and can monitor...">PinWatch</a> for a pin with a specific number from the list. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pinNumber</td><td>The pin to search for</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if pin was removed. false if it is not in the list</dd></dl>
 
 </div>
 </div>
@@ -567,8 +677,79 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>isCached</b></td></tr
       </table>
 </div><div class="memdoc">
 
-<p>Bundles all Ip pinWatches into a JSON array </p>
-<dl class="section return"><dt>Returns</dt><dd>A string containing a valid JSON array of ip pinWatches. Example of a returned string: ["192.168.1.54","10.1.1.15","10.1.1.1","255.255.255.0"]</dd></dl>
+<p>Exports all pinWatch values of the list to A <a class="el" href="class_json.html" title="A class for parsing json strings ">Json</a> array string. </p>
+<dl class="section return"><dt>Returns</dt><dd>A string containing a valid JSON array of PinWatches.</dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="aaefcdaf1e7c906065b633f4a68f90b86"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool PinWatchList::update </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_pin_watch.html">PinWatch</a>&#160;</td>
+          <td class="paramname"><em>pinWatch</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Updates an existing <a class="el" href="class_pin_watch.html" title="Used to monitor a pin. Can monitor if a pin value changes more or less than something and can monitor...">PinWatch</a> </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>zero based list index location</td></tr>
+    <tr><td class="paramname">pinWatch</td><td>Values to copy from</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a21d780c26cbecb5d1dbd335b4c6712f0"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int PinWatchList::updateMonitorFromJsonObject </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_json_data.html">JsonData</a> *&#160;</td>
+          <td class="paramname"><em>root</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_g_pins.html">GPins</a> *&#160;</td>
+          <td class="paramname"><em>devicePins</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>updates the list with values from <a class="el" href="class_json.html" title="A class for parsing json strings ">Json</a> </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">root</td><td>The root object which can be an JSONTYPE_ARRAY or a JSONTYPE_OBJECT</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Success: the number of PinWatches updated. Fail: 0</dd></dl>
 
 </div>
 </div>
@@ -581,7 +762,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>isCached</b></td></tr
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_pin_watch_list.html">PinWatchList</a></li>
-    <li class="footer">Generated on Thu May 30 2019 14:08:02 for Voffcon NodeMcu device server by
+    <li class="footer">Generated on Mon Jun 3 2019 20:41:23 for Voffcon NodeMcu device server by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

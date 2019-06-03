@@ -133,15 +133,36 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:afa7bdb48188b3919c65ac612b498e1df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the number of pins.  <a href="#afa7bdb48188b3919c65ac612b498e1df">More...</a><br /></td></tr>
 <tr class="separator:afa7bdb48188b3919c65ac612b498e1df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a00dce0858e444a8d88d870177aeb8673"><td class="memItemLeft" align="right" valign="top">String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_pins.html#a00dce0858e444a8d88d870177aeb8673">toJson</a> ()</td></tr>
-<tr class="memdesc:a00dce0858e444a8d88d870177aeb8673"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns all pin values in a json array a key-value Json object with the '{' and '}' around it. where first key is the first in the index with the key as the GPO key and the value is the last value set to that key.  <a href="#a00dce0858e444a8d88d870177aeb8673">More...</a><br /></td></tr>
+<tr class="memdesc:a00dce0858e444a8d88d870177aeb8673"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns all pin values in a json array a key-value <a class="el" href="class_json.html" title="A class for parsing json strings ">Json</a> object with the '{' and '}' around it. where first key is the first in the index with the key as the GPO key and the value is the last value set to that key.  <a href="#a00dce0858e444a8d88d870177aeb8673">More...</a><br /></td></tr>
 <tr class="separator:a00dce0858e444a8d88d870177aeb8673"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac8714225dd92a9c32a26aab409d1b298"><td class="memItemLeft" align="right" valign="top">String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_pins.html#ac8714225dd92a9c32a26aab409d1b298">JsonPinout</a> ()</td></tr>
 <tr class="memdesc:ac8714225dd92a9c32a26aab409d1b298"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a JSON object containg all pins name and their number.  <a href="#ac8714225dd92a9c32a26aab409d1b298">More...</a><br /></td></tr>
 <tr class="separator:ac8714225dd92a9c32a26aab409d1b298"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac3fb64ff315d2f3575b6e2c20c2613b2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_pins.html#ac3fb64ff315d2f3575b6e2c20c2613b2">GPins</a> ()</td></tr>
+<tr class="memdesc:ac3fb64ff315d2f3575b6e2c20c2613b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for the <a class="el" href="class_g_pins.html" title="This class stores GPin objects which connect the server to device hardware pins para/> ...">GPins</a> Object  <a href="#ac3fb64ff315d2f3575b6e2c20c2613b2">More...</a><br /></td></tr>
+<tr class="separator:ac3fb64ff315d2f3575b6e2c20c2613b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This class stores <a class="el" href="class_g_pin.html" title="Class for handling GPIO pins Use it to read from or write to a pin ">GPin</a> objects which connect the server to device hardware pins para/&gt; </p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="ac3fb64ff315d2f3575b6e2c20c2613b2"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">GPins::GPins </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructor for the <a class="el" href="class_g_pins.html" title="This class stores GPin objects which connect the server to device hardware pins para/> ...">GPins</a> Object </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
 <a class="anchor" id="a573d40831376ac83fdfd866e646fe126"></a>
 <div class="memitem">
 <div class="memproto">
@@ -206,9 +227,6 @@ Public Member Functions</h2></td></tr>
 <a class="anchor" id="afa7bdb48188b3919c65ac612b498e1df"></a>
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">int GPins::count </td>
@@ -217,11 +235,6 @@ Public Member Functions</h2></td></tr>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>Gets the number of pins. </p>
@@ -320,9 +333,7 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Creates a JSON object containg all pins name and their number. </p>
-<p>Returns a name and a number of a pin. </p>
 <dl class="section return"><dt>Returns</dt><dd>A string formatted as a JSON object which contains all pin names and number. </dd></dl>
-<dl class="section return"><dt>Returns</dt><dd>a key-value string of a name and a pin number ready for an json object</dd></dl>
 
 </div>
 </div>
@@ -375,8 +386,8 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Returns all pin values in a json array a key-value Json object with the '{' and '}' around it. where first key is the first in the index with the key as the GPO key and the value is the last value set to that key. </p>
-<dl class="section return"><dt>Returns</dt><dd>A Json object string containing status of all pins in the <a class="el" href="class_g_pins.html" title="This class stores GPin objects which connect the server to device hardware pins para/> ...">GPins</a> object</dd></dl>
+<p>Returns all pin values in a json array a key-value <a class="el" href="class_json.html" title="A class for parsing json strings ">Json</a> object with the '{' and '}' around it. where first key is the first in the index with the key as the GPO key and the value is the last value set to that key. </p>
+<dl class="section return"><dt>Returns</dt><dd>A <a class="el" href="class_json.html" title="A class for parsing json strings ">Json</a> object string containing status of all pins in the <a class="el" href="class_g_pins.html" title="This class stores GPin objects which connect the server to device hardware pins para/> ...">GPins</a> object</dd></dl>
 
 </div>
 </div>
@@ -389,7 +400,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_g_pins.html">GPins</a></li>
-    <li class="footer">Generated on Thu May 30 2019 14:07:55 for Voffcon Esp32 device server by
+    <li class="footer">Generated on Mon Jun 3 2019 20:41:18 for Voffcon Esp32 device server by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

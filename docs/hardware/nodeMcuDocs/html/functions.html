@@ -83,13 +83,16 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="#index_c"><span>c</span></a></li>
       <li><a href="#index_e"><span>e</span></a></li>
       <li><a href="#index_g"><span>g</span></a></li>
+      <li><a href="#index_h"><span>h</span></a></li>
       <li><a href="#index_i"><span>i</span></a></li>
       <li><a href="#index_j"><span>j</span></a></li>
+      <li><a href="#index_l"><span>l</span></a></li>
       <li><a href="#index_m"><span>m</span></a></li>
       <li><a href="#index_p"><span>p</span></a></li>
       <li><a href="#index_r"><span>r</span></a></li>
       <li><a href="#index_s"><span>s</span></a></li>
       <li><a href="#index_t"><span>t</span></a></li>
+      <li><a href="#index_u"><span>u</span></a></li>
       <li class="current"><a href="#index_~"><span>~</span></a></li>
     </ul>
   </div>
@@ -128,7 +131,11 @@ $(document).ready(function(){initNavTree('functions.html','');});
 <h3><a class="anchor" id="index_a"></a>- a -</h3><ul>
 <li>add()
 : <a class="el" href="class_i_p_address_list.html#a745ec126cf6b08ca863efd02dd22af99">IPAddressList</a>
+, <a class="el" href="class_linked_list.html#a9c3c4f3f527bde2e1572a43f3fb26ea3">LinkedList&lt; T &gt;</a>
 , <a class="el" href="class_pin_watch_list.html#a5c442358e56e4db112e29426c98b21fd">PinWatchList</a>
+</li>
+<li>addOrUpdate()
+: <a class="el" href="class_pin_watch_list.html#ad00f7de274ad60b7df8daa8a662cfedc">PinWatchList</a>
 </li>
 <li>addPin()
 : <a class="el" href="class_g_pins.html#a573d40831376ac83fdfd866e646fe126">GPins</a>
@@ -146,6 +153,12 @@ $(document).ready(function(){initNavTree('functions.html','');});
 
 
 <h3><a class="anchor" id="index_c"></a>- c -</h3><ul>
+<li>check()
+: <a class="el" href="class_pin_watch.html#a7d44d36ae6903a6701b718b11f2c8da9">PinWatch</a>
+</li>
+<li>clear()
+: <a class="el" href="class_linked_list.html#a50c26292740c964ac7bef0e072868be1">LinkedList&lt; T &gt;</a>
+</li>
 <li>count()
 : <a class="el" href="class_g_pins.html#afa7bdb48188b3919c65ac612b498e1df">GPins</a>
 </li>
@@ -170,6 +183,13 @@ $(document).ready(function(){initNavTree('functions.html','');});
 <h3><a class="anchor" id="index_g"></a>- g -</h3><ul>
 <li>get()
 : <a class="el" href="class_g_pins.html#a9697d2ff4ac416d3d18a5ffa2f7a26f3">GPins</a>
+, <a class="el" href="class_linked_list.html#a25079ed9b408efad63a1522c818d8705">LinkedList&lt; T &gt;</a>
+</li>
+<li>GetChild()
+: <a class="el" href="class_json_data.html#aac004791f57a20b50706473b782a6851">JsonData</a>
+</li>
+<li>GetChildAt()
+: <a class="el" href="class_json_data.html#a4deeeb3402a54da0af26e599bf4ef328">JsonData</a>
 </li>
 <li>getFirstPinWatchDo()
 : <a class="el" href="class_pin_watch_list.html#a503835612e22e1e2f328a9cbfa28248c">PinWatchList</a>
@@ -177,11 +197,26 @@ $(document).ready(function(){initNavTree('functions.html','');});
 <li>getName()
 : <a class="el" href="class_g_pin.html#af97eb3e6a00936ebd936263750b8d6cc">GPin</a>
 </li>
+<li>GetNext()
+: <a class="el" href="class_json_data.html#a02b4db577a8449bcacdd839561ad9ba8">JsonData</a>
+</li>
 <li>getNextPinWatchDo()
 : <a class="el" href="class_pin_watch_list.html#a3353d2c905c8ebd96752c10b005b0608">PinWatchList</a>
 </li>
 <li>getNumber()
 : <a class="el" href="class_g_pin.html#a5e2c17ea3b2ff50aca62ff029b854c6b">GPin</a>
+</li>
+<li>getPinNumber()
+: <a class="el" href="class_pin_watch.html#a2fc18ff5c618aa1801cb117388f5f356">PinWatch</a>
+</li>
+<li>getPinType()
+: <a class="el" href="class_pin_watch.html#af4ff4cba3c96940080b88a64a4fec2a3">PinWatch</a>
+</li>
+<li>getPinValue()
+: <a class="el" href="class_pin_watch.html#ad2b40a10a8212b065250a66d5a3b10d0">PinWatch</a>
+</li>
+<li>getRootObject()
+: <a class="el" href="class_json.html#a224e718175e56c603d8625313ce21393">Json</a>
 </li>
 <li>getType()
 : <a class="el" href="class_g_pin.html#a71e4b92ee6107be89b3ffeeb3a73afa9">GPin</a>
@@ -193,8 +228,18 @@ $(document).ready(function(){initNavTree('functions.html','');});
 <li>GPin()
 : <a class="el" href="class_g_pin.html#a5d0dcfe7e245ce7c7c442546d812df0a">GPin</a>
 </li>
+<li>GPins()
+: <a class="el" href="class_g_pins.html#ac3fb64ff315d2f3575b6e2c20c2613b2">GPins</a>
+</li>
 <li>GTime()
 : <a class="el" href="class_g_time.html#a24908fca4346a619c1c7312c0631a036">GTime</a>
+</li>
+</ul>
+
+
+<h3><a class="anchor" id="index_h"></a>- h -</h3><ul>
+<li>hasChildren()
+: <a class="el" href="class_json_data.html#ac7847e50b77eba68a747df8e0976c130">JsonData</a>
 </li>
 </ul>
 
@@ -209,15 +254,39 @@ $(document).ready(function(){initNavTree('functions.html','');});
 <li>isAnyPinWatchDo()
 : <a class="el" href="class_pin_watch_list.html#ad9ab6fe4b86dbac73cc43dc2b3fee7aa">PinWatchList</a>
 </li>
+<li>isEmpty()
+: <a class="el" href="class_i_p_address_list.html#a3b98f398a01f7a7bd54be24676fe1c08">IPAddressList</a>
+, <a class="el" href="class_pin_watch_list.html#a3e3b6c9b9e20d8efeabc13ccdbe817ce">PinWatchList</a>
+</li>
+<li>isValid()
+: <a class="el" href="class_json.html#a3135139aa72769c9f9ac74b16d3e6415">Json</a>
+, <a class="el" href="class_json_data.html#ab41141ec1d62290e3c20622fe517b13b">JsonData</a>
+</li>
+<li>isValidPin()
+: <a class="el" href="class_pin_watch.html#a6e27eca29af17b27f641ad4fce6b43ea">PinWatch</a>
+</li>
 </ul>
 
 
 <h3><a class="anchor" id="index_j"></a>- j -</h3><ul>
+<li>Json()
+: <a class="el" href="class_json.html#a5729c9b566b89c1d997186f27b21667d">Json</a>
+</li>
+<li>JsonData()
+: <a class="el" href="class_json_data.html#a17e85d8b5055a827ea257a8c7c932b7f">JsonData</a>
+</li>
 <li>jsonKeyValue()
 : <a class="el" href="class_g_url.html#a1cfba2abd6110205a35c51651b7c293e">GUrl</a>
 </li>
 <li>JsonPinout()
 : <a class="el" href="class_g_pins.html#ac8714225dd92a9c32a26aab409d1b298">GPins</a>
+</li>
+</ul>
+
+
+<h3><a class="anchor" id="index_l"></a>- l -</h3><ul>
+<li>LinkedList()
+: <a class="el" href="class_linked_list.html#a3c20fcfec867e867f541061a09fc640c">LinkedList&lt; T &gt;</a>
 </li>
 </ul>
 
@@ -231,12 +300,22 @@ $(document).ready(function(){initNavTree('functions.html','');});
 
 <h3><a class="anchor" id="index_p"></a>- p -</h3><ul>
 <li>PinWatch()
-: <a class="el" href="class_pin_watch.html#aa26d0f1dce87c0d2c2ee9186b4f8aca7">PinWatch</a>
+: <a class="el" href="class_pin_watch.html#a0f852861aa4e2fea27b597bf2a729062">PinWatch</a>
+</li>
+<li>pop()
+: <a class="el" href="class_linked_list.html#a00a70f924d76dcbfa3b05503caad40e6">LinkedList&lt; T &gt;</a>
 </li>
 </ul>
 
 
 <h3><a class="anchor" id="index_r"></a>- r -</h3><ul>
+<li>remove()
+: <a class="el" href="class_i_p_address_list.html#a68550286dd73438331d98d60945a9a9c">IPAddressList</a>
+, <a class="el" href="class_linked_list.html#af331637727b3ada2f806c29b9f4cc6fe">LinkedList&lt; T &gt;</a>
+</li>
+<li>removePin()
+: <a class="el" href="class_pin_watch_list.html#a24d129c0bbd6f80373060e7ecc0255fa">PinWatchList</a>
+</li>
 <li>reset()
 : <a class="el" href="class_pin_watch.html#a19ee960c4477d34a04b1431803bfd04e">PinWatch</a>
 </li>
@@ -247,15 +326,24 @@ $(document).ready(function(){initNavTree('functions.html','');});
 
 
 <h3><a class="anchor" id="index_s"></a>- s -</h3><ul>
+<li>set()
+: <a class="el" href="class_linked_list.html#a08ce5b6527cefbd221324569fdb10969">LinkedList&lt; T &gt;</a>
+</li>
 <li>setName()
 : <a class="el" href="class_g_pin.html#a4ebe1b73f933005897f43dd7bb76970d">GPin</a>
 </li>
 <li>setTime()
-: <a class="el" href="class_g_time.html#ab72425a2570304484b21564a7bbb0a90">GTime</a>
+: <a class="el" href="class_g_time.html#a8af1804c9d4e951d8591a0d2b322f8cf">GTime</a>
 </li>
 <li>setValue()
 : <a class="el" href="class_g_pin.html#a0d0e096fb1dc7a81de7cf31ff2bdb1f1">GPin</a>
 , <a class="el" href="class_g_pins.html#a10f478e492d936aa70a110e6d9cfb731">GPins</a>
+</li>
+<li>shift()
+: <a class="el" href="class_linked_list.html#aaf7239844a9d745b6dd11249ff4990c8">LinkedList&lt; T &gt;</a>
+</li>
+<li>size()
+: <a class="el" href="class_linked_list.html#ab8388ea027c2de8125f5d1e5901c2b2e">LinkedList&lt; T &gt;</a>
 </li>
 <li>strToMonth()
 : <a class="el" href="class_g_time.html#a69b75dc7cd1ac52d8389a12deb662958">GTime</a>
@@ -264,15 +352,26 @@ $(document).ready(function(){initNavTree('functions.html','');});
 
 
 <h3><a class="anchor" id="index_t"></a>- t -</h3><ul>
+<li>toFloat()
+: <a class="el" href="class_json_data.html#aebd377f13a843c70d313e46ba1cfeb8e">JsonData</a>
+</li>
+<li>toInt()
+: <a class="el" href="class_json_data.html#a7e72328dd1d7920ef2b3113a4cf0d93b">JsonData</a>
+</li>
 <li>toJson()
 : <a class="el" href="class_g_pin.html#aa9970fbce06a45ac04495ed3e2981758">GPin</a>
 , <a class="el" href="class_g_pins.html#a00dce0858e444a8d88d870177aeb8673">GPins</a>
 , <a class="el" href="class_g_time.html#a5666ab896e25cf3674a60f7b292a4369">GTime</a>
 , <a class="el" href="class_i_p_address_list.html#a278ae502095b6f45868c896858c9ba41">IPAddressList</a>
+, <a class="el" href="class_key_value.html#a8f80b4e7d12ebb75100667e509b15ace">KeyValue</a>
+, <a class="el" href="class_pin_watch.html#acd92b97bec879b74c745bf955da53310">PinWatch</a>
 , <a class="el" href="class_pin_watch_list.html#ac3af3d488bdc27f8f6503884d049f97e">PinWatchList</a>
 </li>
 <li>toJsonKeyValue()
 : <a class="el" href="class_g_pin.html#a7019fa992b11b934b3f7f037a1379d8f">GPin</a>
+</li>
+<li>toLong()
+: <a class="el" href="class_json_data.html#afdd126f49a57c8e4ff25924dc1b5631c">JsonData</a>
 </li>
 <li>toNumber()
 : <a class="el" href="class_g_time.html#a19f73f42d36bb8de37ccb2409098d7b1">GTime</a>
@@ -282,6 +381,32 @@ $(document).ready(function(){initNavTree('functions.html','');});
 </li>
 <li>toString()
 : <a class="el" href="class_g_time.html#a73fa833d8f79f3de2fa14ef93c92be86">GTime</a>
+, <a class="el" href="class_json.html#a92354b0f98f67b7eb2184de35b8bfb20">Json</a>
+, <a class="el" href="class_json_data.html#aa1f576495733f0e704471c8a706c9025">JsonData</a>
+</li>
+<li>toTree()
+: <a class="el" href="class_json.html#a8da555ac6c107e69f3239123131794cb">Json</a>
+, <a class="el" href="class_json_data.html#a202bd9062e115343b5ca420907203c93">JsonData</a>
+</li>
+<li>toULong()
+: <a class="el" href="class_json_data.html#a3c377d6bef88e483240230243fb8999e">JsonData</a>
+</li>
+<li>trim()
+: <a class="el" href="class_json.html#abab65f77fa705ce7f3099fd52d134d90">Json</a>
+, <a class="el" href="class_json_data.html#adcac90c31c61c37191bbdba9aa76ead3">JsonData</a>
+</li>
+</ul>
+
+
+<h3><a class="anchor" id="index_u"></a>- u -</h3><ul>
+<li>unshift()
+: <a class="el" href="class_linked_list.html#a55ba7f61737011f2b684d59154543e6e">LinkedList&lt; T &gt;</a>
+</li>
+<li>update()
+: <a class="el" href="class_pin_watch_list.html#aaefcdaf1e7c906065b633f4a68f90b86">PinWatchList</a>
+</li>
+<li>updateMonitorFromJsonObject()
+: <a class="el" href="class_pin_watch_list.html#a21d780c26cbecb5d1dbd335b4c6712f0">PinWatchList</a>
 </li>
 </ul>
 
@@ -293,6 +418,12 @@ $(document).ready(function(){initNavTree('functions.html','');});
 <li>~IPAddressList()
 : <a class="el" href="class_i_p_address_list.html#a9354221bab992dcceced35156af9546c">IPAddressList</a>
 </li>
+<li>~Json()
+: <a class="el" href="class_json.html#ae447c0674b8d639acb5137fabfeacfd2">Json</a>
+</li>
+<li>~JsonData()
+: <a class="el" href="class_json_data.html#a28ecfaf4fffd9b6c914444716a36326d">JsonData</a>
+</li>
 <li>~PinWatchList()
 : <a class="el" href="class_pin_watch_list.html#ac70826b00572366ed677a33c4d84c15e">PinWatchList</a>
 </li>
@@ -302,7 +433,7 @@ $(document).ready(function(){initNavTree('functions.html','');});
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Thu May 30 2019 14:08:03 for Voffcon NodeMcu device server by
+    <li class="footer">Generated on Mon Jun 3 2019 20:41:23 for Voffcon NodeMcu device server by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

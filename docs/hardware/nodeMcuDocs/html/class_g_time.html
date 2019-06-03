@@ -116,10 +116,9 @@ $(document).ready(function(){initNavTree('class_g_time.html','');});
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a24908fca4346a619c1c7312c0631a036"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_time.html#a24908fca4346a619c1c7312c0631a036">GTime</a> (const <a class="el" href="class_g_time.html">GTime</a> &amp;gTime)</td></tr>
-<tr class="memdesc:a24908fca4346a619c1c7312c0631a036"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets time values from a given string  <a href="#a24908fca4346a619c1c7312c0631a036">More...</a><br /></td></tr>
 <tr class="separator:a24908fca4346a619c1c7312c0631a036"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a58114569161de5c2f6caa9f80e6f4222"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_time.html#a58114569161de5c2f6caa9f80e6f4222">GTime</a> (unsigned long milliSeconds)</td></tr>
-<tr class="memdesc:a58114569161de5c2f6caa9f80e6f4222"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts milliseconds to <a class="el" href="class_g_time.html" title="Used to store time. Depended on which constuctor is used, values can be eather a &quot;date and time&quot; or a...">GTime</a> But note this is not a real <a class="el" href="class_g_time.html" title="Used to store time. Depended on which constuctor is used, values can be eather a &quot;date and time&quot; or a...">GTime</a> because this is more like a counter so if milliseconds are less than one day year, month and day will all be 0  <a href="#a58114569161de5c2f6caa9f80e6f4222">More...</a><br /></td></tr>
+<tr class="memdesc:a58114569161de5c2f6caa9f80e6f4222"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for the <a class="el" href="class_g_time.html" title="Used to store time. Depended on which constuctor is used, values can be eather a &quot;date and time&quot; or a...">GTime</a> object Creates new <a class="el" href="class_g_time.html" title="Used to store time. Depended on which constuctor is used, values can be eather a &quot;date and time&quot; or a...">GTime</a> by converting milliseconds to <a class="el" href="class_g_time.html" title="Used to store time. Depended on which constuctor is used, values can be eather a &quot;date and time&quot; or a...">GTime</a> Largest possible unsigned long is 4294967295, which is 49 days, 17:02:47 If there are more than 28 days then the month is not be increased so days can grow up to 49 But note, this is not a real <a class="el" href="class_g_time.html" title="Used to store time. Depended on which constuctor is used, values can be eather a &quot;date and time&quot; or a...">GTime</a> because this is more like a counter, so if milliseconds are less than one day year, month and day will all be 0  <a href="#a58114569161de5c2f6caa9f80e6f4222">More...</a><br /></td></tr>
 <tr class="separator:a58114569161de5c2f6caa9f80e6f4222"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab72425a2570304484b21564a7bbb0a90"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_time.html#ab72425a2570304484b21564a7bbb0a90">setTime</a> (unsigned long milliSeconds)</td></tr>
 <tr class="memdesc:ab72425a2570304484b21564a7bbb0a90"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets a new <a class="el" href="class_g_time.html" title="Used to store time. Depended on which constuctor is used, values can be eather a &quot;date and time&quot; or a...">GTime</a> by converting milliseconds to <a class="el" href="class_g_time.html" title="Used to store time. Depended on which constuctor is used, values can be eather a &quot;date and time&quot; or a...">GTime</a> Largest possible unsigned long is 4294967295, which is 49 days, 17:02:47 If there are more than 28 days then the month is not be increased so days can grow up to 49 But note, this is not a real <a class="el" href="class_g_time.html" title="Used to store time. Depended on which constuctor is used, values can be eather a &quot;date and time&quot; or a...">GTime</a> because this is more like a counter, so if milliseconds are less than one day year, month and day will all be 0  <a href="#ab72425a2570304484b21564a7bbb0a90">More...</a><br /></td></tr>
@@ -181,9 +180,11 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Sets time values from a given string </p>
-<p><a class="el" href="class_g_time.html" title="Used to store time. Depended on which constuctor is used, values can be eather a &quot;date and time&quot; or a...">GTime</a> x, y; x = y; </p>
-
+<p></p>
+<p>Assignment constructor </p>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;GTime x, y;</div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;x = y;</div>
+</div><!-- fragment --> 
 </div>
 </div>
 <a class="anchor" id="a58114569161de5c2f6caa9f80e6f4222"></a>
@@ -200,7 +201,13 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Converts milliseconds to <a class="el" href="class_g_time.html" title="Used to store time. Depended on which constuctor is used, values can be eather a &quot;date and time&quot; or a...">GTime</a> But note this is not a real <a class="el" href="class_g_time.html" title="Used to store time. Depended on which constuctor is used, values can be eather a &quot;date and time&quot; or a...">GTime</a> because this is more like a counter so if milliseconds are less than one day year, month and day will all be 0 </p>
+<p>Constructor for the <a class="el" href="class_g_time.html" title="Used to store time. Depended on which constuctor is used, values can be eather a &quot;date and time&quot; or a...">GTime</a> object Creates new <a class="el" href="class_g_time.html" title="Used to store time. Depended on which constuctor is used, values can be eather a &quot;date and time&quot; or a...">GTime</a> by converting milliseconds to <a class="el" href="class_g_time.html" title="Used to store time. Depended on which constuctor is used, values can be eather a &quot;date and time&quot; or a...">GTime</a> Largest possible unsigned long is 4294967295, which is 49 days, 17:02:47 If there are more than 28 days then the month is not be increased so days can grow up to 49 But note, this is not a real <a class="el" href="class_g_time.html" title="Used to store time. Depended on which constuctor is used, values can be eather a &quot;date and time&quot; or a...">GTime</a> because this is more like a counter, so if milliseconds are less than one day year, month and day will all be 0 </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">milliSeconds</td><td>There are 1000 milliSeconds in a second </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -250,7 +257,7 @@ Static Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Success: returns true if time was set successfully. Fail: returns false.</dd></dl>
 
 </div>
 </div>
@@ -375,7 +382,7 @@ Static Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_g_time.html">GTime</a></li>
-    <li class="footer">Generated on Thu May 30 2019 14:08:01 for Voffcon NodeMcu device server by
+    <li class="footer">Generated on Mon Jun 3 2019 20:41:22 for Voffcon NodeMcu device server by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

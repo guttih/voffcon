@@ -269,7 +269,8 @@ function deleteItem(routeText, id){
 				}
 			});
 		
-		});
+		}
+	);
 		
 }
 function showModalError(title, responce){

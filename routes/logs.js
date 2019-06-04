@@ -169,6 +169,18 @@ router.get('/list/:deviceID', lib.authenticateRequest, function(req, res){
 	}
 });
 
+router.delete('/list/:deviceId', lib.authenticateDeviceOwnerRequest, function(req, res){
+	var id = req.params.deviceId;
+	console.log('deleting:' + id)
+	LogItem.deleteAllDeviceRecords(id, function(err, result){
+		if(err !== null){
+			res.status(404).send({message:'unable to delete logItem', id:id});
+		} else {
+			res.status(200).send({id:id});
+		}
+	});
+});
+
 //listing all devices and which have logs and return them as a json array
 router.get('/device-list', lib.authenticatePowerRequest, function(req, res) {
 
@@ -223,12 +235,7 @@ router.delete('/:logID', lib.authenticateDeviceOwnerRequest, function(req, res){
 	
 });
 
-
-/*
-	todo: get pinstatus from device
-	save pinout to logs
-
-*/
+//	save pinout to logs
 router.get('/pins/:deviceId', function(req, res){
 	var deviceId = req.params.deviceId;
 

@@ -190,20 +190,39 @@ $(function () {
 		}).fail(function( data ) {
 			showModalErrorText("Logging error", "Unable to save device pin values to the log.");
 		});
-
-
-
-
-
-
-
-
-
-
+	});
+	
+	$('button.btn-delete-all-device-logs').click(function() {
+		
+		showModalConfirm('Delete all records', 'Are you sure you want to delete all records in this log?', 'Delete', 
+		function(){
+			var request = $.delete( SERVER+'/logs/list/'+device.id );
+			request.done(function( data ) {
+				getDeviceLogs(true);
+			}).fail(function( data ) {
+				showModalErrorText("Delete error", "Unable to delete all device records logs from this log.");
+			});
+		}
+	);
 
 
 
 
 		
+		
+		
+		
+	
+
+
+
+
+
+
+
+
+
+
 	});
+
 });

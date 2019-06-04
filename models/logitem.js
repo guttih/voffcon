@@ -88,6 +88,11 @@ module.exports.listByDeviceId = function(deviceId, callback){
 	LogItem.find(query, callback);
 };
 
+module.exports.deleteAllDeviceRecords = function(deviceId, callback){
+	var query = {deviceid: deviceId};
+	LogItem.deleteMany(query, callback);
+};
+
 module.exports.countLogsByDeviceId = function(deviceId, callback){
 	var query = {deviceid: deviceId};
 	LogItem.find(query).count(callback);

@@ -10,5 +10,6 @@ var class_pin_watch =
     [ "reset", "class_pin_watch.html#a19ee960c4477d34a04b1431803bfd04e", null ],
     [ "serialPrintLnValues", "class_pin_watch.html#af0d00af1ef7ce32f27331abb6bc0ae58", null ],
     [ "serialPrintValues", "class_pin_watch.html#ad538aaa50b3589fbbc8eb40dbc8a4465", null ],
-    [ "toJson", "class_pin_watch.html#acd92b97bec879b74c745bf955da53310", null ]
+    [ "toJson", "class_pin_watch.html#acd92b97bec879b74c745bf955da53310", null ],
+    [ "PinWatchList", "class_pin_watch.html#ab3b6a947ed9fbf416744a1c0daf82e47", null ]
 ];

@@ -154,12 +154,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a7e72328dd1d7920ef2b3113a4cf0d93b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_json_data.html#a7e72328dd1d7920ef2b3113a4cf0d93b">toInt</a> ()</td></tr>
 <tr class="memdesc:a7e72328dd1d7920ef2b3113a4cf0d93b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts the value of an object from string to a int. If the object is a JSONTYPE_KEY_VALUE then the child object value is returned as a number Note the type of the value can be be a positive or negative number. (JSONTYPE_LONG or JSONTYPE_ULONG). If a value is larger than 32767 then the conversion will be invalid and the function result invalid. If a value is less than -32768 then the conversion will be invalid and the function result invalid. If no valid conversion could be performed because the String doesn’t start with a integer number, a zero is returned.  <a href="#a7e72328dd1d7920ef2b3113a4cf0d93b">More...</a><br /></td></tr>
 <tr class="separator:a7e72328dd1d7920ef2b3113a4cf0d93b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9cad31326e487110d3c3fdbfd06ce457"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9cad31326e487110d3c3fdbfd06ce457"></a>
-JSONTYPE&#160;</td><td class="memItemRight" valign="bottom"><b>getType</b> () const </td></tr>
-<tr class="separator:a9cad31326e487110d3c3fdbfd06ce457"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8105b7c4a4096707fb0a0a8a9791ebc2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8105b7c4a4096707fb0a0a8a9791ebc2"></a>
-JSONTYPE&#160;</td><td class="memItemRight" valign="bottom"><b>getValueType</b> () const </td></tr>
-<tr class="separator:a8105b7c4a4096707fb0a0a8a9791ebc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a20ae49d6345eae9c133b89096b973583"><td class="memItemLeft" align="right" valign="top">JSONTYPE&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_json_data.html#a20ae49d6345eae9c133b89096b973583">getType</a> ()</td></tr>
+<tr class="memdesc:a20ae49d6345eae9c133b89096b973583"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get Type type of the <a class="el" href="class_json_data.html" title="Class for representing elements and objects in a json object. You can use it to browse and get values...">JsonData</a> object  <a href="#a20ae49d6345eae9c133b89096b973583">More...</a><br /></td></tr>
+<tr class="separator:a20ae49d6345eae9c133b89096b973583"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a965b037ef68a9b63235712aea468a4c9"><td class="memItemLeft" align="right" valign="top">JSONTYPE&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_json_data.html#a965b037ef68a9b63235712aea468a4c9">getValueType</a> ()</td></tr>
+<tr class="memdesc:a965b037ef68a9b63235712aea468a4c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the ValueType of the child object;  <a href="#a965b037ef68a9b63235712aea468a4c9">More...</a><br /></td></tr>
+<tr class="separator:a965b037ef68a9b63235712aea468a4c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -284,6 +284,42 @@ Static Public Member Functions</h2></td></tr>
 
 <p>Gets a a pointer to the next sibling of this object. If no sibling is found NULL is returned </p>
 <dl class="section return"><dt>Returns</dt><dd>Pointer to the next sibling. If no sibling exists, NULL is returned.</dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a20ae49d6345eae9c133b89096b973583"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">JSONTYPE JsonData::getType </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get Type type of the <a class="el" href="class_json_data.html" title="Class for representing elements and objects in a json object. You can use it to browse and get values...">JsonData</a> object </p>
+<dl class="section return"><dt>Returns</dt><dd>the type</dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a965b037ef68a9b63235712aea468a4c9"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">JSONTYPE JsonData::getValueType </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the ValueType of the child object; </p>
+<dl class="section return"><dt>Returns</dt><dd>The type of the child object</dd></dl>
 
 </div>
 </div>
@@ -480,7 +516,7 @@ Static Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_json_data.html">JsonData</a></li>
-    <li class="footer">Generated on Mon Jun 3 2019 20:41:22 for Voffcon NodeMcu device server by
+    <li class="footer">Generated on Tue Jun 4 2019 08:49:16 for Voffcon NodeMcu device server by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

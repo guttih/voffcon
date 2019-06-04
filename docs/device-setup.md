@@ -111,14 +111,17 @@ These are possible commands a client (the Node server) can send to the device.
 
 Todo: make timed commands.  That is allow a client to send a command which is a sequence of commands made to pins.  That could be shomething like this.  Set pins 1 value to 1023 and set pins 2 value to 0.  Wait for 500 milliseconds and set pins 1 value to 0 and set pins 3 value to 256.
 
-### Classes available from the device server
-- NodeMcu
-  - [VoffCon device server classes](http://voffcon.com/docs/hardware/nodeMcuDocs/html/annotated.html)
-  - The variable server is a ESP8266WebServer object.  Click [here](https://links2004.github.io/Arduino/d3/d58/class_e_s_p8266_web_server.html) to see ESP8266WebServer documentation
-  - If you want to develop the Device server further you can get [esp8266 documentation](http://esp8266.github.io/Arduino/versions/2.2.0/doc/libraries.html) for the ESP8266 Community libraries.
-  - See also: [ESP8266 Class libary](https://links2004.github.io/Arduino/annotated.html) from the [ESP8266 core](https://github.com/esp8266/Arduino)
-- Esp32
-  - [VoffCon device server classes](http://voffcon.com/docs/hardware/esp32Docs/html/annotated.html)
+### Device server Documentation
+#### NodeMcu
+In the node server is a variable called server which is of the type [ESP8266WebServer](https://links2004.github.io/Arduino/d3/d58/class_e_s_p8266_web_server.html)
+
+See also:
+  - [esp8266 documentation](http://esp8266.github.io/Arduino/versions/2.2.0/doc/libraries.html) from the ESP8266 Community libraries.
+  - [ESP8266 Class libary](https://links2004.github.io/Arduino/annotated.html) from the [ESP8266 core](https://github.com/esp8266/Arduino)
+
+#### Esp32
+ [Arduino-esp32](https://github.com/espressif/arduino-esp32) is intended to provide an arduino compatible environment on the esp32 hardware. The basic arduino functional documentation can be found [here](https://www.arduino.cc/reference/en/).
+ 
   
 
 

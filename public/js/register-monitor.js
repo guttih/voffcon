@@ -134,7 +134,7 @@ function onInputMillisecondsChange($input, formGroupClass){
 			text = msToStr(millis, true);
 		}
 		
-		$('.'+formGroupClass+' monitor-input-text').text(text);
+		$('.'+formGroupClass+' .monitor-input-text').text(text);
 }
 $(function () {
 	

@@ -652,7 +652,7 @@ router.get('/item/:deviceID', lib.authenticateRequest, function(req, res){
 });
 
 
-//render a page with list of users
+//render a page with list of devices
 router.get('/list', lib.authenticateUrl, function(req, res){
 	res.render('list-device');
 });

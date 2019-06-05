@@ -23,7 +23,7 @@ var router = express.Router();
 var request = require('request');
 var lib = require('../utils/glib');
 
-var LogItem = require('../models/logitem');
+var Monitor = require('../models/monitor');
 var Device = require('../models/device');
 
 
@@ -33,15 +33,12 @@ router.get('/ids/:deviceId', function(req, res){
 	var isValid=false;
 	var error = "You must provide an device id!";
 	if (id !== undefined){
-		isValid = LogItem.isObjectIdStringValid(id);
+		isValid = Monitor.isObjectIdStringValid(id);
 		error = "invalid device id provided!";
 	}
 	if (isValid){
-		/*LogItem.logInformation('57e2a6f74a43074811a0720f','Þessi texti á að vistast þriðji', function(err, item){
-				if(err) {throw err;}
-				console.log(item);
-		});*/
-		LogItem.listByDeviceId(id, function(err, items){
+
+		Monitor.listByDeviceId(id, function(err, items){
 			if(err) {
 				req.flash('error_msg', err.message);
 				//throw err;
@@ -60,19 +57,116 @@ router.get('/ids/:deviceId', function(req, res){
 	}
 });
 
-//logs device pin status to the database
+var getPins = function(url, callback) {
+	request.get(url,	function (err, res, body) {
+		if (res) {
+			console.log("get pins statuscode:"+res.statusCode);
+			//we got the pinvalues, so let's save them
+			callback(null, body);
+		} else {
+			callback(err, body);
+		}
+	});
+};
+
+var getAvailableMonitorPins = function getAvailableMonitorPins(device, callback) {
+	var urlid = device.url+'/pins';
+	getPins(urlid, function(err, body){
+		if(err || body === null) {
+			callback(err, null);
+		} else {
+		
+			var pinObject = JSON.parse(body);
+			
+			var allPins = pinObject.pins;
+			var pinsToRemove = [];
+			//todo: Next, we need to exclude all pins that have monitors and add theyr pinnumbers to pinsToRemove
+			var availablePins = allPins.filter(m => {
+				console.log(m);
+				return !pinsToRemove.includes(m.pin);
+			});
+			callback(err, availablePins);
+		}
+	});
+};
+
+
+router.get('/:deviceId/register', lib.authenticatePowerUrl, function(req, res) {
+	var deviceId = req.params.deviceId;
+	if (deviceId != undefined) {
+		Device.getById(deviceId, function(err, device) {
+			if(err || device === null) {
+				req.flash('error',	'Could not find device.' );
+				res.redirect('/result');
+			} else {
+				var ipAddress = device._doc.url;
+				ipAddress = lib.removeSchemaAndPortFromUrl(ipAddress);
+				if (!lib.isUserOrDeviceAuthenticated(req, ipAddress)){
+					res.statusCode = 404;
+					return res.json({text:'Error 404: You are not not authorized'});
+				}
+
+				var newDevice = {
+						id:device._id,
+						name:device.name,
+						description:device.description,
+						owners:device.owners,
+						type:device.type,
+						url:device.url
+					};
+				var urlid = device._doc.url+'/pins';
+				getAvailableMonitorPins(newDevice, function(err, availablePins){
+					if(err || availablePins === null) {
+						req.flash('error',	'Could not get device pins.' );
+						res.redirect('/result');
+					} else {
+					
+						newDevice.pins=availablePins;
+						//todo: Next, we need to exclude all pins that have monitors
+						res.render('register-monitor', {device:JSON.stringify(newDevice),deviceName:newDevice.name});
+					}
+				});
+			}
+		});
+	}
+});
+
+router.get('/:deviceId/register/:monitorId', lib.authenticatePowerUrl, function(req, res) {
+	var deviceId = req.params.deviceId;
+	var id = req.params.monitorId;
+
+	if (deviceId != undefined) {
+		Device.getById(deviceId, function(err, device){
+			if(err || device === null) {
+				req.flash('error',	'Could not find device.' );
+				res.redirect('/result');
+			} 
+			else {
+				if (id !== undefined) {
+					Monitor.getById(id, function(err, monitor) {
+						if(err || monitor === null) {
+							req.flash('error', 'Could not find monitor.');
+							res.redirect('/result');
+						} else{
+							res.render('register-monitor', {device:JSON.stringify(device),monitor:JSON.stringify(monitor)});
+						}
+					});
+				}
+			}
+
+		});
+	}
+});
+
+//monitors device pin status to the database
 router.post('/pins', function(req, res) {
 	
 	req.checkBody('pins', 'pins are required').notEmpty();
 	req.checkBody('deviceId', 'deviceId is required').notEmpty();
-	req.checkBody('type', 'type is required').notEmpty();
-
-	var logType = LogItem.LogTypes.indexOf('OBJECTTYPE_LOG_PINS');
-	req.checkBody('type', 'type must be OBJECTTYPE_LOG_PINS').isNumeric().isEqual(logType);
 	var errors = req.validationErrors();
 	
 	if(!errors){
-		if (!LogItem.isObjectIdStringValid(req.body.deviceId)) {
+		if (!Monitor.isObjectIdStringValid(req.body.deviceId)) {
 			errors = {error:"Invalid device id provided!"};
 		}
 	}
@@ -82,24 +176,23 @@ router.post('/pins', function(req, res) {
 	} else {
 			var deviceId = req.body.deviceId;
 			var pins = req.body.pins.slice();
-			LogItem.logJsonAsText(
+			Monitor.monitorJsonAsText(
 				deviceId,
-				LogItem.LogTypes.indexOf('OBJECTTYPE_PINS'),
 				pins, 
 				function(err, item) {
 					if(err) {throw err;}
 					console.log(item);
-					res.status(200).json({message: "logging succeded!"});
+					res.status(200).json({message: "??? succeded!"});
 			});
 	}
 });
 
-//render a page with list of logs
+//render a page with list of monitors
 router.get('/list', lib.authenticateUrl, function(req, res){
-	res.render('list-log');
+	res.render('list-monitor');
 });
-//opens a page which shows logs as a table for a specific device
-router.get('/device/:deviceID', lib.authenticateRequest, function(req, res){
+//opens a page which shows monitors as a table for a specific device
+router.get('/device/:deviceID', lib.authenticateRequest, function(req, res) {
 	// todo: how to authenticate? now a logged in user can use all devices
 	var deviceId = req.params.deviceID;
 
@@ -117,53 +210,22 @@ router.get('/device/:deviceID', lib.authenticateRequest, function(req, res){
 							id:deviceId,
 							name:retDevice._doc.name
 						};
-						res.render('devicelog', { item:device, device:JSON.stringify(device) });
+						res.render('devicemonitor', { item:device, device:JSON.stringify(device) });
 					}
 				});
-			/*LogItem.listByDeviceId(deviceId, function(err, data){
-				res.json(data);
-	});*/
 	}
 });
 
-//opens a page which shows logs as a linechart for a specific device
-router.get('/device/linechart/:deviceID', lib.authenticateRequest, function(req, res){
-	// todo: how to authenticate? now a logged in user can use all devices
-	var deviceId = req.params.deviceID;
-
-	if (deviceId === undefined){ 
-		res.status(422).json({"error":"No device id provided!"});
-	}
-	else{
-
-			Device.getById(deviceId, function(err, retDevice){
-					if(err || retDevice === null) {
-						req.flash('error',	'Could not find device.' );
-						res.redirect('/result');
-					} else{
-						var device = {
-							id:deviceId,
-							name:retDevice._doc.name
-						};
-						res.render('devicelog-linechart', { item:device, device:JSON.stringify(device) });
-					}
-				});
-			/*LogItem.listByDeviceId(deviceId, function(err, data){
-				res.json(data);
-	});*/
-	}
-});
-
-//returns a Json object with all logs from the specific device
+//returns a Json object with all monitors from the specific device
 router.get('/list/:deviceID', lib.authenticateRequest, function(req, res){
-	// todo: how to authenticate? now a logged in user can use all devices
+	// todo: how to authenticate? now a monitorged in user can use all devices
 	var deviceId = req.params.deviceID;
 
 	if (deviceId === undefined){ 
 		res.status(422).json({"error":"No device id provided!"});
 	}
 	else{
-			LogItem.listByDeviceId(deviceId, function(err, data){
+			Monitor.listByDeviceId(deviceId, function(err, data){
 				res.json(data);
 	});
 	}
@@ -172,27 +234,27 @@ router.get('/list/:deviceID', lib.authenticateRequest, function(req, res){
 router.delete('/list/:deviceId', lib.authenticateDeviceOwnerRequest, function(req, res){
 	var id = req.params.deviceId;
 	console.log('deleting:' + id)
-	LogItem.deleteAllDeviceRecords(id, function(err, result){
+	Monitor.deleteAllDeviceRecords(id, function(err, result){
 		if(err !== null){
-			res.status(404).send({message:'unable to delete logItem', id:id});
+			res.status(404).send({message:'unable to delete monitor', id:id});
 		} else {
 			res.status(200).send({id:id});
 		}
 	});
 });
 
-//listing all devices and which have logs and return them as a json array
+//listing all devices and which have monitors and return them as a json array
 router.get('/device-list', lib.authenticatePowerRequest, function(req, res) {
 
-	var logDevices = [];
+	var monitorDevices = [];
 	var saveData;
-	LogItem.devicesLogCount(function(err, data) {
+	Monitor.devicesMonitorCount(function(err, data) {
 		if(err) {throw err;}
-		logDevices = [];
+		monitorDevices = [];
 		var i = 0;
 		for(i = 0; i < data.length; i++) {
-			logDevices.push({ id:data[i]._id.toString(), count:data[i].count});
-			if (data.length == logDevices.length) {
+			monitorDevices.push({ id:data[i]._id.toString(), count:data[i].count});
+			if (data.length == monitorDevices.length) {
 
 				//now let's get device information about the devices
 				Device.listByOwnerId(req.user._id, function(err, deviceList){
@@ -202,8 +264,8 @@ router.get('/device-list', lib.authenticatePowerRequest, function(req, res) {
 					for(var i = 0; i < deviceList.length; i++){
 						item = deviceList[i];
 						var findId = item._id.toString(); 
-						var logIndex = logDevices.map(function(e) {return e.id;}).indexOf(findId);
-						if (logIndex > -1) {
+						var monitorIndex = monitorDevices.map(function(e) {return e.id;}).indexOf(findId);
+						if (monitorIndex > -1) {
 							isOwner = lib.findObjectID(item._doc.owners, req.user._id);
 							arr.push({	name:deviceList[i].name, 
 										description:deviceList[i].description,
@@ -211,7 +273,7 @@ router.get('/device-list', lib.authenticatePowerRequest, function(req, res) {
 										type:deviceList[i].type,
 										url:deviceList[i].url,
 										isOwner:isOwner,
-										recordCount:logDevices[logIndex].count
+										recordCount:monitorDevices[monitorIndex].count
 									});
 						}
 					}
@@ -223,11 +285,11 @@ router.get('/device-list', lib.authenticatePowerRequest, function(req, res) {
 });
 
 
-router.delete('/:logID', lib.authenticateDeviceOwnerRequest, function(req, res){
-	var id = req.params.logID;
-	LogItem.delete(id, function(err, result){
+router.delete('/:monitorID', lib.authenticateDeviceOwnerRequest, function(req, res){
+	var id = req.params.monitorID;
+	Monitor.delete(id, function(err, result){
 		if(err !== null){
-			res.status(404).send({message:'unable to delete logItem', id:id});
+			res.status(404).send({message:'unable to delete monitor', id:id});
 		} else {
 			res.status(200).send({id:id});
 		}
@@ -235,8 +297,8 @@ router.delete('/:logID', lib.authenticateDeviceOwnerRequest, function(req, res){
 	
 });
 
-//	save pinout to logs
-router.get('/pins/:deviceId', function(req, res) {
+//	save pinout to monitors
+router.get('/pins/:deviceId', function(req, res){
 	var deviceId = req.params.deviceId;
 
 	Device.getById(deviceId, function(err, device){
@@ -256,13 +318,12 @@ router.get('/pins/:deviceId', function(req, res) {
 			if (res) {
 				console.log("get pins statuscode:"+res.statusCode);
 				//we got the pinvalues, so let's save them
-				var logType = LogItem.LogTypes.indexOf('OBJECTTYPE_LOG_PINS');
 				var obj, pins;
 				obj = JSON.parse(body);
 					pins = obj.pins; 
-				LogItem.logJsonAsText(
+				Monitor.monitorJsonAsText(
 					deviceId,
-					LogItem.LogTypes.indexOf('OBJECTTYPE_PINS'),
+					Monitor.MonitorTypes.indexOf('OBJECTTYPE_PINS'),
 					pins, 
 					function(err, item) {
 						if(err) {throw err;}
@@ -274,7 +335,8 @@ router.get('/pins/:deviceId', function(req, res) {
 				return console.error(err);
 			}
 			return body;
-		}).pipe(res);
+		}
+			).pipe(res);
 	});
 });
 

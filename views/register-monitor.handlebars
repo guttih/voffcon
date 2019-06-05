@@ -1,0 +1,66 @@
+
+{{#if device}}
+<script type="text/javascript">
+	var device = {{{device}}};
+	console.log('device:');console.log(device);
+</script>
+{{/if}}	
+{{#if monitor}}
+<script type="text/javascript">
+	var monitor = {{{monitor}}};
+	console.log('monitor:');console.log(monitor);
+</script>
+	<div class="row"><h3 class="page-header pull-right">Modify a monitor for <b>{{deviceName}}</b></h3></div>
+{{else}}
+		<div class="row"><h3 class="page-header pull-right">Register a new monitor for <b>{{deviceName}}</b></h3></div>			
+{{/if}}
+
+{{#if errors}}
+      {{#each errors}}
+        <div class="alert alert-danger">{{msg}}</div>
+      {{/each}}
+{{/if}}
+
+<form method="post" action="/monitors/register" id="monitorform">
+	<div class="form-group pin">
+		<label>Pin to monitor</label>
+		<select id="monitor-pin" name="Pin" class="access-select form-control" required>
+			<option value="x" selected="">xxxxxxxxxxxxxxx</option>
+		</select>
+		<p class="monitor-input-text"></p>
+	</div>
+	<div class="form-group pinValueMargin">
+		<label>How much does a value or averaged value need to change to trigger a log</label>
+		<!--ULong-->
+		<input id="monitor-pinValueMargin" type="number"  min="0" max="1023" class="form-control" placeholder="1" name="pinValueMargin" required>
+	</div>
+	<div class="form-group sampleTotalCount">
+		<label>How many sample to be taken to be averaged</label>
+		<!--int-->
+		<input id="monitor-sampleTotalCount" type="number"  min="-1" max="32767" class="form-control" placeholder="10" name="sampleTotalCount" required>
+	</div>
+	<div class="form-group sampleInterval">
+		<label>How many milliseconds need to pass between taken samples</label>
+		<!--ULong-->
+		<input id="monitor-sampleInterval" type="number"  min="0" max="4294967295" class="form-control" placeholder="1000" name="sampleInterval" required>
+		<p class="monitor-input-text"></p>
+	</div>
+	<div class="form-group minLogInterval">
+		<label>The minimum milliseconds between triggering a log</label>
+		<!--ULong-->
+		<input id="monitor-minLogInterval" type="number"  min="0" max="4294967295" class="form-control" placeholder="0" name="minLogInterval" required>
+		<p class="monitor-input-text"></p>
+	</div>
+	<div class="form-horizontal description">
+		<label>Description</label>
+		<div class="form-group">
+			
+			<div class="col-md-12">
+				<textarea id="monitor-description" name="description" form="monitorform" class="form-control" rows="3" placeholder="Describe your monitor, when it logs and why you need it." required></textarea>
+			</div>
+		</div>
+	</div>
+	
+</form>
+<button id="btn-submit-monitorform" class="btn btn-success pull-right">Submit</button>
+<script src="/js/register-monitor.js"></script>

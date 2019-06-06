@@ -76,6 +76,11 @@ WiFiServer server(PORT);
 
 const int ERROR_NUMBER = -9999;
 
+struct KeyVal {
+    String key = "";
+    long value = 0;
+};
+
 enum OBJECTTYPE {
     OBJECTTYPE_KEYVALUE_STRING,
     OBJECTTYPE_KEYVALUE_INT,
@@ -1515,11 +1520,6 @@ bool ExtractAndRemoveFirstKeyValuePair(String* arrayObject, String* key, long* v
     return success;
 
 }
-
-struct KeyVal{
-    String key="";
-    long value=0;
-};
 
 int getIndex(String searchFor, KeyVal arr[], int sizeOfArr) {
     for (int i = 0; i < sizeOfArr; i++) {

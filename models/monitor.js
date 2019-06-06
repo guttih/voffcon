@@ -106,6 +106,35 @@ module.exports.getById = function(id, callback){
 	Monitor.findById(id, callback);
 };
 
+/**
+ * Removes everything from SchemaObject except raw data
+ * Does not add id
+ * @param {MonitorSchema} SchemaObject 
+ */
+module.exports.MonitorCleanObject = function(SchemaObject){
+        return {  
+                pin            : SchemaObject.pin,
+                minLogInterval : SchemaObject.minLogInterval,
+                pinValueMargin : SchemaObject.pinValueMargin,
+                sampleInterval : SchemaObject.sampleInterval,
+                sampleTotalCount:SchemaObject.sampleTotalCount
+        };
+}
+
+module.exports.listByDeviceIdAndCleanObjects = function(deviceId, callback){
+	var query = {deviceid: deviceId};
+	Monitor.find(query, function(err, arr){
+                if (err || !arr) {
+                        return callback(err, arr);
+                }
+                var retArray = [];
+                arr.forEach(m => {
+                        retArray.push(module.exports.MonitorCleanObject(m));
+                })
+                callback(err, retArray);
+        });
+};
+
 module.exports.listByDeviceId = function(deviceId, callback){
 	var query = {deviceid: deviceId};
 	Monitor.find(query, callback);

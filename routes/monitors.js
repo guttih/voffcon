@@ -100,7 +100,6 @@ router.getAvailableMonitorPins = function getAvailableMonitorPins(device, addThi
 
 			//Excluding all pins that are in use
 			var availablePins = allPins.filter(m => {
-				console.log(m);
 				return !pinsToRemove.includes(m.pin);
 			});
 
@@ -262,7 +261,6 @@ router.post('/register/:deviceID', lib.authenticateDeviceOwnerRequest, function(
 				//res.status(404).json(err);
 				res.status(404).json({"error":"Device not found in database!"});
 			} else {
-				console.log(device);
 				var deviceRoute = device._doc.url+'/monitors';
 				router.updateDeviceAndDatabase(res, deviceID, deviceRoute, newMonitor);
 			}
@@ -316,7 +314,6 @@ router.post('/register/:deviceId/:monitorId', lib.authenticateDeviceOwnerRequest
 							res.redirect('/result');
 						} else {
 							var deviceRoute = device._doc.url+'/monitors';
-							console.log(monitor);
 							if (monitor.pin !== newMonitor.pin) {
 								//we need to delete the older monitor on the device
 								request(lib.makeRequestPostBodyOptions(deviceRoute,[monitor.pin], 'DELETE'), function(delErr, delRes){
@@ -324,7 +321,6 @@ router.post('/register/:deviceId/:monitorId', lib.authenticateDeviceOwnerRequest
 										console.log("Unable to delete pin "+monitor.pin);
 									} else {
 										console.log('DELETED: '+ monitor.pin);
-										console.log(delRes);
 									}
 									router.updateDeviceAndDatabase(res, deviceID, deviceRoute, newMonitor);
 								});
@@ -414,7 +410,6 @@ router.get('/list/:deviceID', lib.authenticateRequest, function(req, res){
 
 router.delete('/list/:deviceId', lib.authenticateDeviceOwnerRequest, function(req, res){
 	var id = req.params.deviceId;
-	console.log('deleting:' + id);
 
 	Device.getById(id, function(err, device) {
 		if(err || device === null) {
@@ -526,7 +521,6 @@ router.delete('/:monitorID', lib.authenticateDeviceOwnerRequest, function(req, r
 							console.log("Unable to delete pin "+monitor.pin);
 						} else {
 							console.log('DELETED: '+ monitor.pin);
-							console.log(delRes);
 						}
 						if (delRes) {
 							var monitors = JSON.parse(delRes.body);
@@ -550,6 +544,53 @@ router.delete('/:monitorID', lib.authenticateDeviceOwnerRequest, function(req, r
 			});
 		}
 	});	
+});
+
+// update the device monitors.  That is from server database to device memory
+router.get('/update/:deviceId', function(req, res) {
+	var deviceId = req.params.deviceId;
+
+	Device.getById(deviceId, function(err, device) {
+		if (err !== null || device === null) {
+			console.log({text:'Error 404: User device not found!'});
+		}
+
+		var ipAddress = device.url;
+					ipAddress = lib.removeSchemaAndPortFromUrl(ipAddress);
+					if (!lib.isPowerUserOrDeviceAuthenticated(req, ipAddress)){
+						console.log({text:'Error 404: You are not not authorized'});
+					}
+		Monitor.listByDeviceIdAndCleanObjects(deviceId, function(err, data){
+			console.log(data);
+
+
+			var deviceRoute = device.url+'/monitors';
+				//we need to delete the older monitor on the device
+				request(lib.makeRequestPostBodyOptions(deviceRoute,data, 'POST'), function(updateErr, updateResult) {
+					if (updateErr) {
+						console.log("Unable to update monitors ");
+					} else {
+						console.log('Monitors updated');
+						Monitor.deleteAllDeviceRecords(deviceId,function(err){
+							if (err!==null || !updateResult) {
+								console.log({"error":"Unable to delete monitors from database"});
+							} else {
+								var monitors = JSON.parse(updateResult.body);
+								Monitor.saveMonitors(deviceId, monitors, function(err){
+									if (err) {
+										console.log({error:"Unable to save monitors to database"});
+									} else {
+										console.log({success:"device monitors updated."});
+									}
+								});
+							}
+						});
+					}
+					
+				}).pipe(res);
+		});
+	});
+	//res.status(200).json({success:"sending monitor update promptly."});
 });
 
 module.exports = router;

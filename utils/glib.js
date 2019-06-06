@@ -296,6 +296,20 @@ module.exports.isUserOrDeviceAuthenticated = function isUserOrDeviceAuthenticate
 
 	return false;
 };
+
+module.exports.isPowerUserOrDeviceAuthenticated = function isPowerUserOrDeviceAuthenticated(req, deviceIp) {
+	if(req.isAuthenticated() && req.user._doc.level > 0){
+		return true;
+	} 
+	
+	if (req.connection !== undefined && req.connection !== null) {
+		if (req.connection.remoteAddress !== undefined && req.connection.remoteAddress !== null) {
+				return req.connection.remoteAddress.indexOf(deviceIp) > -1 ;
+		}
+	}
+
+	return false;
+};
 module.exports.authenticatePowerRequest = function authenticatePowerRequest(req, res, next){
 
 	if(req.isAuthenticated() && req.user._doc.level > 0){

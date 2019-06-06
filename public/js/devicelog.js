@@ -108,7 +108,7 @@ function addToTable(headers, logs, clearOldValues){
 	for(i = 0; i<logs.length; i++){
 		row='<tr id="'+ logs[i].id +'">';
 		row+='<td class="datetime-td">' + 
-		' <a href="javascript:deleteLogItem(\''+ logs[i].id +'\');"><span class="glyphicon glyphicon glyphicon-remove" rel="tooltip" title="Delete this log record" style="color:red" aria-hidden="true"></span></a>' +
+		' <a href="javascript:deleteListItem(\'logs\',\''+ logs[i].id +'\');"><span class="glyphicon glyphicon glyphicon-remove" rel="tooltip" title="Delete this log record" style="color:red" aria-hidden="true"></span></a>' +
 
 		'<span>' +
 		formaTima(new Date(logs[i].datetime)); +'</span></td>';
@@ -149,12 +149,12 @@ function setDeviceLogsToTable(deviceLogs, clearOldValues){
 	addToTable(headers, logs, clearOldValues);
 }
 
-function deleteLogItem(logItemID){
+function deleteListItem(route,logItemID){
 	var sendObj = {
 			"id":logItemID
 		};
 
-	var url = SERVER+'/logs/'+logItemID;
+	var url = SERVER+'/'+route+'/'+logItemID;
 		var deleting = $.delete( url, sendObj);
 
 		deleting.done(function(data){

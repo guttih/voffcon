@@ -42,35 +42,48 @@ function showModalMonitorError(title, text){
 }
 
 function showError(data){
-	var text = "The monitor was not registered!";
+	var text = "The monitor was not added";
 	if (data.responseJSON !== undefined){
 		text = "<br>";
-		for(var i = 0; i<data.responseJSON.length; i++){
-			console.log(data.responseJSON[i]);
-			text += "<p>" + data.responseJSON[i].param + " : " + data.responseJSON[i].msg + "</p>";
+		if (data.responseJSON.error !== undefined) {
+			text=data.responseJSON.error;
+		} else {
+			for(var i = 0; i<data.responseJSON.length; i++){
+				console.log(data.responseJSON[i]);
+				text += "<p>" + data.responseJSON[i].param + " : " + data.responseJSON[i].msg + "</p>";
+			}
 		}
 	}
 
 	showModalMonitorError("An error Uccurred", text);
 }
 function doSubmit(){
+	var $form = $("#monitorform");
 	var sendObj = {};
-	var url = "/monitors/register";
-	if (typeof monitor !== 'undefined') {
-		sendObj.id = monitor.id;
-		url+= "/" + sendObj.id;
-	}
-	sendObj.name = $('#monitor-name').val();
-	sendObj.description = $('#monitor-description').val(); 
-	sendObj.url = $('#monitor-url').val();
-	sendObj.type = $('#monitor-pin').val();
-	
+	var name, val;
+	$form.find('input').each(function(){
+		name = $(this).attr('name');
+		val = $(this).val();
+		sendObj[name]=val;
+	});
+	/*$form.find('textarea').each(function(){
+		name = $(this).attr('name');
+		val = $(this).val();
+		sendObj[name]=val;
+	});*/
+	var select = $('#monitor-pin');
+	var selected = 	select.find('option:selected');
+	val = selected.val();
+	sendObj['pin']=val;
 	console.log(sendObj);
-
+	var url = $form.attr('action');
+	console.log(url);
 	sendData(url, sendObj, function(data){
 		//successfully saved this monitor
-		window.location.href = '/monitors/list';
+		window.location.href = '/monitors/device/'+device.id;
+		
 	}, showError);
+		
 }
 
 function comparePinsNumbers(a,b) {
@@ -83,7 +96,7 @@ function comparePinsNumbers(a,b) {
 
 function setSelectOptionsFromArray(id, list){
 	//todo: remove next line
-	list.push({pin: -1, val: 0, m: 0, name: "Timer"});
+	//list.push({pin: -1, val: 0, m: 0, name: "Timer"});
 	list.sort(comparePinsNumbers);
 	var select = 	$("#"+id);
 	var selected = select.find('option:selected');
@@ -105,9 +118,21 @@ function setSelectOptionsFromArray(id, list){
 	list.forEach(element => {
 		var opt = new Option(element.name, element.id);
 		opt.setAttribute("title", 'Pin number ' + element.pin);
-		opt.setAttribute("pin-number", element.pin);
+		opt.setAttribute("value", element.pin);
+		
 		select.append(opt);
 	});
+
+
+	if (typeof monitor !== 'undefined') {
+		console.log("We got a monitor and need to set form values");
+		console.log(monitor);
+		//select.val(monitor.pin);
+		Object.keys(monitor).forEach(element => {
+			$('#monitor-'+element).val(monitor[element]);
+		});
+		onSelectPinChange(select);
+	}
 }
 
 var checkTimer;
@@ -117,56 +142,76 @@ function updateSubmitButtonState(){
 		var form = document.getElementById('monitorform');
 		var isValid = form.checkValidity();
 		$( '#btn-submit-monitorform').prop('disabled', !isValid);
+
+	//list all form variables
+	/*$("#monitorform input").each(function(){
+		console.log($(this).attr('name'))
+	});*/
 		
 	}, 300);
 }
 
-function onInputMillisecondsChange($input, formGroupClass){
+function onInputMillisecondsChange($input, formGroupClass, formGroupMultiplierClass, multiply, updateOther){
 	var millis = $input.val();
-	
-	console.log(typeof millis);
+	if (formGroupMultiplierClass !== undefined && multiply !== undefined && multiply === true) {
+		var multiplier = Number($('.'+formGroupMultiplierClass+' input').val());
+		if (millis.length > 0)
+		{
+			var num = Number(millis) * multiplier;
+			millis = String(num);
+		}
+	}
 		var max = Number($input.attr("max"));
 		var min = Number($input.attr("min"));
-		console.log('min:'+min+' max:'+max+' millis:'+millis);
-
 		var text = '';
 		if (millis.length > 0 && millis >= min &&  millis <= max ){
 			text = msToStr(millis, true);
 		}
 		
 		$('.'+formGroupClass+' .monitor-input-text').text(text);
+		if (updateOther !== undefined && updateOther === true){
+			onInputMillisecondsChange($('.'+formGroupMultiplierClass+' input'), formGroupMultiplierClass, formGroupClass, true);
+		}
 }
+
+var onSelectPinChange = function onSelectPinChange($selectElm){
+	var $elm = $selectElm !== undefined? $selectElm: $('#monitor-pin');
+	pinNumber = $elm.find(":selected").val();
+	var notATimerPin = pinNumber != -1;
+	var displayText = pinNumber === undefined? '': 'Selected is pin number ' + pinNumber;
+	$('.pinValueMargin,.sampleTotalCount,.sampleInterval').toggle(notATimerPin);
+	$('.pinValueMargin input,.sampleTotalCount input,.sampleInterval input').prop('required', notATimerPin);
+	$('.pin .monitor-input-text').text(displayText);
+}
+
 $(function () {
 	
 	$("#btn-submit-monitorform").click(function() {
 		doSubmit();
 	});
-	if (typeof monitor !== 'undefined') {
-		console.log("We got a monitor and need to set form values")
-		console.log(monitor);
-	}
 
 	$('#monitor-pin').on('change', function() {
-		console.log($(this).val());
-		pinNumber = $(this).find(":selected").attr('pin-number');
-		var notATimerPin = pinNumber != -1;
-		var displayText = pinNumber === undefined? '': 'Selected is pin number ' + pinNumber;
-		$('.pinValueMargin,.sampleTotalCount,.sampleInterval').toggle(notATimerPin);
-		$('.pinValueMargin input,.sampleTotalCount input,.sampleInterval input').prop('required', notATimerPin);
-		$('.pin .monitor-input-text').text(displayText);
-
+		onSelectPinChange($(this));
 	});
 
-	$('#monitor-sampleInterval').on('input', function(){
-		onInputMillisecondsChange($(this), 'sampleInterval');
-	});
+	
 	$('#monitor-minLogInterval').on('input', function(){
 		onInputMillisecondsChange($(this), 'minLogInterval');
 	});
 
+	$('#monitor-sampleInterval').on('input', function(){
+		onInputMillisecondsChange($(this), 'sampleInterval', 'sampleTotalCount', false, true);
+	});
+	$('#monitor-sampleTotalCount').on('input', function(){
+		onInputMillisecondsChange($(this), 'sampleTotalCount', 'sampleInterval', true);
+	});
+
 	setSelectOptionsFromArray('monitor-pin', device.pins);
-	$('input,select,textarea').on('change input', function(){
+	
+	$('input,select').on('change input', function(){
 		updateSubmitButtonState();
 	});
+	
 	updateSubmitButtonState();
+	
 });

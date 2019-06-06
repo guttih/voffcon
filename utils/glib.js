@@ -314,9 +314,9 @@ module.exports.authenticateAdminRequest = function authenticateAdminRequest(req,
 		return res.send('Error 401: You are not not authorized! ');
 	}
 };
-module.exports.makeRequestPostOptions = function makeRequestOptions(url, formData, method, ContentType){
+module.exports.makeRequestPostOptions = function makeRequestOptions(url, payload, method, ContentType){
 	
-	var byteLength = Buffer.byteLength(formData);
+	var byteLength = Buffer.byteLength(payload);
 	if (method === undefined ){
 		method = 'POST';
 	}
@@ -326,7 +326,7 @@ module.exports.makeRequestPostOptions = function makeRequestOptions(url, formDat
 	var options = {
 	url: url,
 	method: method,
-	form: formData,
+	form: payload,
 		
 		headers: {
 			'Content-Type': ContentType,
@@ -334,7 +334,28 @@ module.exports.makeRequestPostOptions = function makeRequestOptions(url, formDat
 			'Content-Length': byteLength
 		}
 	};
-	console.log("options");console.log(options);
+	return options;
+};
+module.exports.makeRequestPostBodyOptions = function makeRequestOptions(url, payload, method, ContentType){
+	
+	var byteLength = Buffer.byteLength(payload);
+	if (method === undefined ){
+		method = 'POST';
+	}
+	if (ContentType === undefined ){
+		ContentType = 'application/json';
+	}
+	var options = {
+	url: url,
+	method: method,
+	body: JSON.stringify(payload),
+		
+		headers: {
+			'Content-Type': ContentType,
+			/*'Content-Type': 'application/x-www-form-urlencoded',*/
+			'Content-Length': byteLength
+		}
+	};
 	return options;
 };
 

@@ -118,7 +118,7 @@
 	<button onclick="changeHref('/run/', '/register/')" class="btn btn-success pull-right"> 
 		<span class="glyphicon glyphicon-edit"></span>&nbsp;edit 
 	</button>
-	<button class="btn btn-default btn-log-monitors pull-right" disabled="disabled"> 
+	<button onclick="window.location.href='/monitors/device/{{deviceId}}'" class="btn btn-default btn-log-monitors pull-right" disabled="disabled"> 
 		<span class="glyphicon glyphicon-wrench"></span>&nbsp;Monitors
 	</button>
 	<button class="btn btn-default btn-log-pins pull-right" disabled="disabled"> 

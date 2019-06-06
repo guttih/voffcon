@@ -28,7 +28,7 @@ var Device = require('../models/device');
 
 
 
-router.get('/ids/:deviceId', function(req, res){
+router.get('/ids/:deviceId', function(req, res) {
 	var id = req.params.deviceId;
 	var isValid=false;
 	var error = "You must provide an device id!";
@@ -57,10 +57,9 @@ router.get('/ids/:deviceId', function(req, res){
 	}
 });
 
-var getPins = function(url, callback) {
+var getRequest = function(url, callback) {
 	request.get(url,	function (err, res, body) {
 		if (res) {
-			console.log("get pins statuscode:"+res.statusCode);
 			//we got the pinvalues, so let's save them
 			callback(null, body);
 		} else {
@@ -68,10 +67,16 @@ var getPins = function(url, callback) {
 		}
 	});
 };
-
-var getAvailableMonitorPins = function getAvailableMonitorPins(device, callback) {
+/**
+ * Gets all pins from a device and removes the ones that have already
+ * A monitor connected to them.
+ * @param {String} device The id of the device
+ * @param {int} addThisPin If you want a pin to exitst, even though it is connected to a monitor, provide it here.  Pass null if you do not want to exclude any pin.
+ * @param {function} callback function(error, ArrayOfAvailablePinObjects);  Error is null on success.
+ */
+router.getAvailableMonitorPins = function getAvailableMonitorPins(device, addThisPin, callback) {
 	var urlid = device.url+'/pins';
-	getPins(urlid, function(err, body){
+	getRequest(urlid, function(err, body){
 		if(err || body === null) {
 			callback(err, null);
 		} else {
@@ -79,20 +84,39 @@ var getAvailableMonitorPins = function getAvailableMonitorPins(device, callback)
 			var pinObject = JSON.parse(body);
 			
 			var allPins = pinObject.pins;
+			allPins.push({pin:-1, val:0, m:0 ,name:'Timer'});
 			var pinsToRemove = [];
-			//todo: Next, we need to exclude all pins that have monitors and add theyr pinnumbers to pinsToRemove
+			
+			//Find all pins in use
+			Monitor.listByDeviceId(device.id, function(err, list){
+			if (!err && list) {
+				//removing pins in use, except the addThisPin
+				list.forEach(element => {
+					if (addThisPin===null || addThisPin !==element.pin ) {
+						pinsToRemove.push(element.pin);
+					}
+				});
+			}
+
+			//Excluding all pins that are in use
 			var availablePins = allPins.filter(m => {
 				console.log(m);
 				return !pinsToRemove.includes(m.pin);
 			});
+
 			callback(err, availablePins);
+
+
+
+			});
+			
 		}
 	});
 };
 
 
-router.get('/:deviceId/register', lib.authenticatePowerUrl, function(req, res) {
-	var deviceId = req.params.deviceId;
+router.get('/register/:deviceID', lib.authenticateDeviceOwnerRequest, function(req, res) {
+	var deviceId = req.params.deviceID;
 	if (deviceId != undefined) {
 		Device.getById(deviceId, function(err, device) {
 			if(err || device === null) {
@@ -114,8 +138,7 @@ router.get('/:deviceId/register', lib.authenticatePowerUrl, function(req, res) {
 						type:device.type,
 						url:device.url
 					};
-				var urlid = device._doc.url+'/pins';
-				getAvailableMonitorPins(newDevice, function(err, availablePins){
+				router.getAvailableMonitorPins(newDevice, null, function(err, availablePins) {
 					if(err || availablePins === null) {
 						req.flash('error',	'Could not get device pins.' );
 						res.redirect('/result');
@@ -123,7 +146,9 @@ router.get('/:deviceId/register', lib.authenticatePowerUrl, function(req, res) {
 					
 						newDevice.pins=availablePins;
 						//todo: Next, we need to exclude all pins that have monitors
-						res.render('register-monitor', {device:JSON.stringify(newDevice),deviceName:newDevice.name});
+						res.render('register-monitor', {device:JSON.stringify(newDevice),
+														deviceName:newDevice.name,
+														deviceId:newDevice.id});
 					}
 				});
 			}
@@ -131,7 +156,7 @@ router.get('/:deviceId/register', lib.authenticatePowerUrl, function(req, res) {
 	}
 });
 
-router.get('/:deviceId/register/:monitorId', lib.authenticatePowerUrl, function(req, res) {
+router.get('/register/:deviceId/:monitorId', lib.authenticatePowerUrl, function(req, res) {
 	var deviceId = req.params.deviceId;
 	var id = req.params.monitorId;
 
@@ -142,13 +167,54 @@ router.get('/:deviceId/register/:monitorId', lib.authenticatePowerUrl, function(
 				res.redirect('/result');
 			} 
 			else {
+				var ipAddress = device._doc.url;
+				ipAddress = lib.removeSchemaAndPortFromUrl(ipAddress);
+				if (!lib.isUserOrDeviceAuthenticated(req, ipAddress)){
+					res.statusCode = 404;
+					return res.json({text:'Error 404: You are not not authorized'});
+				}
+
+				var newDevice = {
+						id:device._id,
+						name:device.name,
+						description:device.description,
+						owners:device.owners,
+						type:device.type,
+						url:device.url
+				};
 				if (id !== undefined) {
 					Monitor.getById(id, function(err, monitor) {
 						if(err || monitor === null) {
 							req.flash('error', 'Could not find monitor.');
 							res.redirect('/result');
 						} else{
-							res.render('register-monitor', {device:JSON.stringify(device),monitor:JSON.stringify(monitor)});
+							
+							router.getAvailableMonitorPins(newDevice, monitor.pin, function(err, availablePins) {
+								if(err || availablePins === null) {
+									req.flash('error',	'Could not get device pins.' );
+									res.redirect('/result');
+								} else {
+									var newMonitor = {
+										deviceId       : monitor.deviceid ,
+										pin            : monitor.pin,
+										minLogInterval : monitor.minLogInterval ,
+										pinValueMargin : monitor.pinValueMargin ,
+										sampleInterval : monitor.sampleInterval ,
+										sampleTotalCount:monitor.sampleTotalCount ,								};
+									newDevice.pins=availablePins;
+									//todo: Next, we need to exclude all pins that have monitors
+									res.render('register-monitor', {device:JSON.stringify(newDevice),
+																	deviceName:newDevice.name,
+																	deviceId:newDevice.id,
+																	monitor:JSON.stringify(newMonitor),
+																    monitorId:id});
+								}
+							});
+
+
+
+
+
 						}
 					});
 				}
@@ -159,33 +225,148 @@ router.get('/:deviceId/register/:monitorId', lib.authenticatePowerUrl, function(
 });
 
 //monitors device pin status to the database
-router.post('/pins', function(req, res) {
+router.post('/register/:deviceID', lib.authenticateDeviceOwnerRequest, function(req, res) {
 	
-	req.checkBody('pins', 'pins are required').notEmpty();
-	req.checkBody('deviceId', 'deviceId is required').notEmpty();
-	var errors = req.validationErrors();
+	req.checkBody('pin', 'pin number is missing').isInt({ gt: -2, lt:40 });
+	//req.checkBody('description', 'description is required').notEmpty();
 	
-	if(!errors){
-		if (!Monitor.isObjectIdStringValid(req.body.deviceId)) {
-			errors = {error:"Invalid device id provided!"};
-		}
+	var pinNumber = req.body.pin;
+	if (pinNumber !== undefined && pinNumber === '-1') {
+		req.checkBody('minLogInterval', 'minLogInterval is missing').isNumeric({ gt: -1, lt:1024 });
+	} else { // not a timer, so we will need to verify all values
+		req.checkBody('minLogInterval', 'minLogInterval is missing').isNumeric({ gt: -1, lt:1024 });
+		req.checkBody('pinValueMargin', 'pinValueMargin is missing').isNumeric({ gt: -1});
+		req.checkBody('sampleInterval', 'sampleInterval is missing').isNumeric({ gt: -1});
+		req.checkBody('sampleTotalCount', 'sampleTotalCount is missing').isInt({ gt: -1});
 	}
 
-	if(errors){
+
+
+	var deviceID = req.params.deviceID;
+	var errors = req.validationErrors();
+	
+	if(errors) {
 		res.status(422).json(errors);
 	} else {
-			var deviceId = req.body.deviceId;
-			var pins = req.body.pins.slice();
-			Monitor.monitorJsonAsText(
-				deviceId,
-				pins, 
-				function(err, item) {
-					if(err) {throw err;}
-					console.log(item);
-					res.status(200).json({message: "??? succeded!"});
-			});
+		var newMonitor = {
+			minLogInterval  :Number(req.body.minLogInterval),
+			pin             :Number(req.body.pin)
+		};
+		if (pinNumber !== '-1') {
+			newMonitor ['pinValueMargin']  = Number(req.body.pinValueMargin);
+			newMonitor ['sampleInterval']  = Number(req.body.sampleInterval);
+			newMonitor ['sampleTotalCount']= Number(req.body.sampleTotalCount);
+		}
+		Device.getById(deviceID, function(err, device) {
+			if(err || device === null) {
+				//res.status(404).json(err);
+				res.status(404).json({"error":"Device not found in database!"});
+			} else {
+				console.log(device);
+				var deviceRoute = device._doc.url+'/monitors';
+				router.updateDeviceAndDatabase(res, deviceID, deviceRoute, newMonitor);
+			}
+		});
 	}
 });
+
+router.post('/register/:deviceId/:monitorId', lib.authenticateDeviceOwnerRequest, function(req, res) {
+	
+	req.checkBody('pin', 'pin number is missing').isInt({ gt: -2, lt:40 });
+	//req.checkBody('description', 'description is required').notEmpty();
+	
+	var pinNumber = req.body.pin;
+	if (pinNumber !== undefined && pinNumber === '-1') {
+		req.checkBody('minLogInterval', 'minLogInterval is missing').isNumeric({ gt: -1, lt:1024 });
+	} else { // not a timer, so we will need to verify all values
+		req.checkBody('minLogInterval', 'minLogInterval is missing').isNumeric({ gt: -1, lt:1024 });
+		req.checkBody('pinValueMargin', 'pinValueMargin is missing').isNumeric({ gt: -1});
+		req.checkBody('sampleInterval', 'sampleInterval is missing').isNumeric({ gt: -1});
+		req.checkBody('sampleTotalCount', 'sampleTotalCount is missing').isInt({ gt: -1});
+	}
+
+	var deviceID = req.params.deviceId;
+	var id = req.params.monitorId;
+	var errors = req.validationErrors();
+	
+	if(errors) {
+		res.status(422).json(errors);
+	} else {
+		var newMonitor = {
+			minLogInterval  :Number(req.body.minLogInterval),
+			pin             :Number(req.body.pin)
+		};
+		if (pinNumber !== '-1') {
+			newMonitor ['pinValueMargin']  = Number(req.body.pinValueMargin);
+			newMonitor ['sampleInterval']  = Number(req.body.sampleInterval);
+			newMonitor ['sampleTotalCount']= Number(req.body.sampleTotalCount);
+		}
+		Device.getById(deviceID, function(err, device) {
+			if(err || device === null) {
+				//res.status(404).json(err);
+				res.status(404).json({"error":"Device not found in database!"});
+			} else {
+
+
+				
+				if (id !== undefined) {
+					Monitor.getById(id, function(err, monitor) {
+						if(err || monitor === null) {
+							req.flash('error', 'Could not find monitor.');
+							res.redirect('/result');
+						} else {
+							var deviceRoute = device._doc.url+'/monitors';
+							console.log(monitor);
+							if (monitor.pin !== newMonitor.pin) {
+								//we need to delete the older monitor on the device
+								request(lib.makeRequestPostBodyOptions(deviceRoute,[monitor.pin], 'DELETE'), function(delErr, delRes){
+									if (delErr) {
+										console.log("Unable to delete pin "+monitor.pin);
+									} else {
+										console.log('DELETED: '+ monitor.pin);
+										console.log(delRes);
+									}
+									router.updateDeviceAndDatabase(res, deviceID, deviceRoute, newMonitor);
+								});
+							} else {
+								router.updateDeviceAndDatabase(res, deviceID, deviceRoute, newMonitor);
+							}
+						}
+					}); //onitor.getById
+				}
+			}
+		});
+	}
+});
+
+router.updateDeviceAndDatabase = function updateDeviceAndDatabase(res, deviceID, deviceRoute, newMonitor) {
+	request(lib.makeRequestPostBodyOptions(deviceRoute, newMonitor, 'POST'),
+		function (err, deviceRes, body) {
+				if (deviceRes){
+					console.log("statuscode:"+deviceRes.statusCode);
+				}
+			if (err) {
+				return console.error(err);
+			}
+			if (body){
+				var monitors = JSON.parse(body);
+				Monitor.deleteAllDeviceRecords(deviceID,function(err){
+					if (err!==null) {
+						res.status(410).json({"error":"Unable to delete monitors from database"});
+					} else {
+						Monitor.saveMonitors(deviceID, monitors, function(err){
+							if (err) {
+								res.status(400).json({error:"Unable to save monitors to database"});
+							} else {
+								res.status(200).json({success:"device monitors updated."});
+							}
+						});
+					}
+				});
+			}
+		}
+	);//request
+}
 
 //render a page with list of monitors
 router.get('/list', lib.authenticateUrl, function(req, res){
@@ -210,7 +391,7 @@ router.get('/device/:deviceID', lib.authenticateRequest, function(req, res) {
 							id:deviceId,
 							name:retDevice._doc.name
 						};
-						res.render('devicemonitor', { item:device, device:JSON.stringify(device) });
+						res.render('devicemonitor', { item:device, device:JSON.stringify(device),deviceId:deviceId });
 					}
 				});
 	}
@@ -233,13 +414,50 @@ router.get('/list/:deviceID', lib.authenticateRequest, function(req, res){
 
 router.delete('/list/:deviceId', lib.authenticateDeviceOwnerRequest, function(req, res){
 	var id = req.params.deviceId;
-	console.log('deleting:' + id)
-	Monitor.deleteAllDeviceRecords(id, function(err, result){
-		if(err !== null){
-			res.status(404).send({message:'unable to delete monitor', id:id});
+	console.log('deleting:' + id);
+
+	Device.getById(id, function(err, device) {
+		if(err || device === null) {
+			return res.status(404).json({'error':'Could not find device.'});
+			
 		} else {
-			res.status(200).send({id:id});
+			
+			Monitor.listByDeviceId(id, function(err, list){
+				if (!err && list) {
+					var pinsToRemove =[];
+					list.forEach(element => {
+							pinsToRemove.push(element.pin);
+					});
+					var deviceRoute = device._doc.url+'/monitors';
+					request(lib.makeRequestPostBodyOptions(deviceRoute, pinsToRemove, 'DELETE'), function(delErr, delRes) {
+						if (delErr) {
+							console.log("Unable to delete device "+ id);
+						} else {
+							console.log('DELETED device: '+ id);
+						}
+						if (delRes) {
+							var monitors = JSON.parse(delRes.body);
+							Monitor.deleteAllDeviceRecords(device.id,function(err){
+								if (err!==null) {
+									res.status(410).json({"error":"Unable to delete monitors from database"});
+								} else {
+									Monitor.saveMonitors(device.id, monitors, function(err){
+										if (err) {
+											return res.status(400).json({error:"Unable to save monitors to database"});
+										} else {
+											return res.status(200).json({success:"device monitors updated.",
+																  id:id                              });
+										}
+									});
+								}
+							});
+						}
+					});
+				}
+			});
+
 		}
+
 	});
 });
 
@@ -287,57 +505,51 @@ router.get('/device-list', lib.authenticatePowerRequest, function(req, res) {
 
 router.delete('/:monitorID', lib.authenticateDeviceOwnerRequest, function(req, res){
 	var id = req.params.monitorID;
-	Monitor.delete(id, function(err, result){
-		if(err !== null){
-			res.status(404).send({message:'unable to delete monitor', id:id});
+	Monitor.getById(id, function(err, monitor) {
+		if(err || monitor === null) {
+			return res.status(404).json({'error':'Could not find monitor.'});
 		} else {
-			res.status(200).send({id:id});
-		}
-	});
-	
-});
+			Device.getById(monitor.deviceid, function(err, device) {
+				if(err || device === null) {
+					return res.status(404).json({'error':'Could not find device.'});
+					
+				} else {
+					var ipAddress = device._doc.url;
+					ipAddress = lib.removeSchemaAndPortFromUrl(ipAddress);
+					if (!lib.isUserOrDeviceAuthenticated(req, ipAddress)){
+						return res.status(404).json({text:'Error 404: You are not not authorized'});
+					}
 
-//	save pinout to monitors
-router.get('/pins/:deviceId', function(req, res){
-	var deviceId = req.params.deviceId;
-
-	Device.getById(deviceId, function(err, device){
-		if (err !== null || device === null) {
-			res.statusCode = 404;
-			return res.json({text:'Error 404: User device not found!'});
+					var deviceRoute = device._doc.url+'/monitors';
+					request(lib.makeRequestPostBodyOptions(deviceRoute,[monitor.pin], 'DELETE'), function(delErr, delRes) {
+						if (delErr) {
+							console.log("Unable to delete pin "+monitor.pin);
+						} else {
+							console.log('DELETED: '+ monitor.pin);
+							console.log(delRes);
+						}
+						if (delRes) {
+							var monitors = JSON.parse(delRes.body);
+							Monitor.deleteAllDeviceRecords(device.id,function(err){
+								if (err!==null) {
+									res.status(410).json({"error":"Unable to delete monitors from database"});
+								} else {
+									Monitor.saveMonitors(device.id, monitors, function(err){
+										if (err) {
+											return res.status(400).json({error:"Unable to save monitors to database"});
+										} else {
+											return res.status(200).json({success:"device monitors updated.",
+																  id:id                              });
+										}
+									});
+								}
+							});
+						}
+					});
+				}
+			});
 		}
-		var ipAddress = device._doc.url;
-		ipAddress = lib.removeSchemaAndPortFromUrl(ipAddress);
-		if (!lib.isUserOrDeviceAuthenticated(req, ipAddress)){
-			res.statusCode = 404;
-			return res.json({text:'Error 404: You are not not authorized'});
-		}
-		console.log(urlid);
-		var urlid = device._doc.url+'/pins';
-		request.get(urlid,	function (err, res, body) {
-			if (res) {
-				console.log("get pins statuscode:"+res.statusCode);
-				//we got the pinvalues, so let's save them
-				var obj, pins;
-				obj = JSON.parse(body);
-					pins = obj.pins; 
-				Monitor.monitorJsonAsText(
-					deviceId,
-					Monitor.MonitorTypes.indexOf('OBJECTTYPE_PINS'),
-					pins, 
-					function(err, item) {
-						if(err) {throw err;}
-						console.log(item);
-				});
-			}
-
-			if (err) {
-				return console.error(err);
-			}
-			return body;
-		}
-			).pipe(res);
-	});
+	});	
 });
 
 module.exports = router;

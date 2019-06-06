@@ -21,7 +21,7 @@
       {{/each}}
 {{/if}}
 
-<form method="post" action="/monitors/register" id="monitorform">
+<form method="post" action="/monitors/register/{{deviceId}}/{{monitorId}}" id="monitorform">
 	<div class="form-group pin">
 		<label>Pin to monitor</label>
 		<select id="monitor-pin" name="Pin" class="access-select form-control" required>
@@ -38,19 +38,21 @@
 		<label>How many sample to be taken to be averaged</label>
 		<!--int-->
 		<input id="monitor-sampleTotalCount" type="number"  min="-1" max="32767" class="form-control" placeholder="10" name="sampleTotalCount" required>
+		<p class="monitor-input-text" title="The total time it takes to calculate a value change (sample time * average sample count)"></p>
 	</div>
 	<div class="form-group sampleInterval">
 		<label>How many milliseconds need to pass between taken samples</label>
 		<!--ULong-->
 		<input id="monitor-sampleInterval" type="number"  min="0" max="4294967295" class="form-control" placeholder="1000" name="sampleInterval" required>
-		<p class="monitor-input-text"></p>
+		<p class="monitor-input-text" title="This time must pass before another sample can be taken"></p>
 	</div>
 	<div class="form-group minLogInterval">
 		<label>The minimum milliseconds between triggering a log</label>
 		<!--ULong-->
 		<input id="monitor-minLogInterval" type="number"  min="0" max="4294967295" class="form-control" placeholder="0" name="minLogInterval" required>
-		<p class="monitor-input-text"></p>
+		<p class="monitor-input-text" title="The minimum time between logs"></p>
 	</div>
+	<!--
 	<div class="form-horizontal description">
 		<label>Description</label>
 		<div class="form-group">
@@ -60,6 +62,7 @@
 			</div>
 		</div>
 	</div>
+	-->
 	
 </form>
 <button id="btn-submit-monitorform" class="btn btn-success pull-right">Submit</button>

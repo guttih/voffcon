@@ -26,21 +26,52 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
 var MonitorSchema = mongoose.Schema({
-        deviceid : Schema.Types.ObjectId,
-        datetime : Date,
-        data     : String
+        deviceid       : Schema.Types.ObjectId,
+        pin            : Number,
+        minLogInterval : Number,
+        pinValueMargin : Number,
+        sampleInterval : Number,
+        sampleTotalCount:Number
 }); 
 var Monitor = module.exports = mongoose.model('Monitor', MonitorSchema);
 
-module.exports.monitorJsonAsText = function monitorJsonAsText(deviceId, json, callback) {
-    var strData = JSON.stringify(json);
+/**
+ * Saves monitors from a device
+ * @param {String}   deviceId The id of the device these monitors belong to
+ * @param {Array}    monitors Array of monitors
+ * @param {function} callback Function which will be called when last monitor has been saved
+ */
+module.exports.saveMonitors = function monitorJsonAsText(deviceId, monitors, callback) {
+        if (monitors === undefined || !Array.isArray(monitors)) {
+                callback({error:'invalid object'});
+                return;
+        }
+        if (monitors.length < 1) {
+                callback(null); //not an error just empty
+                return;
+        }
+
     var deviceObjectId = new mongoose.mongo.ObjectId(deviceId);
-    var newItem = new Monitor ({
-                                        deviceid : deviceObjectId,
-                                        datetime : Date(),
-                                        data     : strData
-                                    });
-    newItem.save(callback);
+    var saveMonitors = [];
+    monitors.forEach(function(item){
+            saveMonitors.push(new Monitor (
+                                                {
+                                                    deviceid       : deviceObjectId,
+                                                    pin            : item.pin,
+                                                    minLogInterval : item.minLogInterval,
+                                                    pinValueMargin : item.pinValueMargin,
+                                                    sampleInterval : item.sampleInterval,
+                                                    sampleTotalCount:item.sampleTotalCount
+                                                }
+                                        )
+                                );
+    });
+
+    for(var i = 0; i<saveMonitors.length -1; i++) {
+        saveMonitors[i].save();
+    }
+
+    saveMonitors[saveMonitors.length-1].save(callback);
 };
 module.exports.isObjectIdStringValid = function (idString) {
         var ObjectId = mongoose.Types.ObjectId;
@@ -60,6 +91,15 @@ module.exports.modify = function (id, newValues, callback){
 };
 
 module.exports.createMonitor = function(newMonitor,  callback){
+        newMonitor.save(callback);
+};
+
+/**
+ * Adds many monitors to the database
+ * @param {Array} newMonitors Array of monitors
+ * @param {function} callback The function to call when monitors have been added
+ */
+module.exports.createMonitors = function(newMonitors,  callback){
         newMonitor.save(callback);
 };
 module.exports.getById = function(id, callback){

@@ -52,13 +52,13 @@ function modeToTypeString(mode) {
 	return "?";
 };
 
-function pinsToTd(headers, pins){
+function pinsToTd(headers, monitors){
 	var index;
 	var str = "";
 	for(var i = 0; i<headers.length; i++) {
-		index = getPinIndexByName(headers[i], pins);
+		index = getPinIndexByName(headers[i], monitors);
 		if (index > -1) {
-			str+='<td class="pin-type-'+pins[index].m+'" rel="tooltip" title="Pin number: '+ pins[index].pin +' , pin type: '+ modeToTypeString(pins[index].m) +'">' + pins[index].val;
+			str+='<td rel="tooltip" title="Pin number: '+ monitors[index].pin +'">' + monitors[index].pin;
 			str+='</td>';
 		} else {
 			str+='<td></td>';
@@ -85,7 +85,8 @@ function monthToShortStr(month){
 	return "";
 };
 
-function addToTable(headers, monitors, clearOldValues){
+function setDeviceLogsToTable(monitors, clearOldValues){
+	
 	var i;
 	var $elm = $('#table-monitor thead');
 	if (clearOldValues !== undefined && clearOldValues === true) {
@@ -96,23 +97,30 @@ function addToTable(headers, monitors, clearOldValues){
 	var row = '<tr>';
 	
 	//	adding header
-	row+='<td>Time</td>';
+	var headers=['pin', 'minLogInterval','pinValueMargin','sampleInterval','sampleTotalCount'];
+	row+='<td>Type</td>';
 	for(i = 0; i<headers.length; i++){
 		row+='<td>'+ headers[i] + '</td>';
 	}
 	row+='</tr>';
 	$elm.append(row);
-
+	
 	//now add data
 	$elm = $('#table-monitor tbody');
+	console.log(monitors);
+	var strType;
 	for(i = 0; i<monitors.length; i++){
-		row='<tr id="'+ monitors[i].id +'">';
-		row+='<td class="datetime-td">' + 
-		' <a href="javascript:deleteLogItem(\''+ monitors[i].id +'\');"><span class="glyphicon glyphicon glyphicon-remove" rel="tooltip" title="Delete this monitor record" style="color:red" aria-hidden="true"></span></a>' +
-
-		'<span>' +
-		formaTima(new Date(monitors[i].datetime)); +'</span></td>';
-		row+=pinsToTd(headers, monitors[i].pins);
+		strType =  monitors[i].pin === -1? ' Timer':' Monitor';
+		row='<tr id="'+ monitors[i]._id +'">';
+		row+='<td class="datetime-td">';
+		row+=' <a href="javascript:deleteListItem(\'monitors\',\''+ monitors[i]._id +'\');"><span class="glyphicon glyphicon glyphicon-remove" rel="tooltip" title="Delete this '+strType+'" style="color:red" aria-hidden="true"></span></a>';
+		row+=' <a href="javascript:window.location.href =\'/monitors/register/'+ device.id +'/'+ monitors[i]._id + '\'"><span class="glyphicon glyphicon glyphicon-pencil" rel="tooltip" title="Modify this '+strType+'" style="color:black" aria-hidden="true"></span></a>';
+		row+='<span>' + strType +'</span></td>';
+		row+='<td rel="tooltip" title="Pin number: '+ monitors[i].pin  +'">' + monitors[i].pin + '</td>';
+		row+='<td rel="tooltip" title="'+ monitors[i].minLogInterval   +'">' + monitors[i].minLogInterval + '</td>';
+		row+='<td rel="tooltip" title="'+ monitors[i].pinValueMargin   +'">' + monitors[i].pinValueMargin + '</td>';
+		row+='<td rel="tooltip" title="'+ monitors[i].sampleInterval   +'">' + monitors[i].sampleInterval + '</td>';
+		row+='<td rel="tooltip" title="'+ monitors[i].sampleTotalCount +'">' + monitors[i].sampleTotalCount + '</td>';
 		row+='</tr>';
 		$elm.append(row);
 	}
@@ -122,43 +130,21 @@ function addToTable(headers, monitors, clearOldValues){
 	row+='<td id="record-count" colspan="' + (headers.length) + '">'+monitors.length+'</td>';
 	row+="</tr>";
 	$elm.append(row);
-	
-
-
-}
-
-function setDeviceLogsToTable(deviceLogs, clearOldValues){
-	var monitors = [];
-	var headers = [];
-	for(var i = 0; i < deviceLogs.length; i++){
-		monitors.push({
-			id:deviceLogs[i]._id,
-			datetime:deviceLogs[i].datetime,
-			pins: JSON.parse(deviceLogs[i].data)
-		});
 		
-		// add headers
-		var head;
-		for(var x = 0; x<monitors[i].pins.length; x++){
-			head = monitors[i].pins[x].name;
-			if (headers.indexOf(head) < 0){
-				headers.push(head);
-			}
-		}
-	};
-	addToTable(headers, monitors, clearOldValues);
+	
+	
+	
 }
 
-function deleteLogItem(monitorID){
+function deleteListItem(route,logItemID){
 	var sendObj = {
-			"id":monitorID
+			"id":logItemID
 		};
 
-	var url = SERVER+'/monitors/'+monitorID;
+	var url = SERVER+'/'+route+'/'+logItemID;
 		var deleting = $.delete( url, sendObj);
-
-		deleting.done(function(data){
-			if (data.id !== undefined) {
+		deleting.done(function( data ) {
+			/*if (data.id !== undefined) {
 				$( "#"+data.id ).remove();
 				var elCount = $("#record-count");
 				var number =  Number(elCount.text());
@@ -168,7 +154,11 @@ function deleteLogItem(monitorID){
 					number--;
 				}
 				elCount.text(number);
-			}
+			}*/
+			window.location.assign(device.id);
+		}).fail(function( data ) {
+			/*showModalErrorText("Delete error", "Unable to delete monitor.");*/
+			window.location.assign(device.id);
 		});
 }
 

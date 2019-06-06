@@ -94,7 +94,7 @@ function comparePinsNumbers(a,b) {
 	return 0;
 }
 
-function setSelectOptionsFromArray(id, list){
+function setFormValues(id, list){
 	//todo: remove next line
 	//list.push({pin: -1, val: 0, m: 0, name: "Timer"});
 	list.sort(comparePinsNumbers);
@@ -132,6 +132,7 @@ function setSelectOptionsFromArray(id, list){
 			$('#monitor-'+element).val(monitor[element]);
 		});
 		onSelectPinChange(select);
+		$('.pinValueMargin input,.sampleTotalCount input,.sampleInterval input,.minLogInterval input').trigger('input');
 	}
 }
 
@@ -153,6 +154,7 @@ function updateSubmitButtonState(){
 
 function onInputMillisecondsChange($input, formGroupClass, formGroupMultiplierClass, multiply, updateOther){
 	var millis = $input.val();
+	var orgMillis = Number(millis);
 	if (formGroupMultiplierClass !== undefined && multiply !== undefined && multiply === true) {
 		var multiplier = Number($('.'+formGroupMultiplierClass+' input').val());
 		if (millis.length > 0)
@@ -164,7 +166,7 @@ function onInputMillisecondsChange($input, formGroupClass, formGroupMultiplierCl
 		var max = Number($input.attr("max"));
 		var min = Number($input.attr("min"));
 		var text = '';
-		if (millis.length > 0 && millis >= min &&  millis <= max ){
+		if (millis.length > 0 && orgMillis >= min &&  orgMillis <= max ){
 			text = msToStr(millis, true);
 		}
 		
@@ -206,12 +208,13 @@ $(function () {
 		onInputMillisecondsChange($(this), 'sampleTotalCount', 'sampleInterval', true);
 	});
 
-	setSelectOptionsFromArray('monitor-pin', device.pins);
+	setFormValues('monitor-pin', device.pins);
 	
 	$('input,select').on('change input', function(){
 		updateSubmitButtonState();
 	});
 	
 	updateSubmitButtonState();
+	
 	
 });

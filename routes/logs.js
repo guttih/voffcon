@@ -94,7 +94,7 @@ router.post('/pins', function(req, res) {
 	}
 });
 
-//render a page with list of users
+//render a page with list of logs
 router.get('/list', lib.authenticateUrl, function(req, res){
 	res.render('list-log');
 });
@@ -169,6 +169,18 @@ router.get('/list/:deviceID', lib.authenticateRequest, function(req, res){
 	}
 });
 
+router.delete('/list/:deviceId', lib.authenticateDeviceOwnerRequest, function(req, res){
+	var id = req.params.deviceId;
+	console.log('deleting:' + id)
+	LogItem.deleteAllDeviceRecords(id, function(err, result){
+		if(err !== null){
+			res.status(404).send({message:'unable to delete logItem', id:id});
+		} else {
+			res.status(200).send({id:id});
+		}
+	});
+});
+
 //listing all devices and which have logs and return them as a json array
 router.get('/device-list', lib.authenticatePowerRequest, function(req, res) {
 
@@ -223,13 +235,8 @@ router.delete('/:logID', lib.authenticateDeviceOwnerRequest, function(req, res){
 	
 });
 
-
-/*
-	todo: get pinstatus from device
-	save pinout to logs
-
-*/
-router.get('/pins/:deviceId', function(req, res){
+//	save pinout to logs
+router.get('/pins/:deviceId', function(req, res) {
 	var deviceId = req.params.deviceId;
 
 	Device.getById(deviceId, function(err, device){
@@ -267,8 +274,7 @@ router.get('/pins/:deviceId', function(req, res){
 				return console.error(err);
 			}
 			return body;
-		}
-			).pipe(res);
+		}).pipe(res);
 	});
 });
 

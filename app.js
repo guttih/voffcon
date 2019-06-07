@@ -43,6 +43,7 @@ var devices = require('./routes/devices');
 var controls = require('./routes/controls');
 var cards = require('./routes/cards');
 var logs = require('./routes/logs');
+var monitors = require('./routes/monitors');
 var addresses = lib.getAddresses(true);
 var subnets = lib.getSubnets(true);
 // Init App
@@ -173,6 +174,7 @@ app.use('/devices', devices);
 app.use('/controls', controls);
 app.use('/cards', cards);
 app.use('/logs', logs);
+app.use('/monitors', monitors);
 
 
 app.set('port', config.port);

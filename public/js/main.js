@@ -77,24 +77,40 @@ var str =  d.getDate() + "." + (d.getMonth()+1) + "." + d.getFullYear() + " " +
 return str;
 }
 
-function msToStr(duration) {
-	var milliseconds = parseInt((duration%1000)/100), 
-		seconds = parseInt((duration/1000)%60),
-		minutes = parseInt((duration/(1000*60))%60), 
-		hours   = parseInt((duration/(1000*60*60))%24),
-		days    = parseInt((duration/(1000*60*60*24)));
+/*
+leadingZeros(10, 4);      // 0010
+leadingZeros(9, 4);       // 0009
+leadingZeros(123, 4);     // 0123
+leadingZeros(10, 4, '-'); // --10*/
+function leadingZeros(n, width, z) {
+	z = z || '0';
+	n = n + '';
+	return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+  }
 
-	days   = (days   < 10) ? "0" + days : days;
-	hours   = (hours   < 10) ? "0" + hours : hours;
-	minutes = (minutes < 10) ? "0" + minutes : minutes;
-	seconds = (seconds < 10) ? "0" + seconds : seconds;
+function msToStr(durationInMillis, showMilliseconds) {
+	var milliseconds = parseInt((durationInMillis%1000)/1), 
+		seconds = parseInt((durationInMillis/1000)%60),
+		minutes = parseInt((durationInMillis/(1000*60))%60), 
+		hours   = parseInt((durationInMillis/(1000*60*60))%24),
+		days    = parseInt((durationInMillis/(1000*60*60*24)));
+	if (durationInMillis < 60000) {
+		//fixing precision problem
+		days=hours=minutes=0;
+	}
+
+	days         = leadingZeros(days, 2);
+	hours        = leadingZeros(hours, 2);
+	minutes      = leadingZeros(minutes, 2);
+	seconds      = leadingZeros(seconds, 2);
+	milliseconds = leadingZeros(milliseconds, 3);
+	
 	var str = "";
-	if (days > 0) {str+=days+" days ";}
-	if (hours > 0) {str+=hours+" hrs ";}
-	if (minutes > 0) {str+=minutes+" min ";}
-	str+=seconds+" sec";
-	return days + "d:" + hours + "h:" + minutes + "m:" + seconds + "s";
-	//return str;
+	str = days + "d:" + hours + "h:" + minutes + "m:" + seconds + "s";
+	if (showMilliseconds !== undefined && showMilliseconds === true){
+		str+= ':'+milliseconds + "ms";
+	}
+	return str;
 }
 
 function updateServerRunningtime(){
@@ -269,7 +285,8 @@ function deleteItem(routeText, id){
 				}
 			});
 		
-		});
+		}
+	);
 		
 }
 function showModalError(title, responce){

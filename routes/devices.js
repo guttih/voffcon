@@ -135,7 +135,7 @@ router.get('/pins/:deviceId', lib.authenticateRequest, function(req, res){
 			).pipe(res);
 	});
 });
-
+/* I Think it's ok to delete this
 router.get('/monitors/:deviceId', lib.authenticateRequest, function(req, res){
 	var deviceId = req.params.deviceId;
 
@@ -164,7 +164,7 @@ router.get('/monitors/:deviceId', lib.authenticateRequest, function(req, res){
 					}
 			).pipe(res);
 	});
-});
+});*/
 
 router.get('/pinout/:deviceId', lib.authenticateRequest, function(req, res){
 	var deviceId = req.params.deviceId;
@@ -736,7 +736,7 @@ router.get('/run/:deviceID', lib.authenticateDeviceOwnerUrl, function(req, res){
 							typeName:nameOfType
 						  };
 			var str = JSON.stringify(device);
-			res.render('run-device', { device:str });
+			res.render('run-device', { device:str, deviceId:device.id });
 		}
 	});
 });

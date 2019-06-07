@@ -136,7 +136,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:ad00f7de274ad60b7df8daa8a662cfedc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds or Updates <a class="el" href="class_pin_watch.html" title="Used to monitor a pin. Can monitor if a pin value changes more or less than something and can monitor...">PinWatch</a> If a <a class="el" href="class_pin_watch.html" title="Used to monitor a pin. Can monitor if a pin value changes more or less than something and can monitor...">PinWatch</a> with a specific <a class="el" href="class_g_pin.html" title="Class for handling GPIO pins Use it to read from or write to a pin ">GPin</a> number already exists in the list the values of the existing <a class="el" href="class_pin_watch.html" title="Used to monitor a pin. Can monitor if a pin value changes more or less than something and can monitor...">PinWatch</a> are updated. If a <a class="el" href="class_pin_watch.html" title="Used to monitor a pin. Can monitor if a pin value changes more or less than something and can monitor...">PinWatch</a> with a specific <a class="el" href="class_g_pin.html" title="Class for handling GPIO pins Use it to read from or write to a pin ">GPin</a> number does NOT exist in the list a new <a class="el" href="class_pin_watch.html" title="Used to monitor a pin. Can monitor if a pin value changes more or less than something and can monitor...">PinWatch</a> is added to the list.  <a href="#ad00f7de274ad60b7df8daa8a662cfedc">More...</a><br /></td></tr>
 <tr class="separator:ad00f7de274ad60b7df8daa8a662cfedc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afb3e77efaa71b7024860ca23f5795507"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_watch_list.html#afb3e77efaa71b7024860ca23f5795507">addTimer</a> (unsigned long minLogInterval)</td></tr>
-<tr class="memdesc:afb3e77efaa71b7024860ca23f5795507"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a timer with a specific interval  <a href="#afb3e77efaa71b7024860ca23f5795507">More...</a><br /></td></tr>
+<tr class="memdesc:afb3e77efaa71b7024860ca23f5795507"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a timer with a specific interval. Timer will get the pin number -1. So when deleting or updating timer use the pin number -1.  <a href="#afb3e77efaa71b7024860ca23f5795507">More...</a><br /></td></tr>
 <tr class="separator:afb3e77efaa71b7024860ca23f5795507"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a038d60c7787fb214ccf217524e6617f7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_watch_list.html#a038d60c7787fb214ccf217524e6617f7">addPinValueMonitoring</a> (<a class="el" href="class_g_pin.html">GPin</a> *gPin, int pinValueMargin, int sampleTotalCount, unsigned long sampleInterval)</td></tr>
 <tr class="memdesc:a038d60c7787fb214ccf217524e6617f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds and a pinWatch that monitors the value of the pin and checks if it changes same or more than is specified in the pinValueMargin parameter  <a href="#a038d60c7787fb214ccf217524e6617f7">More...</a><br /></td></tr>
@@ -169,10 +169,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:abedf32964ab15c41b4d6f115c6deedc9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resets all checks by updateing timers and resetting sampleSum and sampleCounts  <a href="#abedf32964ab15c41b4d6f115c6deedc9">More...</a><br /></td></tr>
 <tr class="separator:abedf32964ab15c41b4d6f115c6deedc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a21d780c26cbecb5d1dbd335b4c6712f0"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_watch_list.html#a21d780c26cbecb5d1dbd335b4c6712f0">updateMonitorFromJsonObject</a> (<a class="el" href="class_json_data.html">JsonData</a> *root, <a class="el" href="class_g_pins.html">GPins</a> *devicePins)</td></tr>
-<tr class="memdesc:a21d780c26cbecb5d1dbd335b4c6712f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">updates the list with values from <a class="el" href="class_json.html" title="A class for parsing json strings ">Json</a>  <a href="#a21d780c26cbecb5d1dbd335b4c6712f0">More...</a><br /></td></tr>
+<tr class="memdesc:a21d780c26cbecb5d1dbd335b4c6712f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the list with item values from <a class="el" href="class_json.html" title="A class for parsing json strings ">Json</a>  <a href="#a21d780c26cbecb5d1dbd335b4c6712f0">More...</a><br /></td></tr>
 <tr class="separator:a21d780c26cbecb5d1dbd335b4c6712f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4577e01e56e712449c1e733700bc88c3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4577e01e56e712449c1e733700bc88c3"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>deleteMonitorFromJsonObject</b> (<a class="el" href="class_json_data.html">JsonData</a> *root)</td></tr>
+<tr class="memitem:a4577e01e56e712449c1e733700bc88c3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_watch_list.html#a4577e01e56e712449c1e733700bc88c3">deleteMonitorFromJsonObject</a> (<a class="el" href="class_json_data.html">JsonData</a> *root)</td></tr>
+<tr class="memdesc:a4577e01e56e712449c1e733700bc88c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deletes list items provided by from <a class="el" href="class_json.html" title="A class for parsing json strings ">Json</a> array  <a href="#a4577e01e56e712449c1e733700bc88c3">More...</a><br /></td></tr>
 <tr class="separator:a4577e01e56e712449c1e733700bc88c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac3af3d488bdc27f8f6503884d049f97e"><td class="memItemLeft" align="right" valign="top">String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_watch_list.html#ac3af3d488bdc27f8f6503884d049f97e">toJson</a> ()</td></tr>
 <tr class="memdesc:ac3af3d488bdc27f8f6503884d049f97e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Exports all pinWatch values of the list to A <a class="el" href="class_json.html" title="A class for parsing json strings ">Json</a> array string.  <a href="#ac3af3d488bdc27f8f6503884d049f97e">More...</a><br /></td></tr>
@@ -483,7 +483,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>isCached</b></td></tr
       </table>
 </div><div class="memdoc">
 
-<p>Adds a timer with a specific interval </p>
+<p>Adds a timer with a specific interval. Timer will get the pin number -1. So when deleting or updating timer use the pin number -1. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">minLogInterval</td><td>How many milliseconds between positive checks (f.example how many milliseconds between logs)</td></tr>
@@ -491,6 +491,31 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>isCached</b></td></tr
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if a <a class="el" href="class_pin_watch.html" title="Used to monitor a pin. Can monitor if a pin value changes more or less than something and can monitor...">PinWatch</a> is added to the list, otherwise false</dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a4577e01e56e712449c1e733700bc88c3"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int PinWatchList::deleteMonitorFromJsonObject </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_json_data.html">JsonData</a> *&#160;</td>
+          <td class="paramname"><em>root</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Deletes list items provided by from <a class="el" href="class_json.html" title="A class for parsing json strings ">Json</a> array </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">root</td><td>The root <a class="el" href="class_json_data.html" title="Class for representing elements and objects in a json object. You can use it to browse and get values...">JsonData</a> object (must be a JSONTYPE::JSONTYPE_ARRAY)</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Number of items removed from the list.</dd></dl>
 
 </div>
 </div>
@@ -742,7 +767,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>isCached</b></td></tr
       </table>
 </div><div class="memdoc">
 
-<p>updates the list with values from <a class="el" href="class_json.html" title="A class for parsing json strings ">Json</a> </p>
+<p>Updates the list with item values from <a class="el" href="class_json.html" title="A class for parsing json strings ">Json</a> </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">root</td><td>The root object which can be an JSONTYPE_ARRAY or a JSONTYPE_OBJECT</td></tr>
@@ -762,7 +787,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>isCached</b></td></tr
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_pin_watch_list.html">PinWatchList</a></li>
-    <li class="footer">Generated on Mon Jun 3 2019 20:41:19 for Voffcon Esp32 device server by
+    <li class="footer">Generated on Thu Jun 6 2019 20:05:50 for Voffcon Esp32 device server by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

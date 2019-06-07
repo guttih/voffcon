@@ -108,7 +108,7 @@ function addToTable(headers, logs, clearOldValues){
 	for(i = 0; i<logs.length; i++){
 		row='<tr id="'+ logs[i].id +'">';
 		row+='<td class="datetime-td">' + 
-		' <a href="javascript:deleteLogItem(\''+ logs[i].id +'\');"><span class="glyphicon glyphicon glyphicon-remove" rel="tooltip" title="Delete this log record" style="color:red" aria-hidden="true"></span></a>' +
+		' <a href="javascript:deleteListItem(\'logs\',\''+ logs[i].id +'\');"><span class="glyphicon glyphicon glyphicon-remove" rel="tooltip" title="Delete this log record" style="color:red" aria-hidden="true"></span></a>' +
 
 		'<span>' +
 		formaTima(new Date(logs[i].datetime)); +'</span></td>';
@@ -149,12 +149,12 @@ function setDeviceLogsToTable(deviceLogs, clearOldValues){
 	addToTable(headers, logs, clearOldValues);
 }
 
-function deleteLogItem(logItemID){
+function deleteListItem(route,logItemID){
 	var sendObj = {
 			"id":logItemID
 		};
 
-	var url = SERVER+'/logs/'+logItemID;
+	var url = SERVER+'/'+route+'/'+logItemID;
 		var deleting = $.delete( url, sendObj);
 
 		deleting.done(function(data){
@@ -190,20 +190,39 @@ $(function () {
 		}).fail(function( data ) {
 			showModalErrorText("Logging error", "Unable to save device pin values to the log.");
 		});
-
-
-
-
-
-
-
-
-
-
+	});
+	
+	$('button.btn-delete-all-device-logs').click(function() {
+		
+		showModalConfirm('Delete all records', 'Are you sure you want to delete all records in this log?', 'Delete', 
+		function(){
+			var request = $.delete( SERVER+'/logs/list/'+device.id );
+			request.done(function( data ) {
+				getDeviceLogs(true);
+			}).fail(function( data ) {
+				showModalErrorText("Delete error", "Unable to delete all device records logs from this log.");
+			});
+		}
+	);
 
 
 
 
 		
+		
+		
+		
+	
+
+
+
+
+
+
+
+
+
+
 	});
+
 });

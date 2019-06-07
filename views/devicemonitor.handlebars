@@ -1,0 +1,46 @@
+<div class="row">
+	<h3 class="page-header pull-right">device monitors</h3>
+</div>
+<p>Device: "{{item.name}}".</p>
+
+{{#if errors}}
+      {{#each errors}}
+        <div class="alert alert-danger">{{msg}}</div>
+      {{/each}}
+{{/if}}
+<div class="row">
+	<p> </p>
+</div>
+<div class="row">
+	<div id = "device-list" class="device-list list-group">
+	<!-- listItems will be added here-->
+	</div>
+</div>
+{{#if device}} <!-- if you want to edit a specific user -->
+			<script type="text/javascript">
+			var device = {{{device}}};
+		</script>
+{{/if}}
+
+<table id="table-monitor" class="table table-bordered table-hover">
+	<thead>
+	</thead>
+	<tfoot>
+	</tfoot>
+	<tbody>
+	</tbody>
+</table>
+
+<button onclick="window.location.href='/monitors/register/{{deviceId}}'" class="btn btn-xs btn-default"> 
+	<span class="glyphicon glyphicon-plus"></span>&nbsp;Add monitor
+</button>
+
+<button onclick="window.location.href='/logs/device/{{deviceId}}'" class="btn btn-xs btn-default btn-monitor-pins"> 
+	<span class="glyphicon glyphicon-list"></span></span>&nbsp;View log 
+</button>
+<button class="btn btn-xs btn-danger btn-delete-all-device-monitors"> 
+	<span class="glyphicon glyphicon-trash"></span>&nbsp;Delete all monitors
+</button>
+
+<script src="/js/bootstrap.min.js"></script>	
+<script src="/js/devicemonitor.js"></script>	

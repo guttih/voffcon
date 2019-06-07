@@ -98,6 +98,7 @@ app.use(cookieParser());
 // Set Static Folder
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/ace-builds', express.static(path.join(__dirname, 'node_modules/ace-builds')));
+app.use('/docs',express.static(path.join(__dirname, 'docs') ));
 
 
 // Express Session

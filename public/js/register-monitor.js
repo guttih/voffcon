@@ -159,7 +159,7 @@ function onInputMillisecondsChange($input, formGroupClass, formGroupMultiplierCl
 		var multiplier = Number($('.'+formGroupMultiplierClass+' input').val());
 		if (millis.length > 0)
 		{
-			var num = Number(millis) * multiplier;
+			var num = orgMillis * multiplier;
 			millis = String(num);
 		}
 	}

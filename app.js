@@ -30,6 +30,7 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var lib = require('./utils/glib');
 var config = lib.getConfig();
+var eventQueue = require('./utils/eventQueue');
 
 ///////////////////// start mongo /////////////////////////
 var mongo = require('mongodb');
@@ -37,18 +38,40 @@ var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/voffcon');
 var db = mongoose.connection;
 
-var routes = require('./routes/index');
-var users = require('./routes/users');
-var devices = require('./routes/devices');
+var routes   = require('./routes/index');
+var users    = require('./routes/users');
+var devices  = require('./routes/devices');
 var controls = require('./routes/controls');
-var cards = require('./routes/cards');
-var logs = require('./routes/logs');
+var cards    = require('./routes/cards');
+var logs     = require('./routes/logs');
 var monitors = require('./routes/monitors');
+
+
 var addresses = lib.getAddresses(true);
 var subnets = lib.getSubnets(true);
 // Init App
 var app = express();
 
+///////////////////// TEST EVENTS START //////////////////////////
+var now = new Date();
+var timabil = 3000;
+var trigger = require('./models/triggeraction');
+var trigger1 = {id       : 't01',   actinId  : 'a01',   deviceId : 'd01',
+								date     : new Date(now.getTime()+timabil * 1),
+							  action   : { url: 'www.undri.is',       body: 'someBody1'}  };
+var trigger2 = {id       : 't02',   actinId  : 'a02',   deviceId : 'd02',
+								date     : new Date(now.getTime()+timabil * 2),
+							  action   : { url: 'www.mbl.is',       body: 'someBody2'}  };
+
+var trigger3 = {id       : 't03',   actinId  : 'a03',   deviceId : 'd03',
+								date     : new Date(now.getTime()+timabil * 3),
+							  action   : { url: 'www.visir.is',       body: 'someBody3'}  };
+
+var b;
+b = eventQueue.addTimer(trigger3);
+b = eventQueue.addTimer(trigger2);
+b = eventQueue.addTimer(trigger1);
+///////////////////// TEST EVENTS  END  //////////////////////////
 mongoose.connection.on('open', function () {
     mongoose.connection.db.listCollections().toArray(function (err, names) {
       if (err) {

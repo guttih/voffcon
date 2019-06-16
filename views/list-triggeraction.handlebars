@@ -1,0 +1,23 @@
+<div class="row">
+	<h3 class="page-header pull-right">Devices with trigger actions</h3>
+</div>
+<p>
+</p>
+
+{{#if errors}}
+      {{#each errors}}
+        <div class="alert alert-danger">{{msg}}</div>
+      {{/each}}
+{{/if}}
+<div class="row">
+	<p> </p>
+</div>
+<div class="row">
+	<div id = "device-list" class="device-list list-group">
+	<!-- listItems will be added here-->
+	</div>
+
+</div>
+
+<script src="/js/bootstrap.min.js"></script>	
+<script src="/js/list-triggeraction.js"></script>	

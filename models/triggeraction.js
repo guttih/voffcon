@@ -26,10 +26,41 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
 var TriggerActionSchema = mongoose.Schema({
-		id     : Schema.Types.ObjectId,
-		actinId : Schema.Types.ObjectId,
+		id       : Schema.Types.ObjectId,
+		actinId  : Schema.Types.ObjectId,
 		deviceId : Schema.Types.ObjectId,
-        date   : Number,
+                date     : Date,
+                /*
+                        When dateRule is:
+                        WEEKLY      : This value will contain a array of numbers representing the day of week.  Where Sunday is 0, Monday is 1, and so on.
+                        MONTHLY-LAST: This value will contain the number of days from last day of the current month.  When 0 then this fire will take place on last day.  When 1 then the fire will take place the day before last day.
+                */
+                dateData : String,
+                /*
+                        LOG-INSTANT  : Fires instantly after a new log arrives from a device
+                        ONES         : Fires ones, on a specified date and time.
+                        TIMELY       : Fires every specified time.  
+                                        Some examples: 
+                                                Date(             30000) :Will Fire every 30 seconds
+                                                Date(     5 * 60 * 1000) :Will fire every 5 minutes
+                                                Date(3 * 60 * 60 * 1000):Will fire every 3 hours
+
+                        DAILY        : Fires every day at a specified time (date part of date is ignored)
+                        WEEKLY       : Fires every week on the days listed in a array in dayData
+                        MONTHLY      : Fires ones a month.  Note if day is more than 28 then this will not fire in february.  When MONTHLY timer is suppose to fire near the last day of month use MONTHLY-LAST dateRule.
+                        YEARLY       : Fires ones a year.
+                        MONTHLY-LAST : Fires ones a month, but counting the days from the last day of the month.  F.example. if date is 1.1.2018 11:21:00 and dateData is 0.  Then this triggerAction will fire first on 30 jan 2018 and next on 28.2.1019.  In february 2020 (a leap year) this triggerAction would fire on the 29.2.2020 at 11:21.  If dateData is 1 then the fire will be the day before last day of month. 
+                */
+                dateRule : {type   : String,
+                            enum   : ['LOG-INSTANT','ONES','TIMELY','DAILY','WEEKLY','MONTHLY','YEARLY', 'MONTHLY-LAST'],
+                            default: 'ONES'},
+                /*      The date when this triggerAction expires*/
+                dateExpires : Date,
+                method      : {type   : String,
+                               enum   : ['GET','POST','DELETE'],
+                               default: 'GET'                 },
+                url         : String,
+                body        : String
 });
 
 var TriggerAction = module.exports = mongoose.model('TriggerAction', TriggerActionSchema);
@@ -48,7 +79,7 @@ TriggerAction.copyValues = function copyValues(triggerActionSchemaObject, dateAs
 		body  : String,
 		deviceId : triggerActionSchemaObject.deviceId
 	};
-}
+};
 
 module.exports.getById = function(id, callback){
 	TriggerAction.findById(id, callback);

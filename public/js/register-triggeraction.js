@@ -127,6 +127,7 @@ function setFormValues(){
 	onSelectYearOrMonthChange();
 	setDevicesSelectValues();
 	onSelectDeviceChange();
+	onSelectTypeChange();
 	
 }
 
@@ -159,6 +160,59 @@ var onSelectYearOrMonthChange = function onSelectYearOrMonthChange(){
 	console.log(devices);
 };
 
+/**
+ * Shows or hides date and time select elements
+ * @param {Boolean} showDate if true year, month and day selects will be shown, otherwise hidden
+ * @param {Boolean} showTime  if true hour, minute and second selects will be shown, otherwise hidden
+ */
+function showDateOrTime(showDate, showTime, showWeekDays){
+	$('.last-day').hide();
+
+	if (showDate || showTime) {
+			$('.date-and-time-selects').show();
+		}
+	else {
+			$('.date-and-time-selects').hide();
+			return;
+	}
+
+	if (showDate){
+		$('.date-select').show();
+	} else {
+		$('.date-select').hide();
+	}
+	if (showTime){
+		$('.time-select').show();
+	} else {
+		$('.time-select').hide();
+	}
+	if (showWeekDays){
+		$('.year,.month,.day').hide();
+		$('.weekdays').show();
+	} else {
+		$('.weekdays').hide();
+	}
+	
+}
+
+var onSelectTypeChange = function onSelectTypeChange(){
+	var val = $('#triggerAction-type').val();
+		switch(val){
+			case "ONES":		    showDateOrTime(true ,true, false);      break;
+			case "TIMELY":          showDateOrTime(false,true, false);      break;
+			case "DAILY":		    showDateOrTime(false,true, false);      break;
+			case "WEEKLY":		    showDateOrTime(true , true,true );  	break;
+			case "MONTHLY":		    showDateOrTime(true , true, false);
+									$('.year,.month').hide();           	break;
+			case "MONTHLY-LAST":	showDateOrTime(true ,true, false);
+									$('.year,.month,.day').hide();
+									$('.last-day').show();					break;
+			case "YEARLY":			showDateOrTime(true , true, false);
+									$('.year').hide();           			break;
+			case "LOG-INSTANT":		showDateOrTime(false,false,false);  	break;
+		}
+}
+
 $(function () {
 	
 	$("#btn-submit-triggerActionForm").click(function() {
@@ -173,13 +227,7 @@ $(function () {
 	});
 	
 	$('#triggerAction-type').on('input', function(){
-		var val = $(this).val();
-		$('.date-and-time-selects').show();
-		switch(val){
-			case "LOG-INSTANT": 
-								$('.date-and-time-selects').hide();
-								break;
-		}
+		onSelectTypeChange();
 	});
 
 	$('#triggerAction-sampleInterval').on('input', function(){

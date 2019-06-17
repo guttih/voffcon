@@ -28,20 +28,20 @@
 		<label>Trigger action type</label>
 		<select id="triggerAction-type" name="Type" class="access-select form-control" required>
 			<option title="No need to provide additional data"      value="LOG-INSTANT" selected="">After each new record</option>
-			<option title="Provide a date and time when the action should fire"                 value="ONES"        >Ones</option>
+			<option title="Provide a date and time when the action should fire"                 value="ONES"        >Ones at</option>
 			<option title="Provide how much time must pass between action fires" value="TIMELY"      >Every</option>
-			<option title="Provide the hour, and second when the action should fire every day"            value="DAILY"       >Every day</option>
-			<option title="Provide the weekdays hour and second when the action should fire"    value="WEEKLY"      >Every week</option>
-			<option title="Provide the day hour and second when the action should fire"         value="MONTHLY"     >Every month</option>
-			<option title="Provide the number of days before the last day of the month and hour and second when the action should fire" value="MONTHLY-LAST">Every month, days before the last of the day of the month</option>
-			<option title="Provide the month, hour and second"      value="YEARLY"      >Every year</option>
+			<option title="Provide the hour, and second when the action should fire every day"            value="DAILY"       >Every day at</option>
+			<option title="Provide the weekdays hour and second when the action should fire"    value="WEEKLY"      >Every week at</option>
+			<option title="Provide the day hour and second when the action should fire"         value="MONTHLY"     >Every month at</option>
+			<option title="Provide the number of days before the last day of the month and hour and second when the action should fire" value="MONTHLY-LAST">Every month at, days before the last of the day of the month</option>
+			<option title="Provide the month, hour and second"      value="YEARLY"      >Every year at</option>
 			
 		</select>
 		<p class="triggerAction-input-text"></p>
 	</div>
 	<div class="date-and-time-selects">
-			<label class="form-label">Year</label>
-			<select id="triggerAction-year" name="year" class="inline-form-control access-select " required>
+			<label class="form-label date-select year">Year</label>
+			<select id="triggerAction-year" name="year" class="inline-form-control access-select date-select year" required>
 				<option value="2019" selected="">2019</option>
 				<option value="2020"            >2020</option>
 				<option value="2021"            >2021</option>
@@ -49,8 +49,8 @@
 				<option value="2023"            >2023</option>
 				<option value="2024"            >2024</option>
 			</select>
-			<label class="form">Month</label>
-			<select id="triggerAction-month" name="month" class="inline-form-control" required>
+			<label class="form date-select month">Month</label>
+			<select id="triggerAction-month" name="month" class="inline-form-control date-select month" required>
 				<option value="0" selected="">January</option>
 				<option value="1" >February</option>
 				<option value="2" >Mars</option>
@@ -64,14 +64,49 @@
 				<option value="10" >November</option>
 				<option value="11" >December</option>
 			</select>
-			<label class="form">Day</label>
-			<select id="triggerAction-day" name="day" class="inline-form-control" required></select>
-			<label class="form">Hour</label>
-			<select id="triggerAction-hour" name="hour" class="inline-form-control" required></select>
-			<label class="form">Minute</label>
-			<select id="triggerAction-minute" name="minute" class="inline-form-control" required></select>
-			<label class="form">Second</label>
-			<select id="triggerAction-second" name="second" class="inline-form-control" required></select>
+			<label class="form date-select day">Day</label>
+			<select id="triggerAction-day" name="day" class="inline-form-control date-select day" required></select>
+			<span class="last-day">
+				<label class="form">Days before last day</label>
+				<select id="triggerAction-last-day" name="Last day" class="inline-form-control">
+					<option value="0" selected="">0 days. (Last day of month)</option>
+					<option value="1" >1 day</option>
+					<option value="2" >2 days</option>
+					<option value="3" >3 days</option>
+					<option value="4" >4 days</option>
+					<option value="5" >5 days</option>
+					<option value="6" >6 days</option>
+					<option value="7" >7 days</option>
+					<option value="8" >8 days</option>
+					<option value="9" >9 days</option>
+					<option value="10">10 days</option>
+					<option value="11">11 days</option>
+					<option value="12">12 days</option>
+				</select>
+			</span>
+			
+			<label class="form time-select hour">Hour</label>
+			<select id="triggerAction-hour" name="hour" class="inline-form-control time-select hour" required></select>
+			<label class="form time-select minute">Minute</label>
+			<select id="triggerAction-minute" name="minute" class="inline-form-control time-select minute" required></select>
+			<label class="form  time-select second">Second</label>
+			<select id="triggerAction-second" name="second" class="inline-form-control time-select second" required></select>
+			<div class="form-check form-check-inline weekdays">
+				<input class="form-check-input" type="checkbox" id="sunday"    value="0">
+				<label class="form-check-label"  for="sunday">sunday</label>
+				<input class="form-check-input" type="checkbox" id="monday"    value="1">
+				<label class="form-check-label"  for="sunday">monday</label>
+				<input class="form-check-input" type="checkbox" id="tuesday"   value="2">
+				<label class="form-check-label"  for="sunday">tuesday</label>
+				<input class="form-check-input" type="checkbox" id="wednesday" value="3">
+				<label class="form-check-label"  for="sunday">wednesday</label>
+				<input class="form-check-input" type="checkbox" id="thursday"  value="4">
+				<label class="form-check-label"  for="sunday">thursday</label>
+				<input class="form-check-input" type="checkbox" id="friday"    value="5">
+				<label class="form-check-label"  for="sunday">friday</label>
+				<input class="form-check-input" type="checkbox" id="saturday"  value="6">
+				<label class="form-check-label"  for="sunday">saturday</label>
+			</div>
 	</div>
 	<div class="form-group method">
 		<label>Method</label>
@@ -83,7 +118,7 @@
 		<p class="triggerAction-input-text"></p>
 	</div>
 	<div class="form-group device">
-		<label>Devices</label>
+		<label>Device to extract data from if needed</label>
 		<select id="triggerAction-device" name="Device" class="access-select form-control" required>
 			<option title="Idblabla"      value="idBlabla" selected="">Name of the device</option>
 		</select>

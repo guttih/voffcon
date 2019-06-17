@@ -317,3 +317,20 @@ button.btn-log-pins, button.btn-log-monitors {
     -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
     transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
 }
+
+
+.weekdays input {
+	margin-left:22px;
+}
+.weekdays input:first-child {
+	margin-left:2px;
+}
+
+div.weekdays {
+	border: 1px solid lightgray;
+	padding:6px;
+	padding-bottom: 3px;
+	margin-top:8px;
+	margin-bottom:8px;
+	border-radius: 4px;
+  }

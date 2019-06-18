@@ -95,7 +95,7 @@ function doSubmit(){
 	console.log(url);
 	sendData(url, sendObj, function(data){
 		//successfully saved this triggerAction
-		window.location.href = '/triggeractions';
+		window.location.href = '/triggeractions/list';
 	}, showError);
 }
 
@@ -124,7 +124,6 @@ function setNumberSelectValues($elm, minNumber, maxNumber, numberSelected) {
 function setDevicesOptions(devices, deviceId){
 	select = $('#triggerAction-deviceId');	
 	select.find('option').remove();
-	console.log(devices);
 	devices.forEach(element => {
 		var opt = new Option(element.name, element.id);
 		opt.setAttribute("title", element.description);
@@ -135,9 +134,23 @@ function setDevicesOptions(devices, deviceId){
 	});
 }
 
-function setFormTriggerActionValues(triggerAction){
+function createOrSelect($elm,value){
+	$elm.val(value);
+	if ($elm.val() === value) {
+		return;  //value existed, so we're done
+	}
+	var opt = new Option(value, value, true);
+	$elm.prepend(opt);
+
+}
+
+function setFormTriggerActionValues(triggerAction) {
 	console.log(triggerAction.date);
 	var date = new Date(triggerAction.date);
+	createOrSelect($('#triggerAction-year'),date.getUTCFullYear());
+	$('#triggerAction-month').val(date.getUTCMonth());
+	onSelectYearOrMonthChange();
+	$('#triggerAction-day').val(date.getUTCDate());
 	$('#triggerAction-hour').val(date.getUTCHours());
 	$('#triggerAction-minute').val(date.getUTCMinutes());
 	$('#triggerAction-second').val(date.getUTCSeconds());
@@ -148,18 +161,22 @@ function setFormTriggerActionValues(triggerAction){
 	$('#triggerAction-body').val(triggerAction.body);
 	$('#triggerAction-description').val(triggerAction.description);
 	
-	var weekdays = triggerAction.dateData.split(';');
-	weekdays.forEach(item => {
-		console.log(item);
-		$('.weekdays :input[value="'+item+'"]').prop( "checked", true );
-	});
+	if (triggerAction.dateData !== undefined && triggerAction.dateData !== null){
+		var weekdays = triggerAction.dateData.split(';');
+		weekdays.forEach(item => {
+			console.log(item);
+			$('.weekdays :input[value="'+item+'"]').prop( "checked", true );
+		});
+	}
 
 }
 function setFormValues(){
+	var date = new Date();
+	setNumberSelectValues($('#triggerAction-year'),   date.getUTCFullYear(), date.getUTCFullYear()+10, date.getUTCFullYear());
 	setNumberSelectValues($('#triggerAction-hour'),   0, 23, 0);
 	setNumberSelectValues($('#triggerAction-minute'), 0, 59, 0);
 	setNumberSelectValues($('#triggerAction-second'), 0, 59, 0);
-	onSelectYearOrMonthChange();
+	
 	
 	var gotTriggerAction = typeof triggerAction !== 'undefined' && triggerAction !== 'undefined';
 	var gotDevices       = typeof devices       !== 'undefined' && devices       !== 'undefined';
@@ -168,6 +185,8 @@ function setFormValues(){
 		console.log(triggerAction);
 		id = triggerAction.deviceId;
 		setFormTriggerActionValues(triggerAction);
+	} else {
+		onSelectYearOrMonthChange();
 	}
 	
 	if (gotDevices) {
@@ -201,7 +220,7 @@ var onSelectYearOrMonthChange = function onSelectYearOrMonthChange(){
 	var year = Number($('#triggerAction-year').find(':selected').val());
 	var numberOfDays = numberOfDaysInMonth(year, month);
 	var selectedDay = Number($('#triggerAction-day').find(':selected').val());
-	if (selectedDay > numberOfDays) {
+	if (Number.isNaN(selectedDay) || selectedDay > numberOfDays) {
 		selectedDay = 1;
 	}
 	setNumberSelectValues($('#triggerAction-day'), 1, numberOfDays, selectedDay);

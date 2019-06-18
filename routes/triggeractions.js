@@ -224,6 +224,27 @@ var utilParser = {
 		//All values are valid
 		return false;
 	},
+	
+	/**
+	 * Checks body part of a request has all the required values to
+	 * create a TriggerAction object of the type ONES.
+	 * Returns false if no errors found
+	 * Returns array of error objects with a msg and a param part
+	 * @param {Object} body The body of a post request to check 
+	 */
+	checkTriggerActionBodyOnes : function checkTriggerActionBodyOnes(body){
+		var errors = [];
+		error = this.checkTriggerActionBodyDate(body);        if (error) { return error; }
+		error = this.checkTriggerActionBodyTime(body);        if (error) { return error; }
+		error = this.checkTriggerActionBodyUrl(body);         if (error) { return error; }
+		error = this.checkTriggerActionBodyBody(body);        if (error) { return error; }
+		error = this.checkTriggerActionBodyMethod(body);      if (error) { return error; }
+		error = this.checkTriggerActionBodyDescription(body); if (error) { return error; }
+		
+	
+		//All values are valid
+		return false;
+	},
 
 	/**
 	 * Checks if a body part of a post request has all the required values to
@@ -236,6 +257,8 @@ var utilParser = {
 		var errors = [];
 		switch(body.type) {
 			case "WEEKLY": return this.checkTriggerActionBodyWeekly(body);
+			case "ONES"  : return this.checkTriggerActionBodyOnes(body);
+			
 		}
 		return [{msg:'Type is missing or invalid', param:'type', value:undefined}];
 	},
@@ -246,20 +269,33 @@ var utilParser = {
 	 */
 	newTriggerAction : function newTriggerAction(body){
 		switch(body	.type) {
+			case 'ONES': 
+								
+								return new TriggerAction({
+															deviceId   : body.deviceId,
+															type       : body.type,
+															method     : body.method,
+															url        : body.url,
+															body       : body.body,
+															description: body.description,
+															date       : new Date(Date.UTC(body.year, body.month, body.day,
+																				body.hour, body.minute,body.second))
+														});
 			case 'WEEKLY': 
 								
 								return new TriggerAction({
-									deviceId   : body.deviceId,
-									type       : body.type,
-									method     : body.method,
-									url        : body.url,
-									body       : body.body,
-									date       : new Date(	((Number(body.hour   ))*60*60*1000) +
-													    	((Number(body.minute ))   *60*1000) +
-													    	((Number(body.second ))      *1000)   ),
-									dateData   : body.weekdays,
-									description: body.description
-								});
+															deviceId   : body.deviceId,
+															type       : body.type,
+															method     : body.method,
+															url        : body.url,
+															body       : body.body,
+															dateData   : body.weekdays,
+															description: body.description,
+															date       : new Date(	((Number(body.hour   ))*60*60*1000) +
+																					((Number(body.minute ))   *60*1000) +
+																					((Number(body.second ))      *1000)   )
+															
+														});
 		}
 	}
 };  //utils
@@ -572,16 +608,16 @@ router.addTriggerAction = function addTriggerAction(req, res, id) {
 			}
 		});
 	} else {
-		TriggerAction.modify(id, values, function (err, result) {
+		TriggerAction.modify(id, TriggerAction.copyValues(newTriggerAction), function (err, result) {
 			if (err || result === null || result.ok !== 1) {//(result.ok===1 result.nModified===1)
 				req.flash('error', ' unable to update');
 			} else {
 				if (result.nModified === 0) {
-					req.flash('success_msg', 'Trigger action is unchanged!');
+					res.status(200).json({success: "Trigger action is unchanged",id: id});
 				} else {
-					req.flash('success_msg', 'Trigger action updated!');
+					res.status(200).json({success: "Trigger action updated.",id: id});
 				}
-				res.redirect('/list');
+				//res.redirect('/list');
 			}
 		});
 	}
@@ -592,18 +628,7 @@ router.post('/register', lib.authenticatePowerRequest, function (req, res) {
 	req.checkBody('type'       ,'Type is missing').notEmpty();
 	req.checkBody('description', 'Description is missing').notEmpty();
 	req.checkBody('url'       , 'Url is missing').notEmpty();
-	//req.checkBody('description', 'description is required').notEmpty();
-/*
-	var pinNumber = req.body.pin;
-	if (pinNumber !== undefined && pinNumber === '-1') {
-		req.checkBody('minLogInterval', 'minLogInterval is missing').isNumeric({ gt: -1, lt: 1024 });
-	} else { // not a timer, so we will need to verify all values
-		req.checkBody('minLogInterval', 'minLogInterval is missing').isNumeric({ gt: -1, lt: 1024 });
-		req.checkBody('pinValueMargin', 'pinValueMargin is missing').isNumeric({ gt: -1 });
-		req.checkBody('sampleInterval', 'sampleInterval is missing').isNumeric({ gt: -1 });
-		req.checkBody('sampleTotalCount', 'sampleTotalCount is missing').isInt({ gt: -1 });
-	}
-*/
+	req.checkBody('description', 'description is required').notEmpty();
 	//var triggerActionId = req.params.triggerActionId;
 	var errors = req.validationErrors();
 	if (!errors)
@@ -628,6 +653,40 @@ router.post('/register', lib.authenticatePowerRequest, function (req, res) {
 		} else {
 			//No need to check device values because there are no tokens referring ot it.
 			router.addTriggerAction(req, res);
+		}
+	}
+});
+
+router.post('/register/:triggerActionId', lib.authenticatePowerRequest, function (req, res) {
+
+	req.checkBody('type'       ,'Type is missing').notEmpty();
+	req.checkBody('description', 'Description is missing').notEmpty();
+	req.checkBody('url'       , 'Url is missing').notEmpty();
+	req.checkBody('description', 'description is required').notEmpty();
+	var id = req.params.triggerActionId;
+	var errors = req.validationErrors();
+	if (!errors)
+	{
+		errors = utils.areTriggerActionErrors(req.body);
+	}
+	if (errors) {
+		res.status(422).json(errors);
+	} else {
+		if (utilParser.areAnyDeviceTokens(req.body.url) || utilParser.areAnyDeviceTokens(req.body.body)) {
+			Device.getById(req.body.deviceId, function (err, device) {
+				if (err || device === null) {
+					res.status(404).json( [{msg:'Device not found in database!', param:'deviceId', value:req.body.deviceId}]);
+				} else if (utilParser.areAnyDevicePinTokens(req.body.url) || utilParser.areAnyDevicePinTokens(req.body.body)) {
+					//Get device pins so se can check if the device has the pin number referred to in the token
+					router.addTriggerAction(req, res, id);
+				} else {
+					router.addTriggerAction(req, res, id);
+				}
+					 
+			});
+		} else {
+			//No need to check device values because there are no tokens referring ot it.
+			router.addTriggerAction(req, res, id);
 		}
 	}
 });

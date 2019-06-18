@@ -94,7 +94,7 @@ module.exports.getById = function(id, callback){
 module.exports.devicesMonitorCount = function(callback){
         // more about aggregate
         // http://excellencenodejsblog.com/mongoose-aggregation-count-group-match-project/
-        Monitor.aggregate([
+        TriggerAction.aggregate([
                 {
                     $group: {
                         _id: '$deviceId',  //$region is the column name in collection
@@ -102,4 +102,15 @@ module.exports.devicesMonitorCount = function(callback){
                     }
                 }
             ], callback);
+};
+
+module.exports.modify = function (id, newValues, callback){
+	//$set
+	var val = {$set: newValues};
+	TriggerAction.update({_id: id}, val, callback);
+};
+
+module.exports.delete = function (id, callback){
+	
+	TriggerAction.findByIdAndRemove(id, callback);
 };

@@ -196,14 +196,25 @@ function setFormValues(){
 
 	onSelectDeviceChange();
 	onSelectTypeChange();
+	onSelectMethodChange();
 }
 
 var checkTimer;
-function updateSubmitButtonState(){
+var updateSubmitButtonState = function updateSubmitButtonState(){
 	clearTimeout(checkTimer);
 	checkTimer=setTimeout(function(){
 		var form = document.getElementById('triggerActionForm');
+		var type = $('#triggerAction-type').val();
+		var method = $('#triggerAction-method').val();
+		if (method === 'GET'){
+			$('#triggerAction-body').attr('required',false);
+		} else {
+			$('#triggerAction-body').attr('required',true);
+		}
 		var isValid = form.checkValidity();
+		if (isValid && type === 'WEEKLY' ){
+			isValid = $("input[type=checkbox]:checked").length > 0;
+		}
 		$( '#btn-submit-triggerActionForm').prop('disabled', !isValid);
 	}, 300);
 }	
@@ -261,11 +272,21 @@ function showDateOrTime(showDate, showTime, showWeekDays){
 	
 }
 
+var onSelectMethodChange = function onSelectMethodChange(){
+	var val = $('#triggerAction-method').val();
+		if (val === 'GET') {
+			$('.body').hide();
+		} else {
+			$('.body').show();
+		}
+}
+
 var onSelectTypeChange = function onSelectTypeChange(){
 	var val = $('#triggerAction-type').val();
 		switch(val){
 			case "ONES":		    showDateOrTime(true ,true, false);      break;
-			case "TIMELY":          showDateOrTime(false,true, false);      break;
+			case "TIMELY":          
+									showDateOrTime(false,true, false);      break;
 			case "DAILY":		    showDateOrTime(false,true, false);      break;
 			case "WEEKLY":		    showDateOrTime(true , true,true );  	break;
 			case "MONTHLY":		    showDateOrTime(true , true, false);
@@ -296,20 +317,16 @@ $(function () {
 		onSelectTypeChange();
 	});
 
-	$('#triggerAction-sampleInterval').on('input', function(){
-		onInputMillisecondsChange($(this), 'sampleInterval', 'sampleTotalCount', false, true);
-	});
-	$('#triggerAction-sampleTotalCount').on('input', function(){
-		onInputMillisecondsChange($(this), 'sampleTotalCount', 'sampleInterval', true);
+	$('#triggerAction-method').on('change', function() {
+		onSelectMethodChange();
+		
 	});
 
 	setFormValues();
 	
-	$('input,select').on('change input', function(){
+	$('input,select,textarea').on('change input', function(){
 		updateSubmitButtonState();
 	});
 	
 	updateSubmitButtonState();
-	
-	
 });

@@ -24,15 +24,254 @@ var request = require('request');
 var lib = require('../utils/glib');
 var TriggerAction = require('../models/triggerAction');
 var Device = require('../models/device');
+/**
+ * Helper functions
+ */
+var utilParser = {
+	validTokens : ['DEVICE_ID','DEVICE_URL','DATE','TIME','PIN_VALUE'],
 
+	/**
+	 * Checks any tokens need to be replaced with values from a device.
+	 * @param {String} text 
+	 * @before Assumes assumes that all tokens are valid.
+	 * @returns  true if any tokens in text start with '<<DEVICE_' or '<<PIN_VALUE'
+	 */
+	areAnyDeviceTokens : function areAnyDeviceTokens(text) {
+		return text.indexOf('<<DEVICE_')>-1 || text.indexOf('<<PIN_VALUE')>-1 ;
+	},
 
-router.get('/register', lib.authenticatePowerUrl, function(req, res){
+	/**
+	 * Checks any tokens need to be replaced with device pin values from a device.
+	 * @param {String} text 
+	 * @before Assumes assumes that all tokens are valid.
+	 * @returns  true if any tokens in text start with '<<PIN_VALUE'
+	 */
+	areAnyDevicePinTokens : function areAnyDevicePinTokens(text) {
+		return text.indexOf('<<PIN_VALUE')>-1 ;
+	},
+
+	 /**
+	 * Counts number of valid tokens in text if all are valid.
+	 * @param {String} text 
+	 * @returns  number of valid tokens found.
+	 * @returns  0  If there are no tokens found.
+	 * @returns -1 If any of the tokens found are invalid.
+	 */
+	countIfAllTokensAreValid : function countIfAllTokensAreValid(text){
+		var ret = 0;
+		var indexStart = text.indexOf('<<');
+		while (indexStart > -1) {
+			indexStart+=2;
+			var indexEnd = text.indexOf('>>', indexStart);
+			if (indexEnd < 0) { return -1; }
+			var tokenToCheck = text.substr(indexStart, indexEnd - indexStart);
+			var tokenIndexInArray = -1;
+			this.validTokens.forEach( function(item, index) {
+				if (tokenToCheck.indexOf(item) === 0) {
+					tokenIndexInArray = index;
+				}
+			});
+
+			if (tokenIndexInArray === -1) { return -1; }
+
+			if (this.validTokens[tokenIndexInArray] === 'PIN_VALUE') {
+				var strNum = tokenToCheck.substr(9);
+				if (strNum.length < 1    || Number.isNaN(strNum) || 
+					Number(strNum) < 0   || Number(strNum)> 99     ) {
+					return -1;
+				}
+			}
+			ret++;
+			text = text.substr(indexEnd+2);
+			indexStart = text.indexOf('<<');
+		}
+		return ret;
+	}
+	
+};
+ var utils = {
+	
+	checkTriggerActionBodyMethod: function checkTriggerActionBodyMethod(body) {
+		if (body.method === undefined || body.method.length < 3){
+			return [{msg:'Method is missing', param:'method', value:undefined}];
+		}
+		
+		var validMethod = body.method === 'GET' || body.method === 'POST' || body.method === 'DELETE';
+		if (!validMethod) {
+			return [{msg:'Method is invalid', param:'method', value:body.method}];
+		}
+
+		return false;
+	},
+
+	checkTriggerActionBodyDescription: function checkTriggerActionBodyDescription(body) {
+		if (body.description === undefined || body.description.length < 3){
+			return [{msg:'Description is missing', param:'description', value:undefined}];
+		}
+		return false;
+	},
+
+	checkTriggerActionBodyUrl : function checkTriggerActionBodyUrl(body){
+		if (body.url === undefined || body.url.length < 1){
+			return [{msg:'Url is missing', param:'url', value:undefined}];
+		}
+
+		var count = utilParser.countIfAllTokensAreValid(body.url);
+		if (count > 0 && utilParser.areAnyDeviceTokens(body.url)){
+			if (body.deviceId === undefined) {
+				return [{msg:'Device id is missing and there are one or more tokens which need it.', param:'device', value:undefined}];
+			}
+			if (!body.deviceId.match(/^[0-9a-fA-F]{24}$/)) {
+				return [{msg:'Device id is invalid and there are one or more tokens which need it.', param:'device', value:undefined}];    
+			}
+		}
+		if (count < 0) {
+			return [{msg:'One or more tokens in url are invalid', param:'url', value:undefined}];
+		}
+
+		return false;
+	},
+
+	checkTriggerActionBodyBody : function checkTriggerActionBodyBody(body){
+		if (body.body === undefined || body.body.length < 1){
+			return [{msg:'Body is missing', param:'body', value:undefined}];
+		}
+
+		var count = utilParser.countIfAllTokensAreValid(body.body);
+		if (count < 0) {
+			return [{msg:'One or more tokens in body are invalid', param:'body', value:undefined}];
+		}
+		return false;
+	},
+
+	/**
+	 * Checks if a variable in body exits and has valid values
+	 * @param {String} variableName 
+	 * @param {Number} minValue 
+	 * @param {Number} maxValue 
+	 */
+	checkBodyVariableNumber : function checkBodyVariableNumber(body,variableName, minValue, maxValue) {
+		var errors = [];
+
+		if (body[variableName] === undefined || body[variableName].length < 1){
+			errors.push({msg:variableName.charAt(0).toUpperCase() + variableName.slice(1)+' is missing', param:variableName, value:undefined});
+		}
+		if (Number.isNaN(body[variableName])) {
+			errors.push({msg:variableName.charAt(0).toUpperCase() + variableName.slice(1)+' is a invalid number', param:variableName, value:undefined});
+		} else if (body[variableName] < minValue || body[variableName] > maxValue) {
+			errors.push({msg:variableName.charAt(0).toUpperCase() + variableName.slice(1)+' is a out of range',   param:variableName, value:body[variableName]});
+		}
+
+		if (errors.length > 0) {return errors;}
+		return false;
+	},
+
+	checkTriggerActionBodyDate : function checkTriggerActionBodyDate(body)
+	{
+		var errors = [];
+		errors = this.checkBodyVariableNumber(body, 'year' , 1970, 3000); if (errors.length > 0 ) {return errors;}
+		errors = this.checkBodyVariableNumber(body, 'month', 0   , 11  ); if (errors.length > 0 ) {return errors;}
+		errors = this.checkBodyVariableNumber(body, 'day'  , 1   , 31  ); if (errors.length > 0 ) {return errors;}
+		return false;
+	},
+
+	checkTriggerActionBodyTime : function checkTriggerActionBodyTime(body)
+	{
+		var errors = [];
+		errors = this.checkBodyVariableNumber(body, 'hour',   0, 23); if (errors.length > 0 ) {return errors;}
+		errors = this.checkBodyVariableNumber(body, 'minute', 0, 59); if (errors.length > 0 ) {return errors;}
+		errors = this.checkBodyVariableNumber(body, 'second', 0, 59); if (errors.length > 0 ) {return errors;}
+		return false;
+	},
+
+	/**
+	 * Checks body part of a request has all the required values to
+	 * create a TriggerAction object of the type WEEKLY.
+	 * Returns false if no errors found
+	 * Returns array of error objects with a msg and a param part
+	 * @param {Object} body The body of a post request to check 
+	 */
+	checkTriggerActionBodyWeekly : function checkTriggerActionBodyWeekly(body){
+		if (body.weekdays === undefined){
+			return [{msg:'No weekdays specified', param:'weekdays', value:undefined}];
+		}
+		var weekDays = body.weekdays.split(';');
+		if (weekDays.length < 1){
+			return [{msg:'Weekday missing, you need to specify at least one', param:'weekdays', value:undefined}];
+		} 
+		else {
+			//we got some weekdays now wee need to check if all are in range 0 - 6
+			var ok = false;
+			var num,iError;
+			for(var i = 0; i<weekDays.length; i++) {
+				num = weekDays[i];
+				ok = num > -1 && num < 7;
+				if (!ok){
+					iError = num;
+					break;
+				}
+			}
+			if (!ok){
+				return[{msg:'Weekday is invalid', param:'weekdays', value:iError}];	
+			}
+			error = this.checkTriggerActionBodyTime(body);        if (error) { return error; }
+			error = this.checkTriggerActionBodyUrl(body);         if (error) { return error; }
+			error = this.checkTriggerActionBodyBody(body);        if (error) { return error; }
+			error = this.checkTriggerActionBodyMethod(body);      if (error) { return error; }
+			error = this.checkTriggerActionBodyDescription(body); if (error) { return error; }
+			
+		}
+		//All values are valid
+		return false;
+	},
+
+	/**
+	 * Checks if a body part of a post request has all the required values to
+	 * create a TriggerAction object.
+	 * @param {Object} body The body of a post request to check 
+	 * @returns false if no errors found
+	 * @returns Array of error objects with a msg and a param part
+	 */
+	areTriggerActionErrors : function areTriggerActionErrors(body){
+		var errors = [];
+		switch(body.type) {
+			case "WEEKLY": return this.checkTriggerActionBodyWeekly(body);
+		}
+		return [{msg:'Type is missing or invalid', param:'type', value:undefined}];
+	},
+	/**
+	 * creates a new TriggerAction object form req.body values.
+	 * @param {Object} body req.body object 
+	 * @returns a new TriggerAction object.  Returns undefined if unable to create the object from body values.
+	 */
+	newTriggerAction : function newTriggerAction(body){
+		switch(body	.type) {
+			case 'WEEKLY': 
+								
+								return new TriggerAction({
+									deviceId   : body.deviceId,
+									type       : body.type,
+									method     : body.method,
+									url        : body.url,
+									body       : body.body,
+									date       : new Date(	((Number(body.hour   ))*60*60*1000) +
+													    	((Number(body.minute ))   *60*1000) +
+													    	((Number(body.second ))      *1000)   ),
+									dateData   : body.weekdays,
+									description: body.description
+								});
+		}
+	}
+};  //utils
+
+router.getRegisterPage = function getRegisterPage(req, res, id){
+
 	Device.listByOwnerId(req.user._id, function(err, deviceList){
 		
 		var arr = [];
 		var item;
 		var isOwner;
-		for(var i = 0; i < deviceList.length; i++){
+		for(var i = 0; i < deviceList.length; i++) {
 			item = deviceList[i];
 			isOwner = lib.findObjectID(item._doc.owners, req.user._id);
 
@@ -44,15 +283,38 @@ router.get('/register', lib.authenticatePowerUrl, function(req, res){
 								isOwner:isOwner
 							});
 		}
-					var str = JSON.stringify(arr);
-		//res.json(arr);
-		res.render('register-triggeraction', {devices:str});
+		var deviceStr = JSON.stringify(arr);
+		if (id !== undefined){
+			TriggerAction.getById(id, function(err, triggerAction){
+				if (err || triggerAction === null) {
+					req.flash('error',	'Could not find trigger action with id "' + id + '"' );
+					res.redirect('/result');
+				} else { 
+					//success
+					var triggerActionStr = JSON.stringify(TriggerAction.copyValues(triggerAction));
+					res.render('register-triggeraction', 
+								{
+									devices:deviceStr,
+									triggerActionId:id,
+									triggerAction:triggerActionStr
+								}
+					);
+				}
+			});
+		} else {
+			res.render('register-triggeraction', {devices:deviceStr});
+		}
 	});
+};
+
+router.get('/register', lib.authenticatePowerUrl, function(req, res){
+	router.getRegisterPage(req, res);
 });
 
 router.get('/register/:triggerActionId', lib.authenticatePowerUrl, function(req, res){
 	var id = req.params.triggerActionId;
-	if (id !== undefined){
+	router.getRegisterPage(req, res, id);
+	/*if (id !== undefined){
 		TriggerAction.getById(id, function(err, device){
 				if(err || device === null) {
 					req.flash('error',	'Could not find trigger action.' );
@@ -60,10 +322,10 @@ router.get('/register/:triggerActionId', lib.authenticatePowerUrl, function(req,
 				} else{
 					var obj = TriggerAction.copyValues(device);
 					var str = JSON.stringify(obj);
-					res.render('register-device', {devices:str});
+					res.render('register-triggeraction', {devices:str});
 				}
 			});
-	}
+	}*/
 });
 
 //render a page with list of trigger actions
@@ -295,6 +557,79 @@ router.get('/update/:deviceId', function (req, res) {
 			}).pipe(res);
 		});
 	});
+});
+
+router.addTriggerAction = function addTriggerAction(req, res, id) {
+	var newTriggerAction = utils.newTriggerAction(req.body);
+	if ( id === undefined ) {
+		TriggerAction.create(newTriggerAction, function (err, addedTriggerAction) {
+			if (err) {
+				res.status(500).json( [{msg:'Unable to add this trigger action to database!', param:'', value:undefined}]);
+			 } else {
+				console.log("TriggerAction created:");
+				console.log(addedTriggerAction);
+				res.redirect('/list');
+			}
+		});
+	} else {
+		TriggerAction.modify(id, values, function (err, result) {
+			if (err || result === null || result.ok !== 1) {//(result.ok===1 result.nModified===1)
+				req.flash('error', ' unable to update');
+			} else {
+				if (result.nModified === 0) {
+					req.flash('success_msg', 'Trigger action is unchanged!');
+				} else {
+					req.flash('success_msg', 'Trigger action updated!');
+				}
+				res.redirect('/list');
+			}
+		});
+	}
+};
+
+router.post('/register', lib.authenticatePowerRequest, function (req, res) {
+
+	req.checkBody('type'       ,'Type is missing').notEmpty();
+	req.checkBody('description', 'Description is missing').notEmpty();
+	req.checkBody('url'       , 'Url is missing').notEmpty();
+	//req.checkBody('description', 'description is required').notEmpty();
+/*
+	var pinNumber = req.body.pin;
+	if (pinNumber !== undefined && pinNumber === '-1') {
+		req.checkBody('minLogInterval', 'minLogInterval is missing').isNumeric({ gt: -1, lt: 1024 });
+	} else { // not a timer, so we will need to verify all values
+		req.checkBody('minLogInterval', 'minLogInterval is missing').isNumeric({ gt: -1, lt: 1024 });
+		req.checkBody('pinValueMargin', 'pinValueMargin is missing').isNumeric({ gt: -1 });
+		req.checkBody('sampleInterval', 'sampleInterval is missing').isNumeric({ gt: -1 });
+		req.checkBody('sampleTotalCount', 'sampleTotalCount is missing').isInt({ gt: -1 });
+	}
+*/
+	//var triggerActionId = req.params.triggerActionId;
+	var errors = req.validationErrors();
+	if (!errors)
+	{
+		errors = utils.areTriggerActionErrors(req.body);
+	}
+	if (errors) {
+		res.status(422).json(errors);
+	} else {
+		if (utilParser.areAnyDeviceTokens(req.body.url) || utilParser.areAnyDeviceTokens(req.body.body)) {
+			Device.getById(req.body.deviceId, function (err, device) {
+				if (err || device === null) {
+					res.status(404).json( [{msg:'Device not found in database!', param:'deviceId', value:req.body.deviceId}]);
+				} else if (utilParser.areAnyDevicePinTokens(req.body.url) || utilParser.areAnyDevicePinTokens(req.body.body)) {
+					//Get device pins so se can check if the device has the pin number referred to in the token
+					router.addTriggerAction(req, res);
+				} else {
+					router.addTriggerAction(req, res);
+				}
+					 
+			});
+		} else {
+			//No need to check device values because there are no tokens referring ot it.
+			router.addTriggerAction(req, res);
+		}
+	}
 });
 
 module.exports = router;

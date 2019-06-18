@@ -27,11 +27,10 @@ var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
 var TriggerActionSchema = mongoose.Schema({
 		id       : Schema.Types.ObjectId,
-		actinId  : Schema.Types.ObjectId,
 		deviceId : Schema.Types.ObjectId,
                 date     : Date,
                 /*
-                        When dateRule is:
+                        When type is:
                         WEEKLY      : This value will contain a array of numbers representing the day of week.  Where Sunday is 0, Monday is 1, and so on.
                         MONTHLY-LAST: This value will contain the number of days from last day of the current month.  When 0 then this fire will take place on last day.  When 1 then the fire will take place the day before last day.
                 */
@@ -47,11 +46,11 @@ var TriggerActionSchema = mongoose.Schema({
 
                         DAILY        : Fires every day at a specified time (date part of date is ignored)
                         WEEKLY       : Fires every week on the days listed in a array in dayData
-                        MONTHLY      : Fires ones a month.  Note if day is more than 28 then this will not fire in february.  When MONTHLY timer is suppose to fire near the last day of month use MONTHLY-LAST dateRule.
+                        MONTHLY      : Fires ones a month.  Note if day is more than 28 then this will not fire in february.  When MONTHLY timer is suppose to fire near the last day of month use MONTHLY-LAST type.
                         YEARLY       : Fires ones a year.
                         MONTHLY-LAST : Fires ones a month, but counting the days from the last day of the month.  F.example. if date is 1.1.2018 11:21:00 and dateData is 0.  Then this triggerAction will fire first on 30 jan 2018 and next on 28.2.1019.  In february 2020 (a leap year) this triggerAction would fire on the 29.2.2020 at 11:21.  If dateData is 1 then the fire will be the day before last day of month. 
                 */
-                dateRule : {type   : String,
+                type : {type   : String,
                             enum   : ['LOG-INSTANT','ONES','TIMELY','DAILY','WEEKLY','MONTHLY','YEARLY', 'MONTHLY-LAST'],
                             default: 'ONES'},
                 /*      The date when this triggerAction expires*/
@@ -60,7 +59,8 @@ var TriggerActionSchema = mongoose.Schema({
                                enum   : ['GET','POST','DELETE'],
                                default: 'GET'                 },
                 url         : String,
-                body        : String
+                body        : String,
+                description : String
 });
 
 var TriggerAction = module.exports = mongoose.model('TriggerAction', TriggerActionSchema);
@@ -71,16 +71,35 @@ var TriggerAction = module.exports = mongoose.model('TriggerAction', TriggerActi
  * @param {Boolean}       dateAsMilliseconds if true then the date object will be converted to the number of milliseconds since 1. of January 1970 UTC 
  */
 TriggerAction.copyValues = function copyValues(triggerActionSchemaObject, dateAsMilliseconds){
-	return{
-		id       : triggerActionSchemaObject.id,
-		date     : (dateAsMilliseconds!== undefined && dateAsMilliseconds === true)?
-		triggerActionSchemaObject.date.toTime() : triggerActionSchemaObject.date,
-		url   : String,
-		body  : String,
-		deviceId : triggerActionSchemaObject.deviceId
+        
+	return {
+                id         : triggerActionSchemaObject._id,
+		date       : (dateAsMilliseconds!== undefined && dateAsMilliseconds === true)?
+                triggerActionSchemaObject.date.toTime() : triggerActionSchemaObject.date,
+                dateData   : triggerActionSchemaObject.dateData,
+		url        : triggerActionSchemaObject.url,
+		body       : triggerActionSchemaObject.body,
+                deviceId   : triggerActionSchemaObject.deviceId,
+                type       : triggerActionSchemaObject.type,
+                method     : triggerActionSchemaObject.method,
+                dateExpires: triggerActionSchemaObject.dateExpires,
+                description: triggerActionSchemaObject.description
 	};
 };
 
 module.exports.getById = function(id, callback){
 	TriggerAction.findById(id, callback);
+};
+
+module.exports.devicesMonitorCount = function(callback){
+        // more about aggregate
+        // http://excellencenodejsblog.com/mongoose-aggregation-count-group-match-project/
+        Monitor.aggregate([
+                {
+                    $group: {
+                        _id: '$deviceId',  //$region is the column name in collection
+                        count: {$sum: 1}
+                    }
+                }
+            ], callback);
 };

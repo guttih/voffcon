@@ -4,13 +4,11 @@
 {{#if devices}}
 <script type="text/javascript">
 	var devices = {{{devices}}};
-	console.log('device:');console.log(devices);
 </script>
 {{/if}}	
 {{#if triggerAction}}
 <script type="text/javascript">
 	var triggerAction = {{{triggerAction}}};
-	console.log('triggerAction:');console.log(triggerAction);
 </script>
 	<div class="row"><h3 class="page-header pull-right">Modify a triggerAction</h3></div>
 {{else}}
@@ -23,10 +21,10 @@
       {{/each}}
 {{/if}}
 
-<form method="post" action="/triggeractions/register/{{deviceId}}/{{triggerActionId}}" id="triggerActionForm">
+<form method="post" action="/triggeractions/register/{{triggerActionId}}" id="triggerActionForm">
 	<div class="form-group type">
 		<label>Trigger action type</label>
-		<select id="triggerAction-type" name="Type" class="access-select form-control" required>
+		<select id="triggerAction-type" name="type" class="access-select form-control" required>
 			<option title="No need to provide additional data"      value="LOG-INSTANT" selected="">After each new record</option>
 			<option title="Provide a date and time when the action should fire"                 value="ONES"        >Ones at</option>
 			<option title="Provide how much time must pass between action fires" value="TIMELY"      >Every</option>
@@ -68,7 +66,7 @@
 			<select id="triggerAction-day" name="day" class="inline-form-control date-select day" required></select>
 			<span class="last-day">
 				<label class="form">Days before last day</label>
-				<select id="triggerAction-last-day" name="Last day" class="inline-form-control">
+				<select id="triggerAction-last-day" name="lastDay" class="inline-form-control">
 					<option value="0" selected="">0 days. (Last day of month)</option>
 					<option value="1" >1 day</option>
 					<option value="2" >2 days</option>
@@ -83,8 +81,7 @@
 					<option value="11">11 days</option>
 					<option value="12">12 days</option>
 				</select>
-			</span>
-			
+			</span>	
 			<label class="form time-select hour">Hour</label>
 			<select id="triggerAction-hour" name="hour" class="inline-form-control time-select hour" required></select>
 			<label class="form time-select minute">Minute</label>
@@ -92,13 +89,13 @@
 			<label class="form  time-select second">Second</label>
 			<select id="triggerAction-second" name="second" class="inline-form-control time-select second" required></select>
 			<div class="form-check form-check-inline weekdays">
-				<input class="form-check-input" type="checkbox" id="sunday"    value="0">
+				<input class="form-check-input" type="checkbox" id="sunday"   value="0">
 				<label class="form-check-label"  for="sunday">sunday</label>
-				<input class="form-check-input" type="checkbox" id="monday"    value="1">
+				<input class="form-check-input" type="checkbox" id="monday"   value="1">
 				<label class="form-check-label"  for="sunday">monday</label>
-				<input class="form-check-input" type="checkbox" id="tuesday"   value="2">
+				<input class="form-check-input" type="checkbox" id="tuesday"  value="2">
 				<label class="form-check-label"  for="sunday">tuesday</label>
-				<input class="form-check-input" type="checkbox" id="wednesday" value="3">
+				<input class="form-check-input" type="checkbox" id="wednesday"value="3">
 				<label class="form-check-label"  for="sunday">wednesday</label>
 				<input class="form-check-input" type="checkbox" id="thursday"  value="4">
 				<label class="form-check-label"  for="sunday">thursday</label>
@@ -110,16 +107,16 @@
 	</div>
 	<div class="form-group method">
 		<label>Method</label>
-		<select id="triggerAction-method" name="Method" class="form-control" required>
+		<select id="triggerAction-method" name="method" class="form-control" required>
 			<option title="Http get method.  Data is sent in url"  value="GET" selected="">GET</option>
 			<option title="Http post method.  Data is set in body" value="POST"           >POST</option>
 			<option title="Http delete method.  Data can be sent in body" value="DELETE">DELETE</option>
 		</select>
 		<p class="triggerAction-input-text"></p>
 	</div>
-	<div class="form-group device">
+	<div class="form-group deviceId">
 		<label>Device to extract data from if needed</label>
-		<select id="triggerAction-device" name="Device" class="access-select form-control" required>
+		<select id="triggerAction-deviceId" name="deviceId" class="access-select form-control" required>
 			<option title="Idblabla"      value="idBlabla" selected="">Name of the device</option>
 		</select>
 		<p class="triggerAction-input-text"></p>
@@ -129,19 +126,27 @@
 		<input id="triggerAction-url" type="text" class="form-control" placeholder="http://www.someurl.com:5100?somevarforPinvalue1=<<PIN_VALUE05>>" name="url" required>
 		<p class="triggerAction-input-text" title="The minimum time between logs"></p>
 	</div>
-	<div class="form-horizontal description">
-		<label>Description</label>
+	<div class="form-horizontal body">
+		<label>Body</label>
 		<div class="form-group">
 			
 			<div class="col-md-12">
-				<textarea id="triggerAction-description" name="description" form="triggerActionForm" class="form-control" rows="4" placeholder="{
+				<textarea id="triggerAction-body" name="body" form="triggerActionForm" class="form-control" rows="4" placeholder="{
 	p4:<<PIN_VALUE05>>,
 	p2:<<PIN_VALUE02>>
 }" required></textarea>
 			</div>
 		</div>
 	</div>
-	
+		<div class="form-horizontal description">
+		<label>Description</label>
+		<div class="form-group">
+			
+			<div class="col-md-12">
+				<textarea id="triggerAction-description" name="description" form="triggerActionForm" class="form-control" rows="4" placeholder="Describe the trigger action, when is it triggered and why" required></textarea>
+			</div>
+		</div>
+	</div>
 </form>
 <button id="btn-submit-triggerActionForm" class="btn btn-success pull-right">Submit</button>
 <script src="/js/register-triggeraction.js"></script>

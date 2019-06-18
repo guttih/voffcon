@@ -55,35 +55,48 @@ function showError(data){
 		}
 	}
 
-	showModalMonitorError("An error Uccurred", text);
+	showModalMonitorError("An error Occurred", text);
 }
 function doSubmit(){
 	var $form = $("#triggerActionForm");
-	var sendObj = {};
+	var weekdays=[];
+	var sendObj = {
+		
+	};
 	var name, val;
-	$form.find('input').each(function(){
+	$form.find('input,textarea').each(function(){
 		name = $(this).attr('name');
-		val = $(this).val();
-		sendObj[name]=val;
+		
+		if (name !== undefined ) {
+			val = $(this).val();
+			sendObj[name]=val;
+		}
 	});
-	/*$form.find('textarea').each(function(){
-		name = $(this).attr('name');
+
+	$form.find('select option:selected').each(function(){
+		name = $(this).parent().attr('name');
+		if (name !== undefined ) {
+			val = $(this).val();
+			sendObj[name]=val;
+		}
+	});
+	$form.find('input[type=checkbox]:checked').each(function(){
+		name = $(this).attr('id');
 		val = $(this).val();
-		sendObj[name]=val;
-	});*/
-	var select = $('#triggerAction-pin');
-	var selected = 	select.find('option:selected');
-	val = selected.val();
-	sendObj['pin']=val;
+			weekdays.push(val);
+	});
+
+	if (weekdays.length > 0){
+		sendObj.weekdays = weekdays.join(';');
+	}
+	
 	console.log(sendObj);
 	var url = $form.attr('action');
 	console.log(url);
 	sendData(url, sendObj, function(data){
 		//successfully saved this triggerAction
-		window.location.href = '/triggeractions/device/'+device.id;
-		
+		window.location.href = '/triggeractions';
 	}, showError);
-		
 }
 
 function comparePinsNumbers(a,b) {
@@ -108,27 +121,62 @@ function setNumberSelectValues($elm, minNumber, maxNumber, numberSelected) {
 
 }
 
-function setDevicesSelectValues(){
-	select = $('#triggerAction-device');
+function setDevicesOptions(devices, deviceId){
+	select = $('#triggerAction-deviceId');	
 	select.find('option').remove();
 	console.log(devices);
 	devices.forEach(element => {
 		var opt = new Option(element.name, element.id);
 		opt.setAttribute("title", element.description);
-		//opt.setAttribute("value", element.id);
+		if (deviceId === element.id) {
+			opt.setAttribute("selected", "");
+		}
 		select.append(opt);
 	});
 }
 
+function setFormTriggerActionValues(triggerAction){
+	console.log(triggerAction.date);
+	var date = new Date(triggerAction.date);
+	$('#triggerAction-hour').val(date.getUTCHours());
+	$('#triggerAction-minute').val(date.getUTCMinutes());
+	$('#triggerAction-second').val(date.getUTCSeconds());
+
+	$('#triggerAction-type').val(triggerAction.type);
+	$('#triggerAction-method').val(triggerAction.method);
+	$('#triggerAction-url').val(triggerAction.url);
+	$('#triggerAction-body').val(triggerAction.body);
+	$('#triggerAction-description').val(triggerAction.description);
+	
+	var weekdays = triggerAction.dateData.split(';');
+	weekdays.forEach(item => {
+		console.log(item);
+		$('.weekdays :input[value="'+item+'"]').prop( "checked", true );
+	});
+
+}
 function setFormValues(){
 	setNumberSelectValues($('#triggerAction-hour'),   0, 23, 0);
 	setNumberSelectValues($('#triggerAction-minute'), 0, 59, 0);
 	setNumberSelectValues($('#triggerAction-second'), 0, 59, 0);
 	onSelectYearOrMonthChange();
-	setDevicesSelectValues();
+	
+	var gotTriggerAction = typeof triggerAction !== 'undefined' && triggerAction !== 'undefined';
+	var gotDevices       = typeof devices       !== 'undefined' && devices       !== 'undefined';
+	var id;
+	if (gotTriggerAction) {
+		console.log(triggerAction);
+		id = triggerAction.deviceId;
+		setFormTriggerActionValues(triggerAction);
+	}
+	
+	if (gotDevices) {
+		console.log(devices);
+		setDevicesOptions(devices, id);
+	}
+
 	onSelectDeviceChange();
 	onSelectTypeChange();
-	
 }
 
 var checkTimer;
@@ -143,7 +191,7 @@ function updateSubmitButtonState(){
 
 var onSelectDeviceChange = function onSelectDeviceChange($elm){
 	if ($elm === undefined) {
-		$elm = $('#triggerAction-device')
+		$elm = $('#triggerAction-deviceId');
 	}
 	console.log($elm.val());
 }
@@ -157,7 +205,6 @@ var onSelectYearOrMonthChange = function onSelectYearOrMonthChange(){
 		selectedDay = 1;
 	}
 	setNumberSelectValues($('#triggerAction-day'), 1, numberOfDays, selectedDay);
-	console.log(devices);
 };
 
 /**
@@ -222,7 +269,7 @@ $(function () {
 	$('#triggerAction-month,#triggerAction-year').on('change', function() {
 		onSelectYearOrMonthChange();
 	});
-	$('#triggerAction-device').on('change', function() {
+	$('#triggerAction-deviceId').on('change', function() {
 		onSelectDeviceChange($(this));
 	});
 	

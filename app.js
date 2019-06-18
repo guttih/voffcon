@@ -75,6 +75,11 @@ var trigger3 = {
 	action: { url: 'www.visir.is', body: 'someBody3' }
 };
 
+var xdate = new Date(1970,0,1,1,2,3);
+var millis = xdate.getTime();
+console.log(xdate.toTimeString());
+console.log(millis);
+
 var b;
 b = eventQueue.addTimer(trigger3);
 b = eventQueue.addTimer(trigger2);

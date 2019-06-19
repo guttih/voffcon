@@ -49,6 +49,61 @@ var utilParser = {
 	areAnyDevicePinTokens : function areAnyDevicePinTokens(text) {
 		return text.indexOf('<<PIN_VALUE')>-1 ;
 	},
+	
+	/**
+	 * Finds all tokens in text and returns them
+	 * @param {String} text 
+	 * @before Assumes assumes that all tokens are valid.
+	 * @returns  Array with all the tokens found in text
+	 */
+	getAllTokens : function getAllTokens(text){
+		var arr = [];
+
+		var ret = 0;
+		var indexStart = text.indexOf('<<');
+		while (indexStart > -1) {
+			indexStart+=2;
+			var indexEnd = text.indexOf('>>', indexStart);
+			if (indexEnd < 0) { return []; }
+			var token = text.substr(indexStart, indexEnd - indexStart);
+			arr.push(token);
+			ret++;
+			text = text.substr(indexEnd+2);
+			indexStart = text.indexOf('<<');
+		}
+		return arr;
+	},
+
+	/**
+	 * Checks if all pin tokens in text reefer to available device pins.  
+	 * @param {String} text 
+	*  @param {Array} devicePins List of pin objects from the device Example item:{m:2,name:"D1",pin:5,val:700} 
+	 * @before Assumes assumes that all tokens are valid.
+	 * @returns true if all tokens in text start with '<<PIN_VALUE' reefer to available pins
+	 * @returns false if at least one device pin token reefers to a pin which is not on the device
+	 */
+	 areDevicePinsAvailable : function areDevicePinsAvailable(text, devicePins){
+		var tokens = this.getAllTokens(text);
+		var pinNumbers = [];
+		devicePins.forEach( m => {
+			pinNumbers.push(m.pin);
+		});
+		var pinTokens = tokens.filter(m => {
+			return m.indexOf('PIN_VALUE')===0;
+		});
+
+		var strNum;
+		var ret = true;
+		pinTokens.forEach( m => {
+			strNum = m.substr(9);
+			if (strNum.length < 1 || Number.isNaN(strNum) || Number(strNum) < 0 || Number(strNum)> 99 ) { return false;	}
+			if (!pinNumbers.includes(Number(strNum))) { 
+				ret = false;
+			}
+			
+		});
+		return ret;
+	},
 
 	 /**
 	 * Counts number of valid tokens in text if all are valid.
@@ -623,6 +678,34 @@ router.addTriggerAction = function addTriggerAction(req, res, id) {
 	}
 };
 
+router.getRequest = function (url, callback) {
+	request.get(url, function (err, res, body) {
+		if (res) {
+			//we got responce
+			callback(null, body);
+		} else {
+			callback(err, body);
+		}
+	});
+};
+
+/**
+ * Gets all pins from a device
+ * @param {String} device The id of the device
+ * @param {function} callback function(error, ArrayOfAvailablePinObjects);  Error is null on success.
+ */
+router.getDevicePins = function getDevicePins(device, callback) {
+	var urlid = device.url + '/pins';
+	router.getRequest(urlid, function (err, body) {
+		if (err || body === null) {
+			callback(err, null);
+		} else {
+			var pinObject = JSON.parse(body);
+			callback(err, pinObject.pins);
+		}
+	});
+};
+
 router.post('/register', lib.authenticatePowerRequest, function (req, res) {
 
 	req.checkBody('type'       ,'Type is missing').notEmpty();
@@ -644,11 +727,14 @@ router.post('/register', lib.authenticatePowerRequest, function (req, res) {
 					res.status(404).json( [{msg:'Device not found in database!', param:'deviceId', value:req.body.deviceId}]);
 				} else if (utilParser.areAnyDevicePinTokens(req.body.url) || utilParser.areAnyDevicePinTokens(req.body.body)) {
 					//Get device pins so se can check if the device has the pin number referred to in the token
-					router.addTriggerAction(req, res);
+					router.getDevicePins(device, function(err, pins){
+						console.log(pins);
+						router.addTriggerAction(req, res);
+					});
+					
 				} else {
 					router.addTriggerAction(req, res);
 				}
-					 
 			});
 		} else {
 			//No need to check device values because there are no tokens referring ot it.
@@ -678,7 +764,21 @@ router.post('/register/:triggerActionId', lib.authenticatePowerRequest, function
 					res.status(404).json( [{msg:'Device not found in database!', param:'deviceId', value:req.body.deviceId}]);
 				} else if (utilParser.areAnyDevicePinTokens(req.body.url) || utilParser.areAnyDevicePinTokens(req.body.body)) {
 					//Get device pins so se can check if the device has the pin number referred to in the token
-					router.addTriggerAction(req, res, id);
+					router.getDevicePins(device, function(err, pins){
+						var urlOk = true, bodyOk = true;
+						if (utilParser.areAnyDeviceTokens(req.body.url)){
+							urlOk = utilParser.areDevicePinsAvailable(req.body.url, pins);
+						}
+						if (utilParser.areAnyDeviceTokens(req.body.body)){
+							bodyOk = utilParser.areDevicePinsAvailable(req.body.body, pins);
+						}
+						if (urlOk && bodyOk) {
+							router.addTriggerAction(req, res, id);
+						} else {
+							var parameter = bodyOk === false? 'body': 'url';
+							res.status(404).json( [{msg:'One or more PIN_VALUE token number reefer to a device pin which does not exist', param:parameter, value:undefined}]);
+						}
+					});
 				} else {
 					router.addTriggerAction(req, res, id);
 				}

@@ -271,8 +271,10 @@ var utilParser = {
 			}
 			error = this.checkTriggerActionBodyTime(body);        if (error) { return error; }
 			error = this.checkTriggerActionBodyUrl(body);         if (error) { return error; }
-			error = this.checkTriggerActionBodyBody(body);        if (error) { return error; }
 			error = this.checkTriggerActionBodyMethod(body);      if (error) { return error; }
+			if (body.method !== 'GET') {
+				error = this.checkTriggerActionBodyBody(body);    if (error) { return error; }
+			}
 			error = this.checkTriggerActionBodyDescription(body); if (error) { return error; }
 			
 		}
@@ -292,8 +294,10 @@ var utilParser = {
 		error = this.checkTriggerActionBodyDate(body);        if (error) { return error; }
 		error = this.checkTriggerActionBodyTime(body);        if (error) { return error; }
 		error = this.checkTriggerActionBodyUrl(body);         if (error) { return error; }
-		error = this.checkTriggerActionBodyBody(body);        if (error) { return error; }
 		error = this.checkTriggerActionBodyMethod(body);      if (error) { return error; }
+		if (body.method !== 'GET') {
+			error = this.checkTriggerActionBodyBody(body);    if (error) { return error; }
+		}
 		error = this.checkTriggerActionBodyDescription(body); if (error) { return error; }
 		
 	
@@ -327,30 +331,32 @@ var utilParser = {
 			case 'ONES': 
 								
 								return new TriggerAction({
-															deviceId   : body.deviceId,
-															type       : body.type,
-															method     : body.method,
-															url        : body.url,
-															body       : body.body,
-															description: body.description,
-															date       : new Date(Date.UTC(body.year, body.month, body.day,
-																				body.hour, body.minute,body.second))
+															deviceId     : body.deviceId,
+															destDeviceId : body.destDeviceId,
+															type         : body.type,
+															method       : body.method,
+															url          : body.url,
+															body         : body.body,
+															description  : body.description,
+															date         : new Date(Date.UTC(body.year, body.month, body.day,
+																		  		body.hour, body.minute,body.second))
 														});
 			case 'WEEKLY': 
 								
 								return new TriggerAction({
-															deviceId   : body.deviceId,
-															type       : body.type,
-															method     : body.method,
-															url        : body.url,
-															body       : body.body,
-															dateData   : body.weekdays,
-															description: body.description,
-															date       : new Date(	((Number(body.hour   ))*60*60*1000) +
-																					((Number(body.minute ))   *60*1000) +
-																					((Number(body.second ))      *1000)   )
+															deviceId     : body.deviceId,
+															destDeviceId : body.destDeviceId,
+															type         : body.type,
+															method       : body.method,
+															url          : body.url,
+															body         : body.body,
+															dateData     : body.weekdays,
+															description  : body.description,
+															date         : new Date(	((Number(body.hour   ))*60*60*1000) +
+																						((Number(body.minute ))   *60*1000) +
+																						((Number(body.second ))      *1000)   )
 															
-														});
+																			});
 		}
 	}
 };  //utils
@@ -442,7 +448,7 @@ router.get('/device/:deviceID', lib.authenticateRequest, function (req, res) {
 					id: deviceId,
 					name: retDevice._doc.name
 				};
-				res.render('devicemonitor', { item: device, device: JSON.stringify(device), deviceId: deviceId });
+				res.render('triggeraction', { item: device, device: JSON.stringify(device), deviceId: deviceId });
 			}
 		});
 	}
@@ -657,9 +663,7 @@ router.addTriggerAction = function addTriggerAction(req, res, id) {
 			if (err) {
 				res.status(500).json( [{msg:'Unable to add this trigger action to database!', param:'', value:undefined}]);
 			 } else {
-				console.log("TriggerAction created:");
-				console.log(addedTriggerAction);
-				res.redirect('/list');
+				res.status(200).json({success: "Trigger action created.",id: id});
 			}
 		});
 	} else {
@@ -672,12 +676,13 @@ router.addTriggerAction = function addTriggerAction(req, res, id) {
 				} else {
 					res.status(200).json({success: "Trigger action updated.",id: id});
 				}
-				//res.redirect('/list');
+				
 			}
 		});
 	}
 };
 
+//todo how to set the timeout
 router.getRequest = function (url, callback) {
 	request.get(url, function (err, res, body) {
 		if (res) {
@@ -708,45 +713,17 @@ router.getDevicePins = function getDevicePins(device, callback) {
 
 router.post('/register', lib.authenticatePowerRequest, function (req, res) {
 
-	req.checkBody('type'       ,'Type is missing').notEmpty();
-	req.checkBody('description', 'Description is missing').notEmpty();
-	req.checkBody('url'       , 'Url is missing').notEmpty();
-	req.checkBody('description', 'description is required').notEmpty();
-	//var triggerActionId = req.params.triggerActionId;
-	var errors = req.validationErrors();
-	if (!errors)
-	{
-		errors = utils.areTriggerActionErrors(req.body);
-	}
-	if (errors) {
-		res.status(422).json(errors);
-	} else {
-		if (utilParser.areAnyDeviceTokens(req.body.url) || utilParser.areAnyDeviceTokens(req.body.body)) {
-			Device.getById(req.body.deviceId, function (err, device) {
-				if (err || device === null) {
-					res.status(404).json( [{msg:'Device not found in database!', param:'deviceId', value:req.body.deviceId}]);
-				} else if (utilParser.areAnyDevicePinTokens(req.body.url) || utilParser.areAnyDevicePinTokens(req.body.body)) {
-					//Get device pins so se can check if the device has the pin number referred to in the token
-					router.getDevicePins(device, function(err, pins){
-						console.log(pins);
-						router.addTriggerAction(req, res);
-					});
-					
-				} else {
-					router.addTriggerAction(req, res);
-				}
-			});
-		} else {
-			//No need to check device values because there are no tokens referring ot it.
-			router.addTriggerAction(req, res);
-		}
-	}
+	router.postRegistering(req, res);
 });
 
 router.post('/register/:triggerActionId', lib.authenticatePowerRequest, function (req, res) {
 
+	router.postRegistering(req, res);
+});
+
+router.postRegistering = function postRegistering(req, res) {
+
 	req.checkBody('type'       ,'Type is missing').notEmpty();
-	req.checkBody('description', 'Description is missing').notEmpty();
 	req.checkBody('url'       , 'Url is missing').notEmpty();
 	req.checkBody('description', 'description is required').notEmpty();
 	var id = req.params.triggerActionId;
@@ -765,18 +742,23 @@ router.post('/register/:triggerActionId', lib.authenticatePowerRequest, function
 				} else if (utilParser.areAnyDevicePinTokens(req.body.url) || utilParser.areAnyDevicePinTokens(req.body.body)) {
 					//Get device pins so se can check if the device has the pin number referred to in the token
 					router.getDevicePins(device, function(err, pins){
-						var urlOk = true, bodyOk = true;
-						if (utilParser.areAnyDeviceTokens(req.body.url)){
-							urlOk = utilParser.areDevicePinsAvailable(req.body.url, pins);
-						}
-						if (utilParser.areAnyDeviceTokens(req.body.body)){
-							bodyOk = utilParser.areDevicePinsAvailable(req.body.body, pins);
-						}
-						if (urlOk && bodyOk) {
-							router.addTriggerAction(req, res, id);
+						if (err) {
+							var code = err.code!==undefined && err.code === 'ETIMEDOUT'? 408 : 404;
+							res.status(code).json( [{msg:'Unable to connect to source device!' + ' ' + err.message, param:'deviceId', value:undefined}]);
 						} else {
-							var parameter = bodyOk === false? 'body': 'url';
-							res.status(404).json( [{msg:'One or more PIN_VALUE token number reefer to a device pin which does not exist', param:parameter, value:undefined}]);
+							var urlOk = true, bodyOk = true;
+							if (utilParser.areAnyDeviceTokens(req.body.url)){
+								urlOk = utilParser.areDevicePinsAvailable(req.body.url, pins);
+							}
+							if (utilParser.areAnyDeviceTokens(req.body.body)){
+								bodyOk = utilParser.areDevicePinsAvailable(req.body.body, pins);
+							}
+							if (urlOk && bodyOk) {
+								router.addTriggerAction(req, res, id);
+							} else {
+								var parameter = bodyOk === false? 'body': 'url';
+								res.status(404).json( [{msg:'One or more PIN_VALUE token number reefer to a device pin which does not exist', param:parameter, value:undefined}]);
+							}
 						}
 					});
 				} else {
@@ -789,6 +771,6 @@ router.post('/register/:triggerActionId', lib.authenticatePowerRequest, function
 			router.addTriggerAction(req, res, id);
 		}
 	}
-});
+};
 
 module.exports = router;

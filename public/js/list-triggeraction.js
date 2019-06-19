@@ -21,7 +21,7 @@ by regular post to the address Haseyla 27, 260 Reykjanesbar, Iceland.
 /*client javascript file for the list-device page*/
 var SERVER;
 
-function getUserDeviceMonitorList(){
+function getUserDeviceTriggerActionList(){
 	var url = SERVER+'/triggeractions/device-list';
 		var request = $.get(url);
 	request.done(function( data ) {
@@ -35,14 +35,14 @@ function getUserDeviceMonitorList(){
 }
 
 /*Creates an item for a list which shows which devices have triggerActions and how many triggerActions*/
-function createDevicesMonitorList(id, name, description, triggerActionRecordCount, routeText){
+function createDevicesTriggerActionList(id, name, description, triggerActionRecordCount, routeText){
 	var url = SERVER+'/'+ routeText +'/register/'+ id;
 	var strElm = 
 '<div id="listItem'+ id +'" class="list-group-item clearfix">' +
 	'<p class="list-group-item-heading">' + name + '</p>' + 
 	'<span class="list-group-item-text">' +description + '</span>'+
 	'<span class="pull-right">';
-	strElm +='<button onclick="deviceMonitors(\''+id+'\');" class="btn btn-xs btn-success"> <span class="glyphicon glyphicon-play"></span>&nbsp;Monitors('+ triggerActionRecordCount +') </button>';
+	strElm +='<button onclick="deviceTriggerActions(\''+id+'\');" class="btn btn-xs btn-success"> <span class="glyphicon glyphicon-play"></span>&nbsp;TriggerActions('+ triggerActionRecordCount +') </button>';
 	
 	strElm +='</span>' +'</div>';
 
@@ -50,7 +50,7 @@ function createDevicesMonitorList(id, name, description, triggerActionRecordCoun
 }
 
 //opens the page for triggerActions for the the specified device.
-function deviceMonitors(id){
+function deviceTriggerActions(id){
 	window.location.assign("device/"+id);
 }
 
@@ -65,7 +65,7 @@ function setDevicelistValues(deviceList){
 		recordCount = deviceList[i].recordCount;
 		/*type = deviceList[i].type;
 		  url  = deviceList[i].url;*/
-		var str =  createDevicesMonitorList(id, name, description, recordCount, 'triggeractions');
+		var str =  createDevicesTriggerActionList(id, name, description, recordCount, 'triggeractions');
 		$("#device-list").append(str);
 	}
 }
@@ -76,5 +76,5 @@ $(function () {
 	/* this is the *$( document ).ready(function( $ ) but jshint does not like that*/
 	SERVER = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ':'+window.location.port: '');
 	
-	getUserDeviceMonitorList();
+	getUserDeviceTriggerActionList();
 });

@@ -121,16 +121,15 @@ function setNumberSelectValues($elm, minNumber, maxNumber, numberSelected) {
 
 }
 
-function setDevicesOptions(devices, deviceId){
-	select = $('#triggerAction-deviceId');	
-	select.find('option').remove();
+function setDevicesOptions(devices, deviceId, elm$){	
+	elm$.find('option').remove();
 	devices.forEach(element => {
 		var opt = new Option(element.name, element.id);
 		opt.setAttribute("title", element.description);
 		if (deviceId === element.id) {
 			opt.setAttribute("selected", "");
 		}
-		select.append(opt);
+		elm$.append(opt);
 	});
 }
 
@@ -180,10 +179,11 @@ function setFormValues(){
 	
 	var gotTriggerAction = typeof triggerAction !== 'undefined' && triggerAction !== 'undefined';
 	var gotDevices       = typeof devices       !== 'undefined' && devices       !== 'undefined';
-	var id;
+	var id, destId;
 	if (gotTriggerAction) {
 		console.log(triggerAction);
 		id = triggerAction.deviceId;
+		destId = triggerAction.destDeviceId;
 		setFormTriggerActionValues(triggerAction);
 	} else {
 		onSelectYearOrMonthChange();
@@ -191,10 +191,12 @@ function setFormValues(){
 	
 	if (gotDevices) {
 		console.log(devices);
-		setDevicesOptions(devices, id);
+		setDevicesOptions(devices, id,      $('#triggerAction-deviceId'));
+		setDevicesOptions(devices, destId,  $('#triggerAction-destDeviceId'));
 	}
 
-	onSelectDeviceChange();
+	onSelectDeviceChange($('#triggerAction-deviceId'));
+	onSelectDeviceChange($('#triggerAction-destDeviceId'));
 	onSelectTypeChange();
 	onSelectMethodChange();
 }
@@ -220,9 +222,6 @@ var updateSubmitButtonState = function updateSubmitButtonState(){
 }	
 
 var onSelectDeviceChange = function onSelectDeviceChange($elm){
-	if ($elm === undefined) {
-		$elm = $('#triggerAction-deviceId');
-	}
 	console.log($elm.val());
 }
 var onSelectYearOrMonthChange = function onSelectYearOrMonthChange(){
@@ -309,7 +308,7 @@ $(function () {
 	$('#triggerAction-month,#triggerAction-year').on('change', function() {
 		onSelectYearOrMonthChange();
 	});
-	$('#triggerAction-deviceId').on('change', function() {
+	$('#triggerAction-deviceId,#triggerAction-destDeviceId').on('change', function() {
 		onSelectDeviceChange($(this));
 	});
 	

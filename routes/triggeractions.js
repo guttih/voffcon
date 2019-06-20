@@ -305,6 +305,70 @@ var utilParser = {
 		return false;
 	},
 
+	
+	/**
+	 * Checks body part of a request has all the required values to
+	 * create a TriggerAction object of the type LOG-INSTANT.
+	 * Returns false if no errors found
+	 * Returns array of error objects with a msg and a param part
+	 * @param {Object} body The body of a post request to check 
+	 */
+	 checkTriggerActionBodyLogInstant : function checkTriggerActionBodyLogInstant(body){
+		var errors = [];
+		error = this.checkTriggerActionBodyUrl(body);         if (error) { return error; }
+		error = this.checkTriggerActionBodyMethod(body);      if (error) { return error; }
+		if (body.method !== 'GET') {
+			error = this.checkTriggerActionBodyBody(body);    if (error) { return error; }
+		}
+		error = this.checkTriggerActionBodyDescription(body); if (error) { return error; }
+		
+	
+		//All values are valid
+		return false;
+	},
+
+	/**
+	 * Checks body part of a request has all the required values to
+	 * create a TriggerAction object of the type MONTHLY-LAST.
+	 * Returns false if no errors found
+	 * Returns array of error objects with a msg and a param part
+	 * @param {Object} body The body of a post request to check 
+	 */
+	 checkTriggerActionBodyMonthlyLast : function checkTriggerActionBodyMonthlyLast(body){
+		var errors = this.checkTriggerActionBodyOnes(body);
+		if (errors){
+			return errors;
+		}
+
+
+		errors = this.checkBodyVariableNumber(body, 'lastDay',   0, 30); if (errors.length > 0 ) {return errors;}
+		
+		//All values are valid
+		return false;
+	},
+
+	/**
+	 * Checks body part of a request has all the required values to
+	 * create a TriggerAction object of the type TIMELY.
+	 * Returns false if no errors found
+	 * Returns array of error objects with a msg and a param part
+	 * @param {Object} body The body of a post request to check 
+	 */
+	 checkTriggerActionBodyTimely : function checkTriggerActionBodyTimely(body){
+		var errors = [];
+		error = this.checkTriggerActionBodyTime(body);        if (error) { return error; }
+		error = this.checkTriggerActionBodyUrl(body);         if (error) { return error; }
+		error = this.checkTriggerActionBodyMethod(body);      if (error) { return error; }
+		if (body.method !== 'GET') {
+			error = this.checkTriggerActionBodyBody(body);    if (error) { return error; }
+		}
+		error = this.checkTriggerActionBodyDescription(body); if (error) { return error; }
+		
+	
+		//All values are valid
+		return false;
+	},
+
 	/**
 	 * Checks if a body part of a post request has all the required values to
 	 * create a TriggerAction object.
@@ -315,8 +379,14 @@ var utilParser = {
 	areTriggerActionErrors : function areTriggerActionErrors(body){
 		var errors = [];
 		switch(body.type) {
-			case "WEEKLY": return this.checkTriggerActionBodyWeekly(body);
-			case "ONES"  : return this.checkTriggerActionBodyOnes(body);
+			case 'LOG-INSTANT' : return this.checkTriggerActionBodyLogInstant(body);
+			case 'WEEKLY'      : return this.checkTriggerActionBodyWeekly(body);
+			case 'DAILY'       :
+			case 'TIMELY'      : return this.checkTriggerActionBodyTimely(body);
+			case 'YEARLY'      :
+			case 'MONTHLY'     :
+			case 'ONES'        : return this.checkTriggerActionBodyOnes(body);
+			case 'MONTHLY-LAST': return this.checkTriggerActionBodyMonthlyLast(body);
 			
 		}
 		return [{msg:'Type is missing or invalid', param:'type', value:undefined}];
@@ -328,6 +398,9 @@ var utilParser = {
 	 */
 	newTriggerAction : function newTriggerAction(body){
 		switch(body	.type) {
+			case 'LOG-INSTANT':
+			case "YEARLY":
+			case 'MONTHLY': 
 			case 'ONES': 
 								
 								return new TriggerAction({
@@ -341,8 +414,36 @@ var utilParser = {
 															date         : new Date(Date.UTC(body.year, body.month, body.day,
 																		  		body.hour, body.minute,body.second))
 														});
+
+			case 'MONTHLY-LAST':
+									return new TriggerAction({
+															deviceId     : body.deviceId,
+															destDeviceId : body.destDeviceId,
+															type         : body.type,
+															method       : body.method,
+															url          : body.url,
+															body         : body.body,
+															description  : body.description,
+															dateData     : body.lastDay,
+															date         : new Date(Date.UTC(body.year, body.month, body.day,
+																				body.hour, body.minute,body.second))
+														});
+
+				case 'DAILY' :
+				case 'TIMELY': 
+									return new TriggerAction({
+																deviceId     : body.deviceId,
+																destDeviceId : body.destDeviceId,
+																type         : body.type,
+																method       : body.method,
+																url          : body.url,
+																body         : body.body,
+																description  : body.description,
+																date         : new Date(  ((Number(body.hour   ))*60*60*1000) +
+																						  ((Number(body.minute ))   *60*1000) +
+																						  ((Number(body.second ))      *1000)   )
+															});
 			case 'WEEKLY': 
-								
 								return new TriggerAction({
 															deviceId     : body.deviceId,
 															destDeviceId : body.destDeviceId,
@@ -352,11 +453,11 @@ var utilParser = {
 															body         : body.body,
 															dateData     : body.weekdays,
 															description  : body.description,
-															date         : new Date(	((Number(body.hour   ))*60*60*1000) +
-																						((Number(body.minute ))   *60*1000) +
-																						((Number(body.second ))      *1000)   )
+															date         : new Date(  ((Number(body.hour   ))*60*60*1000) +
+																					  ((Number(body.minute ))   *60*1000) +
+																					  ((Number(body.second ))      *1000)   )
 															
-																			});
+															});
 		}
 	}
 };  //utils

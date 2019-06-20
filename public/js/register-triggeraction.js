@@ -95,7 +95,7 @@ function doSubmit(){
 	console.log(url);
 	sendData(url, sendObj, function(data){
 		//successfully saved this triggerAction
-		window.location.href = '/triggeractions/list';
+		window.location.href = '/triggeractions/list-all';
 	}, showError);
 }
 

@@ -125,3 +125,8 @@ module.exports.listByDestDeviceId = function(destDeviceId, callback){
 	var query = {destDeviceId: destDeviceId};
 	TriggerAction.find(query, callback);
 };
+
+module.exports.list = function(callback){
+	var query = {};
+	TriggerAction.find(query, callback);
+};

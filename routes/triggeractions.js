@@ -429,6 +429,9 @@ router.get('/register/:triggerActionId', lib.authenticatePowerUrl, function(req,
 router.get('/list', lib.authenticateUrl, function (req, res) {
 	res.render('list-triggeraction');
 });
+router.get('/list-all', lib.authenticateUrl, function (req, res) {
+	res.render('list-devicetriggeraction-all');
+});
 //opens a page which shows trigger actions as a table for a specific device
 router.get('/device/:deviceID', lib.authenticateRequest, function (req, res) {
 	// todo: how to authenticate? now a logged in user can use all devices
@@ -469,8 +472,48 @@ router.get('/list/:deviceID', lib.authenticateRequest, function (req, res) {
 	}
 });
 
+/**
+ * Finds a device name
+ * @param {String} deviceId id of the device 
+ * @param {Array} devices list of Mongoose Schema devices to search 
+ * @returns Success: String containing the name of the device
+ * @returns Fail: 'undefined'
+ */
+function getDeviceName(deviceId, devices){
+	for(var i = 0; i<devices.length; i++){
+		if (devices[i]._doc._id.equals(deviceId)) {
+			return devices[i]._doc.name;
+		}
+	}
+}
 
-//listing all devices and which have monitors and return them as a json array
+//returns a Json object with all trigger actions
+router.get('/listall', lib.authenticateRequest, function (req, res) {
+	Device.find({}, function(err, devices){
+		if (err) {
+			res.status(404).send('unable to find devices');
+		} else {
+			TriggerAction.list(function (err, triggerActions) {
+				if (err) {
+					res.status(404).send('unable to find trigger actions');
+				} else {
+					var name;
+					triggerActions.forEach(triggerAction => {
+							console.log(triggerAction._doc.deviceId);
+							triggerAction._doc.deviceName = getDeviceName(triggerAction._doc.deviceId,devices);
+							triggerAction._doc.destDeviceName = getDeviceName(triggerAction._doc.destDeviceId,devices);
+					});
+					console.log(triggerActions);
+					res.json(triggerActions);
+				}
+			});
+		}
+	})
+	
+});
+
+
+//listing all devices and which have trigger actions and return them as a json array
 router.get('/device-list', lib.authenticatePowerRequest, function (req, res) {
 
 	var monitorDevices = [];

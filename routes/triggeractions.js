@@ -448,7 +448,7 @@ router.get('/device/:deviceID', lib.authenticateRequest, function (req, res) {
 					id: deviceId,
 					name: retDevice._doc.name
 				};
-				res.render('triggeraction', { item: device, device: JSON.stringify(device), deviceId: deviceId });
+				res.render('list-devicetriggeraction', { item: device, device: JSON.stringify(device), deviceId: deviceId });
 			}
 		});
 	}
@@ -469,53 +469,6 @@ router.get('/list/:deviceID', lib.authenticateRequest, function (req, res) {
 	}
 });
 
-router.delete('/list/:deviceId', lib.authenticateDeviceOwnerRequest, function (req, res) {
-	var id = req.params.deviceId;
-
-	Device.getById(id, function (err, device) {
-		if (err || device === null) {
-			return res.status(404).json({ 'error': 'Could not find device.' });
-
-		} else {
-
-			TriggerAction.listByDeviceId(id, function (err, list) {
-				if (!err && list) {
-					var pinsToRemove = [];
-					list.forEach(element => {
-						pinsToRemove.push(element.pin);
-					});
-					var deviceRoute = device._doc.url + '/monitors';
-					request(lib.makeRequestPostBodyOptions(deviceRoute, pinsToRemove, 'DELETE'), function (delErr, delRes) {
-						if (delErr) {
-							console.log("Unable to delete device " + id);
-						} else {
-							console.log('DELETED device: ' + id);
-						}
-						if (delRes) {
-							var monitors = JSON.parse(delRes.body);
-							TriggerAction.deleteAllDeviceRecords(device.id, function (err) {
-								if (err !== null) {
-									res.status(410).json({ "error": "Unable to delete monitors from database" });
-								} else {
-									TriggerAction.saveMonitors(device.id, monitors, function (err) {
-										if (err) {
-											return res.status(400).json({ error: "Unable to save monitors to database" });
-										} else {
-											return res.status(200).json({
-												success: "device monitors updated.",
-												id: id
-											});
-										}
-									});
-								}
-							});
-						}
-					});
-				}
-			});
-		}
-	});
-});
 
 //listing all devices and which have monitors and return them as a json array
 router.get('/device-list', lib.authenticatePowerRequest, function (req, res) {
@@ -560,52 +513,13 @@ router.get('/device-list', lib.authenticatePowerRequest, function (req, res) {
 });
 
 
-router.delete('/:monitorID', lib.authenticateDeviceOwnerRequest, function (req, res) {
-	var id = req.params.monitorID;
-	TriggerAction.getById(id, function (err, triggerAction) {
-		if (err || triggerAction === null) {
-			return res.status(404).json({ 'error': 'Could not find triggerAction.' });
+router.delete('/:triggerActionId', lib.authenticateDeviceOwnerRequest, function (req, res) {
+	var id = req.params.triggerActionId;
+	TriggerAction.delete(id, function(err, result){
+		if(err !== null){
+			res.status(404).send('unable to delete trigger action "' + id + '".');
 		} else {
-			Device.getById(triggerAction.deviceid, function (err, device) {
-				if (err || device === null) {
-					return res.status(404).json({ 'error': 'Could not find device.' });
-
-				} else {
-					var ipAddress = device._doc.url;
-					ipAddress = lib.removeSchemaAndPortFromUrl(ipAddress);
-					if (!lib.isUserOrDeviceAuthenticated(req, ipAddress)) {
-						return res.status(404).json({ text: 'Error 404: You are not not authorized' });
-					}
-
-					var deviceRoute = device._doc.url + '/monitors';
-					request(lib.makeRequestPostBodyOptions(deviceRoute, [triggerAction.pin], 'DELETE'), function (delErr, delRes) {
-						if (delErr) {
-							console.log("Unable to delete pin " + triggerAction.pin);
-						} else {
-							console.log('DELETED: ' + triggerAction.pin);
-						}
-						if (delRes) {
-							var monitors = JSON.parse(delRes.body);
-							TriggerAction.deleteAllDeviceRecords(device.id, function (err) {
-								if (err !== null) {
-									res.status(410).json({ "error": "Unable to delete monitors from database" });
-								} else {
-									TriggerAction.saveMonitors(device.id, monitors, function (err) {
-										if (err) {
-											return res.status(400).json({ error: "Unable to save monitors to database" });
-										} else {
-											return res.status(200).json({
-												success: "device monitors updated.",
-												id: id
-											});
-										}
-									});
-								}
-							});
-						}
-					});
-				}
-			});
+			res.status(200).send('trigger action deleted.');
 		}
 	});
 });
@@ -724,8 +638,8 @@ router.post('/register/:triggerActionId', lib.authenticatePowerRequest, function
 router.postRegistering = function postRegistering(req, res) {
 
 	req.checkBody('type'       ,'Type is missing').notEmpty();
-	req.checkBody('url'       , 'Url is missing').notEmpty();
-	req.checkBody('description', 'description is required').notEmpty();
+	req.checkBody('url'        ,'Url is missing').notEmpty();
+	req.checkBody('description','description is required').notEmpty();
 	var id = req.params.triggerActionId;
 	var errors = req.validationErrors();
 	if (!errors)

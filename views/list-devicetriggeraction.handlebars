@@ -1,7 +1,8 @@
 <div class="row">
-	<h3 class="page-header pull-right">device log</h3>
+	<h3 class="page-header pull-right">Trigger actions</h3>
 </div>
-<h4>Device: <strong>{{item.name}}</strong></h4>
+<h4>Device: "{{item.name}}".</h4>
+
 {{#if errors}}
       {{#each errors}}
         <div class="alert alert-danger">{{msg}}</div>
@@ -21,15 +22,18 @@
 		</script>
 {{/if}}
 
-	<link rel="stylesheet" type="text/css" href="/css/line-chart.css">
+<table id="table-triggerAction" class="table table-bordered table-hover">
+	<thead>
+	</thead>
+	<tfoot>
+	</tfoot>
+	<tbody>
+	</tbody>
+</table>
 
-
-	<svg id="legend" width="850" height="30"></svg>
-	<svg id="visualisation"></svg>	
-
-
-<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+<button onclick="window.location.href='/triggeractions/register'" class="btn btn-xs btn-default"> 
+	<span class="glyphicon glyphicon-plus"></span>&nbsp;Add Trigger action
+</button>
 
 <script src="/js/bootstrap.min.js"></script>	
-<script src="/js/devicelog-linechart.js"></script>	
+<script src="/js/list-devicetriggeraction.js"></script>	

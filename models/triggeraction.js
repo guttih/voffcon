@@ -116,3 +116,12 @@ module.exports.delete = function (id, callback){
 	
 	TriggerAction.findByIdAndRemove(id, callback);
 };
+
+module.exports.listByDeviceId = function(deviceId, callback){
+	var query = {deviceId: deviceId};
+	TriggerAction.find(query, callback);
+};
+module.exports.listByDestDeviceId = function(destDeviceId, callback){
+	var query = {destDeviceId: destDeviceId};
+	TriggerAction.find(query, callback);
+};

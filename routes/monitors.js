@@ -368,7 +368,7 @@ router.get('/device/:deviceID', lib.authenticateRequest, function (req, res) {
 					id: deviceId,
 					name: retDevice._doc.name
 				};
-				res.render('devicemonitor', { item: device, device: JSON.stringify(device), deviceId: deviceId });
+				res.render('list-devicemonitor', { item: device, device: JSON.stringify(device), deviceId: deviceId });
 			}
 		});
 	}

@@ -22,7 +22,7 @@ by regular post to the address Haseyla 27, 260 Reykjanesbar, Iceland.
 var SERVER;
 
 function getDeviceLogs(clearOldValues){
-	var url = SERVER+'/logs/list/'+device.id;
+	var url = SERVER+'/triggeractions/list/'+device.id;
 		var request = $.get(url);
 	request.done(function( data ) {
 		setDeviceLogsToTable(data, clearOldValues);
@@ -52,21 +52,6 @@ function modeToTypeString(mode) {
 	return "?";
 };
 
-function pinsToTd(headers, pins){
-	var index;
-	var str = "";
-	for(var i = 0; i<headers.length; i++) {
-		index = getPinIndexByName(headers[i], pins);
-		if (index > -1) {
-			str+='<td class="pin-type-'+pins[index].m+'" rel="tooltip" title="Pin number: '+ pins[index].pin +' , pin type: '+ modeToTypeString(pins[index].m) +'">' + pins[index].val;
-			str+='</td>';
-		} else {
-			str+='<td></td>';
-		}
-	}
-	return str;
-}
-
 function monthToShortStr(month){
 	switch(month){
 		case 0: return "jan";
@@ -83,70 +68,68 @@ function monthToShortStr(month){
 		case 11: return "dec";
 	}
 	return "";
-};
+}
 
-function addToTable(headers, logs, clearOldValues){
+encodeHTML = function encodeHTML(str) {
+    return str.replace(/&/g, '&amp;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;')
+              .replace(/"/g, '&quot;')
+              .replace(/'/g, '&apos;');
+  };
+
+function setDeviceLogsToTable(itemList, clearOldValues){
+	
 	var i;
-	var $elm = $('#table-log thead');
+	var $elm = $('#table-triggerAction thead');
 	if (clearOldValues !== undefined && clearOldValues === true) {
 		$elm.empty();
-		$('#table-log tbody').empty();
-		$('#table-log tfoot').empty();
+		$('#table-triggerAction tbody').empty();
+		$('#table-triggerAction tfoot').empty();
 	}
 	var row = '<tr>';
 	
 	//	adding header
-	row+='<td>Time</td>';
+	var headers=[ 	{title:'url'			 ,text:'Url'}, 
+					{title:'Http method'	 ,text:'Method'},
+					{title:'date'	         ,text:'Date'},
+					{title:'description'     ,text:'Description'}];
+	
+	row+='<td>Type</td>';
 	for(i = 0; i<headers.length; i++){
-		row+='<td>'+ headers[i] + '</td>';
+		row+='<td rel="tooltip" title="'+ headers[i].title   +'">'+ headers[i].text + '</td>';
 	}
 	row+='</tr>';
 	$elm.append(row);
-
+	
 	//now add data
-	$elm = $('#table-log tbody');
-	for(i = 0; i<logs.length; i++){
-		row='<tr id="'+ logs[i].id +'">';
-		row+='<td class="datetime-td">' + 
-		' <a href="javascript:deleteListItem(\'logs\',\''+ logs[i].id +'\');"><span class="glyphicon glyphicon glyphicon-remove" rel="tooltip" title="Delete this log record" style="color:red" aria-hidden="true"></span></a>' +
-
-		'<span>' +
-		formaTima(new Date(logs[i].datetime)); +'</span></td>';
-		row+=pinsToTd(headers, logs[i].pins);
+	$elm = $('#table-triggerAction tbody');
+	console.log(itemList);
+	var strType;
+	for(i = 0; i<itemList.length; i++){
+		strType =  itemList[i].type;
+		row='<tr id="'+ itemList[i]._id +'">';
+		row+='<td class="datetime-td">';
+		row+=' <a href="javascript:deleteListItem(\'triggeractions\',\''+ itemList[i]._id +'\');"><span class="glyphicon glyphicon glyphicon-remove" rel="tooltip" title="Delete this trigger action" style="color:red" aria-hidden="true"></span></a>';
+		row+=' <a href="javascript:window.location.href =\'/triggeractions/register/'+ itemList[i]._id + '\'"><span class="glyphicon glyphicon glyphicon-pencil" rel="tooltip" title="Modify this trigger action" style="color:black" aria-hidden="true"></span></a>';
+		row+='<span>' + strType +'</span></td>';
+		row+='<td rel="tooltip" title="Url">' + encodeHTML(itemList[i].url) + '</td>';
+		row+='<td rel="tooltip" title="'+ itemList[i].method   +'">' + itemList[i].method + '</td>';
+		row+='<td rel="tooltip" title="'+ itemList[i].date   +'">' + itemList[i].date + '</td>';
+		row+='<td rel="tooltip" title="'+ itemList[i].description +'">' + itemList[i].description + '</td>';
 		row+='</tr>';
 		$elm.append(row);
 	}
-	$elm = $('#table-log tfoot');
+	$elm = $('#table-triggerAction tfoot');
 	row='<tr>';
 	row+='<td>Records</td>'
-	row+='<td id="record-count" colspan="' + (headers.length) + '">'+logs.length+'</td>';
+	row+='<td id="record-count" colspan="' + (headers.length) + '">'+itemList.length+'</td>';
 	row+="</tr>";
 	$elm.append(row);
-	
-
-
-}
-
-function setDeviceLogsToTable(deviceLogs, clearOldValues){
-	var logs = [];
-	var headers = [];
-	for(var i = 0; i < deviceLogs.length; i++){
-		logs.push({
-			id:deviceLogs[i]._id,
-			datetime:deviceLogs[i].datetime,
-			pins: JSON.parse(deviceLogs[i].data)
-		});
 		
-		// add headers
-		var head;
-		for(var x = 0; x<logs[i].pins.length; x++){
-			head = logs[i].pins[x].name;
-			if (headers.indexOf(head) < 0){
-				headers.push(head);
-			}
-		}
-	};
-	addToTable(headers, logs, clearOldValues);
+	
+	
+	
 }
 
 function deleteListItem(route,itemId){
@@ -156,19 +139,10 @@ function deleteListItem(route,itemId){
 
 	var url = SERVER+'/'+route+'/'+itemId;
 		var deleting = $.delete( url, sendObj);
-
-		deleting.done(function(data){
-			if (data.id !== undefined) {
-				$( "#"+data.id ).remove();
-				var elCount = $("#record-count");
-				var number =  Number(elCount.text());
-				if (isNaN(number) || number < 1){
-					number = 0;
-				} else {
-					number--;
-				}
-				elCount.text(number);
-			}
+		deleting.done(function( data ) {
+			window.location.assign(device.id);
+		}).fail(function( data ) {
+			window.location.assign(device.id);
 		});
 }
 
@@ -181,26 +155,26 @@ $(function () {
 	SERVER = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ':'+window.location.port: '');
 	getDeviceLogs();
 	$.ajaxSetup({timeout:5000});
-	$('button.btn-log-pins').click(function() {
-		var url = SERVER+'/logs/pins/'+device.id;
+	$('button.btn-triggerAction-pins').click(function() {
+		var url = SERVER+'/itemList/pins/'+device.id;
 		var request = $.get(url);
 		request.done(function( data ) {
 			console.log(data);
 			getDeviceLogs(true);
 		}).fail(function( data ) {
-			showModalErrorText("Logging error", "Unable to save device pin values to the log.");
+			showModalErrorText("Logging error", "Unable to save device pin values to the trigger action.");
 		});
 	});
 	
-	$('button.btn-delete-all-device-logs').click(function() {
+	$('button.btn-delete-all-device-itemList').click(function() {
 		
-		showModalConfirm('Delete all records', 'Are you sure you want to delete all records in this log?', 'Delete', 
+		showModalConfirm('Delete all records', 'Are you sure you want to delete all records in this trigger action?', 'Delete', 
 		function(){
-			var request = $.delete( SERVER+'/logs/list/'+device.id );
+			var request = $.delete( SERVER+'/itemList/list/'+device.id );
 			request.done(function( data ) {
 				getDeviceLogs(true);
 			}).fail(function( data ) {
-				showModalErrorText("Delete error", "Unable to delete all device records logs from this log.");
+				showModalErrorText("Delete error", "Unable to delete all device records itemList from this trigger action.");
 			});
 		}
 	);

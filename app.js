@@ -55,35 +55,20 @@ var subnets = lib.getSubnets(true);
 // Init App
 var app = express();
 
-///////////////////// TEST EVENTS START //////////////////////////
-var now = new Date();
-var timabil = 3000;
-var trigger1 = {
-	id: 't01', actinId: 'a01', deviceId: 'd01',
-	date: new Date(now.getTime() + timabil * 1),
-	action: { url: 'www.undri.is', body: 'someBody1' }
-};
-var trigger2 = {
-	id: 't02', actinId: 'a02', deviceId: 'd02',
-	date: new Date(now.getTime() + timabil * 2),
-	action: { url: 'www.mbl.is', body: 'someBody2' }
-};
 
-var trigger3 = {
-	id: 't03', actinId: 'a03', deviceId: 'd03',
-	date: new Date(now.getTime() + timabil * 3),
-	action: { url: 'www.visir.is', body: 'someBody3' }
-};
 
-var xdate = new Date(1970,0,1,1,2,3);
-var millis = xdate.getTime();
-console.log(xdate.toTimeString());
-console.log(millis);
+var ta = triggerActions.getTriggerAction();
+ta.list(function (err, list) {
+	
+	list.forEach(item => {
+		var timer = ta.copyValues(item, true,true);
+		eventQueue.addTimer(timer);
+	});
+	console.log('eventQueue.events');
+	eventQueue.consoleLogEvents();
+	
+});
 
-var b;
-b = eventQueue.addTimer(trigger3);
-b = eventQueue.addTimer(trigger2);
-b = eventQueue.addTimer(trigger1);
 ///////////////////// TEST EVENTS  END  //////////////////////////
 mongoose.connection.on('open', function () {
 	mongoose.connection.db.listCollections().toArray(function (err, names) {

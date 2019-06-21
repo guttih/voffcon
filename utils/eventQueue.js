@@ -1,6 +1,12 @@
 //Event queue is a 
 
 module.events = []; 
+module.exports.consoleLogEvents = function consoleLogEvents() {
+	console.log('Server date: '+(new Date()).toUTCString());
+	console.log('------------------  Events  ------------------');
+	console.log(module.events);
+	console.log('----------------------------------------------');
+}; 
 module.timerVariable = 0;
  
   /**
@@ -10,6 +16,12 @@ module.timerVariable = 0;
    */
 module.exports.addTimer = function addTimer(timer) {
 	//set timeoute bla removea úr array og gera eitthvað	
+	var now = new Date();
+	if (timer.date === undefined || timer.date < now) {
+		//time has passed
+		console.log('timer has passed : ' + timer.id);
+		return false;
+	}
 	module.events.push(timer);
 	module.events.sort(module.compareEvent);
 	var thisIsTheFirstTimer = module.events[0].id ===timer.id;
@@ -51,7 +63,7 @@ module.compareEvent = function compareEvent(a, b) {
 module.runFirstTrigger = function runFirstTrigger() {
 	var trigger = module.events[0];
 	module.events.shift();
-	console.log('RUNNING FIRST TRIGGER:')
+	console.log('RUNNING FIRST TRIGGER:');
 	console.log(trigger);
 }
 
@@ -72,6 +84,9 @@ module.addSetTimeout = function addSetTimeout() {
 		module.addSetTimeout();
 		return;
 	}
+	
+	console.log('Next timer runs after "'+ millisecondsUntilTimerEvent+'" millis');
+
 	module.timerVariable = setTimeout(function() {  
 		console.log('I am a timeout');
 		module.runFirstTrigger();

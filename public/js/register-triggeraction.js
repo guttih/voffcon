@@ -159,6 +159,7 @@ function setFormTriggerActionValues(triggerAction) {
 	$('#triggerAction-url').val(triggerAction.url);
 	$('#triggerAction-body').val(triggerAction.body);
 	$('#triggerAction-description').val(triggerAction.description);
+	$('#triggerAction-last-day').val(triggerAction.dateData);
 	
 	if (triggerAction.dateData !== undefined && triggerAction.dateData !== null){
 		var weekdays = triggerAction.dateData.split(';');

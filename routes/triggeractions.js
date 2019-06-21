@@ -462,6 +462,10 @@ var utilParser = {
 	}
 };  //utils
 
+router.getTriggerAction = function getTriggerAction(){
+	return TriggerAction;
+};
+
 router.getRegisterPage = function getRegisterPage(req, res, id){
 
 	Device.listByOwnerId(req.user._id, function(err, deviceList){
@@ -489,7 +493,7 @@ router.getRegisterPage = function getRegisterPage(req, res, id){
 					res.redirect('/result');
 				} else { 
 					//success
-					var triggerActionStr = JSON.stringify(TriggerAction.copyValues(triggerAction));
+					var triggerActionStr = JSON.stringify(TriggerAction.copyValues(triggerAction, false, false));
 					res.render('register-triggeraction', 
 								{
 									devices:deviceStr,
@@ -512,18 +516,6 @@ router.get('/register', lib.authenticatePowerUrl, function(req, res){
 router.get('/register/:triggerActionId', lib.authenticatePowerUrl, function(req, res){
 	var id = req.params.triggerActionId;
 	router.getRegisterPage(req, res, id);
-	/*if (id !== undefined){
-		TriggerAction.getById(id, function(err, device){
-				if(err || device === null) {
-					req.flash('error',	'Could not find trigger action.' );
-					res.redirect('/result');
-				} else{
-					var obj = TriggerAction.copyValues(device);
-					var str = JSON.stringify(obj);
-					res.render('register-triggeraction', {devices:str});
-				}
-			});
-	}*/
 });
 
 //render a page with list of trigger actions
@@ -600,11 +592,9 @@ router.get('/listall', lib.authenticateRequest, function (req, res) {
 				} else {
 					var name;
 					triggerActions.forEach(triggerAction => {
-							console.log(triggerAction._doc.deviceId);
 							triggerAction._doc.deviceName = getDeviceName(triggerAction._doc.deviceId,devices);
 							triggerAction._doc.destDeviceName = getDeviceName(triggerAction._doc.destDeviceId,devices);
 					});
-					console.log(triggerActions);
 					res.json(triggerActions);
 				}
 			});
@@ -668,52 +658,6 @@ router.delete('/:triggerActionId', lib.authenticateDeviceOwnerRequest, function 
 	});
 });
 
-// update the device monitors.  That is from server database to device memory
-router.get('/update/:deviceId', function (req, res) {
-	var deviceId = req.params.deviceId;
-
-	Device.getById(deviceId, function (err, device) {
-		if (err !== null || device === null) {
-			console.log({ text: 'Error 404: User device not found!' });
-		}
-
-		var ipAddress = device.url;
-		ipAddress = lib.removeSchemaAndPortFromUrl(ipAddress);
-		if (!lib.isPowerUserOrDeviceAuthenticated(req, ipAddress)) {
-			console.log({ text: 'Error 404: You are not not authorized' });
-		}
-		TriggerAction.listByDeviceIdAndCleanObjects(deviceId, function (err, data) {
-			console.log(data);
-
-
-			var deviceRoute = device.url + '/monitors';
-			//we need to delete the older triggerAction on the device
-			request(lib.makeRequestPostBodyOptions(deviceRoute, data, 'POST'), function (updateErr, updateResult) {
-				if (updateErr) {
-					console.log("Unable to update monitors ");
-				} else {
-					console.log('Monitors updated');
-					TriggerAction.deleteAllDeviceRecords(deviceId, function (err) {
-						if (err !== null || !updateResult) {
-							console.log({ "error": "Unable to delete monitors from database" });
-						} else {
-							var monitors = JSON.parse(updateResult.body);
-							TriggerAction.saveMonitors(deviceId, monitors, function (err) {
-								if (err) {
-									console.log({ error: "Unable to save monitors to database" });
-								} else {
-									console.log({ success: "device monitors updated." });
-								}
-							});
-						}
-					});
-				}
-
-			}).pipe(res);
-		});
-	});
-});
-
 router.addTriggerAction = function addTriggerAction(req, res, id) {
 	var newTriggerAction = utils.newTriggerAction(req.body);
 	if ( id === undefined ) {
@@ -725,7 +669,7 @@ router.addTriggerAction = function addTriggerAction(req, res, id) {
 			}
 		});
 	} else {
-		TriggerAction.modify(id, TriggerAction.copyValues(newTriggerAction), function (err, result) {
+		TriggerAction.modify(id, TriggerAction.copyValues(newTriggerAction, false, false), function (err, result) {
 			if (err || result === null || result.ok !== 1) {//(result.ok===1 result.nModified===1)
 				req.flash('error', ' unable to update');
 			} else {

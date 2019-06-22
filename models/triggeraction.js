@@ -142,12 +142,12 @@ module.exports.listByLoggingDeviceId = function(deviceId, callback){
 };
 
 /**
-	 * Finds all tokens in text and returns them
-	 * @param {String} text 
-	 * @before Assumes assumes that all tokens are valid.
-     * @returns Success: Array with all the tokens found in text
-     * @returns Fail: returns an empty array.
-	 */
+* Finds all tokens in text and returns them
+* @param {String} text 
+* @before Assumes assumes that all tokens are valid.
+* @returns Success: Array with all the tokens found in text
+* @returns Fail: returns an empty array.
+*/
 module.exports.getAllTokensInText = function getAllTokensInText(text) {
 		var arr = [];
 

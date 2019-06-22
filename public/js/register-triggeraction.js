@@ -19,6 +19,27 @@ You can contact the author by sending email to gudjonholm@gmail.com or
 by regular post to the address Haseyla 27, 260 Reykjanesbar, Iceland.
 */
 
+
+/**
+ * 
+ * @param {*} [deviceId] If provided all device pin numbers will be added as 'PIN_VALUE##' token 
+ */
+var getTokens = function getTokens(deviceId) {
+	var tokens = ['DEVICE_ID','DEVICE_URL','DATE'];
+	if (deviceId === undefined || devices === undefined || devices.length < 1){
+		return tokens;
+	}
+	for(var i = 0; i<devices.length; i++){
+		if (devices[i].id === deviceId) {
+			index = i;
+			break;
+		}
+	}
+	if (index < 0 ) { return; };
+	devices[index].pins.forEach(e => tokens.push('PIN_VALUE'+ zeroFirst(e.pin)));
+	return tokens;
+};
+
 function sendData(subUrl, data, callback, errorCallback){
 		var url = SERVER + subUrl;
 		var request = $.post(url, data);
@@ -57,12 +78,99 @@ function showError(data){
 
 	showModalMonitorError("An error Occurred", text);
 }
+
+/**
+* Finds all tokens in text and returns them
+* @param {String} text 
+* @before Assumes assumes that all tokens are valid.
+* @returns Success: Array with all the tokens found in text
+* @returns Fail: returns an empty array.
+*/
+var getAllTokensInText = function getAllTokensInText(text) {
+	var arr = [];
+
+	var ret = 0;
+	var indexStart = text.indexOf('<<');
+	while (indexStart > -1) {
+		indexStart+=2;
+		var indexEnd = text.indexOf('>>', indexStart);
+		if (indexEnd < 0) { return []; }
+		var token = text.substr(indexStart, indexEnd - indexStart);
+		arr.push(token);
+		ret++;
+		text = text.substr(indexEnd+2);
+		indexStart = text.indexOf('<<');
+	}
+	return arr;
+}; 
+
+/**
+ * Searches if any invalid tokens are in text
+ * @param {String} text
+ * Success: returns an empty array when all tokens in text are valid
+ * Fail: returns all invalid tokens. 
+ */
+var getInvalidTokensInText = function getInvalidTokensInText(text) {
+	var invalidTokens = [];
+	var textTokens = getAllTokensInText(text);
+	var validTokens = getTokens($('#triggerAction-deviceId').val());
+	textTokens.forEach(tokenInText => {
+		if (!validTokens.includes(tokenInText)){
+			invalidTokens.push(tokenInText);
+		}
+	});
+	return invalidTokens;
+};
+function validateUrlAndBody(){
+	var invalidTokens = getInvalidTokensInText($('#triggerAction-url').val());
+	var title, text;
+	if (invalidTokens.length > 0) {
+		title = 'Error in Url';
+	} else {
+		invalidTokens = getInvalidTokensInText($('#triggerAction-body').val());
+		if (invalidTokens.length > 0) {
+			title = 'Error in Body';
+		}
+	}
+	if (invalidTokens.length > 0) {
+		text = (invalidTokens.length > 1)? 'The following tokens are invalid: ': 'This token is invalid: ';
+		var tokenList = invalidTokens.join(',');
+		text+=tokenList;
+		showModalMonitorError(title, text);
+		return false;
+	}
+
+	//Check the content of body if needed
+	var method = $('#triggerAction-method').val();
+	if (method === 'GET'){
+		$('#triggerAction-body').val('');
+		return true;
+	}
+
+	var body = $('#triggerAction-body').val();
+	var textTokens = getAllTokensInText(body);
+	//replace all tokens with numbers
+	textTokens.forEach(function(token, index) {
+		body = body.replace('<<'+token+'>>', index);
+	});
+	var obj;
+	try {
+		obj = JSON.parse(body);
+	} catch(e) {
+		showModalMonitorError('Body', 'The body does not contain a valid Json object.');
+		return false;
+	}
+
+	return true;
+}
+
 function doSubmit(){
+	if (!validateUrlAndBody()){
+		return;
+	}
 	var $form = $("#triggerActionForm");
 	var weekdays=[];
-	var sendObj = {
-		
-	};
+	var sendObj = {};
 	var name, val;
 	$form.find('input,textarea').each(function(){
 		name = $(this).attr('name');
@@ -90,11 +198,8 @@ function doSubmit(){
 		sendObj.weekdays = weekdays.join(';');
 	}
 	
-	console.log(sendObj);
 	var url = $form.attr('action');
-	console.log(url);
 	sendData(url, sendObj, function(data){
-		//successfully saved this triggerAction
 		window.location.href = '/triggeractions/list-all';
 	}, showError);
 }
@@ -220,10 +325,43 @@ var updateSubmitButtonState = function updateSubmitButtonState(){
 		}
 		$( '#btn-submit-triggerActionForm').prop('disabled', !isValid);
 	}, 300);
-}	
+};	
+
+function getDeviceStatus(deviceId, callback){
+	var url = SERVER+'/devices/status/'+deviceId;
+	requestData(url, function(data){
+		console.log(data);
+		callback(data);
+	},function(data){
+		$elm.text("Unable to connect to this device.").removeClass("alert-warning").addClass("alert-danger");
+	});
+}
 
 var onSelectDeviceChange = function onSelectDeviceChange($elm){
-	console.log($elm.val());
+	var elmId = $elm.attr('id');
+	if (elmId !== 'triggerAction-deviceId'){
+		return;  //only need pin for source device
+	}
+	var deviceId = $elm.val();
+	console.log(deviceId);
+	var gotDevices       = typeof devices       !== 'undefined' && devices       !== 'undefined';
+	if (!gotDevices) { return };
+	var index = -1;
+	for(var i = 0; i<devices.length; i++){
+		if (devices[i].id === deviceId) {
+			index = i;
+			break;
+		}
+	}
+	if (index < 0 ) { return; }
+	if (devices[index].pins === undefined) {
+		getDeviceStatus(devices[index].id, function(data){
+			devices[index].pins = data.pins;
+			updateTokenMenu(getTokens(deviceId));
+		});
+	} else {
+		updateTokenMenu(getTokens(deviceId));
+	}
 }
 var onSelectYearOrMonthChange = function onSelectYearOrMonthChange(){
 	var $daySelect = $('#triggerAction-day');
@@ -279,7 +417,36 @@ var onSelectMethodChange = function onSelectMethodChange(){
 		} else {
 			$('.body').show();
 		}
+};
+
+function appendTextToValue($elm){
+	var token = $elm.attr('title');
+	var parent = $elm.parent().parent().parent().parent();
+	var id;
+	if (parent.hasClass('body')){
+		id = 'triggerAction-body';
+	} else if (parent.hasClass('url')){
+		id = 'triggerAction-url';
+
+	}
+	
+	
+
+	var $destElm = $('#'+id);
+	$destElm.val($destElm.val()+'<<'+token+'>>');
 }
+
+var updateTokenMenu = function updateTokenMenu(newTokens) {
+	var tokens = newTokens === undefined? getTokens() : newTokens;
+	var $elm = $('form .url .dropdown-menu,form .body .dropdown-menu');
+	//todo: hreinsa menu
+	$elm.find('li').remove();
+	tokens.forEach(token => {
+		$elm.append('<li><a href="#" title="'+token+'" onclick="appendTextToValue($(this)); return false;">&lt;&lt;'+token+'&gt;&gt;</a></li>');
+	});
+	
+
+};
 
 var onSelectTypeChange = function onSelectTypeChange(){
 	var val = $('#triggerAction-type').val();
@@ -327,6 +494,7 @@ $(function () {
 	$('input,select,textarea').on('change input', function(){
 		updateSubmitButtonState();
 	});
-	
+	updateTokenMenu();	
 	updateSubmitButtonState();
+
 });

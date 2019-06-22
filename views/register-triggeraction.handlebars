@@ -129,19 +129,34 @@
 		<p class="triggerAction-input-text"></p>
 	</div>
 	<div class="form-group url">
+		<div class="dropdown pull-right">
+			<button class="btn btn-default btn-xs  dropdown-toggle " type="button" data-toggle="dropdown">
+			Append a token&nbsp;<span class="caret"></span></button>
+			<ul class="dropdown-menu">
+				<li><a href="#" onclick="refreshPartSelect(this); return false;">Refresh</a></li>
+			</ul>
+		</div>
 		<label>Url</label>
 		<input id="triggerAction-url" type="text" class="form-control" placeholder="http://www.someurl.com:5100?somevarforPinvalue1=<<PIN_VALUE05>>" name="url" required>
 		<p class="triggerAction-input-text" title="The minimum time between logs"></p>
 	</div>
 	<div class="form-horizontal body">
-		<label>Body</label>
+		<div class="dropdown pull-right">
+			<button class="btn btn-default btn-xs  dropdown-toggle " type="button" data-toggle="dropdown">
+			Append a token&nbsp;<span class="caret"></span></button>
+			<ul class="dropdown-menu">
+				<li><a href="#" onclick="refreshPartSelect(this); return false;">Refresh</a></li>
+			</ul>
+		</div>
+
+		<label>Body  Remember to use quotation marks around keys.</label>
 		<div class="form-group">
 			
 			<div class="col-md-12">
-				<textarea id="triggerAction-body" name="body" form="triggerActionForm" class="form-control" rows="4" placeholder="{
-	p4:<<PIN_VALUE05>>,
-	p2:<<PIN_VALUE02>>
-}" required></textarea>
+				<textarea id='triggerAction-body' name='body' form='triggerActionForm' class='form-control' rows='4' placeholder='{
+	"p4":<<PIN_VALUE05>>,
+	"p2":<<PIN_VALUE02>>
+}' required></textarea>
 			</div>
 		</div>
 	</div>

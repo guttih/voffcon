@@ -328,7 +328,7 @@ module.exports.authenticateAdminRequest = function authenticateAdminRequest(req,
 		return res.send('Error 401: You are not not authorized! ');
 	}
 };
-module.exports.makeRequestPostOptions = function makeRequestOptions(url, payload, method, ContentType){
+module.exports.makeRequestPostOptions = function makeRequestPostOptions(url, payload, method, ContentType){
 	
 	var byteLength = Buffer.byteLength(payload);
 	if (method === undefined ){
@@ -350,7 +350,7 @@ module.exports.makeRequestPostOptions = function makeRequestOptions(url, payload
 	};
 	return options;
 };
-module.exports.makeRequestPostBodyOptions = function makeRequestOptions(url, payload, method, ContentType){
+module.exports.makeRequestPostBodyOptions = function makeRequestPostBodyOptions(url, payload, method, ContentType){
 	
 	var byteLength = Buffer.byteLength(payload);
 	if (method === undefined ){

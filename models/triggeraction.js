@@ -23,6 +23,11 @@ by regular post to the address Haseyla 27, 260 Reykjanesbar, Iceland.
 //             and about types: http://mongoosejs.com/docs/schematypes.html
 "use strict";
 var mongoose = require('mongoose');
+
+var Device   = require('./device');
+var lib      = require('../utils/glib');
+var request  = require('request');
+
 var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
 var TriggerActionSchema = mongoose.Schema({
@@ -65,6 +70,12 @@ var TriggerActionSchema = mongoose.Schema({
 
 var TriggerAction = module.exports = mongoose.model('TriggerAction', TriggerActionSchema);
 
+/**
+ * Returns all Valid tokens
+ */
+module.exports.getValidTokens = function(addStartingToken, addEndToken, skipPinToken) {
+        return ['DEVICE_ID','DEVICE_URL','DATE','PIN_VALUE'];
+};
 /**
  * Copies all values from a TriggerAction Schema object to a new raw object.
  * @param {TriggerActionSchema} triggerActionSchemaObject mongoose Schema object to convert 
@@ -124,6 +135,109 @@ module.exports.listByDeviceId = function(deviceId, callback){
 	var query = {deviceId: deviceId};
 	TriggerAction.find(query, callback);
 };
+module.exports.listByLoggingDeviceId = function(deviceId, callback){
+    var query = {deviceId: deviceId,
+                 type: 'LOG-INSTANT'};
+	TriggerAction.find(query, callback);
+};
+
+/**
+	 * Finds all tokens in text and returns them
+	 * @param {String} text 
+	 * @before Assumes assumes that all tokens are valid.
+     * @returns Success: Array with all the tokens found in text
+     * @returns Fail: returns an empty array.
+	 */
+module.exports.getAllTokensInText = function getAllTokensInText(text) {
+		var arr = [];
+
+		var ret = 0;
+		var indexStart = text.indexOf('<<');
+		while (indexStart > -1) {
+			indexStart+=2;
+			var indexEnd = text.indexOf('>>', indexStart);
+			if (indexEnd < 0) { return []; }
+			var token = text.substr(indexStart, indexEnd - indexStart);
+			arr.push(token);
+			ret++;
+			text = text.substr(indexEnd+2);
+			indexStart = text.indexOf('<<');
+		}
+		return arr;
+}; 
+
+/**
+ * Replaces <<TOKENS>> with a value.  A value could be url, date or device pin value(s).
+ * @param {String} textWithTokens A string that could include tokens, if no tokens are found the same string is returned.
+ * @param {Object} arrayOfDevicePinsAndValues 
+ * @param {String} deviceId of the device where the pin values come from
+ * @param {String} deviceUrl the complete url to a device, including the the appended :port number if needed
+ * @param {Date} [date] If date is not provided, current time will be used if a DATE token is found.
+ * @param Success: a string where all tokens have been 
+ */
+module.exports.replaceAllTokensInText = function replaceAllTokensInText(textWithTokens, arrayOfDevicePinsAndValues, deviceId, deviceUrl, date) {
+
+    var newText;
+    newText = module.exports.replacePinValuesInText(textWithTokens, arrayOfDevicePinsAndValues);
+    if (newText === undefined) { return; } //at least one pin token is invalid
+
+    if (date===undefined) { 
+        date = new Date();
+    }
+    newText = newText.replace('<<DEVICE_ID>>', deviceId);
+    newText = newText.replace('<<DEVICE_URL>>', deviceUrl);
+    newText = newText.replace('<<DATE>>', date.toUTCString()); 
+
+    return newText;
+}; 
+/**
+ * Replaces <<PIN_VALUE##>> with pin value .
+ * @param {*} textWithTokens 
+ * @param {*} arrayOfDevicePinsAndValues 
+ * @returns Success: Text where app pin tokens have been replaced with the pin values.  
+                     If no pin tokens are found, it is not considered an error so the textWithTokens is returned.
+ * @returns Fail: undefined
+ */
+module.exports.replacePinValuesInText = function (textWithTokens, arrayOfDevicePinsAndValues) {
+    var tokens = module.exports.getAllTokensInText(textWithTokens);
+
+    var pinNumbers = [];
+    var newText = textWithTokens;
+    
+    /*arrayOfDevicePinsAndValues.forEach( m => {
+        pinNumbers.push(m.pin);
+    });*/
+    var pinTokens = tokens.filter(m => {
+        return m.indexOf('PIN_VALUE') === 0;
+    });
+    if (pinTokens.length < 1) {
+        return textWithTokens;
+    }
+
+    var strNum, num;
+    var ret = true;
+    //now let's extract all numbers from the tokens
+    //Create an array with tokens, tokenNumber and later where pin value will be added to that object
+    var workArray=[];
+    pinTokens.forEach( m => {
+        strNum = m.substr(9);
+        if (strNum.length < 1 || Number.isNaN(strNum) || Number(strNum) < 0 || Number(strNum)> 99 ) { return false;	}
+        num = Number(strNum);
+        var pin = arrayOfDevicePinsAndValues.find( p => p.pin === num );
+        if (pin === undefined) { 
+            return; 
+        }  //all pins must exits
+        workArray.push({token:m, tokenNumber:num, value:pin.val});
+    });
+    workArray.forEach(item => {
+        newText = newText.replace('<<'+item.token+'>>', item.value);
+    });
+    
+    return newText;
+    
+};
+
+
 module.exports.listByDestDeviceId = function(destDeviceId, callback){
 	var query = {destDeviceId: destDeviceId};
 	TriggerAction.find(query, callback);
@@ -176,6 +290,49 @@ module.exports.findCurrentOrNextWeekday = function findCurrentOrNextWeekday(semi
     var offset = foundDay - currentDay;
     return new Date(Date.UTC(baseDate.getUTCFullYear(), baseDate.getUTCMonth(), baseDate.getUTCDate()+offset, hour, minute, second));
 
+};
+
+/**
+ * Searches for all TriggerAction of the type 'LOG-INSTANT' with reference to the given device,
+ * and populates the url and body and runs the actions. 
+ * @param {Device} loggingDevice The device sending this record
+ * @param {Array} deviceLogRecord The record with all the pin values
+ */
+ module.exports.onNewDeviceLogRecord = function onNewDeviceLogRecord(loggingDevice, deviceLogRecord) {
+    var deviceRecord = JSON.parse(deviceLogRecord.data);
+    
+	TriggerAction.listByLoggingDeviceId(loggingDevice.id, function(err, triggerActions) {
+		triggerActions.forEach(ta => {
+            var populatedUrl, populatedBody;
+            Device.getById(ta.destDeviceId, function(err, destDevice) {
+                var destUrl = (!err && destDevice !== undefined )? destDevice.url : '';
+                populatedUrl = TriggerAction.replaceAllTokensInText(ta.url, deviceRecord, loggingDevice.id, destUrl);
+                if (ta.method !== 'GET') {
+                    populatedBody = TriggerAction.replaceAllTokensInText(ta.body, deviceRecord, loggingDevice.id, destUrl);
+                }
+                if( populatedUrl !== undefined && (populatedBody !== undefined || ta.method === 'GET') ) {
+                    //Now I need to make call the request
+                    var requestOptions = lib.makeRequestPostBodyOptions(populatedUrl, populatedBody, ta.method);
+
+
+                    request(requestOptions, function (err, result) {
+                        if (err) {
+                            console.log('Error when calling TriggerAction "' +ta.id+'".  Url : '+ populatedUrl);
+                        } else {
+                            //todo: remove this else when things have started working
+                            if (result.body !== undefined) {
+                                console.log(result.body);
+                            }
+                        }
+                    });
+                } else {
+                    console.error("Unable to send the Action");
+                    if (populatedUrl === undefined){ console.error('The trigger action url was invalid'  ); }
+                    if (populatedBody === undefined){ console.error('The trigger action body was invalid'); }
+                }
+            });
+		});
+	});
 };
 /**
  * Calculates the day of the month from the last day.

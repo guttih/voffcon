@@ -1,4 +1,5 @@
-//Event queue is a 
+//Event queue 
+var TriggerAction = require('../models/triggerAction');
 
 module.events = []; 
 module.exports.consoleLogEvents = function consoleLogEvents() {
@@ -92,4 +93,6 @@ module.addSetTimeout = function addSetTimeout() {
 		module.runFirstTrigger();
 		module.addSetTimeout();
 	}, millisecondsUntilTimerEvent);
-}
+};
+
+

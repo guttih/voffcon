@@ -28,7 +28,12 @@ var Device = require('../models/device');
  * Helper functions
  */
 var utilParser = {
-	validTokens : ['DEVICE_ID','DEVICE_URL','DATE','TIME','PIN_VALUE'],
+	/**
+	* Returns all Valid tokens
+	*/
+	getValidTokens : function getValidTokens(){
+		return TriggerAction.getValidTokens();
+	},
 
 	/**
 	 * Checks any tokens need to be replaced with values from a device.
@@ -53,25 +58,11 @@ var utilParser = {
 	/**
 	 * Finds all tokens in text and returns them
 	 * @param {String} text 
-	 * @before Assumes assumes that all tokens are valid.
+	 * @before Assumes that all tokens are valid.
 	 * @returns  Array with all the tokens found in text
 	 */
-	getAllTokens : function getAllTokens(text){
-		var arr = [];
-
-		var ret = 0;
-		var indexStart = text.indexOf('<<');
-		while (indexStart > -1) {
-			indexStart+=2;
-			var indexEnd = text.indexOf('>>', indexStart);
-			if (indexEnd < 0) { return []; }
-			var token = text.substr(indexStart, indexEnd - indexStart);
-			arr.push(token);
-			ret++;
-			text = text.substr(indexEnd+2);
-			indexStart = text.indexOf('<<');
-		}
-		return arr;
+	getAllTokensInText : function getAllTokensInText(text){
+		return TriggerAction.getAllTokensInText(text);
 	},
 
 	/**
@@ -83,7 +74,7 @@ var utilParser = {
 	 * @returns false if at least one device pin token reefers to a pin which is not on the device
 	 */
 	 areDevicePinsAvailable : function areDevicePinsAvailable(text, devicePins){
-		var tokens = this.getAllTokens(text);
+		var tokens = this.getAllTokensInText(text);
 		var pinNumbers = [];
 		devicePins.forEach( m => {
 			pinNumbers.push(m.pin);
@@ -114,6 +105,7 @@ var utilParser = {
 	 */
 	countIfAllTokensAreValid : function countIfAllTokensAreValid(text){
 		var ret = 0;
+		var validTokens = this.getValidTokens();
 		var indexStart = text.indexOf('<<');
 		while (indexStart > -1) {
 			indexStart+=2;
@@ -121,16 +113,23 @@ var utilParser = {
 			if (indexEnd < 0) { return -1; }
 			var tokenToCheck = text.substr(indexStart, indexEnd - indexStart);
 			var tokenIndexInArray = -1;
-			this.validTokens.forEach( function(item, index) {
-				if (tokenToCheck.indexOf(item) === 0) {
+			
+			validTokens.forEach( function(item, index) {
+				if ( tokenToCheck === item || tokenToCheck.indexOf('PIN_VALUE') === 0) {
 					tokenIndexInArray = index;
 				}
+				
 			});
 
-			if (tokenIndexInArray === -1) { return -1; }
+			if (tokenIndexInArray === -1) { 
+					return -1; 
+			}
 
-			if (this.validTokens[tokenIndexInArray] === 'PIN_VALUE') {
+			if (validTokens[tokenIndexInArray] === 'PIN_VALUE') {
 				var strNum = tokenToCheck.substr(9);
+				if (strNum.length !== 2){
+					return -1;
+				}
 				if (strNum.length < 1    || Number.isNaN(strNum) || 
 					Number(strNum) < 0   || Number(strNum)> 99     ) {
 					return -1;
@@ -737,6 +736,7 @@ router.postRegistering = function postRegistering(req, res) {
 	if (errors) {
 		res.status(422).json(errors);
 	} else {
+		//todo: do not save body.deviceId and body.destDeviceId if no tokens reefer to these devices.
 		if (utilParser.areAnyDeviceTokens(req.body.url) || utilParser.areAnyDeviceTokens(req.body.body)) {
 			Device.getById(req.body.deviceId, function (err, device) {
 				if (err || device === null) {

@@ -91,7 +91,7 @@ This server will only allow request to it, if the request comes from a client wh
 
 
 ### Device server commands
-These are possible commands a client (the Node server) can send to the device. 
+These are possible commands a client (the Node server) can send to the device.
 
 - /pins
   - __get__ Get status of all pins
@@ -108,8 +108,10 @@ These are possible commands a client (the Node server) can send to the device.
   - __get__ whitelists the first caller to the device.  (todo: this is a sequrity risk, should be removed after development)
 - /pinout
   - __get__ returns the pin mappings of the device.  That is f.example "D0" on the device is mapped to the pin number 16.
-
-Todo: make timed commands.  That is allow a client to send a command which is a sequence of commands made to pins.  That could be shomething like this.  Set pins 1 value to 1023 and set pins 2 value to 0.  Wait for 500 milliseconds and set pins 1 value to 0 and set pins 3 value to 256.
+  - /monitors
+  - __get__ returns all the pin monitors which monitor pin values and if a cetain time has passed.
+  - __post__ Updates the monitor list with monitors from the Json object provided in the body.
+  - __delete__ Deletes list items provided by from Json array
 
 ### Device server Documentation
 #### NodeMcu

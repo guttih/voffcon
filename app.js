@@ -198,6 +198,8 @@ app.use('/triggeractions', triggerActions);
 
 
 app.set('port', config.port);
+app.set('eventQueue',eventQueue);
+// eventQueue can be accessed from a route like this: req.app.locals.eventQueue;
 
 app.listen(app.get('port'), function () {
 	lib.getFirstDefaultGateWay(function (defaultGateway) {

@@ -36,7 +36,9 @@ var getTokens = function getTokens(deviceId) {
 		}
 	}
 	if (index < 0 ) { return; };
-	devices[index].pins.forEach(e => tokens.push('PIN_VALUE'+ zeroFirst(e.pin)));
+	if (devices[index].pins !== undefined){
+		devices[index].pins.forEach(e => tokens.push('PIN_VALUE'+ zeroFirst(e.pin)));
+	}
 	return tokens;
 };
 
@@ -333,7 +335,7 @@ function getDeviceStatus(deviceId, callback){
 		console.log(data);
 		callback(data);
 	},function(data){
-		$elm.text("Unable to connect to this device.").removeClass("alert-warning").addClass("alert-danger");
+		console.log("Unable to connect to device with id "+ deviceId);
 	});
 }
 

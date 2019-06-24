@@ -79,14 +79,13 @@ module.exports.getValidTokens = function(addStartingToken, addEndToken, skipPinT
 /**
  * Copies all values from a TriggerAction Schema object to a new raw object.
  * @param {TriggerActionSchema} triggerActionSchemaObject mongoose Schema object to convert 
- * @param {Boolean}             dateAsTriggerTime if true, the date object will contain when this TriggerAction should fire next.
+ * @param {Boolean}             addTriggerTime if true, the date object will contain when this TriggerAction should fire next.
  * @param {Boolean}       includeId set to false if you do not want to copy the Id of the TriggerAction
  */
-TriggerAction.copyValues = function copyValues(triggerActionSchemaObject, dateAsTriggerTime, includeId){
+ module.exports.copyValues = function copyValues(triggerActionSchemaObject, addTriggerTime, includeId){
         var cleanObject = {
                 
-		date        : (dateAsTriggerTime!== undefined && dateAsTriggerTime === true)?
-                module.exports.getTriggerTime(triggerActionSchemaObject) : triggerActionSchemaObject.date,
+		date        : triggerActionSchemaObject.date,
                 dateData    : triggerActionSchemaObject.dateData,
 		url         : triggerActionSchemaObject.url,
 		body        : triggerActionSchemaObject.body,
@@ -100,7 +99,27 @@ TriggerAction.copyValues = function copyValues(triggerActionSchemaObject, dateAs
         if ( (includeId !== undefined && includeId === true) || includeId === undefined) {
                 cleanObject.id = triggerActionSchemaObject._id;
         }
+        if (addTriggerTime !== undefined && addTriggerTime === true){
+            cleanObject.triggerTime = module.exports.getTriggerTime(cleanObject);
+        }
 	return cleanObject;
+};
+
+TriggerAction.cloneRawObject = function cloneRawObject(triggerActionRaw){
+    return {
+        date        : triggerActionRaw.date,
+        dateData    : triggerActionRaw.dateData,
+        url         : triggerActionRaw.url,
+        body        : triggerActionRaw.body,
+        deviceId    : triggerActionRaw.deviceId,
+        destDeviceId: triggerActionRaw.destDeviceId,
+        type        : triggerActionRaw.type,
+        method      : triggerActionRaw.method,
+        dateExpires : triggerActionRaw.dateExpires,
+        description : triggerActionRaw.description,
+        id          : triggerActionRaw.id,
+        triggerTime : triggerActionRaw.triggerTime
+    };
 };
 
 module.exports.getById = function(id, callback){
@@ -135,7 +154,22 @@ module.exports.listByDeviceId = function(deviceId, callback){
 	var query = {deviceId: deviceId};
 	TriggerAction.find(query, callback);
 };
-module.exports.listByLoggingDeviceId = function(deviceId, callback){
+
+/**
+ * Lists all TriggerActions who are triggered by time
+ * @param {function} callback The callback function to call after result has been produced
+ */
+module.exports.listTimeTriggered = function(callback){
+    var query = { type: { $ne: "LOG-INSTANT" } };
+	TriggerAction.find(query, callback);
+};
+
+/**
+ * Lists all TriggerActions depended an a device
+ * @param {String} deviceId Id of the device the TriggerActions should depend on
+ * @param {function} callback The callback function to call after result has been produced
+ */
+module.exports.listLogTriggered = function(deviceId, callback){
     var query = {deviceId: deviceId,
                  type: 'LOG-INSTANT'};
 	TriggerAction.find(query, callback);
@@ -169,7 +203,7 @@ module.exports.getAllTokensInText = function getAllTokensInText(text) {
 /**
  * Replaces <<TOKENS>> with a value.  A value could be url, date or device pin value(s).
  * @param {String} textWithTokens A string that could include tokens, if no tokens are found the same string is returned.
- * @param {Object} arrayOfDevicePinsAndValues 
+ * @param {Object} arrayOfDevicePinsAndValues pass null if you do now want populate device pin value tokens (PIN_VALUE##)
  * @param {String} deviceId of the device where the pin values come from
  * @param {String} deviceUrl the complete url to a device, including the the appended :port number if needed
  * @param {Date} [date] If date is not provided, current time will be used if a DATE token is found.
@@ -178,16 +212,18 @@ module.exports.getAllTokensInText = function getAllTokensInText(text) {
 module.exports.replaceAllTokensInText = function replaceAllTokensInText(textWithTokens, arrayOfDevicePinsAndValues, deviceId, deviceUrl, date) {
 
     var newText;
-    newText = module.exports.replacePinValuesInText(textWithTokens, arrayOfDevicePinsAndValues);
-    if (newText === undefined) { return; } //at least one pin token is invalid
-
+    if (arrayOfDevicePinsAndValues){
+        newText = module.exports.replacePinValuesInText(textWithTokens, arrayOfDevicePinsAndValues);
+        if (newText === undefined) { return; } //at least one pin token is invalid
+    } else {
+        newText = textWithTokens;
+    }
     if (date===undefined) { 
         date = new Date();
     }
     newText = newText.replace('<<DEVICE_ID>>', deviceId);
     newText = newText.replace('<<DEVICE_URL>>', deviceUrl);
     newText = newText.replace('<<DATE>>', date.toUTCString()); 
-
     return newText;
 }; 
 /**
@@ -204,9 +240,6 @@ module.exports.replacePinValuesInText = function (textWithTokens, arrayOfDeviceP
     var pinNumbers = [];
     var newText = textWithTokens;
     
-    /*arrayOfDevicePinsAndValues.forEach( m => {
-        pinNumbers.push(m.pin);
-    });*/
     var pinTokens = tokens.filter(m => {
         return m.indexOf('PIN_VALUE') === 0;
     });
@@ -301,7 +334,7 @@ module.exports.findCurrentOrNextWeekday = function findCurrentOrNextWeekday(semi
  module.exports.onNewDeviceLogRecord = function onNewDeviceLogRecord(loggingDevice, deviceLogRecord) {
     var deviceRecord = JSON.parse(deviceLogRecord.data);
     
-	TriggerAction.listByLoggingDeviceId(loggingDevice.id, function(err, triggerActions) {
+	TriggerAction.listLogTriggered(loggingDevice.id, function(err, triggerActions) {
 		triggerActions.forEach(ta => {
             var populatedUrl, populatedBody;
             Device.getById(ta.destDeviceId, function(err, destDevice) {
@@ -334,6 +367,118 @@ module.exports.findCurrentOrNextWeekday = function findCurrentOrNextWeekday(semi
 		});
 	});
 };
+
+/**
+ * Populates the url and body and runs the actions. 
+ * @param {Object} event action The event to be run
+ */
+ module.exports.run = function run(event) {
+     var urlTokens  = module.exports.getAllTokensInText(event.url);
+     var bodyTokens = module.exports.getAllTokensInText(event.body);
+     var needDestDevice   = urlTokens.includes('DEVICE_URL') || bodyTokens.includes('DEVICE_URL');
+     var needSourceDevice = urlTokens.includes('DEVICE_ID') || bodyTokens.includes('DEVICE_ID');
+     if (!needSourceDevice) {
+        var found = urlTokens.find( token => token.indexOf('PIN_VALUE') === 0 );
+        if (found === undefined){
+            found = bodyTokens.find( token => token.indexOf('PIN_VALUE') === 0 );
+        }
+        needSourceDevice = found !== undefined;
+     }
+
+     if (!needDestDevice && !needSourceDevice)  {
+        module.exports.runEventRequest(event); 
+        return;     
+     }
+
+     //at least one device is needed
+     var ids = [];
+     if (needDestDevice){
+         ids.push(event.destDeviceId);
+     }
+     if (needSourceDevice){
+        ids.push(event.deviceId);
+    }
+     
+
+     Device.find({ '_id': { $in: ids } }, function(err, result){
+         var srcDeviceId  = event.deviceId.toString();
+         var destDeviceId = event.destDeviceId.toString();
+         
+         var srcDevice  = result.find(item => item._doc._id.toString() === srcDeviceId );
+         var destDevice = result.find(item => item._doc._id.toString() === destDeviceId );
+
+         if (needDestDevice &&  destDevice === undefined){
+            console.error("Destination device Id invalid");
+            return;
+         }
+
+         if (needSourceDevice && srcDevice === undefined){
+                console.error("Source device Id invalid");
+                return;
+        }
+
+        if (needSourceDevice) {
+            //get pin values
+            module.exports.runRequest ('GET', srcDevice.url+'/pins', '', function(err, result) {
+                if (!err && result && result.body !== undefined){
+                    var pins = JSON.parse(result.body);
+                    pins = pins.pins;
+                    event.url  = TriggerAction.replaceAllTokensInText(event.url,  pins, srcDeviceId, destDevice.url);
+                    event.body = TriggerAction.replaceAllTokensInText(event.body, pins, srcDeviceId, destDevice.url);
+                    module.exports.runEventRequest(event); 
+                } else {
+                    console.error('Unable to get device pins from a device in an ActionTrigger');
+                }
+            });
+        } else {
+            //don't need needSourceDevice
+            event.url = TriggerAction.replaceAllTokensInText(event.url,  null, srcDeviceId, destDevice.url);
+            event.body= TriggerAction.replaceAllTokensInText(event.body, null, srcDeviceId, destDevice.url);
+            module.exports.runEventRequest(event); 
+        }
+        
+
+     });
+
+     
+
+ };
+
+ module.exports.runEventRequest = function runRequest(event, callback) {
+
+    if (event.method !== 'GET'){
+    //Fixing the body part, removing spaces and end lines
+        try{
+            var obj = JSON.parse(event.body);
+            event.body = JSON.stringify(obj);
+        } catch(e){
+            console.error("Invalid Body of a event " + event.id);
+            if (callback) {
+                callback(true, null);
+            }
+            return;
+        }
+    }    
+    module.exports.runRequest(event.method, event.url, event.body, callback); 
+ };
+ module.exports.runRequest = function runRequest(method, url, body, callback) {
+    var requestOptions = lib.makeRequestPostBodyOptions(url, body, method);
+    request(requestOptions, function (err, result) {
+        if (err) {
+            console.log('Error when calling request. Url : '+ url);
+            if (callback !== undefined){
+                callback(err, null);
+            }
+        } else {
+            //success
+            if (callback !== undefined){
+                callback(err, result);
+            }
+        }
+    });
+ };
+
+
 /**
  * Calculates the day of the month from the last day.
  * @param {*} year 
@@ -348,33 +493,54 @@ module.exports.getDayOfMontFromLastDay =  function getDayOfMontFromLastDay(year,
 };
 
 /**
- * Calculates when the TriggerAction schema object is suppose to fire
- * @param {*} triggerActionSchemaObject The object to calculate the next fire time
+ * Calculates when the TriggerAction object is suppose to fire
+ * @param {*} triggerAction The object to calculate the next fire time
  * @returns Success: The fire time
  * @returns Fail: undefined.  (TriggerAction of the type LOG-INSTANT would result in a return value of undefined.)
  */
-module.exports.getTriggerTime = function(triggerActionSchemaObject){
-        var ta = triggerActionSchemaObject;
+module.exports.getTriggerTime = function(triggerAction){
+        var ta = triggerAction;
         var date = new Date(ta.date);
         var dateNow = new Date();
         var fireTime;
         switch (ta.type){
-                //case 'TIMELY'   // This will be more tricky; how will we know when the last one fired? Do I use ta.dateData to store last fireTime
+                case 'TIMELY':      var millis = dateNow.getTime() + date.getTime();
+                                    fireTime = new Date(millis);
+                                    break;
                 case 'WEEKLY':      fireTime = module.exports.findCurrentOrNextWeekday(ta.dateData, dateNow, date.getUTCHours(),  date.getUTCMinutes(), date.getUTCSeconds());
                                     break;
 
                                    
                 case 'YEARLY'       : fireTime = new Date(  dateNow.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(),
                                                             date.getUTCHours(),  date.getUTCMinutes(), date.getUTCSeconds()  );
+                                      if (fireTime < dateNow){
+                                          //We need to add one year
+                                        dateNow.getYear(dateNow.getYear()+1);
+                                        fireTime = new Date(  dateNow.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(),
+                                                            date.getUTCHours(),  date.getUTCMinutes(), date.getUTCSeconds()  );
+                                      }
                                       break;
                 case 'MONTHLY'      : 
-                case 'MONTHLY-LAST' :     
+                case 'MONTHLY-LAST' :   
                                         var dayOfMonth = (ta.type ==='MONTHLY')? date.getUTCDate() : module.exports.getDayOfMontFromLastDay(dateNow.getUTCFullYear(), dateNow.getUTCMonth(),Number(ta.dateData));
                                         fireTime = new Date(  dateNow.getUTCFullYear(), dateNow.getUTCMonth(), dayOfMonth,
                                                              date.getUTCHours(),  date.getUTCMinutes(), date.getUTCSeconds()  );
+                                        if (fireTime < dateNow){
+                                            //We need to add one month
+                                            dateNow.setMonth(dateNow.getMonth()+1);
+                                            dayOfMonth = (ta.type ==='MONTHLY')? date.getUTCDate() : module.exports.getDayOfMontFromLastDay(dateNow.getUTCFullYear(), dateNow.getUTCMonth(),Number(ta.dateData));
+                                            fireTime = new Date(  dateNow.getUTCFullYear(), dateNow.getUTCMonth(), dayOfMonth,
+                                                                date.getUTCHours(),  date.getUTCMinutes(), date.getUTCSeconds()  );
+                                        }
                                       break;
                 case 'DAILY' :        fireTime = new Date(  dateNow.getUTCFullYear(), dateNow.getUTCMonth(), dateNow.getUTCDate(),
                                                              date.getUTCHours(),  date.getUTCMinutes(), date.getUTCSeconds()  );
+                                        if (fireTime < dateNow){
+                                            //Need to run on next day
+                                            dateNow.setDate(dateNow.getDate()+1);
+                                            fireTime = new Date(  dateNow.getUTCFullYear(), dateNow.getUTCMonth(), dateNow.getUTCDate(),
+                                                             date.getUTCHours(),  date.getUTCMinutes(), date.getUTCSeconds()  );
+                                        }
                                       break;
                 case 'ONES'  :        fireTime = date;
                                       break;

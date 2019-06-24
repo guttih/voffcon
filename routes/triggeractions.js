@@ -512,6 +512,14 @@ router.get('/register', lib.authenticatePowerUrl, function(req, res){
 	router.getRegisterPage(req, res);
 });
 
+router.get('/list-event-queue', lib.authenticatePowerUrl, function(req, res){
+	var events = req.app.locals.settings.eventQueue.copyEvents();
+	var eventsStr = JSON.stringify(events);
+	var currentTime = new Date();
+	var strServerDate = currentTime.toISOString();
+	res.render('list-event-queue', {events:eventsStr, serverDate:strServerDate});
+});
+
 router.get('/register/:triggerActionId', lib.authenticatePowerUrl, function(req, res){
 	var id = req.params.triggerActionId;
 	router.getRegisterPage(req, res, id);
@@ -652,6 +660,7 @@ router.delete('/:triggerActionId', lib.authenticateDeviceOwnerRequest, function 
 		if(err !== null){
 			res.status(404).send('unable to delete trigger action "' + id + '".');
 		} else {
+			req.app.locals.settings.eventQueue.deleteTimer(id);
 			res.status(200).send('trigger action deleted.');
 		}
 	});
@@ -664,6 +673,7 @@ router.addTriggerAction = function addTriggerAction(req, res, id) {
 			if (err) {
 				res.status(500).json( [{msg:'Unable to add this trigger action to database!', param:'', value:undefined}]);
 			 } else {
+				req.app.locals.settings.eventQueue.addTimer(TriggerAction.copyValues(addedTriggerAction, true,true));
 				res.status(200).json({success: "Trigger action created.",id: id});
 			}
 		});
@@ -676,6 +686,10 @@ router.addTriggerAction = function addTriggerAction(req, res, id) {
 					res.status(200).json({success: "Trigger action is unchanged",id: id});
 				} else {
 					res.status(200).json({success: "Trigger action updated.",id: id});
+					TriggerAction.getById(id, function(err, modifiedTriggerAction){
+						req.app.locals.settings.eventQueue.modifyTimer(TriggerAction.copyValues(modifiedTriggerAction, true,true));
+					});
+					
 				}
 				
 			}

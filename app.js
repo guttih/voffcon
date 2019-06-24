@@ -56,18 +56,8 @@ var subnets = lib.getSubnets(true);
 var app = express();
 
 
+eventQueue.initialize();
 
-var ta = triggerActions.getTriggerAction();
-ta.list(function (err, list) {
-	
-	list.forEach(item => {
-		var timer = ta.copyValues(item, true,true);
-		eventQueue.addTimer(timer);
-	});
-	console.log('eventQueue.events');
-	eventQueue.consoleLogEvents();
-	
-});
 
 ///////////////////// TEST EVENTS  END  //////////////////////////
 mongoose.connection.on('open', function () {

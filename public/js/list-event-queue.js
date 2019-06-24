@@ -51,12 +51,13 @@ function addEventsToTable() {
 	var keys = Object.keys(events[1]);
 	
 	//	adding header
-	var keys2=['triggerTime','firesAfter','type', 'method','url', 'body','id','description']; 
+	var keys2=['firesAfter','triggerTime','type', 'method','url', 'body']; 
 	
+	/*
 	keys.forEach(element => {
 		if (!keys2.includes(element))
 		keys2.push(element);
-	});
+	});*/
 	var headers=[];
 	keys2.forEach(element => {
 		headers.push({title:element,text:element});
@@ -64,7 +65,7 @@ function addEventsToTable() {
 	
 	var row = '<tr>';
 	for(i = 0; i<headers.length; i++){
-		row+='<td rel="tooltip" title="'+ headers[i].title   +'">'+ headers[i].text + '</td>';
+		row+='<td>'+ headers[i].text + '</td>';
 	}
 	row+='</tr>';
 	$elm.append(row);
@@ -75,14 +76,15 @@ function addEventsToTable() {
 	var strType;
 	for(i = 0; i<itemList.length; i++) {
 		row='<tr class="trigger" id="'+itemList[i].id+'">';
-		headers.forEach(item => {
-			row+='<td>';
-			if (item.text ==='id'){
-				row+='<a href="'+SERVER+'/triggeractions/register/'+itemList[i].id+'">'+itemList[i].id+'</a>';
-			} else {
-				row+=encodeHTML(itemList[i][item.text]);
-			}
-			row+='</td>';
+			keys2.forEach(function(item, index){
+				if (index === 0){
+					row+='<td>';
+					row+='<a title="Click to edit this trigger action" href="'+SERVER+'/triggeractions/register/'+itemList[i].id+'">'+itemList[i][item]+'</a>';
+				} else {
+					row+='<td class="item-property">';
+					row+=encodeHTML(itemList[i][item]);
+				}
+				row+='</td>';
 		});
 		row+='</tr>';
 		$elm.append(row);
@@ -106,5 +108,26 @@ $(function () {
 	SERVER = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ':'+window.location.port: '');
 	
 	addEventsToTable();
+	$('.item-property').click(function() {
+		var id = $(this).parent().attr('id');
+		var event = events.find(e => e.id === id);
+		if (event !== undefined) {
+			var message = '';
+			var keys = Object.keys(events[1]);
+			keys.forEach(element => {
+				var text = encodeHTML(event[element]);
+				if (element === 'id'){
+					text = '<a title="Click to edit this trigger action" href="'+SERVER+'/triggeractions/register/'+event[element]+'">'+encodeHTML(event[element])+'</a>';
+				}
+				message+='<p><span style="display: inline-block;min-width: 100px;"><b>'+element+'</b>:</span>';
+				message+=''+text+'</p>';
+				
+			});
+			message+='\n';
+			
+			showModal('Event details', message);
+		}
+	});
 
 });
+

@@ -292,7 +292,7 @@ function showModal(title, message){
 	$(".modal-title").text(title);
 	if (message.indexOf('\n')>-1)
 	{
-		message = message.replace('\n', '<br/>');
+		message = message.replace(/\n/g, '<br/>');
 		$(".modal-body").html(message);
 	}
 	else {

@@ -359,15 +359,16 @@ module.exports.makeRequestPostBodyOptions = function makeRequestPostBodyOptions(
 	if (ContentType === undefined ){
 		ContentType = 'application/json';
 	}
+	var body = JSON.stringify(payload);
 	var options = {
 	url: url,
 	method: method,
-	body: JSON.stringify(payload),
+	body: body,
 		
 		headers: {
 			'Content-Type': ContentType,
 			/*'Content-Type': 'application/x-www-form-urlencoded',*/
-			'Content-Length': byteLength
+			'Content-Length':  Buffer.byteLength(body)
 		}
 	};
 	return options;

@@ -221,8 +221,12 @@ module.exports.replaceAllTokensInText = function replaceAllTokensInText(textWith
     if (date===undefined) { 
         date = new Date();
     }
-    newText = newText.replace('<<DEVICE_ID>>', deviceId);
-    newText = newText.replace('<<DEVICE_URL>>', deviceUrl);
+    if (deviceId !== undefined && deviceId !== null) {
+        newText = newText.replace('<<DEVICE_ID>>', deviceId);
+    }
+    if (deviceUrl !== undefined && deviceUrl !== null) {
+        newText = newText.replace('<<DEVICE_URL>>', deviceUrl);
+    }
     newText = newText.replace('<<DATE>>', date.toUTCString()); 
     return newText;
 }; 
@@ -386,7 +390,11 @@ module.exports.findCurrentOrNextWeekday = function findCurrentOrNextWeekday(semi
      }
 
      if (!needDestDevice && !needSourceDevice)  {
-        module.exports.runEventRequest(event); 
+        module.exports.runEventRequest(event,function(err, result){
+            if (!err) {
+                console.log('Request for event "'+event.id+'" succeeded');
+            }
+        }); 
         return;     
      }
 
@@ -406,7 +414,7 @@ module.exports.findCurrentOrNextWeekday = function findCurrentOrNextWeekday(semi
          
          var srcDevice  = result.find(item => item._doc._id.toString() === srcDeviceId );
          var destDevice = result.find(item => item._doc._id.toString() === destDeviceId );
-
+         var destUrl = destDevice !== undefined? destDevice.url: undefined;
          if (needDestDevice &&  destDevice === undefined){
             console.error("Destination device Id invalid");
             return;
@@ -423,18 +431,27 @@ module.exports.findCurrentOrNextWeekday = function findCurrentOrNextWeekday(semi
                 if (!err && result && result.body !== undefined){
                     var pins = JSON.parse(result.body);
                     pins = pins.pins;
-                    event.url  = TriggerAction.replaceAllTokensInText(event.url,  pins, srcDeviceId, destDevice.url);
-                    event.body = TriggerAction.replaceAllTokensInText(event.body, pins, srcDeviceId, destDevice.url);
-                    module.exports.runEventRequest(event); 
+                    
+                    event.url  = TriggerAction.replaceAllTokensInText(event.url,  pins, srcDeviceId, destUrl);
+                    event.body = TriggerAction.replaceAllTokensInText(event.body, pins, srcDeviceId, destUrl);
+                    module.exports.runEventRequest(event, function(err, result){
+                        if (!err) {
+                            console.log('Request for event "'+event.id+'" succeeded');
+                        }
+                    }); 
                 } else {
                     console.error('Unable to get device pins from a device in an ActionTrigger');
                 }
             });
         } else {
             //don't need needSourceDevice
-            event.url = TriggerAction.replaceAllTokensInText(event.url,  null, srcDeviceId, destDevice.url);
-            event.body= TriggerAction.replaceAllTokensInText(event.body, null, srcDeviceId, destDevice.url);
-            module.exports.runEventRequest(event); 
+            event.url = TriggerAction.replaceAllTokensInText(event.url,  null, srcDeviceId, destUrl);
+            event.body= TriggerAction.replaceAllTokensInText(event.body, null, srcDeviceId, destUrl);
+            module.exports.runEventRequest(event, function(err, result){
+                if (!err) {
+                    console.log('Request for event "'+event.id+'" succeeded');
+                }
+            }); 
         }
         
 
@@ -449,8 +466,7 @@ module.exports.findCurrentOrNextWeekday = function findCurrentOrNextWeekday(semi
     if (event.method !== 'GET'){
     //Fixing the body part, removing spaces and end lines
         try{
-            var obj = JSON.parse(event.body);
-            event.body = JSON.stringify(obj);
+            event.body = JSON.parse(event.body);
         } catch(e){
             console.error("Invalid Body of a event " + event.id);
             if (callback) {

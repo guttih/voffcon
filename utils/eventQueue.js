@@ -24,8 +24,6 @@ module.exports.initialize = function initialize() {
 			var timer = TriggerAction.copyValues(item, true,true);
 			module.exports.addTimer(timer);
 		});
-		console.log('eventQueue.events');
-		module.exports.consoleLogEvents();
 	});
 };
 
@@ -67,8 +65,6 @@ module.exports.addTimer = function addTimer(timer) {
    * @returns Fail: returns false if timer was not found or not modified
    */
    module.exports.modifyTimer = function modifyTimer(timer) {
-	console.log('THEN MODIFY THE TIMER DUDE');
-	console.log(timer);
 	var index = -1;
 	var tId = timer.id.toString();
 	for(var i = 0; i<module.events.length; i++) {
@@ -153,9 +149,7 @@ module.compareEvent = function compareEvent(a, b) {
  */
 module.runFirstTriggerAndSetTimeout = function runFirstTriggerAndSetTimeout() {
 	timer = module.events.shift();
-	console.log('RUNNING FIRST TRIGGER:');
-	//Run the populated trigger
-	
+	console.log('Running event "'+timer.id+'" at '+ (new Date).toISOString());
 	//Add this ActionTrigger back to the queue with a newly calculated trigger time. 
 	var timerToRun = TriggerAction.cloneRawObject(timer);
 	timer.triggerTime = TriggerAction.getTriggerTime(timer);

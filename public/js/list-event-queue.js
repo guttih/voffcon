@@ -49,23 +49,13 @@ function addEventsToTable() {
 	var $elm = $('#table-event thead');
 	
 	var keys = Object.keys(events[1]);
-	
-	//	adding header
-	var keys2=['firesAfter','triggerTime','type', 'method','url', 'body']; 
-	
-	/*
-	keys.forEach(element => {
-		if (!keys2.includes(element))
-		keys2.push(element);
-	});*/
-	var headers=[];
-	keys2.forEach(element => {
-		headers.push({title:element,text:element});
-	});
-	
+	//selecting properties to show
+	var keys2   =['firesAfter',     'triggerTime',        'type', 'method','url', 'body']; 
+	//setting header text
+	var headers=['Time until event','Time when triggered','Type', 'Method','Url', 'Body'];
 	var row = '<tr>';
 	for(i = 0; i<headers.length; i++){
-		row+='<td>'+ headers[i].text + '</td>';
+		row+='<td>'+ headers[i] + '</td>';
 	}
 	row+='</tr>';
 	$elm.append(row);

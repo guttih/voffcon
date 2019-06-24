@@ -349,7 +349,16 @@ module.exports.findCurrentOrNextWeekday = function findCurrentOrNextWeekday(semi
                 }
                 if( populatedUrl !== undefined && (populatedBody !== undefined || ta.method === 'GET') ) {
                     //Now I need to make call the request
-                    var requestOptions = lib.makeRequestPostBodyOptions(populatedUrl, populatedBody, ta.method);
+                    var body;
+                    if (populatedBody !== undefined) {
+                        try {
+                            body = JSON.parse(populatedBody);
+                        } catch(e){
+                            console.error('Logging trigger action has invalid body.  id: '+ta.id);
+                            return;
+                        }
+                    }
+                    var requestOptions = lib.makeRequestPostBodyOptions(populatedUrl, body, ta.method);
 
 
                     request(requestOptions, function (err, result) {

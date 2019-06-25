@@ -389,8 +389,7 @@ router.post('/whitelist/:deviceId', lib.authenticatePowerRequest, function(req, 
 			
 			keys = Object.keys(formData);
 
-				formData = JSON.stringify(formData);
-				request(lib.makeRequestPostOptions(urlid, formData),
+				request(lib.makeRequestPostBodyOptions(urlid, formData),
 					function (err, res, body) {
 							if (res){
 								console.log("statuscode:"+res.statusCode);

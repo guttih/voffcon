@@ -55,9 +55,10 @@ var TriggerActionSchema = mongoose.Schema({
                         DAILY        : Fires every day at a specified time (date part of date is ignored)
                         WEEKLY       : Fires every week on the days listed in a array in dayData
                         MONTHLY      : Fires ones a month.  Note if day is more than 28 then this will not fire in february.  
-                                       When MONTHLY timer is suppose to fire near the last day of month use MONTHLY-LAST type.
+                                        When MONTHLY timer is suppose to fire near the last day of month use MONTHLY-LAST type.
+                        MONTHLY-LAST : Fires ones a month, but counting the days from the last day of the month.  F.example. 
+                                    if date is 1.1.2018 11:21:00 and dateData is 0.  Then this triggerAction will fire first on 30 jan 2018 and next on 28.2.1019.  In february 2020 (a leap year) this triggerAction would fire on the 29.2.2020 at 11:21.  If dateData is 1 then the fire will be the day before last day of month.  
                         YEARLY       : Fires ones a year.
-                        MONTHLY-LAST : Fires ones a month, but counting the days from the last day of the month.  F.example. if date is 1.1.2018 11:21:00 and dateData is 0.  Then this triggerAction will fire first on 30 jan 2018 and next on 28.2.1019.  In february 2020 (a leap year) this triggerAction would fire on the 29.2.2020 at 11:21.  If dateData is 1 then the fire will be the day before last day of month. 
                 */
                 type         : {type   : String,
                             enum   : ['LOG-INSTANT','ONES','TIMELY','DAILY','WEEKLY','MONTHLY','YEARLY', 'MONTHLY-LAST'],

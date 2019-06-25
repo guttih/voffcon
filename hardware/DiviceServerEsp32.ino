@@ -1261,7 +1261,7 @@ bool connectWifi() {
             iTriesLeft--;
         }
     */
-    if (connectWifiHelper(ssid, password, 600))
+    if (connectWifiHelper(ssid, password, 1200))
         return true;
 
     Serial.println("WiFi scanning!");

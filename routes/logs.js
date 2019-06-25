@@ -18,14 +18,14 @@
 You can contact the author by sending email to gudjonholm@gmail.com or 
 by regular post to the address Haseyla 27, 260 Reykjanesbar, Iceland.
 */
-var express = require('express');
-var router = express.Router();
-var request = require('request');
-var lib = require('../utils/glib');
+var express       = require('express');
+var router        = express.Router();
+var request       = require('request');
+var lib           = require('../utils/glib');
 
-var LogItem = require('../models/logitem');
-var Device = require('../models/device');
-
+var LogItem       = require('../models/logitem');
+var Device        = require('../models/device');
+var TriggerAction = require('../models/triggerAction');
 
 
 router.get('/ids/:deviceId', function(req, res){
@@ -250,11 +250,9 @@ router.get('/pins/:deviceId', function(req, res) {
 			res.statusCode = 404;
 			return res.json({text:'Error 404: You are not not authorized'});
 		}
-		console.log(urlid);
 		var urlid = device._doc.url+'/pins';
 		request.get(urlid,	function (err, res, body) {
 			if (res) {
-				console.log("get pins statuscode:"+res.statusCode);
 				//we got the pinvalues, so let's save them
 				var logType = LogItem.LogTypes.indexOf('OBJECTTYPE_LOG_PINS');
 				var obj, pins;
@@ -266,7 +264,8 @@ router.get('/pins/:deviceId', function(req, res) {
 					pins, 
 					function(err, item) {
 						if(err) {throw err;}
-						console.log(item);
+						//run all Trigger actions attached to logs from this device
+						TriggerAction.onNewDeviceLogRecord(device, item);
 				});
 			}
 

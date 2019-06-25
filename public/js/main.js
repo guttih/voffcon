@@ -142,27 +142,14 @@ function getUserDeviceList(){
 			}
 		});
 }
-/*
-function setDevicelistValues(devicelist){
-	var key, name, shallDisable = true;
-	$("#devicelist").empty().prop( "disabled", true );
-	for(var i = 0; i < devicelist.length; i++){
-		shallDisable=false;
-		console.log(devicelist[i]);
-		
-		key = devicelist[i].id;
-		name = devicelist[i].name;
-		$('#devicelist')
-			.append($('<option>', { value : JSON.stringify(devicelist[i])})
-			.text(name));
-	}
-	$('#devicelist').prop( "disabled", shallDisable );
-	$("#devicelist option").each(function(item){
-			console.log(item);
-		// Add $(this).val() to your list
-	});
+/**
+ * Returns them number of days in a specified month
+ * @param {Integer} year
+ * @param {Integer} month 1-indexed months, where 1 is january and 12 is december
+ */
+function numberOfDaysInMonth (year, month) {
+    return new Date(year, month, 0).getDate();
 }
-*/
 function getWhenServerStarted(){
 	var url = SERVER+'/devices/started';
 	var selected = $( "#devicelist" ).val();
@@ -305,7 +292,7 @@ function showModal(title, message){
 	$(".modal-title").text(title);
 	if (message.indexOf('\n')>-1)
 	{
-		message = message.replace('\n', '<br/>');
+		message = message.replace(/\n/g, '<br/>');
 		$(".modal-body").html(message);
 	}
 	else {

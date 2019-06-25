@@ -1,0 +1,174 @@
+
+
+
+{{#if devices}}
+<script type="text/javascript">
+	var devices = {{{devices}}};
+</script>
+{{/if}}	
+{{#if triggerAction}}
+<script type="text/javascript">
+	var triggerAction = {{{triggerAction}}};
+</script>
+	<div class="row"><h3 class="page-header pull-right">Modify a triggerAction</h3></div>
+{{else}}
+		<div class="row"><h3 class="page-header pull-right">Register a new triggerAction</h3></div>			
+{{/if}}
+
+{{#if errors}}
+      {{#each errors}}
+        <div class="alert alert-danger">{{msg}}</div>
+      {{/each}}
+{{/if}}
+
+<form method="post" action="/triggeractions/register/{{triggerActionId}}" id="triggerActionForm">
+	<div class="form-group type">
+		<label>Trigger action type</label>
+		<select id="triggerAction-type" name="type" class="access-select form-control" required>
+			<option title="No need to provide additional date or time"      value="LOG-INSTANT" selected="">Instantly after each new record</option>
+			<option title="Provide a date and time when the action should fire"                 value="ONES"        >Ones at</option>
+			<option title="Provide how much time must pass between action fires" value="TIMELY"      >Every</option>
+			<option title="Provide the hour, and second when the action should fire every day"            value="DAILY"       >Every day at</option>
+			<option title="Provide the weekdays hour and second when the action should fire"    value="WEEKLY"      >Every week at</option>
+			<option title="Provide the day hour and second when the action should fire"         value="MONTHLY"     >Every month at</option>
+			<option title="Provide the number of days before the last day of the month and hour and second when the action should fire" value="MONTHLY-LAST">Every month at, days before the last of the day of the month</option>
+			<option title="Provide the month, hour and second"      value="YEARLY"      >Every year at</option>
+			
+		</select>
+		<p class="triggerAction-input-text"></p>
+	</div>
+	<div class="date-and-time-selects">
+			<label class="form-label date-select year">Year</label>
+			<select id="triggerAction-year" name="year" class="inline-form-control access-select date-select year" required>
+				<option value="2019" selected="">2019</option>
+				<option value="2020"            >2020</option>
+				<option value="2021"            >2021</option>
+				<option value="2022"            >2022</option>
+				<option value="2023"            >2023</option>
+				<option value="2024"            >2024</option>
+			</select>
+			<label class="form date-select month">Month</label>
+			<select id="triggerAction-month" name="month" class="inline-form-control date-select month" required>
+				<option value="0" selected="">January</option>
+				<option value="1" >February</option>
+				<option value="2" >Mars</option>
+				<option value="3" >April</option>
+				<option value="4" >May</option>
+				<option value="5" >June</option>
+				<option value="6" >July</option>
+				<option value="7" >August</option>
+				<option value="8" >September</option>
+				<option value="9" >October</option>
+				<option value="10" >November</option>
+				<option value="11" >December</option>
+			</select>
+			<label class="form date-select day">Day</label>
+			<select id="triggerAction-day" name="day" class="inline-form-control date-select day" required></select>
+			<span class="last-day">
+				<label class="form">Days before last day</label>
+				<select id="triggerAction-last-day" name="lastDay" class="inline-form-control">
+					<option value="0" selected="">0 days. (Last day of month)</option>
+					<option value="1" >1 day</option>
+					<option value="2" >2 days</option>
+					<option value="3" >3 days</option>
+					<option value="4" >4 days</option>
+					<option value="5" >5 days</option>
+					<option value="6" >6 days</option>
+					<option value="7" >7 days</option>
+					<option value="8" >8 days</option>
+					<option value="9" >9 days</option>
+					<option value="10">10 days</option>
+					<option value="11">11 days</option>
+					<option value="12">12 days</option>
+				</select>
+			</span>	
+			<label class="form time-select hour">Hour</label>
+			<select id="triggerAction-hour" name="hour" class="inline-form-control time-select hour" required></select>
+			<label class="form time-select minute">Minute</label>
+			<select id="triggerAction-minute" name="minute" class="inline-form-control time-select minute" required></select>
+			<label class="form  time-select second">Second</label>
+			<select id="triggerAction-second" name="second" class="inline-form-control time-select second" required></select>
+			<div class="form-check form-check-inline weekdays">
+				<input class="form-check-input" type="checkbox" id="sunday"   value="0">
+				<label class="form-check-label"  for="sunday">sunday</label>
+				<input class="form-check-input" type="checkbox" id="monday"   value="1">
+				<label class="form-check-label"  for="sunday">monday</label>
+				<input class="form-check-input" type="checkbox" id="tuesday"  value="2">
+				<label class="form-check-label"  for="sunday">tuesday</label>
+				<input class="form-check-input" type="checkbox" id="wednesday"value="3">
+				<label class="form-check-label"  for="sunday">wednesday</label>
+				<input class="form-check-input" type="checkbox" id="thursday"  value="4">
+				<label class="form-check-label"  for="sunday">thursday</label>
+				<input class="form-check-input" type="checkbox" id="friday"    value="5">
+				<label class="form-check-label"  for="sunday">friday</label>
+				<input class="form-check-input" type="checkbox" id="saturday"  value="6">
+				<label class="form-check-label"  for="sunday">saturday</label>
+			</div>
+	</div>
+	<div class="form-group method">
+		<label>Method</label>
+		<select id="triggerAction-method" name="method" class="form-control" required>
+			<option title="Http get method.  Data is sent in url"         value="GET" selected="">GET</option>
+			<option title="Http post method.  Data is set in body"        value="POST"           >POST</option>
+			<option title="Http delete method.  Data can be sent in body" value="DELETE"         >DELETE</option>
+		</select>
+		<p class="triggerAction-input-text"></p>
+	</div>
+	<div class="form-group destDeviceId">
+		<label>Destination device &lt;&lt;DEVICE_URL&gt;&gt; will be extracted from this device</label>
+		<select id="triggerAction-destDeviceId" name="destDeviceId" class="access-select form-control" required>
+			<option title="Idblabla"      value="idBlabla" selected="">Name of the device</option>
+		</select>
+		<p class="triggerAction-input-text"></p>
+	</div>
+		<div class="form-group deviceId">
+		<label>Device to extract data from if needed.  &lt;&lt;PIN_VALUE##&gt;&gt; will be extracted from this device</label>
+		<select id="triggerAction-deviceId" name="deviceId" class="access-select form-control" required>
+			<option title="Idblabla"      value="idBlabla" selected="">Name of the device</option>
+		</select>
+		<p class="triggerAction-input-text"></p>
+	</div>
+	<div class="form-group url">
+		<div class="dropdown pull-right">
+			<button class="btn btn-default btn-xs  dropdown-toggle " type="button" data-toggle="dropdown">
+			Append a token&nbsp;<span class="caret"></span></button>
+			<ul class="dropdown-menu">
+				<li><a href="#" onclick="refreshPartSelect(this); return false;">Refresh</a></li>
+			</ul>
+		</div>
+		<label>Url</label>
+		<input id="triggerAction-url" type="text" class="form-control" placeholder="http://www.someurl.com:5100?somevarforPinvalue1=<<PIN_VALUE05>>" name="url" required>
+		<p class="triggerAction-input-text" title="The minimum time between logs"></p>
+	</div>
+	<div class="form-horizontal body">
+		<div class="dropdown pull-right">
+			<button class="btn btn-default btn-xs  dropdown-toggle " type="button" data-toggle="dropdown">
+			Append a token&nbsp;<span class="caret"></span></button>
+			<ul class="dropdown-menu">
+				<li><a href="#" onclick="refreshPartSelect(this); return false;">Refresh</a></li>
+			</ul>
+		</div>
+
+		<label>Body  Remember to use quotation marks around keys.</label>
+		<div class="form-group">
+			
+			<div class="col-md-12">
+				<textarea id='triggerAction-body' name='body' form='triggerActionForm' class='form-control' rows='4' placeholder='{
+	"p4":<<PIN_VALUE05>>,
+	"p2":<<PIN_VALUE02>>
+}' required></textarea>
+			</div>
+		</div>
+	</div>
+		<div class="form-horizontal description">
+		<label>Description</label>
+		<div class="form-group">
+			
+			<div class="col-md-12">
+				<textarea id="triggerAction-description" name="description" form="triggerActionForm" class="form-control" rows="4" placeholder="Describe the trigger action, when is it triggered and why" required></textarea>
+			</div>
+		</div>
+	</div>
+</form>
+<button id="btn-submit-triggerActionForm" class="btn btn-success pull-right">Submit</button>
+<script src="/js/register-triggeraction.js"></script>

@@ -1,0 +1,26 @@
+{{#if events}}
+<script type="text/javascript">
+	var events = {{{events}}};
+	var serverDate = new Date('{{{serverDate}}}');
+</script>
+{{/if}}	
+	
+
+<div class="row"><h3 class="page-header" style="margin-bottom: 14px;">List up coming events</h3></div>			
+<table><tr><td>Server time:&nbsp;</td><td><b>{{serverDate}}</b></td><td>&nbsp;when this list was created</td></tr></table>
+{{#if errors}}
+      {{#each errors}}
+        <div class="alert alert-danger">{{msg}}</div>
+      {{/each}}
+{{/if}}
+
+<table id="table-event" class="table table-bordered table-hover">
+	<thead>
+	</thead>
+	<tfoot>
+	</tfoot>
+	<tbody>
+	</tbody>
+</table>
+
+<script src="/js/list-event-queue.js"></script>

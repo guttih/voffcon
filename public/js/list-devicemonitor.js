@@ -141,12 +141,12 @@ function setDeviceLogsToTable(monitors, clearOldValues){
 	
 }
 
-function deleteListItem(route,logItemID){
+function deleteListItem(route,itemId){
 	var sendObj = {
-			"id":logItemID
+			"id":itemId
 		};
 
-	var url = SERVER+'/'+route+'/'+logItemID;
+	var url = SERVER+'/'+route+'/'+itemId;
 		var deleting = $.delete( url, sendObj);
 		deleting.done(function( data ) {
 			window.location.assign(device.id);

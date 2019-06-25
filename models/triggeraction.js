@@ -36,8 +36,11 @@ var TriggerActionSchema = mongoose.Schema({
                 date         : Date,
                 /*
                         When type is:
-                        WEEKLY      : This value will contain a array of numbers representing the day of week.  Where Sunday is 0, Monday is 1, and so on.
-                        MONTHLY-LAST: This value will contain the number of days from last day of the current month.  When 0 then this fire will take place on last day.  When 1 then the fire will take place the day before last day.
+                        WEEKLY      : This value will contain a array of numbers representing the day of week.  
+                                      Where Sunday is 0, Monday is 1, and so on.
+                        MONTHLY-LAST: This value will contain the number of days from last day of the current month.  
+                                      When 0 then this fire will take place on last day.  When 1 then fire 
+                                      will take place the day before last day.
                 */
                 dateData     : String,
                 /*
@@ -51,14 +54,15 @@ var TriggerActionSchema = mongoose.Schema({
 
                         DAILY        : Fires every day at a specified time (date part of date is ignored)
                         WEEKLY       : Fires every week on the days listed in a array in dayData
-                        MONTHLY      : Fires ones a month.  Note if day is more than 28 then this will not fire in february.  When MONTHLY timer is suppose to fire near the last day of month use MONTHLY-LAST type.
+                        MONTHLY      : Fires ones a month.  Note if day is more than 28 then this will not fire in february.  
+                                       When MONTHLY timer is suppose to fire near the last day of month use MONTHLY-LAST type.
                         YEARLY       : Fires ones a year.
                         MONTHLY-LAST : Fires ones a month, but counting the days from the last day of the month.  F.example. if date is 1.1.2018 11:21:00 and dateData is 0.  Then this triggerAction will fire first on 30 jan 2018 and next on 28.2.1019.  In february 2020 (a leap year) this triggerAction would fire on the 29.2.2020 at 11:21.  If dateData is 1 then the fire will be the day before last day of month. 
                 */
                 type         : {type   : String,
                             enum   : ['LOG-INSTANT','ONES','TIMELY','DAILY','WEEKLY','MONTHLY','YEARLY', 'MONTHLY-LAST'],
                             default: 'ONES'},
-                /*      The date when this triggerAction expires*/
+                /*      The date when this triggerAction expires (currently not used)*/
                 dateExpires  : Date,
                 method       : {type   : String,
                                 enum   : ['GET','POST','DELETE'],
@@ -231,7 +235,7 @@ module.exports.replaceAllTokensInText = function replaceAllTokensInText(textWith
     return newText;
 }; 
 /**
- * Replaces <<PIN_VALUE##>> with pin value .
+ * Replaces <<PIN_VALUE##>> with pin value
  * @param {*} textWithTokens 
  * @param {*} arrayOfDevicePinsAndValues 
  * @returns Success: Text where app pin tokens have been replaced with the pin values.  
@@ -382,7 +386,7 @@ module.exports.findCurrentOrNextWeekday = function findCurrentOrNextWeekday(semi
 };
 
 /**
- * Populates the url and body and runs the actions. 
+ * Populates the url and body and runs the event. 
  * @param {Object} event action The event to be run
  */
  module.exports.run = function run(event) {
@@ -462,12 +466,7 @@ module.exports.findCurrentOrNextWeekday = function findCurrentOrNextWeekday(semi
                 }
             }); 
         }
-        
-
      });
-
-     
-
  };
 
  module.exports.runEventRequest = function runRequest(event, callback) {

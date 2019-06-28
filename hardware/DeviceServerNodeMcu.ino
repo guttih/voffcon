@@ -1022,20 +1022,16 @@ bool setPinValues(String jsonString, GPins* devicePins) {
     };
 
     bool bRet = false;
-    Serial.println("Valid post object parsed");
     JsonData* child, * current = root->getChildAt(0);
-    Serial.println(root->toTree());
     String name;
     unsigned long ulValue;
 
     while (current && current->getType() == JSONTYPE::JSONTYPE_KEY_VALUE) {
         name = current->getValue();
         int pin = name.toInt();
-        Serial.println(String("pin: ") + pin);
         child = current->getChildAt(0);
         if (child != NULL) {
             ulValue = child->getValueAsULong();
-            Serial.println(String("ulValue: ") + ulValue);
             if (ulValue != JSONDATA_ERRORNUMBER) {
                 if (devicePins->setValue(pin, ulValue)) {
                     bRet = true; //set to true, if at least one value is changed

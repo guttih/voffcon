@@ -459,7 +459,6 @@ router.post('/register/:deviceID', lib.authenticatePowerRequest, function(req, r
 	}
 });
 
-
 //listing all devices and return them as a json array
 router.get('/device-list', lib.authenticatePowerRequest, function(req, res){
 	Device.listByOwnerId(req.user._id, function(err, deviceList){
@@ -483,7 +482,6 @@ router.get('/device-list', lib.authenticatePowerRequest, function(req, res){
 	});
 });
 
-
 router.get('/item/:deviceID', lib.authenticateRequest, function(req, res){
 	// todo: how to authenticate? now a logged in user can use all devices
 	var id = req.params.deviceID;
@@ -498,12 +496,10 @@ router.get('/item/:deviceID', lib.authenticateRequest, function(req, res){
 	}
 });
 
-
 //render a page with list of users
 router.get('/list', lib.authenticateUrl, function(req, res){
 	res.render('list-device');
 });
-
 
 router.delete('/:deviceID', lib.authenticateDeviceOwnerRequest, function(req, res){
 	var id = req.params.deviceID;
@@ -517,9 +513,7 @@ router.delete('/:deviceID', lib.authenticateDeviceOwnerRequest, function(req, re
 	
 });
 
-
 //render a page wich runs a device, that is if the user is a registered user for that device (has access)
-
 router.get('/useraccess/:deviceID', lib.authenticateDeviceOwnerUrl, function(req, res){
 	var id = req.params.deviceID;
 	Device.getById(id, function(err, retDevice){
@@ -562,7 +556,7 @@ router.post('/useraccess/:deviceID', lib.authenticateDeviceOwnerRequest, functio
 	});
 });
 
-/*render a page wich runs a diagnostic device, for a device, if the user is a registered user for that device (has access)*/
+// render a page wich runs a diagnostic device, for a device, if the user is a registered user for that device (has access)
 router.get('/run/:deviceID', lib.authenticateDeviceOwnerUrl, function(req, res){
 	var id = req.params.deviceID;
 	Device.getById(id, function(err, retDevice){

@@ -1,10 +1,10 @@
 var searchData=
 [
-  ['set',['set',['../class_linked_list.html#a08ce5b6527cefbd221324569fdb10969',1,'LinkedList']]],
-  ['setname',['setName',['../class_g_pin.html#a4ebe1b73f933005897f43dd7bb76970d',1,'GPin']]],
-  ['settime',['setTime',['../class_g_time.html#ab72425a2570304484b21564a7bbb0a90',1,'GTime::setTime(unsigned long milliSeconds)'],['../class_g_time.html#a8af1804c9d4e951d8591a0d2b322f8cf',1,'GTime::setTime(String strTime)']]],
-  ['setvalue',['setValue',['../class_g_pin.html#a0d0e096fb1dc7a81de7cf31ff2bdb1f1',1,'GPin::setValue()'],['../class_g_pins.html#a10f478e492d936aa70a110e6d9cfb731',1,'GPins::setValue()']]],
-  ['shift',['shift',['../class_linked_list.html#aaf7239844a9d745b6dd11249ff4990c8',1,'LinkedList']]],
-  ['size',['size',['../class_linked_list.html#ab8388ea027c2de8125f5d1e5901c2b2e',1,'LinkedList']]],
-  ['strtomonth',['strToMonth',['../class_g_time.html#a69b75dc7cd1ac52d8389a12deb662958',1,'GTime']]]
+  ['tojson',['toJson',['../class_i_p_address_list.html#a278ae502095b6f45868c896858c9ba41',1,'IPAddressList::toJson()'],['../class_g_pin.html#aa9970fbce06a45ac04495ed3e2981758',1,'GPin::toJson()'],['../class_g_pins.html#a00dce0858e444a8d88d870177aeb8673',1,'GPins::toJson()'],['../class_g_time.html#a5666ab896e25cf3674a60f7b292a4369',1,'GTime::toJson()'],['../class_pin_watch.html#acd92b97bec879b74c745bf955da53310',1,'PinWatch::toJson()'],['../class_pin_watch_list.html#ac3af3d488bdc27f8f6503884d049f97e',1,'PinWatchList::toJson()']]],
+  ['tojsonkeyvalue',['toJsonKeyValue',['../class_g_pin.html#a7019fa992b11b934b3f7f037a1379d8f',1,'GPin']]],
+  ['tonumber',['toNumber',['../class_g_time.html#a19f73f42d36bb8de37ccb2409098d7b1',1,'GTime']]],
+  ['tostreng',['toStreng',['../class_g_time.html#a6269ddc4c7fe133f7ab573944e132c8c',1,'GTime']]],
+  ['tostring',['toString',['../class_g_time.html#a73fa833d8f79f3de2fa14ef93c92be86',1,'GTime::toString()'],['../class_json_data.html#aa1f576495733f0e704471c8a706c9025',1,'JsonData::toString()'],['../class_json.html#a92354b0f98f67b7eb2184de35b8bfb20',1,'Json::toString()']]],
+  ['totree',['toTree',['../class_json_data.html#a202bd9062e115343b5ca420907203c93',1,'JsonData::toTree()'],['../class_json.html#a8da555ac6c107e69f3239123131794cb',1,'Json::toTree()']]],
+  ['trim',['trim',['../class_json_data.html#adcac90c31c61c37191bbdba9aa76ead3',1,'JsonData::trim()'],['../class_json.html#abab65f77fa705ce7f3099fd52d134d90',1,'Json::trim()']]]
 ];

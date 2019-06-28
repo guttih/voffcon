@@ -7,7 +7,6 @@ var annotated =
     [ "IPAddressList", "class_i_p_address_list.html", "class_i_p_address_list" ],
     [ "Json", "class_json.html", "class_json" ],
     [ "JsonData", "class_json_data.html", "class_json_data" ],
-    [ "KeyVal", "struct_key_val.html", "struct_key_val" ],
     [ "KeyValue", "class_key_value.html", "class_key_value" ],
     [ "LinkedList", "class_linked_list.html", "class_linked_list" ],
     [ "ListNode", "struct_list_node.html", "struct_list_node" ],

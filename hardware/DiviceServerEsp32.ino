@@ -76,11 +76,6 @@ WiFiServer server(PORT);
 
 const int ERROR_NUMBER = -9999;
 
-struct KeyVal {
-    String key = "";
-    long value = 0;
-};
-
 enum OBJECTTYPE {
     OBJECTTYPE_KEYVALUE_STRING,
     OBJECTTYPE_KEYVALUE_INT,
@@ -608,18 +603,13 @@ private:
     int mLength = 0;
 public:
     GUrl() { }
-    String getAfter(String str, String afterMe);
     int toNumber(String str);
-    boolean extractAndSetPinsAndValues(const char *unParsedJson, GPins *pinnar);
-    uint8_t extractPinValues(const char *unParsedJson, PinValue pinValuesArray[], uint8_t arrayLength);
-    String removeLastSpaceIfExists(String str);
     String jsonKeyValue(String key, String value);
     String jsonKeyValue(String key, int value);
     String jsonObjectType(unsigned int uiType);
     String makeStatusResponceJson(String jsonPins, String jsonWhitelist, String jsonDate);
     String makePostLogPinsJson(String deviceId, String jsonPins);
     String makeHttpStatusCodeString(unsigned int uiStatusCode);
-    String extractAndReturnIPaddress(const char *unParsedJson);
     String jsonRoot(unsigned int uiType, String key, String value);
 };
 
@@ -627,7 +617,7 @@ public:
 /// The errornumber to return when a numberfunction fails;
 /// Like: toInt(), toFloat(), toLong(), toULong()
 /// </summary>
-#define JSONDATA_ERRORNUMBER 999999999;
+#define JSONDATA_ERRORNUMBER 999999999
 
 //See informanation on JSON on https://www.json.org (nice pictures)
 //See more info here : https://www.crockford.com/mckeeman.html
@@ -668,58 +658,55 @@ class JsonData
 
 private:
 
-    String        mValue;
-    JSONTYPE      mType;
-    JSONTYPE      mValueType;
-
-    JsonData* mFirstChild{},
-        * mNext{},
-        * mParent{};
+    String       mValue;
+    JSONTYPE     mType;
+    JSONTYPE     mValueType;
+    JsonData    *mFirstChild{},
+                *mNext{},
+                *mParent{};
 
     JsonData(JSONTYPE type, JsonData* parent);
     JsonData(String jsonString, JsonData* parent);
     JsonData(String value, JSONTYPE type, JSONTYPE valueType, JsonData* parent);
 
-    static bool          isClosingToken(char c);
-    static char          getClosingToken(char openingToken);
-    static int           getIndexOfClosingToken(String *string, bool ignoreStrings);
-    static bool          isDigit(char c);
-    static bool          removeLast(JsonData* pNode);
-    static bool          destroyIncludingChildren(JsonData* pNode);
-    static JSONTYPE      getValueTypeFromChar(char firstCharInValue);
-    static JSONTYPE      getType(String strValue);
-    static JsonData* getLastChild(JsonData* parent);
-    static JsonData* getLastNode(JsonData* previous);
-    static JsonData* getPointingNode(JsonData* findMe);
-    static JsonData* findPointingNode(JsonData* startFrom, JsonData* findMe);
-    static JsonData* getRootNode(JsonData* current);
-    void                 init(JSONTYPE type, JSONTYPE valueType, JsonData* parent);
-    void                 parse(const String jsonString, JsonData* parent);
-    JsonData* setRootInvalid();
-    String               valueToString();
-    String               getValue()     const { return mValue; }
-
-    JsonData* array(String* elements, JsonData* parent, bool canBeMoreThanOne);
-    JsonData* object(String* members, JsonData* parent);
-    JsonData* elements(String* values, JsonData* parent);
-    bool                 getPairIndexes(String* pairs, bool& thereIsAnotherPair,
-        int& keyIndexOfFirstChar, int& keyLength,
-        int& valueIndexOfFirstChar, int& valueLength,
-        int& pairLength);
-    JsonData* members(String* pairs, JsonData* parent);
-    JsonData* pair(String* keyValues, JsonData* parent);
-    static bool          validateValue(const JSONTYPE jsonvaluetype, String string);
-    JsonData* value(String* valuesString, JsonData* parent);
-    static String       jsonTypeString(JSONTYPE type);
-    String              toTree(JsonData* current, int level);
-    static bool         isWhitespace(const char c);
+    static bool      isClosingToken(char c);
+    static char      getClosingToken(char openingToken);
+    static int       getIndexOfClosingToken(String* string, bool ignoreStrings);
+    static bool      isDigit(char c);
+    static bool      removeLast(JsonData* pNode);
+    static bool      destroyIncludingChildren(JsonData* pNode);
+    static JSONTYPE  getValueTypeFromChar(char firstCharInValue);
+    static JSONTYPE  getType(String strValue);
+    static JsonData *getLastChild(JsonData* parent);
+    static JsonData *getLastNode(JsonData* previous);
+    static JsonData *getPointingNode(JsonData* findMe);
+    static JsonData *findPointingNode(JsonData* startFrom, JsonData* findMe);
+    static JsonData *getRootNode(JsonData* current);
+    void             init(JSONTYPE type, JSONTYPE valueType, JsonData* parent);
+    void             parse(const String jsonString, JsonData* parent);
+    JsonData        *setRootInvalid();
+    String           valueToString();
+    JsonData        *array(String* elements, JsonData* parent, bool canBeMoreThanOne);
+    JsonData        *object(String* members, JsonData* parent);
+    JsonData        *elements(String* values, JsonData* parent);
+    bool             getPairIndexes(String* pairs, bool& thereIsAnotherPair,
+                                    int    &keyIndexOfFirstChar, int& keyLength,
+                                    int    &valueIndexOfFirstChar, int& valueLength,
+                                    int    &pairLength);
+    JsonData        *members(String* pairs, JsonData* parent);
+    JsonData        *pair(String* keyValues, JsonData* parent);
+    static bool      validateValue(const JSONTYPE jsonvaluetype, String string);
+    JsonData       *value(String* valuesString, JsonData* parent);
+    static String   jsonTypeString(JSONTYPE type);
+    String          toTree(JsonData* current, int level);
+    static bool     isWhitespace(const char c);
 public:
     JsonData(const char* jsonString);
     ~JsonData();
-    String toString();
-    String toTree();
-    static String  trim(String jsonStringToTrim);
-    bool           isValid() const;
+    String        toString();
+    String        toTree();
+    static String trim(String jsonStringToTrim);
+    bool          isValid() const;
     /// <summary>
     /// Checks if the current object has any child objects
     /// </summary>
@@ -727,15 +714,17 @@ public:
     /// true if this object has one ore more child object(s).  Otherwize false
     /// </returns>
     bool          hasChildren() { return this->mFirstChild != NULL; };
-    JsonData*     GetChildAt(unsigned int index);
-    JsonData*     GetChild(String value);
-    JsonData*     GetNext();
-    float         toFloat();
-    unsigned long toULong();
-    long          toLong();
-    int           toInt();
-    JSONTYPE      getType();
-    JSONTYPE      getValueType();
+    JsonData     *getChildAt(unsigned int index);
+    JsonData     *getChild(String value);
+    JsonData     *getNext();
+    const String  getValue();
+    String        getValueAsString();
+    float         getValueAsFloat();
+    unsigned long getValueAsULong();
+    long          getValueAsLong();
+    int           getValueAsInt();
+    JSONTYPE      getType()      const { return mType; }
+    JSONTYPE      getValueType() const { return mValueType; }
 };
 
 /// <summary>
@@ -886,6 +875,157 @@ PinWatchList monitors;
 char linebuf[580];
 int charcount = 0;
 
+//////////////////////// Global Functions  ///////////////////////////////
+
+String reportIn() {
+    Serial.println("Reporting in ");
+    String ret = "Fri, 1 Jan 1971 00:00:00 GMT";
+    String data = "{" +
+        urlTool.jsonKeyValue("id", "\"" + String(deviceId) + "\",") +
+        urlTool.jsonKeyValue("ip", "\"" + WiFi.localIP().toString() + "\",") +
+        urlTool.jsonKeyValue("port", PORT) +
+        "}";
+
+    HTTPClient http;
+    String host = voffconServerIp.toString() + ":" + String(voffconServerPort);
+    String url = "http://" + host + "/devices/reportin";
+    http.begin(url);  //Specify destination for HTTP request
+    http.addHeader("Content-Type", "application/json");
+    http.addHeader("Connection", "close");
+    Serial.println("sending");
+    Serial.println(data);
+
+    int httpResponseCode = http.POST(data);   //Send the actual POST request
+
+    if (httpResponseCode>0) {
+
+        String response = http.getString(); //Get the response to the request
+
+        Serial.println(httpResponseCode);   //Print return code
+        Serial.println(response);           //Print request answer
+        ret = response; //responce should contain date.toUTCString()
+
+    }
+    else {
+
+        Serial.print("Error on sending POST: ");
+        Serial.println(httpResponseCode);
+    }
+
+    http.end();  //Free resources
+    return ret;
+}
+
+void tellServerToSaveLog() {
+    Serial.println("Telling server to log the device pins");
+
+    HTTPClient http;
+    String host = voffconServerIp.toString() + ":" + String(voffconServerPort);
+    String url = "http://" + host + "/logs/pins/" + deviceId;
+    http.begin(url);  
+    http.addHeader("Connection", "close");
+    Serial.print("Calling : "); Serial.println(url);
+    int httpResponseCode = http.GET();   //make the request to server
+    Serial.print("Responce code: "); Serial.println(httpResponseCode);   //return code
+    Serial.println(http.getString());   //The response to the request
+    http.end();  //Free resources
+}
+
+void tellServerToSendMonitors() {
+    Serial.println("Telling server to send monitors");
+
+    HTTPClient http;
+    String host = voffconServerIp.toString() + ":" + String(voffconServerPort);
+    String url = "http://" + host + "/monitors/update/" + deviceId;
+    http.begin(url);
+    http.addHeader("Connection", "close");
+    Serial.print("Calling : "); Serial.println(url);
+    int httpResponseCode = http.GET();   //make the request to server
+    Serial.print("Responce code: "); Serial.println(httpResponseCode);   //return code
+    Serial.println(http.getString());   //The response to the request
+    http.end();  //Free resources
+}
+
+void SerialPrint(String str, int value) {
+    Serial.print(str + " ");
+    Serial.print(value);
+}
+
+void SerialPrintLn(String str, String value, bool setMarkerAtBeginningAndEndOfValue = false) {
+    Serial.print(str + " ");
+    if (setMarkerAtBeginningAndEndOfValue)
+        value = "|" + value + "|";
+    Serial.println(value);
+}
+
+void SerialPrintLn(String str, int value) {
+    SerialPrint(str, value);
+    Serial.println();
+}
+
+/// <summary>
+/// Parses Json text and extracts a key value from it.
+/// The function assumes that the jsonText has only child objects of Json Key values.
+/// Like so: {"key1":1,"key2":"string2"}
+/// </summary>
+/// <param name="jsonText"></param> 
+/// <param name="key"></param> The key of a Key value object;
+/// <returns>Success: The value as a string.  Fail: an empty string</returns>
+String getKeyValueFromJsonAsString(String jsonText, String key) {
+    Json parser(jsonText.c_str());
+
+    JsonData* root = parser.getRootObject();
+
+    if (root == NULL || !root->isValid()) {
+        Serial.println("Invalid json root object");
+        return "";
+    };
+    JsonData* current = root->getChild(key);
+    if (current == NULL)
+        return "";
+
+    return current->getValueAsString();
+}
+
+/// <summary>
+/// Extracts pin numbers and values from the given string
+/// and sets the pin values according to what was extracted.
+/// </summary>
+/// <param name="unParsedJson">A json string on the form { "3":220}</param>
+/// <returns>true if successful otherwhise false</returns>
+bool setPinValues(String jsonString, GPins* devicePins) {
+
+    Json parser(jsonString.c_str());
+
+    JsonData* root = parser.getRootObject();
+
+    if (root == NULL || !root->isValid()) {
+        Serial.println("Invalid json root object");
+        return false;
+    };
+
+    bool bRet = false;
+    JsonData* child, * current = root->getChildAt(0);
+    String name;
+    unsigned long ulValue;
+
+    while (current && current->getType() == JSONTYPE::JSONTYPE_KEY_VALUE) {
+        name = current->getValue();
+        int pin = name.toInt();
+        child = current->getChildAt(0);
+        if (child != NULL) {
+            ulValue = child->getValueAsULong();
+            if (ulValue != JSONDATA_ERRORNUMBER) {
+                if (devicePins->setValue(pin, ulValue)) {
+                    bRet = true; //set to true, if at least one value is changed
+                }
+            }
+        }
+        current = current->getNext();
+    }
+    return bRet;
+}
+
 /// <summary>
 /// Setup all pins by selecting their index/channel, number, initial value and type.
 /// </summary>
@@ -907,7 +1047,6 @@ void setupPins() {
     devicePins.addPin("D5", type, 19, 25);
     devicePins.addPin("D6", type, 21, 40);
     devicePins.addPin("D7", type, 23, 60);
-
     devicePins.addPin("D8", type2, 13, 80);
     devicePins.addPin("D9", type2, 12, 90);
     devicePins.addPin("D10", type2, 14, 100);
@@ -1004,22 +1143,6 @@ String getTime() {
         }
     }
     return "";
-}
-/*
-
-*/
-/// <summary>
-/// this function will always return true
-/// </summary>
-/// <param name="unParsedJson"></param>
-/// <returns></returns>
-void extractAndAddToWhitelist(const char* unParsedJson) {
-
-    whiteList.add(urlTool.extractAndReturnIPaddress(unParsedJson).c_str());
-}
-void extractAndRemoveFromWhitelist(const char* unParsedJson) {
-
-    whiteList.remove(urlTool.extractAndReturnIPaddress(unParsedJson).c_str());
 }
 
 /// <summary>
@@ -1165,7 +1288,6 @@ void logPins() {
     http.begin(url);
     http.addHeader("Content-Type", "application/json");
     http.addHeader("Connection", "close");
-
     Serial.println("sending");
     Serial.println(data);
 
@@ -1174,10 +1296,8 @@ void logPins() {
     if (httpResponseCode > 0) {
 
         String response = http.getString();   //Get the response to the request
-
         Serial.println(httpResponseCode);     //Print return code
         Serial.println(response);             //Print request answer
-
     }
     else {
 
@@ -1296,21 +1416,6 @@ void printHeapSize(String strAddInfront = String("")) {
     Serial.println(strAddInfront + " ESP32 SDK version:" + String(system_get_sdk_version()) + ", RAM left " + String(esp_get_free_heap_size()) + "\n");
 }
 
-bool extractAndSetPinValues(const char* unParsedJson, GPins* pinnar) {
-    //Change this function if you want to set conditions for pins or do additional work when incomming pinvalues are beeing changed
-    int count;
-    bool ret = false;
-    PinValue arr[30];
-    count = urlTool.extractPinValues(unParsedJson, arr, 30);
-    for (uint8_t i = 0; i < count; i++) {
-        if (pinnar->setValue(arr[i].pinNumber, arr[i].pinValue)) {
-            Serial.print("    new values set");
-            ret = true;
-        }
-    }
-    return ret;
-}
-
 static bool sta_was_connected = true;
 static void poll_connection(void) {
     static uint32_t ms = millis();
@@ -1338,282 +1443,6 @@ static void timerTwoSeconds(void) {
         //after the last command executes then two second will pass
         timerTwoSecondsMs = millis();
     }
-}
-
-String reportIn() {
-    Serial.println("Reporting in ");
-    String ret = "Fri, 1 Jan 1971 00:00:00 GMT";
-    String data = "{" +
-        urlTool.jsonKeyValue("id", "\"" + String(deviceId) + "\",") +
-        urlTool.jsonKeyValue("ip", "\"" + WiFi.localIP().toString() + "\",") +
-        urlTool.jsonKeyValue("port", PORT) +
-        "}";
-
-    HTTPClient http;
-    String host = voffconServerIp.toString() + ":" + String(voffconServerPort);
-    String url = "http://" + host + "/devices/reportin";
-    http.begin(url);  //Specify destination for HTTP request
-    http.addHeader("Content-Type", "application/json");
-    http.addHeader("Connection", "close");
-    Serial.println("sending");
-    Serial.println(data);
-
-    int httpResponseCode = http.POST(data);   //Send the actual POST request
-
-    if (httpResponseCode>0) {
-
-        String response = http.getString(); //Get the response to the request
-
-        Serial.println(httpResponseCode);   //Print return code
-        Serial.println(response);           //Print request answer
-        ret = response; //responce should contain date.toUTCString()
-
-    }
-    else {
-
-        Serial.print("Error on sending POST: ");
-        Serial.println(httpResponseCode);
-
-    }
-
-    http.end();  //Free resources
-    return ret;
-}
-
-void tellServerToSaveLog() {
-    Serial.println("Telling server to log the device pins");
-
-    HTTPClient http;
-    String host = voffconServerIp.toString() + ":" + String(voffconServerPort);
-    String url = "http://" + host + "/logs/pins/" + deviceId;
-    http.begin(url);  
-    http.addHeader("Connection", "close");
-    Serial.print("Calling : "); Serial.println(url);
-    int httpResponseCode = http.GET();   //make the request to server
-    Serial.print("Responce code: "); Serial.println(httpResponseCode);   //return code
-    Serial.println(http.getString());   //The response to the request
-    http.end();  //Free resources
-}
-
-void tellServerToSendMonitors() {
-    Serial.println("Telling server to send monitors");
-
-    HTTPClient http;
-    String host = voffconServerIp.toString() + ":" + String(voffconServerPort);
-    String url = "http://" + host + "/monitors/update/" + deviceId;
-    http.begin(url);
-    http.addHeader("Connection", "close");
-    Serial.print("Calling : "); Serial.println(url);
-    int httpResponseCode = http.GET();   //make the request to server
-    Serial.print("Responce code: "); Serial.println(httpResponseCode);   //return code
-    Serial.println(http.getString());   //The response to the request
-    http.end();  //Free resources
-}
-
-void SerialPrint(String str, int value) {
-    Serial.print(str + " ");
-    Serial.print(value);
-}
-
-void SerialPrintLn(String str, String value, bool setMarkerAtBeginningAndEndOfValue = false) {
-    Serial.print(str + " ");
-    if (setMarkerAtBeginningAndEndOfValue)
-        value = "|" + value + "|";
-    Serial.println(value);
-}
-
-void SerialPrintLn(String str, int value) {
-    SerialPrint(str, value);
-    Serial.println();
-}
-
-/// <summary>
-/// Removes ArrayBrackets from a valid Json array
-/// </summary>
-/// <param name="validJsonArray">
-/// Should contain a valid Json array.
-/// </param>
-/// <param name="out">
-/// Will contain all content of validJsonArray without the surrounding brackets
-/// Will be unchanged if the function returns false
-/// </param>
-/// <returns>
-/// true : The string out will contain all content of validJsonArray without the surrounding brackets
-///        Warning, it is considered a success if there is nothing between the brackets, resulting in a empty out String.
-/// false: There are no surrounding brackets, The string out is unchanged".</returns>
-bool removeArrayBrackets(String validJsonArray, String *out) {
-    bool success;
-    int start = validJsonArray.indexOf('[');
-    int end = validJsonArray.indexOf(']');
-    int len = validJsonArray.length();
-    success = ((start == 0) && (start < end) && (end == len - 1));
-    if (success)
-        *out = validJsonArray.substring(start + 1, end);
-
-    return success;
-}
-
-bool ExtractAndRemoveFirstArrayObject(String *arrayObjectList, String* out) {
-    bool success;
-    int start = (*arrayObjectList).indexOf('{');
-    int end   = (*arrayObjectList).indexOf('}');
-    int len   = (*arrayObjectList).length();
-    success = (start == 0) && (start < end);
-    if (!success)
-        return false;
-
-    *out = (*arrayObjectList).substring(start + 1, end);
-    end++;
-    if ((*arrayObjectList).charAt(end) == ',')
-        end++;
-    (*arrayObjectList).remove(0, end);
-    return true;
-}
-
-// extracts an integer value from the first keyvalue pair
-bool ExtractAndRemoveFirstKeyValuePair(String* arrayObject, String* key, long* value) {
-    /* todo:    �etta fall �tti bara a� s�kja �ll value sem streng hvort sem �ar er 
-    falli� �tti svo a� skila t�pu sem skilagildi hvort sem value var - tala e�a + tala e�a strengur*/
-
-    String k, v = "";
-    bool success = false;
-    int start = 1, end, sign = 1;
-    if ((*arrayObject).indexOf('\"') != 0) return false;
-    end = (*arrayObject).indexOf('\"', start);
-    if (end < 2) return false;
-    k = (*arrayObject).substring(start, end);
-    if ((*arrayObject).charAt(end + 1) != ':') return false;
-    start = end + 2;
-    if ((*arrayObject).charAt(start) == '\"') return false; //this is a string value not an integer value
-    if ((*arrayObject).charAt(start) == '-') {
-        sign = -1;
-        start++;
-    }
-    int len = (*arrayObject).length();
-    end = (*arrayObject).indexOf(',', start);
-    if (end < start)
-        end = len;
-
-    if (start >= end)
-        return false;
-
-    int pos = start;
-
-    char ch = (*arrayObject).charAt(pos);
-    while (ch >= '0' && ch <= '9' && pos < end) {
-        v += ch;
-        if (pos + 1 >= end) {
-            success = true;
-            break;
-        }
-        ch = (*arrayObject).charAt(++pos);
-    }
-    if (success) {
-
-        *key = k;
-        *value = (atol(v.c_str()) * sign);
-        if ((*arrayObject).charAt(end) == ',') end++;
-        k = (*arrayObject).substring(end);
-        (*arrayObject) = k;
-    }
-
-    return success;
-
-}
-
-int getIndex(String searchFor, KeyVal arr[], int sizeOfArr) {
-    for (int i = 0; i < sizeOfArr; i++) {
-        if (arr[i].key == searchFor)
-            return i;
-    }
-    return -1;
-}
-
-//returns NULL on error or arrayObject is empty
-//if not NULL you are responsible to delete the object from memory.
-PinWatch *ExtractAndRemoveFirstPinWatch(GPins* devicePins, String *arrayObjectList) {
-
-    String tempObjList = *arrayObjectList, tempObj;
-    int i = 0;
-    const int KEYVALS_COUNT = 10;
-    KeyVal keyVals[KEYVALS_COUNT];
-
-    if (!ExtractAndRemoveFirstArrayObject(&tempObjList, &tempObj))
-        return NULL;
-    
-    
-    while (i < KEYVALS_COUNT) {
-        if (!ExtractAndRemoveFirstKeyValuePair(&tempObj, &keyVals[i].key, &keyVals[i].value))
-            return NULL;
-        i++;
-    }
-
-    int index_pin             = getIndex("pin"             , keyVals, KEYVALS_COUNT),
-        index_pinValueMargin  = getIndex("pinValueMargin"  , keyVals, KEYVALS_COUNT),
-        index_sampleTotalCount= getIndex("sampleTotalCount", keyVals, KEYVALS_COUNT),
-        index_sampleInterval  = getIndex("sampleInterval"  , keyVals, KEYVALS_COUNT),
-        index_minLogInterval  = getIndex("minLogInterval"  , keyVals, KEYVALS_COUNT);
-
-    if (  index_pin              == -1 || index_pinValueMargin == -1 ||  index_sampleTotalCount == -1 ||
-          index_sampleInterval   == -1 || index_minLogInterval == -1                                      )
-    {
-        Serial.println("Did not find all values needed to create a PinWatch");
-        return NULL;
-    }
-    PinWatch *ptr = new PinWatch(
-        (*devicePins).get(keyVals[index_pin].value),
-        keyVals[index_pinValueMargin].value,
-        keyVals[index_sampleTotalCount].value,
-        keyVals[index_sampleInterval].value,
-        keyVals[index_minLogInterval].value);
-
-    *arrayObjectList = tempObjList;
-    return ptr;
-   
-}
-
-// clears all monitors and adds new ones
-// success: returns number of monitors added
-// fail: returns -1 on error
-int setMonitorsFromJason(GPins* devicePins, String jsonArrayOfMonitors) {
-
-    if (!removeArrayBrackets(jsonArrayOfMonitors, &jsonArrayOfMonitors))
-    {
-        Serial.println("Invalid monitors");
-        Serial.println(jsonArrayOfMonitors);
-        return false;
-    }
-
-    monitors.clear();
-    PinWatch* pPinWatch = ExtractAndRemoveFirstPinWatch(devicePins, &jsonArrayOfMonitors);
-    
-    while (pPinWatch != NULL) {
-        monitors.add(pPinWatch);
-        pPinWatch = ExtractAndRemoveFirstPinWatch(devicePins, &jsonArrayOfMonitors);
-    }
-
-    return monitors.size();
-}
-void test(GPins *devicePins) {
-    Serial.println("--------------------------  starting test()  --------------------------");
-        bool success;
-        String  jsonMonitors = "[{\"pin\":-1,\"sampleSum\":0,\"pinValueLast\":4294967295,\"pinValueMargin\":0,\"sampleCount\":0,\"sampleTotalCount\":0,\"nextSampleTime\":0,\"sampleInterval\":0,\"minLogInterval\":86400000,\"nextLogTime\":86411107},{\"pin\":5,\"sampleSum\":700,\"pinValueLast\":700,\"pinValueMargin\":1,\"sampleCount\":1,\"sampleTotalCount\":2,\"nextSampleTime\":881877,\"sampleInterval\":500,\"minLogInterval\":518400000,\"nextLogTime\":518411125}]";
-       setMonitorsFromJason(devicePins, jsonMonitors);
-        Serial.println(" M o n i t o r s ");
-        Serial.println(monitors.toJson());
-
-        /*
-        SerialPrintLn("current", current, true);
-        long lValue = 0;
-        String key;
-        success = ExtractAndRemoveFirstKeyValuePair(&current, &key, &lValue);
-        SerialPrintLn("-----------------success", success);
-        SerialPrintLn("key", key, true);
-        SerialPrintLn("value", lValue);
-        SerialPrintLn("current", current, true);*/
-
-    Serial.println("-------------------------- ending test  --------------------------");
-    while (true);
 }
 
 void setup() {
@@ -1658,13 +1487,12 @@ void setup() {
 void loop() {
 
     //timerTwoSeconds();
-
     if (monitors.isAnyPinWatchDo()) {
         // One item did trigger so you could log
         tellServerToSaveLog();
         monitors.resetAllChecks();
     }
-
+    
     // listen for incoming clients
     WiFiClient client = server.available();
     if (client) {
@@ -1698,17 +1526,17 @@ void loop() {
                             Serial.println(linebuf);
                             //if ( command == COMMANDS_POST_PINS && lib.extractAndSetPinsAndValues(linebuf, &pinnar)) {
                             if (command == COMMANDS_POST_PINS) {
-                                extractAndSetPinValues(linebuf, &devicePins);
+                                setPinValues(linebuf, &devicePins);
                                 handlePins(&client);
                             }
                             else if (command == COMMANDS_POST_WHITELIST) {
                                 if (isAuthorized(&client))
-                                    extractAndAddToWhitelist(linebuf);
+                                    whiteList.add(getKeyValueFromJsonAsString(linebuf, "ipaddress").c_str());
                                 client.println(makeJsonResponseString(200, whiteList.toJson()));
                             }
                             else if (command == COMMANDS_DELETE_WHITELIST) {
                                 if (isAuthorized(&client))
-                                    extractAndRemoveFromWhitelist(linebuf);
+                                    whiteList.remove(getKeyValueFromJsonAsString(linebuf, "ipaddress").c_str());
                                 client.println(makeJsonResponseString(200, whiteList.toJson()));
                             }
 
@@ -1789,7 +1617,8 @@ void loop() {
                 }
             }//if (client.available())
         }//while (client.connected()) 
-            // give the web browser time to receive the data
+        
+        // give the web browser time to receive the data
         delay(1);
         // close the connection:
         method = METHODS::METHOD_NOTSET;
@@ -1906,12 +1735,16 @@ bool IPAddressList::remove(const char *strIpAddress) {
 /// <returns>Success: Returns true if the address was removed.  Fail: Returns false if the address was not removed</returns>
 bool IPAddressList::remove(IPAddress ipAddress) {
     int i = indexOf(ipAddress);
+    
     if (i>-1)
     {
         delete get(i);
         set(i, NULL);
     }
-    return LinkedList<IPAddress*>::remove(i);
+    else
+        return false;
+    LinkedList<IPAddress*>::remove(i);
+    return true;
 }
 
 /// <summary>
@@ -2217,7 +2050,7 @@ GPins::GPins() {
 boolean GPins::setValue(int pinNumber, int newValue) {
     int i = indexOf(pinNumber);
     if (i < 0) return false;
-    Serial.println("setting value of " + String(i) + " to " + String(newValue));
+    Serial.println("setting value of pin " + String(pinNumber) + " to " + String(newValue));
     mPins[i]->setValue(newValue);
     return true;
 }
@@ -2276,15 +2109,13 @@ int GPins::addPin(const char *strPinName, PINTYPE pinType, int pinNumber, int pi
 /// <param name="pinNumber">The pin number to search for</param>
 /// <returns>If nothing is found the function returns -1</returns>
 int GPins::indexOf(int pinNumber) {
-    Serial.print("index of " + String(pinNumber) + " :");
     if (pinNumber < 0) return -1;
     for (int i = 0; i<mLength; i++) {
         if (pinNumber == mPins[i]->getNumber()) {
-            Serial.println(i);
             return i;
         }
     }
-    Serial.println(-1);
+    Serial.println("indexOf pin not found!");
     return -1;
 }
 
@@ -2606,16 +2437,6 @@ int GTime::getSeconds() { return mSeconds; }
 #endif //CODE_BLOCK_Gtime
 
 #ifndef CODE_BLOCK_GUrl_impl
-//returns "" if nothing is found after given string
-String GUrl::getAfter(String str, String afterMe) {
-    int index = str.indexOf(afterMe);
-
-    if (index > -1) {
-        index += afterMe.length();
-        return str.substring(index);
-    }
-    return "";
-}
 
 //return  -9999 if a string is not a number
 int GUrl::toNumber(String str) {
@@ -2627,17 +2448,6 @@ int GUrl::toNumber(String str) {
             return ERROR_NUMBER;
     }
     return str.toInt();
-}
-
-String GUrl::removeLastSpaceIfExists(String str) {
-    Serial.println();
-    int lSpace = str.lastIndexOf(" ");
-    if (lSpace > 0)
-    {
-        Serial.println("remove last space: " + String(lSpace));
-        str = str.substring(0, lSpace);
-    }
-    return str;
 }
 
 String GUrl::jsonKeyValue(String key, String value) {
@@ -2706,113 +2516,6 @@ String GUrl::makeHttpStatusCodeString(unsigned int uiStatusCode) {
         break;
     }
     return strCode;
-}
-
-/// <summary>
-/// Extracts pin numbers and values from the given string
-/// and sets the pin values according to what was extracted.
-/// </summary>
-/// <param name="unParsedJson">A endline seperated json values on the form { "3":220}</param>
-/// <returns>true if successful otherwhise false</returns>
-boolean GUrl::extractAndSetPinsAndValues(const char *unParsedJson, GPins *pinnar) {
-    boolean ret = false;
-    String line = String(unParsedJson);
-    String strPin, strValue;
-    int pin, val, iCol, iCom;
-    Serial.println("extractAndSetPinsAndValues");
-    Serial.println("0" + line);
-    line = line.substring(1, line.length() - 1);
-    Serial.println("1:" + line);
-    line += ",";
-    Serial.println("2:" + line);
-    line.replace("\"", "");
-    line.replace("\"", "");
-    Serial.println("3:Line:" + line);
-    iCol = line.indexOf(':');
-    iCom = line.indexOf(',');
-    Serial.println("iCol:" + String(iCol) + "iCom:" + String(iCom));
-    while (iCol>0 && iCom>2)
-    {
-        strPin = line.substring(0, iCol);
-        strValue = line.substring(iCol + 1, iCom);
-        line.remove(0, iCom + 1);
-        Serial.print("Pin  :" + strPin);
-        Serial.print("    Value:" + strValue);
-        pin = toNumber(strPin);
-        val = toNumber(strValue);
-
-        if (pin > -1 && val > -1) {
-            if (pinnar->setValue(pin, val))
-                Serial.print("    new values set");
-            ret = true;
-        }
-        Serial.println();
-        iCol = line.indexOf(':');
-        iCom = line.indexOf(',');
-    }
-    return ret;
-}
-
-/// <summary>
-/// Extracts pin numbers and values from the given string
-/// and adds theyr number to the 
-/// </summary>
-/// <param name="unParsedJson">A endline seperated json values on the form { "3":220}</param>
-/// <param name="pinValues">A container to use when storing pinValues</param>
-/// <returns>The number of PinValues saved to the Array</returns>
-    uint8_t GUrl::extractPinValues(const char *unParsedJson, PinValue pinValuesArray[], uint8_t arrayLength) {
-    uint8_t index = 0;
-    String line = String(unParsedJson);
-    String strPin, strValue;
-    int pin, val, iCol, iCom;
-    Serial.println("extractPinValues");
-    Serial.println("0" + line);
-    line = line.substring(1, line.length() - 1);
-    Serial.println("1:" + line);
-    line += ",";
-    Serial.println("2:" + line);
-    line.replace("\"", "");
-    line.replace("\"", "");
-    Serial.println("3:Line:" + line);
-    iCol = line.indexOf(':');
-    iCom = line.indexOf(',');
-    Serial.println("iCol:" + String(iCol) + "iCom:" + String(iCom));
-    while (iCol>0 && iCom>2)
-    {
-        strPin = line.substring(0, iCol);
-        strValue = line.substring(iCol + 1, iCom);
-        line.remove(0, iCom + 1);
-        Serial.print("Pin  :" + strPin);
-        Serial.print("    Value:" + strValue);
-        pin = toNumber(strPin);
-        val = toNumber(strValue);
-
-        if (pin > -1 && val > -1) {
-            pinValuesArray[index].pinNumber = pin;
-            pinValuesArray[index].pinValue = val;
-            index++;
-        }
-        Serial.println();
-        iCol = line.indexOf(':');
-        iCom = line.indexOf(',');
-    }
-    return index;
-}
-
-String GUrl::extractAndReturnIPaddress(const char *unParsedJson) {
-
-    String line = String(unParsedJson);
-    int iStart, iEnd;
-    iStart = line.indexOf("{\"ipaddress\":\"");
-    if (iStart < 0) return "";
-    iStart = iStart + 14; //length of {"ipaddress":"
-    iEnd = line.indexOf("\"}", iStart);
-
-    if (iEnd <= iStart + 6) return "";//shortest valid ip address is 0.0.0.0
-    line = line.substring(iStart, iEnd);
-    if (line.length() < 7 || line.length() > 15) return ""; // longest ip address 255.255.255.255
-    Serial.println("Processed \"" + line + "\" len=" + String(line.length()));
-    return line;
 }
 
 String GUrl::jsonRoot(unsigned int uiType, String key, String value) {
@@ -4048,7 +3751,7 @@ String JsonData::trim(String jsonStringToTrim) {
 /// </summary>
 /// <param name="index">Zero based index of the child to get</param>
 /// <returns>Pointer to the object.  If no object is found NULL is returned</returns>
-JsonData* JsonData::GetChildAt(unsigned int index)
+JsonData* JsonData::getChildAt(unsigned int index)
 {
     unsigned int i = 0;
     JsonData* current = mFirstChild;
@@ -4067,7 +3770,7 @@ JsonData* JsonData::GetChildAt(unsigned int index)
 /// </summary>
 /// <param name="value">Value to search for.  the search is case sensitive</param>
 /// <returns>Pointer to the object.  If no object is found NULL is returned</returns>
-JsonData* JsonData::GetChild(String value)
+JsonData* JsonData::getChild(String value)
 {
     JsonData* current = mFirstChild;
     while (current != NULL) {
@@ -4080,69 +3783,87 @@ JsonData* JsonData::GetChild(String value)
 
 /// <summary>
 /// Gets a a pointer to the next sibling of this object.  
+/// This function does NEVER return a child object.
 /// If no sibling is found NULL is returned
 /// </summary>
 /// <returns>Pointer to the next sibling. If no sibling exists, NULL is returned.</returns>
-JsonData* JsonData::GetNext()
+JsonData* JsonData::getNext()
 {
     return mNext;
+}
+
+/// <summary>
+/// Gets the value of an object.
+/// If the object is a JSONTYPE_KEY_VALUE then the child object value is NOT returned.
+/// </summary>
+/// <returns>The value as a string</returns>
+const String JsonData::getValue()
+{
+    return mValue;
+}
+
+/// <summary>
+/// Returns the value of an object as a String.
+/// If the object is a JSONTYPE_KEY_VALUE then the child object value is returned as a String
+/// </summary>
+/// <returns>The values as a String</returns>
+String JsonData::getValueAsString()
+{
+    if (mType == JSONTYPE_KEY_VALUE && mFirstChild) {
+        return mFirstChild->getValueAsString();
+    }
+
+    return getValue();
 }
 
 /// <summary>
 /// Converts the value of an object from string to a float.
 /// If the object is a JSONTYPE_KEY_VALUE then the child object value is returned as a number
 /// </summary>
-/// <returns>Success: Returns a float number.  Fail: returns a 999999999.
-/// Or if conversion fails, a zero is returned. Data type: float.</returns>
-float JsonData::toFloat()
+/// <returns>Success: If no valid conversion could be performed because the String doesn’t start with a digit, 
+/// a zero is returned. Data type: float.  Fail: the number 999999999</returns>
+float JsonData::getValueAsFloat()
 {
-    bool     useChild     = (mType == JSONTYPE_KEY_VALUE && mFirstChild);
-    JSONTYPE typeOfValue  = (useChild) ? mValueType : mType;
-    bool     valueIsValid = (typeOfValue == JSONTYPE_FLOAT || typeOfValue == JSONTYPE_ULONG || typeOfValue == JSONTYPE_LONG);
+    if (mType == JSONTYPE_KEY_VALUE && mFirstChild &&
+        (mValueType == JSONTYPE_FLOAT || mValueType == JSONTYPE_ULONG || mValueType == JSONTYPE_LONG)) {
+        return mFirstChild->getValueAsFloat();
+    }
+    if (mType == JSONTYPE_FLOAT || mType == JSONTYPE_ULONG || mType == JSONTYPE_LONG)
+        return mValue.toFloat();
 
-    if (!valueIsValid)
-        return JSONDATA_ERRORNUMBER; //999999999
-
-    if (useChild)
-        return mFirstChild->toFloat();
-
-    return mValue.toFloat();
+    return JSONDATA_ERRORNUMBER; //999999999
 }
 
 /// <summary>
 /// Converts the value of an object from string to a unsigned long.
-/// If the object is a JSONTYPE_KEY_VALUE then the child object value is returned as a number 
 /// Note the type of the value must be a positive number (JSONTYPE_ULONG). 
-/// If a value is larger than 4294967295 then the conversion will be invalid 
+/// If the object is a JSONTYPE_KEY_VALUE then the child object value is returned as a number 
 /// </summary>
 /// <returns>Succsess: A unsinged long number.  Fail:  999999999</returns>
-unsigned long JsonData::toULong()
+unsigned long JsonData::getValueAsULong()
 {
-    bool     useChild     = (mType == JSONTYPE_KEY_VALUE && mFirstChild);
-    JSONTYPE typeOfValue  = (useChild) ? mValueType : mType;
+    bool     useChild = mType == JSONTYPE_KEY_VALUE && mFirstChild;
+    JSONTYPE typeOfValue = (useChild) ? mValueType : mType;
     bool     valueIsValid = (typeOfValue == JSONTYPE_ULONG);
 
     if (!valueIsValid)
         return JSONDATA_ERRORNUMBER; //999999999
 
     if (useChild)
-        return strtoul(mFirstChild->mValue.c_str(), NULL, 10);
+        return atol(mFirstChild->mValue.c_str());
 
-    return strtoul(mValue.c_str(), NULL, 10);
+    return atol(mValue.c_str());
 }
 
 /// <summary>
-/// Converts the value of an object from string to a long.
+/// Converts the value of an object from string to a long number.
 /// If the object is a JSONTYPE_KEY_VALUE then the child object value is returned as a number 
-/// Note the type of the value can be be a positive or negative number. (JSONTYPE_LONG or JSONTYPE_ULONG). 
-/// If a value is larger than 2147483647 then the conversion will be invalid 
-/// Because it will become negative.
 /// </summary>
-/// <returns>Succsess: A unsinged long number.  Fail:  999999999</returns>
-long JsonData::toLong()
+/// <returns>Succsess: A long number.  Fail:  999999999</returns>
+long JsonData::getValueAsLong()
 {
-    bool     useChild     = (mType == JSONTYPE_KEY_VALUE && mFirstChild);
-    JSONTYPE typeOfValue  = (useChild) ? mValueType : mType;
+    bool     useChild = mType == JSONTYPE_KEY_VALUE && mFirstChild;
+    JSONTYPE typeOfValue = (useChild) ? mValueType : mType;
     bool     valueIsValid = (typeOfValue == JSONTYPE_LONG || typeOfValue == JSONTYPE_ULONG);
 
     if (!valueIsValid)
@@ -4153,19 +3874,16 @@ long JsonData::toLong()
 
     return atol(mValue.c_str());
 }
+
 /// <summary>
-/// Converts the value of an object from string to a int.
+/// Converts the value of an object from string to a integer number.
 /// If the object is a JSONTYPE_KEY_VALUE then the child object value is returned as a number 
-/// Note the type of the value can be be a positive or negative number. (JSONTYPE_LONG or JSONTYPE_ULONG). 
-/// If a value is larger than  32767 then the conversion will be invalid and the function result invalid.
-/// If a value is less   than -32768 then the conversion will be invalid and the function result invalid.
-/// If no valid conversion could be performed because the String doesn’t start with a integer number, a zero is returned. 
 /// </summary>
-/// <returns>Success:int number.  Fail: 0 or 999999999</returns>
-int JsonData::toInt()
+/// <returns>Succsess: A integer number.  Fail:  999999999</returns>
+int JsonData::getValueAsInt()
 {
-    bool     useChild     = (mType == JSONTYPE_KEY_VALUE && mFirstChild);
-    JSONTYPE typeOfValue  = (useChild) ? mValueType : mType;
+    bool     useChild = mType == JSONTYPE_KEY_VALUE && mFirstChild;
+    JSONTYPE typeOfValue = (useChild) ? mValueType : mType;
     bool     valueIsValid = (typeOfValue == JSONTYPE_LONG || typeOfValue == JSONTYPE_ULONG);
 
     if (!valueIsValid)
@@ -4175,24 +3893,6 @@ int JsonData::toInt()
         return mFirstChild->mValue.toInt();
 
     return mValue.toInt();
-}
-
-/// <summary>
-/// Get the ValueType of the child object;
-/// </summary>
-/// <returns>The type of the child object</returns>
-JSONTYPE JsonData::getValueType()
-{
-    return mValueType;
-}
-
-/// <summary>
-/// Get Type type of the JsonData object
-/// </summary>
-/// <returns>the type</returns>
-JSONTYPE JsonData::getType()
-{
-    return mType;
 }
 
 #ifndef CODE_BLOCK_PinWatchList
@@ -4662,11 +4362,11 @@ int PinWatchList::updateMonitorFromJsonObject(JsonData* root, GPins *devicePins)
         return 0;
     }
 
-    current = root->GetChildAt(0);
+    current = root->getChildAt(0);
     while (current && current->getType() == JSONTYPE::JSONTYPE_OBJECT) {
         updateCount += addJsonPinWatchToList(current, devicePins);
 
-        current = current->GetNext();
+        current = current->getNext();
     }
     return updateCount;
 }
@@ -4687,13 +4387,13 @@ int PinWatchList::deleteMonitorFromJsonObject(JsonData* root)
     }
     int pinNumber, index;
     JsonData* child;
-    current = root->GetChildAt(0);
+    current = root->getChildAt(0);
     while (  current && (current->getType() == JSONTYPE::JSONTYPE_ULONG || 
                          current->getType() == JSONTYPE::JSONTYPE_LONG      )  ) 
     {
-        pinNumber = current->toInt();
+        pinNumber = current->getValueAsInt();
         delCount+=removePin(pinNumber);
-        current = current->GetNext();
+        current = current->getNext();
     }
     return delCount;
 }
@@ -4732,16 +4432,16 @@ PinWatch* PinWatchList::NewPinWatchFromJsonObject(JsonData* jsonObject, GPins *d
 
     //Getting the required  values
     //if any of them are missing we return NULL
-    JsonData* child = jsonObject->GetChild("pin");   if (!child) return NULL; pinNumber = child->toInt();
-    child = jsonObject->GetChild("minLogInterval");  if (!child) return NULL; minLogInterval = child->toULong();
+    JsonData* child = jsonObject->getChild("pin");   if (!child) return NULL; pinNumber = child->getValueAsInt();
+    child = jsonObject->getChild("minLogInterval");  if (!child) return NULL; minLogInterval = child->getValueAsULong();
     
     if (pinNumber == -1) {
         //it's a timer other values are not needed, so setting them to zero
         pinValueMargin = sampleInterval = sampleTotalCount = 0;
     } else {
-        child = jsonObject->GetChild("pinValueMargin");  if (!child) return NULL; pinValueMargin = child->toULong();
-        child = jsonObject->GetChild("sampleInterval");  if (!child) return NULL; sampleInterval = child->toULong();
-        child = jsonObject->GetChild("sampleTotalCount"); if (!child) return NULL; sampleTotalCount = child->toInt();
+        child = jsonObject->getChild("pinValueMargin");  if (!child) return NULL; pinValueMargin = child->getValueAsULong();
+        child = jsonObject->getChild("sampleInterval");  if (!child) return NULL; sampleInterval = child->getValueAsULong();
+        child = jsonObject->getChild("sampleTotalCount"); if (!child) return NULL; sampleTotalCount = child->getValueAsInt();
     }
 
     return new PinWatch(devicePins->get(pinNumber), pinValueMargin, sampleTotalCount, sampleInterval, minLogInterval);

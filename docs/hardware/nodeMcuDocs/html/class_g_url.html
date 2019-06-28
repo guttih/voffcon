@@ -111,21 +111,9 @@ $(document).ready(function(){initNavTree('class_g_url.html','');});
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a669d663791c32a67f4da7c507d76cb1a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a669d663791c32a67f4da7c507d76cb1a"></a>
-String&#160;</td><td class="memItemRight" valign="bottom"><b>getAfter</b> (String str, String afterMe)</td></tr>
-<tr class="separator:a669d663791c32a67f4da7c507d76cb1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa77b1aadbcbb6c8dc33263d84f2d87ae"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa77b1aadbcbb6c8dc33263d84f2d87ae"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>toNumber</b> (String str)</td></tr>
 <tr class="separator:aa77b1aadbcbb6c8dc33263d84f2d87ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa8028fe4c282341d203d6b5ba5885290"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_url.html#aa8028fe4c282341d203d6b5ba5885290">extractAndSetPinsAndValues</a> (const char *unParsedJson, <a class="el" href="class_g_pins.html">GPins</a> *pinnar)</td></tr>
-<tr class="memdesc:aa8028fe4c282341d203d6b5ba5885290"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extracts pin numbers and values from the given string and sets the pin values according to what was extracted.  <a href="#aa8028fe4c282341d203d6b5ba5885290">More...</a><br /></td></tr>
-<tr class="separator:aa8028fe4c282341d203d6b5ba5885290"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab168a8d51cf25e38c260a2cf8fb311bc"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_url.html#ab168a8d51cf25e38c260a2cf8fb311bc">extractPinValues</a> (const char *unParsedJson, <a class="el" href="struct_pin_value.html">PinValue</a> pinValuesArray[], uint8_t arrayLength)</td></tr>
-<tr class="memdesc:ab168a8d51cf25e38c260a2cf8fb311bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extracts pin numbers and values from the given string and adds theyr number to the  <a href="#ab168a8d51cf25e38c260a2cf8fb311bc">More...</a><br /></td></tr>
-<tr class="separator:ab168a8d51cf25e38c260a2cf8fb311bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aefea14d1af37eb2a1f65d6185e2ff42b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aefea14d1af37eb2a1f65d6185e2ff42b"></a>
-String&#160;</td><td class="memItemRight" valign="bottom"><b>removeLastSpaceIfExists</b> (String str)</td></tr>
-<tr class="separator:aefea14d1af37eb2a1f65d6185e2ff42b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a331138d4585c66d9e588a322b4d476f3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a331138d4585c66d9e588a322b4d476f3"></a>
 String&#160;</td><td class="memItemRight" valign="bottom"><b>jsonKeyValue</b> (String key, String value)</td></tr>
 <tr class="separator:a331138d4585c66d9e588a322b4d476f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -144,91 +132,11 @@ String&#160;</td><td class="memItemRight" valign="bottom"><b>makePostLogPinsJson
 <tr class="memitem:a6444e418d255f534983b48f54343e746"><td class="memItemLeft" align="right" valign="top">String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_url.html#a6444e418d255f534983b48f54343e746">makeHttpStatusCodeString</a> (unsigned int uiStatusCode)</td></tr>
 <tr class="memdesc:a6444e418d255f534983b48f54343e746"><td class="mdescLeft">&#160;</td><td class="mdescRight">Formats a http status code  <a href="#a6444e418d255f534983b48f54343e746">More...</a><br /></td></tr>
 <tr class="separator:a6444e418d255f534983b48f54343e746"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aea999b0044deb04b5925d17ac065b63e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aea999b0044deb04b5925d17ac065b63e"></a>
-String&#160;</td><td class="memItemRight" valign="bottom"><b>extractAndReturnIPaddress</b> (const char *unParsedJson)</td></tr>
-<tr class="separator:aea999b0044deb04b5925d17ac065b63e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac4d843edad96f7d606b306a638e74ce8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac4d843edad96f7d606b306a638e74ce8"></a>
 String&#160;</td><td class="memItemRight" valign="bottom"><b>jsonRoot</b> (unsigned int uiType, String key, String value)</td></tr>
 <tr class="separator:ac4d843edad96f7d606b306a638e74ce8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="aa8028fe4c282341d203d6b5ba5885290"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">boolean GUrl::extractAndSetPinsAndValues </td>
-          <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>unParsedJson</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="class_g_pins.html">GPins</a> *&#160;</td>
-          <td class="paramname"><em>pinnar</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Extracts pin numbers and values from the given string and sets the pin values according to what was extracted. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">unParsedJson</td><td>A endline seperated json values on the form { "3":220}</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>true if successful otherwhise false</dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="ab168a8d51cf25e38c260a2cf8fb311bc"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">uint8_t GUrl::extractPinValues </td>
-          <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>unParsedJson</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="struct_pin_value.html">PinValue</a>&#160;</td>
-          <td class="paramname"><em>pinValuesArray</em>[], </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint8_t&#160;</td>
-          <td class="paramname"><em>arrayLength</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Extracts pin numbers and values from the given string and adds theyr number to the </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">unParsedJson</td><td>A endline seperated json values on the form { "3":220}</td></tr>
-    <tr><td class="paramname">pinValues</td><td>A container to use when storing pinValues</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The number of PinValues saved to the Array</dd></dl>
-
-</div>
-</div>
 <a class="anchor" id="a1cfba2abd6110205a35c51651b7c293e"></a>
 <div class="memitem">
 <div class="memproto">
@@ -299,7 +207,7 @@ String&#160;</td><td class="memItemRight" valign="bottom"><b>jsonRoot</b> (unsig
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_g_url.html">GUrl</a></li>
-    <li class="footer">Generated on Thu Jun 6 2019 20:05:53 for Voffcon NodeMcu device server by
+    <li class="footer">Generated on Fri Jun 28 2019 15:38:45 for Voffcon NodeMcu device server by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

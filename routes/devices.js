@@ -246,7 +246,7 @@ router.post('/google/pins/:deviceId', function(req, res){
 			var obj = {text:'Error 404: User device not found!'};
 			return res.json(obj);
 		}
-	
+			//todo: use router.jsonRequestToDevice with a callback instead
 			var urlid = device._doc.url+'/pins';					
 			var formData = {};
 			
@@ -303,214 +303,62 @@ router.post('/google/pins/:deviceId', function(req, res){
 });
 /////////////////// google assistant IFTTT END /////////////////////
 
-
-router.post('/pins/:deviceId', lib.authenticateRequest, function(req, res){
-
-	var deviceId = req.params.deviceId;
-	var b = req.body;	
+router.jsonRequestToDevice = function jsonRequestToDevice(res, deviceId, postBody, subUrl, httpMethod, callback) {
+	
 	Device.getById(deviceId, function(err, device) {
 		if (err !== null || device === null){
 			res.statusCode = 404;
 			var obj = {text:'Error 404: User device not found!'};
+			if (callback !== undefined){
+                callback(err, null);
+            }
 			return res.json(obj);
 		}
 	
-			var urlid = device._doc.url+'/pins';					
-			var contentType = 'application/json';
-			
-					var keys = Object.keys(b);
-						
-					if (device.type === "0") {
-						//NodeMcu we need key=value (form)
-						contentType = 'application/x-www-form-urlencoded';
-						var formData = "";
-						for (var i = 0; i<keys.length; i++) {
-							if (i > 0) {
-								formData+= '&';
-							}
-							formData+= keys[i] + '=' + b[ keys[i] ];
-						}
-					}
-					else {
-						var formData = {};
-						//esp32
-						//we use key:value
-						keys.forEach(function(key) {
-							console.log(key+ ':' + b[key]);
-							formData[key] = Number(b[key]);
-						}, this);
-					
-						keys = Object.keys(formData);
-						formData = JSON.stringify(formData);
-					}
-					
-						request(lib.makeRequestPostOptions(urlid, formData, 'POST', contentType),
-							function (err, res, body) {
-									if (res){
-										console.log("statuscode:"+res.statusCode);
-									}
+		var urlid = device._doc.url+subUrl;					
+		var contentType = 'application/json';
 		
-								if (err) {
-									return console.error(err);
-								}
-								if (body){
-									//todo: remvoe this line
-									console.log(body);
-								}
-								return body;
-							}
-						).pipe(res);
-			});
-		});
+		var keys = Object.keys(postBody);
+		var bodyData = {};
+		keys.forEach(function(key) {
+			console.log(key+ ':' + postBody[key]);
+			//only convert value to number if it is a number
+			var val = Number(postBody[key]);
+			if (Number.isNaN(val)) {
+				val = postBody[key];
+			}
+
+			bodyData[key] = val;
+		}, this);
+
+		
+		request(lib.makeRequestPostBodyOptions(urlid, bodyData, httpMethod, contentType),
+			function (err, res, body) {
+				if (callback !== undefined) {
+					callback(err, res, body);
+				}
+				return body; //todo: why return body? do I need this
+			}
+		).pipe(res);
+	});
+};
+
+
+router.post('/pins/:deviceId', lib.authenticateRequest, function(req, res){
+	router.jsonRequestToDevice(res, req.params.deviceId, req.body, '/pins', 'POST');
+});
 			
 router.post('/whitelist/:deviceId', lib.authenticatePowerRequest, function(req, res){
-	//var SERVERURL = 'http://192.168.1.154:5100';
-	//var urlid = SERVERURL+'/pins';
-	//var formData = {5: 999, 0: 999, 16: 999, 	4: 999, 	12: 999,	13:999,	15:999 };
-
-	var deviceId = req.params.deviceId;
-	
-	var b = req.body;	
-	Device.getById(deviceId, function(err, device){
-		if (err !== null || device === null) {
-			res.statusCode = 404;
-			var obj = {text:'Error 404: User device not found!'};
-			return res.json(obj);
-		}
-	
-			var urlid = device._doc.url+'/whitelist';					
-			var formData = {};
-			
-			var keys = Object.keys(b);
-			keys.forEach(function(key) {
-					console.log(key+ ':' + b[key]);
-					formData[key] = b[key];
-				}, this);
-			
-			keys = Object.keys(formData);
-
-				request(lib.makeRequestPostBodyOptions(urlid, formData),
-					function (err, res, body) {
-							if (res){
-								console.log("statuscode:"+res.statusCode);
-							}
-
-						if (err) {
-							return console.error(err);
-						}
-						if (body){
-							//todo: remvoe this line
-							console.log(body);
-						}
-						return body;
-					}
-				).pipe(res);}
-	);
+	router.jsonRequestToDevice(res, req.params.deviceId, req.body, '/whitelist', 'POST');
 });
 router.delete('/whitelist/:deviceId', lib.authenticatePowerRequest, function(req, res){
-	//var SERVERURL = 'http://192.168.1.154:5100';
-	//var urlid = SERVERURL+'/pins';
-	//var formData = {5: 999, 0: 999, 16: 999, 	4: 999, 	12: 999,	13:999,	15:999 };
-
-	var deviceId = req.params.deviceId;
-	
-	var b = req.body;	
-	Device.getById(deviceId, function(err, device){
-		if (err !== null || device === null) {
-			res.statusCode = 404;
-			var obj = {text:'Error 404: User device not found!'};
-			return res.json(obj);
-		}
-	
-			var urlid = device._doc.url+'/whitelist';					
-			var formData = {};
-			
-			var keys = Object.keys(b);
-			keys.forEach(function(key) {
-					console.log(key+ ':' + b[key]);
-					formData[key] = b[key];
-				}, this);
-			
-			keys = Object.keys(formData);
-
-				formData = JSON.stringify(formData);
-				request(lib.makeRequestPostOptions(urlid, formData, 'DELETE'),
-					function (err, res, body) {
-							if (res){
-								console.log("statuscode:"+res.statusCode);
-							}
-
-						if (err) {
-							return console.error(err);
-						}
-						if (body){
-							//todo: remvoe this line
-							console.log(body);
-						}
-						return body;
-					}
-				).pipe(res);}
-	);
+	router.jsonRequestToDevice(res, req.params.deviceId, req.body, '/whitelist', 'DELETE');
 });
 
 
 router.post('/custom/:deviceId', lib.authenticateRequest, function(req, res){
 	//var formData = {5: 999, 0: 999, 16: 999, 	4: 999, 	12: 999,	13:999,	15:999 };
-
-	var deviceId = req.params.deviceId;
-	var b = req.body;	
-	Device.getById(deviceId, function(err, device){
-		if (err !== null || device === null){
-			res.statusCode = 404;
-			var obj = {text:'Error 404: User device not found!'};
-			return res.json(obj);
-		}
-	
-			var urlid = device._doc.url+'/custom';					
-			var contentType = 'application/json';
-			
-					var keys = Object.keys(b);
-					if (device.type === "0") {
-						//NodeMcu we need key=value (form)
-						contentType = 'application/x-www-form-urlencoded';
-						var formData = "";
-						for (var i = 0; i<keys.length; i++) {
-							if (i > 0) {
-								formData+= '&';
-							}
-							formData+= keys[i] + '=' + b[ keys[i] ];
-						}
-					}
-					else {
-						var formData = {};
-						//esp32
-						//we use key:value
-						keys.forEach(function(key) {
-							console.log(key+ ':' + b[key]);
-							formData[key] = Number(b[key]);
-						}, this);
-					
-						keys = Object.keys(formData);
-						formData = JSON.stringify(formData);
-					}
-					
-						request(lib.makeRequestPostOptions(urlid, formData, 'POST', contentType),
-					function (err, res, body) {
-							if (res){
-								console.log("statuscode:"+res.statusCode);
-							}
-
-						if (err) {
-							return console.error(err);
-						}
-						if (body){
-							//todo: remvoe this line
-							console.log(body);
-						}
-						return body;
-					}
-				).pipe(res);}
-		);
+	router.jsonRequestToDevice(res, req.params.deviceId, req.body, '/custom', 'POST');
 });
 
 router.get('/register', lib.authenticatePowerUrl, function(req, res){
@@ -521,20 +369,20 @@ router.get('/register/:deviceID', lib.authenticatePowerUrl, function(req, res){
 	var id = req.params.deviceID;
 	if (id !== undefined){
 		Device.getById(id, function(err, device){
-				if(err || device === null) {
-					req.flash('error',	'Could not find device.' );
-					res.redirect('/result');
-				} else{
-					var obj = {id : id,
-						name: device.name,
-						description: device.description,
-						url: device.url,
-						type: device.type
-					};
-					var str = JSON.stringify(obj);
-					res.render('register-device', {device:str});
-				}
-			});
+			if(err || device === null) {
+				req.flash('error',	'Could not find device.' );
+				res.redirect('/result');
+			} else{
+				var obj = {id : id,
+					name: device.name,
+					description: device.description,
+					url: device.url,
+					type: device.type
+				};
+				var str = JSON.stringify(obj);
+				res.render('register-device', {device:str});
+			}
+		});
 	}
 });
 
@@ -782,11 +630,6 @@ router.post('/program/:deviceID', lib.authenticatePowerUrl, function(req, res){
 							req.flash('error',	'Could not read program file.' );
 							res.redirect('/result');
 					});
-					/*var obj = {id : id,
-						name: device.name,
-						description: device.description,
-						url: device.url
-					};*/
 				}
 			});
 	}
@@ -802,34 +645,33 @@ router.post('/reportin', function(req, res) {
 	if(errors){
 		res.status(422).json(errors);
 	} else {
-			var newUrl = "http://"+req.body.ip+":"+req.body.port;
-
-				Device.getById(id, function(err, device){
-							if(err || device === null) {
-								res.status(412).json({message:"device not found!"});
-							} else{
-								if (newUrl !== device.url) {
-									//url is change so let's update the device in the database
-									var obj = {id : device.id,
-										name: device.name,
-										description: device.description,
-										url: newUrl,
-										type: device.type
-									};
-									Device.modify(id, obj, function(err, result){
-										if(err || result === null || result.ok !== 1) {//(result.ok===1 result.nModified===1)
-												res.status(500).json({message:"Unable to update!"});
-										} else{
-												var date = new Date();
-												res.status(200).send(date.toUTCString());
-										}
-									});
-								} else { //url is unchanged
-									var date = new Date();
-									res.status(200).send(date.toUTCString());
-								}
-							}
-				});
+		var newUrl = "http://"+req.body.ip+":"+req.body.port;
+		Device.getById(id, function(err, device){
+			if(err || device === null) {
+				res.status(412).json({message:"device not found!"});
+			} else{
+				if (newUrl !== device.url) {
+					//url is change so let's update the device in the database
+					var obj = {id : device.id,
+						name: device.name,
+						description: device.description,
+						url: newUrl,
+						type: device.type
+					};
+					Device.modify(id, obj, function(err, result){
+						if(err || result === null || result.ok !== 1) {//(result.ok===1 result.nModified===1)
+								res.status(500).json({message:"Unable to update!"});
+						} else{
+								var date = new Date();
+								res.status(200).send(date.toUTCString());
+						}
+					});
+				} else { //url is unchanged
+					var date = new Date();
+					res.status(200).send(date.toUTCString());
+				}
+			}
+		});
 	}
 });
 

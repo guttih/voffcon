@@ -22,7 +22,7 @@ var express = require('express');
 var router = express.Router();
 var request = require('request');
 var lib = require('../utils/glib');
-var TriggerAction = require('../models/triggerAction');
+var TriggerAction = require('../models/triggeraction');
 var Device = require('../models/device');
 /**
  * Helper functions

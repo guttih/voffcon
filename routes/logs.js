@@ -25,7 +25,7 @@ var lib           = require('../utils/glib');
 
 var LogItem       = require('../models/logitem');
 var Device        = require('../models/device');
-var TriggerAction = require('../models/triggerAction');
+var TriggerAction = require('../models/triggeraction');
 
 
 router.get('/ids/:deviceId', function(req, res){

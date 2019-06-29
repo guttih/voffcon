@@ -1,5 +1,5 @@
 
-var TriggerAction = require('../models/triggerAction');
+var TriggerAction = require('../models/triggeraction');
 
 module.events = []; 
 module.exports.consoleLogEvents = function consoleLogEvents() {

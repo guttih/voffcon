@@ -1244,8 +1244,10 @@ void handleCustom() {
         }
     }
 
+    String strSend = "{\"custom\":\"Some responce for getting started\",\"val\":123}";
+    Serial.println("Sending custom response-----");
     Serial.println("client IP: " + server.client().remoteIP().toString());
-    server.send(200, "application/json", monitors.toJson());
+    server.send(200, "application/json", strSend);   
 }
 
 //returns:

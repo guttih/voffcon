@@ -351,7 +351,6 @@ module.exports.makeRequestPostOptions = function makeRequestPostOptions(url, pay
 };
 module.exports.makeRequestPostBodyOptions = function makeRequestPostBodyOptions(url, payload, method, ContentType){
 	
-	var byteLength = Buffer.byteLength(payload);
 	if (method === undefined ){
 		method = 'POST';
 	}

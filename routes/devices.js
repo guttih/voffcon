@@ -318,13 +318,23 @@ router.jsonRequestToDevice = function jsonRequestToDevice(res, deviceId, postBod
 	});
 };
 
-router.post('/custom/:deviceId'/*, lib.authenticateRequest*/, function(req, res){
+router.post('/custom/:deviceId', lib.authenticateRequest, function(req, res){
 	router.jsonRequestToDevice(res, req.params.deviceId, req.body, '/custom', 'POST', 
 	function(err, res, body){
 		if (err){
 			console.error("error custom posting");
 		} else {
 			console.log("succsess custom posting")
+		}
+	});
+});
+router.delete('/custom/:deviceId', lib.authenticateRequest, function(req, res){
+	router.jsonRequestToDevice(res, req.params.deviceId, req.body, '/custom', 'DELETE', 
+	function(err, res, body){
+		if (err){
+			console.error("error custom posting");
+		} else {
+			console.log("succsess custom deleteing")
 		}
 	});
 });

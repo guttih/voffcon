@@ -1,10 +1,7 @@
 var searchData=
 [
-  ['set',['set',['../class_linked_list.html#a08ce5b6527cefbd221324569fdb10969',1,'LinkedList']]],
-  ['setname',['setName',['../class_g_pin.html#a4ebe1b73f933005897f43dd7bb76970d',1,'GPin']]],
-  ['settime',['setTime',['../class_g_time.html#ab72425a2570304484b21564a7bbb0a90',1,'GTime::setTime(unsigned long milliSeconds)'],['../class_g_time.html#a8af1804c9d4e951d8591a0d2b322f8cf',1,'GTime::setTime(String strTime)']]],
-  ['setvalue',['setValue',['../class_g_pin.html#a0d0e096fb1dc7a81de7cf31ff2bdb1f1',1,'GPin::setValue()'],['../class_g_pins.html#a10f478e492d936aa70a110e6d9cfb731',1,'GPins::setValue()']]],
-  ['shift',['shift',['../class_linked_list.html#aaf7239844a9d745b6dd11249ff4990c8',1,'LinkedList']]],
-  ['size',['size',['../class_linked_list.html#ab8388ea027c2de8125f5d1e5901c2b2e',1,'LinkedList']]],
-  ['strtomonth',['strToMonth',['../class_g_time.html#a69b75dc7cd1ac52d8389a12deb662958',1,'GTime']]]
+  ['remove',['remove',['../class_linked_list.html#af331637727b3ada2f806c29b9f4cc6fe',1,'LinkedList::remove()'],['../class_i_p_address_list.html#a68550286dd73438331d98d60945a9a9c',1,'IPAddressList::remove(const char *strIpAddress)'],['../class_i_p_address_list.html#a5273086cc27b53604c3da1c765f23b65',1,'IPAddressList::remove(IPAddress address)']]],
+  ['removepin',['removePin',['../class_pin_watch_list.html#a24d129c0bbd6f80373060e7ecc0255fa',1,'PinWatchList']]],
+  ['reset',['reset',['../class_pin_watch.html#a19ee960c4477d34a04b1431803bfd04e',1,'PinWatch']]],
+  ['resetallchecks',['resetAllChecks',['../class_pin_watch_list.html#abedf32964ab15c41b4d6f115c6deedc9',1,'PinWatchList']]]
 ];

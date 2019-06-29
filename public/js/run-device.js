@@ -68,24 +68,6 @@ function getPinout(){
 	});
 }
 
-function getMonitors(){
-	requestData(SERVER+'/devices/monitors/'+device.id, function(monitorData){
-		
-		requestData(SERVER+'/devices/pins/'+device.id, function(pinsData){
-			//setPinoutValues(data, pinOutdata);
-			console.log("monitorData");console.log(monitorData);
-			console.log("pinsData");console.log(pinsData);
-			var message = "Monitors";
-			message+="\n\n";
-			message+=device.id+': this feature is in the process of being implemented, please be patient.';
-			showModal("Success", message);
-		});
-		
-	});
-}
-
-
-
 function getModeString(mode){
 	var str ='(' + mode + '): ';
 
@@ -305,7 +287,7 @@ function downloadFile(filename, data) {
 }
 function download(data) {
     if (device.type == 1){
-		downloadFile("DiviceServerEsp32.ino", data);
+		downloadFile("DeviceServerEsp32.ino", data);
 	} else {
 		downloadFile("DeviceServerNodeMcu.ino", data);
 	}
@@ -378,9 +360,6 @@ function init(){
 		}).fail(function( data ) {
 			showModalErrorText("Logging error", "Unable to save device pin values to the log.");
 		});
-	});
-	$('button.btn-log-monitors').click(function() {
-		getMonitors();
 	});
 		
 	inputDialog.hide();

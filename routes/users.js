@@ -48,7 +48,7 @@ router.get('/login', function(req, res){
 router.post('/register', function(req, res){
 var config = lib.getConfig();
 if (config.allowUserRegistration === true) {
-	
+
 		var name = req.body.name;
 		var email = req.body.email;
 		var username = req.body.username;

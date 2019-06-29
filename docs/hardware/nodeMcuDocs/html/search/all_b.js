@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['remove',['remove',['../class_linked_list.html#af331637727b3ada2f806c29b9f4cc6fe',1,'LinkedList::remove()'],['../class_i_p_address_list.html#a68550286dd73438331d98d60945a9a9c',1,'IPAddressList::remove(const char *strIpAddress)'],['../class_i_p_address_list.html#a5273086cc27b53604c3da1c765f23b65',1,'IPAddressList::remove(IPAddress address)']]],
-  ['removepin',['removePin',['../class_pin_watch_list.html#a24d129c0bbd6f80373060e7ecc0255fa',1,'PinWatchList']]],
-  ['reset',['reset',['../class_pin_watch.html#a19ee960c4477d34a04b1431803bfd04e',1,'PinWatch']]],
-  ['resetallchecks',['resetAllChecks',['../class_pin_watch_list.html#abedf32964ab15c41b4d6f115c6deedc9',1,'PinWatchList']]]
+  ['pinvalue',['PinValue',['../struct_pin_value.html',1,'']]],
+  ['pinwatch',['PinWatch',['../class_pin_watch.html',1,'PinWatch'],['../class_pin_watch.html#a0f852861aa4e2fea27b597bf2a729062',1,'PinWatch::PinWatch(GPin *gPin, unsigned int pinValueMargin, int sampleTotalCount, unsigned long sampleInterval, unsigned long minLogInterval)'],['../class_pin_watch.html#ad8c92970089e2675e7f944beacf54020',1,'PinWatch::PinWatch(const PinWatch &amp;pinWatch)']]],
+  ['pinwatchlist',['PinWatchList',['../class_pin_watch_list.html',1,'']]],
+  ['pop',['pop',['../class_linked_list.html#a00a70f924d76dcbfa3b05503caad40e6',1,'LinkedList']]]
 ];

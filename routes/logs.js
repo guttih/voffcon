@@ -18,14 +18,14 @@
 You can contact the author by sending email to gudjonholm@gmail.com or 
 by regular post to the address Haseyla 27, 260 Reykjanesbar, Iceland.
 */
-var express = require('express');
-var router = express.Router();
-var request = require('request');
-var lib = require('../utils/glib');
+var express       = require('express');
+var router        = express.Router();
+var request       = require('request');
+var lib           = require('../utils/glib');
 
-var LogItem = require('../models/logitem');
-var Device = require('../models/device');
-
+var LogItem       = require('../models/logitem');
+var Device        = require('../models/device');
+var TriggerAction = require('../models/triggeraction');
 
 
 router.get('/ids/:deviceId', function(req, res){
@@ -94,7 +94,7 @@ router.post('/pins', function(req, res) {
 	}
 });
 
-//render a page with list of users
+//render a page with list of logs
 router.get('/list', lib.authenticateUrl, function(req, res){
 	res.render('list-log');
 });
@@ -169,6 +169,18 @@ router.get('/list/:deviceID', lib.authenticateRequest, function(req, res){
 	}
 });
 
+router.delete('/list/:deviceId', lib.authenticateDeviceOwnerRequest, function(req, res){
+	var id = req.params.deviceId;
+	console.log('deleting:' + id)
+	LogItem.deleteAllDeviceRecords(id, function(err, result){
+		if(err !== null){
+			res.status(404).send({message:'unable to delete logItem', id:id});
+		} else {
+			res.status(200).send({id:id});
+		}
+	});
+});
+
 //listing all devices and which have logs and return them as a json array
 router.get('/device-list', lib.authenticatePowerRequest, function(req, res) {
 
@@ -223,13 +235,8 @@ router.delete('/:logID', lib.authenticateDeviceOwnerRequest, function(req, res){
 	
 });
 
-
-/*
-	todo: get pinstatus from device
-	save pinout to logs
-
-*/
-router.get('/pins/:deviceId', function(req, res){
+//	save pinout to logs
+router.get('/pins/:deviceId', function(req, res) {
 	var deviceId = req.params.deviceId;
 
 	Device.getById(deviceId, function(err, device){
@@ -243,11 +250,9 @@ router.get('/pins/:deviceId', function(req, res){
 			res.statusCode = 404;
 			return res.json({text:'Error 404: You are not not authorized'});
 		}
-		console.log(urlid);
 		var urlid = device._doc.url+'/pins';
 		request.get(urlid,	function (err, res, body) {
 			if (res) {
-				console.log("get pins statuscode:"+res.statusCode);
 				//we got the pinvalues, so let's save them
 				var logType = LogItem.LogTypes.indexOf('OBJECTTYPE_LOG_PINS');
 				var obj, pins;
@@ -259,7 +264,8 @@ router.get('/pins/:deviceId', function(req, res){
 					pins, 
 					function(err, item) {
 						if(err) {throw err;}
-						console.log(item);
+						//run all Trigger actions attached to logs from this device
+						TriggerAction.onNewDeviceLogRecord(device, item);
 				});
 			}
 
@@ -267,8 +273,7 @@ router.get('/pins/:deviceId', function(req, res){
 				return console.error(err);
 			}
 			return body;
-		}
-			).pipe(res);
+		}).pipe(res);
 	});
 });
 

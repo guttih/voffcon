@@ -91,7 +91,7 @@ This server will only allow request to it, if the request comes from a client wh
 
 
 ### Device server commands
-These are possible commands a client (the Node server) can send to the device. 
+These are possible commands a client (the Node server) can send to the device.
 
 - /pins
   - __get__ Get status of all pins
@@ -108,11 +108,14 @@ These are possible commands a client (the Node server) can send to the device.
   - __get__ whitelists the first caller to the device.  (todo: this is a sequrity risk, should be removed after development)
 - /pinout
   - __get__ returns the pin mappings of the device.  That is f.example "D0" on the device is mapped to the pin number 16.
-
-Todo: make timed commands.  That is allow a client to send a command which is a sequence of commands made to pins.  That could be shomething like this.  Set pins 1 value to 1023 and set pins 2 value to 0.  Wait for 500 milliseconds and set pins 1 value to 0 and set pins 3 value to 256.
+  - /monitors
+  - __get__ returns all the pin monitors which monitor pin values and if a cetain time has passed.
+  - __post__ Updates the monitor list with monitors from the Json object provided in the body.
+  - __delete__ Deletes list items provided by from Json array
 
 ### Device server Documentation
 #### NodeMcu
+Here are all the [classes](http://voffcon.com/docs/hardware/nodeMcuDocs/html/annotated.html) you have access to from the [NodeMcu VoffCon device server](https://github.com/guttih/voffcon/blob/master/hardware/DeviceServerNodeMcu.ino).
 In the node server is a variable called server which is of the type [ESP8266WebServer](https://links2004.github.io/Arduino/d3/d58/class_e_s_p8266_web_server.html)
 
 See also:
@@ -120,8 +123,6 @@ See also:
   - [ESP8266 Class libary](https://links2004.github.io/Arduino/annotated.html) from the [ESP8266 core](https://github.com/esp8266/Arduino)
 
 #### Esp32
- [Arduino-esp32](https://github.com/espressif/arduino-esp32) is intended to provide an arduino compatible environment on the esp32 hardware. The basic arduino functional documentation can be found [here](https://www.arduino.cc/reference/en/).
+Here are all the [classes](http://voffcon.com/docs/hardware/esp32Docs/html/annotated.html) you have access to from the [Esp32 device server](https://github.com/guttih/voffcon/blob/master/hardware/DeviceServerEsp32.ino).
+ The esp32 device server is built using [Arduino-esp32](https://github.com/espressif/arduino-esp32) which is intended to provide an arduino compatible environment on the esp32 hardware. The basic arduino functional documentation can be found [here](https://www.arduino.cc/reference/en/).
  
-  
-
-

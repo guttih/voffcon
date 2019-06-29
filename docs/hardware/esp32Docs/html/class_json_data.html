@@ -133,27 +133,33 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ac7847e50b77eba68a747df8e0976c130"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_json_data.html#ac7847e50b77eba68a747df8e0976c130">hasChildren</a> ()</td></tr>
 <tr class="memdesc:ac7847e50b77eba68a747df8e0976c130"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if the current object has any child objects  <a href="#ac7847e50b77eba68a747df8e0976c130">More...</a><br /></td></tr>
 <tr class="separator:ac7847e50b77eba68a747df8e0976c130"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4deeeb3402a54da0af26e599bf4ef328"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_json_data.html">JsonData</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_json_data.html#a4deeeb3402a54da0af26e599bf4ef328">GetChildAt</a> (unsigned int index)</td></tr>
-<tr class="memdesc:a4deeeb3402a54da0af26e599bf4ef328"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a a pointer to a child at a specific index. If no child is found at given location NULL is returned  <a href="#a4deeeb3402a54da0af26e599bf4ef328">More...</a><br /></td></tr>
-<tr class="separator:a4deeeb3402a54da0af26e599bf4ef328"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aac004791f57a20b50706473b782a6851"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_json_data.html">JsonData</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_json_data.html#aac004791f57a20b50706473b782a6851">GetChild</a> (String value)</td></tr>
-<tr class="memdesc:aac004791f57a20b50706473b782a6851"><td class="mdescLeft">&#160;</td><td class="mdescRight">Searches for a child with a specific value. Good for searching for a spesific JSONTYPE_KEY_VALUE f.example  <a href="#aac004791f57a20b50706473b782a6851">More...</a><br /></td></tr>
-<tr class="separator:aac004791f57a20b50706473b782a6851"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a02b4db577a8449bcacdd839561ad9ba8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_json_data.html">JsonData</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_json_data.html#a02b4db577a8449bcacdd839561ad9ba8">GetNext</a> ()</td></tr>
-<tr class="memdesc:a02b4db577a8449bcacdd839561ad9ba8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a a pointer to the next sibling of this object. If no sibling is found NULL is returned  <a href="#a02b4db577a8449bcacdd839561ad9ba8">More...</a><br /></td></tr>
-<tr class="separator:a02b4db577a8449bcacdd839561ad9ba8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aebd377f13a843c70d313e46ba1cfeb8e"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_json_data.html#aebd377f13a843c70d313e46ba1cfeb8e">toFloat</a> ()</td></tr>
-<tr class="memdesc:aebd377f13a843c70d313e46ba1cfeb8e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts the value of an object from string to a float. If the object is a JSONTYPE_KEY_VALUE then the child object value is returned as a number  <a href="#aebd377f13a843c70d313e46ba1cfeb8e">More...</a><br /></td></tr>
-<tr class="separator:aebd377f13a843c70d313e46ba1cfeb8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3c377d6bef88e483240230243fb8999e"><td class="memItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_json_data.html#a3c377d6bef88e483240230243fb8999e">toULong</a> ()</td></tr>
-<tr class="memdesc:a3c377d6bef88e483240230243fb8999e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts the value of an object from string to a unsigned long. If the object is a JSONTYPE_KEY_VALUE then the child object value is returned as a number Note the type of the value must be a positive number (JSONTYPE_ULONG). If a value is larger than 4294967295 then the conversion will be invalid  <a href="#a3c377d6bef88e483240230243fb8999e">More...</a><br /></td></tr>
-<tr class="separator:a3c377d6bef88e483240230243fb8999e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afdd126f49a57c8e4ff25924dc1b5631c"><td class="memItemLeft" align="right" valign="top">long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_json_data.html#afdd126f49a57c8e4ff25924dc1b5631c">toLong</a> ()</td></tr>
-<tr class="memdesc:afdd126f49a57c8e4ff25924dc1b5631c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts the value of an object from string to a long. If the object is a JSONTYPE_KEY_VALUE then the child object value is returned as a number Note the type of the value can be be a positive or negative number. (JSONTYPE_LONG or JSONTYPE_ULONG). If a value is larger than 2147483647 then the conversion will be invalid Because it will become negative.  <a href="#afdd126f49a57c8e4ff25924dc1b5631c">More...</a><br /></td></tr>
-<tr class="separator:afdd126f49a57c8e4ff25924dc1b5631c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7e72328dd1d7920ef2b3113a4cf0d93b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_json_data.html#a7e72328dd1d7920ef2b3113a4cf0d93b">toInt</a> ()</td></tr>
-<tr class="memdesc:a7e72328dd1d7920ef2b3113a4cf0d93b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts the value of an object from string to a int. If the object is a JSONTYPE_KEY_VALUE then the child object value is returned as a number Note the type of the value can be be a positive or negative number. (JSONTYPE_LONG or JSONTYPE_ULONG). If a value is larger than 32767 then the conversion will be invalid and the function result invalid. If a value is less than -32768 then the conversion will be invalid and the function result invalid. If no valid conversion could be performed because the String doesn’t start with a integer number, a zero is returned.  <a href="#a7e72328dd1d7920ef2b3113a4cf0d93b">More...</a><br /></td></tr>
-<tr class="separator:a7e72328dd1d7920ef2b3113a4cf0d93b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a10299879dfd98998474b00f3d73e02f4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_json_data.html">JsonData</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_json_data.html#a10299879dfd98998474b00f3d73e02f4">getChildAt</a> (unsigned int index)</td></tr>
+<tr class="memdesc:a10299879dfd98998474b00f3d73e02f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a a pointer to a child at a specific index. If no child is found at given location NULL is returned  <a href="#a10299879dfd98998474b00f3d73e02f4">More...</a><br /></td></tr>
+<tr class="separator:a10299879dfd98998474b00f3d73e02f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9d4a845a706b5dcce6d9fbee06d20cd3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_json_data.html">JsonData</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_json_data.html#a9d4a845a706b5dcce6d9fbee06d20cd3">getChild</a> (String value)</td></tr>
+<tr class="memdesc:a9d4a845a706b5dcce6d9fbee06d20cd3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Searches for a child with a specific value. Good for searching for a spesific JSONTYPE_KEY_VALUE f.example  <a href="#a9d4a845a706b5dcce6d9fbee06d20cd3">More...</a><br /></td></tr>
+<tr class="separator:a9d4a845a706b5dcce6d9fbee06d20cd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a51bacd4b9e07ecadbfa844031dd07b09"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_json_data.html">JsonData</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_json_data.html#a51bacd4b9e07ecadbfa844031dd07b09">getNext</a> ()</td></tr>
+<tr class="memdesc:a51bacd4b9e07ecadbfa844031dd07b09"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a a pointer to the next sibling of this object. This function does NEVER return a child object. If no sibling is found NULL is returned  <a href="#a51bacd4b9e07ecadbfa844031dd07b09">More...</a><br /></td></tr>
+<tr class="separator:a51bacd4b9e07ecadbfa844031dd07b09"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a47d663f95caa4da0572bd816ca391558"><td class="memItemLeft" align="right" valign="top">const String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_json_data.html#a47d663f95caa4da0572bd816ca391558">getValue</a> ()</td></tr>
+<tr class="memdesc:a47d663f95caa4da0572bd816ca391558"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the value of an object. If the object is a JSONTYPE_KEY_VALUE then the child object value is NOT returned.  <a href="#a47d663f95caa4da0572bd816ca391558">More...</a><br /></td></tr>
+<tr class="separator:a47d663f95caa4da0572bd816ca391558"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb69295385e78d3be60eded2c6dea80b"><td class="memItemLeft" align="right" valign="top">String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_json_data.html#afb69295385e78d3be60eded2c6dea80b">getValueAsString</a> ()</td></tr>
+<tr class="memdesc:afb69295385e78d3be60eded2c6dea80b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the value of an object as a String. If the object is a JSONTYPE_KEY_VALUE then the child object value is returned as a String  <a href="#afb69295385e78d3be60eded2c6dea80b">More...</a><br /></td></tr>
+<tr class="separator:afb69295385e78d3be60eded2c6dea80b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab15898d085181a7805243c649507aa90"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_json_data.html#ab15898d085181a7805243c649507aa90">getValueAsFloat</a> ()</td></tr>
+<tr class="memdesc:ab15898d085181a7805243c649507aa90"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts the value of an object from string to a float. If the object is a JSONTYPE_KEY_VALUE then the child object value is returned as a number  <a href="#ab15898d085181a7805243c649507aa90">More...</a><br /></td></tr>
+<tr class="separator:ab15898d085181a7805243c649507aa90"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a88b1741e098473dbfae4f71fbc21fc59"><td class="memItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_json_data.html#a88b1741e098473dbfae4f71fbc21fc59">getValueAsULong</a> ()</td></tr>
+<tr class="memdesc:a88b1741e098473dbfae4f71fbc21fc59"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts the value of an object from string to a unsigned long. Note the type of the value must be a positive number (JSONTYPE_ULONG). If the object is a JSONTYPE_KEY_VALUE then the child object value is returned as a number  <a href="#a88b1741e098473dbfae4f71fbc21fc59">More...</a><br /></td></tr>
+<tr class="separator:a88b1741e098473dbfae4f71fbc21fc59"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad272b0cfe9fdd81b8e88bbe78e68bbbd"><td class="memItemLeft" align="right" valign="top">long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_json_data.html#ad272b0cfe9fdd81b8e88bbe78e68bbbd">getValueAsLong</a> ()</td></tr>
+<tr class="memdesc:ad272b0cfe9fdd81b8e88bbe78e68bbbd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts the value of an object from string to a long number. If the object is a JSONTYPE_KEY_VALUE then the child object value is returned as a number  <a href="#ad272b0cfe9fdd81b8e88bbe78e68bbbd">More...</a><br /></td></tr>
+<tr class="separator:ad272b0cfe9fdd81b8e88bbe78e68bbbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d7aa53e78294d38e768afcc56398715"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_json_data.html#a2d7aa53e78294d38e768afcc56398715">getValueAsInt</a> ()</td></tr>
+<tr class="memdesc:a2d7aa53e78294d38e768afcc56398715"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts the value of an object from string to a integer number. If the object is a JSONTYPE_KEY_VALUE then the child object value is returned as a number  <a href="#a2d7aa53e78294d38e768afcc56398715">More...</a><br /></td></tr>
+<tr class="separator:a2d7aa53e78294d38e768afcc56398715"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9cad31326e487110d3c3fdbfd06ce457"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9cad31326e487110d3c3fdbfd06ce457"></a>
 JSONTYPE&#160;</td><td class="memItemRight" valign="bottom"><b>getType</b> () const </td></tr>
 <tr class="separator:a9cad31326e487110d3c3fdbfd06ce457"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -219,12 +225,12 @@ Static Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="aac004791f57a20b50706473b782a6851"></a>
+<a class="anchor" id="a9d4a845a706b5dcce6d9fbee06d20cd3"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="class_json_data.html">JsonData</a> * JsonData::GetChild </td>
+          <td class="memname"><a class="el" href="class_json_data.html">JsonData</a> * JsonData::getChild </td>
           <td>(</td>
           <td class="paramtype">String&#160;</td>
           <td class="paramname"><em>value</em></td><td>)</td>
@@ -244,12 +250,12 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a4deeeb3402a54da0af26e599bf4ef328"></a>
+<a class="anchor" id="a10299879dfd98998474b00f3d73e02f4"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="class_json_data.html">JsonData</a> * JsonData::GetChildAt </td>
+          <td class="memname"><a class="el" href="class_json_data.html">JsonData</a> * JsonData::getChildAt </td>
           <td>(</td>
           <td class="paramtype">unsigned int&#160;</td>
           <td class="paramname"><em>index</em></td><td>)</td>
@@ -269,12 +275,12 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a02b4db577a8449bcacdd839561ad9ba8"></a>
+<a class="anchor" id="a51bacd4b9e07ecadbfa844031dd07b09"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="class_json_data.html">JsonData</a> * JsonData::GetNext </td>
+          <td class="memname"><a class="el" href="class_json_data.html">JsonData</a> * JsonData::getNext </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -282,8 +288,116 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Gets a a pointer to the next sibling of this object. If no sibling is found NULL is returned </p>
+<p>Gets a a pointer to the next sibling of this object. This function does NEVER return a child object. If no sibling is found NULL is returned </p>
 <dl class="section return"><dt>Returns</dt><dd>Pointer to the next sibling. If no sibling exists, NULL is returned.</dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a47d663f95caa4da0572bd816ca391558"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const String JsonData::getValue </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Gets the value of an object. If the object is a JSONTYPE_KEY_VALUE then the child object value is NOT returned. </p>
+<dl class="section return"><dt>Returns</dt><dd>The value as a string</dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ab15898d085181a7805243c649507aa90"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float JsonData::getValueAsFloat </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts the value of an object from string to a float. If the object is a JSONTYPE_KEY_VALUE then the child object value is returned as a number </p>
+<dl class="section return"><dt>Returns</dt><dd>Success: If no valid conversion could be performed because the String doesn’t start with a digit, a zero is returned. Data type: float. Fail: the number 999999999</dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a2d7aa53e78294d38e768afcc56398715"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int JsonData::getValueAsInt </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts the value of an object from string to a integer number. If the object is a JSONTYPE_KEY_VALUE then the child object value is returned as a number </p>
+<dl class="section return"><dt>Returns</dt><dd>Succsess: A integer number. Fail: 999999999</dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ad272b0cfe9fdd81b8e88bbe78e68bbbd"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">long JsonData::getValueAsLong </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts the value of an object from string to a long number. If the object is a JSONTYPE_KEY_VALUE then the child object value is returned as a number </p>
+<dl class="section return"><dt>Returns</dt><dd>Succsess: A long number. Fail: 999999999</dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="afb69295385e78d3be60eded2c6dea80b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">String JsonData::getValueAsString </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the value of an object as a String. If the object is a JSONTYPE_KEY_VALUE then the child object value is returned as a String </p>
+<dl class="section return"><dt>Returns</dt><dd>The values as a String</dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a88b1741e098473dbfae4f71fbc21fc59"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned long JsonData::getValueAsULong </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts the value of an object from string to a unsigned long. Note the type of the value must be a positive number (JSONTYPE_ULONG). If the object is a JSONTYPE_KEY_VALUE then the child object value is returned as a number </p>
+<dl class="section return"><dt>Returns</dt><dd>Succsess: A unsinged long number. Fail: 999999999</dd></dl>
 
 </div>
 </div>
@@ -330,60 +444,6 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="aebd377f13a843c70d313e46ba1cfeb8e"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">float JsonData::toFloat </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Converts the value of an object from string to a float. If the object is a JSONTYPE_KEY_VALUE then the child object value is returned as a number </p>
-<dl class="section return"><dt>Returns</dt><dd>Success: Returns a float number. Fail: returns a 999999999. Or if conversion fails, a zero is returned. Data type: float.</dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a7e72328dd1d7920ef2b3113a4cf0d93b"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int JsonData::toInt </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Converts the value of an object from string to a int. If the object is a JSONTYPE_KEY_VALUE then the child object value is returned as a number Note the type of the value can be be a positive or negative number. (JSONTYPE_LONG or JSONTYPE_ULONG). If a value is larger than 32767 then the conversion will be invalid and the function result invalid. If a value is less than -32768 then the conversion will be invalid and the function result invalid. If no valid conversion could be performed because the String doesn’t start with a integer number, a zero is returned. </p>
-<dl class="section return"><dt>Returns</dt><dd>Success:int number. Fail: 0 or 999999999</dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="afdd126f49a57c8e4ff25924dc1b5631c"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">long JsonData::toLong </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Converts the value of an object from string to a long. If the object is a JSONTYPE_KEY_VALUE then the child object value is returned as a number Note the type of the value can be be a positive or negative number. (JSONTYPE_LONG or JSONTYPE_ULONG). If a value is larger than 2147483647 then the conversion will be invalid Because it will become negative. </p>
-<dl class="section return"><dt>Returns</dt><dd>Succsess: A unsinged long number. Fail: 999999999</dd></dl>
-
-</div>
-</div>
 <a class="anchor" id="aa1f576495733f0e704471c8a706c9025"></a>
 <div class="memitem">
 <div class="memproto">
@@ -417,24 +477,6 @@ Static Public Member Functions</h2></td></tr>
 
 <p>Prints the object as a tree </p>
 <dl class="section return"><dt>Returns</dt><dd>A string ready to be sent to the console</dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a3c377d6bef88e483240230243fb8999e"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">unsigned long JsonData::toULong </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Converts the value of an object from string to a unsigned long. If the object is a JSONTYPE_KEY_VALUE then the child object value is returned as a number Note the type of the value must be a positive number (JSONTYPE_ULONG). If a value is larger than 4294967295 then the conversion will be invalid </p>
-<dl class="section return"><dt>Returns</dt><dd>Succsess: A unsinged long number. Fail: 999999999</dd></dl>
 
 </div>
 </div>
@@ -480,7 +522,7 @@ Static Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_json_data.html">JsonData</a></li>
-    <li class="footer">Generated on Mon Jun 3 2019 20:41:18 for Voffcon Esp32 device server by
+    <li class="footer">Generated on Fri Jun 28 2019 15:38:41 for Voffcon Esp32 device server by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

@@ -296,6 +296,20 @@ module.exports.isUserOrDeviceAuthenticated = function isUserOrDeviceAuthenticate
 
 	return false;
 };
+
+module.exports.isPowerUserOrDeviceAuthenticated = function isPowerUserOrDeviceAuthenticated(req, deviceIp) {
+	if(req.isAuthenticated() && req.user._doc.level > 0){
+		return true;
+	} 
+	
+	if (req.connection !== undefined && req.connection !== null) {
+		if (req.connection.remoteAddress !== undefined && req.connection.remoteAddress !== null) {
+				return req.connection.remoteAddress.indexOf(deviceIp) > -1 ;
+		}
+	}
+
+	return false;
+};
 module.exports.authenticatePowerRequest = function authenticatePowerRequest(req, res, next){
 
 	if(req.isAuthenticated() && req.user._doc.level > 0){
@@ -314,9 +328,8 @@ module.exports.authenticateAdminRequest = function authenticateAdminRequest(req,
 		return res.send('Error 401: You are not not authorized! ');
 	}
 };
-module.exports.makeRequestPostOptions = function makeRequestOptions(url, formData, method, ContentType){
+module.exports.makeRequestPostOptions = function makeRequestPostOptions(url, payload, method, ContentType){
 	
-	var byteLength = Buffer.byteLength(formData);
 	if (method === undefined ){
 		method = 'POST';
 	}
@@ -326,7 +339,7 @@ module.exports.makeRequestPostOptions = function makeRequestOptions(url, formDat
 	var options = {
 	url: url,
 	method: method,
-	form: formData,
+	form: payload,
 		
 		headers: {
 			'Content-Type': ContentType,
@@ -334,7 +347,28 @@ module.exports.makeRequestPostOptions = function makeRequestOptions(url, formDat
 			'Content-Length': byteLength
 		}
 	};
-	console.log("options");console.log(options);
+	return options;
+};
+module.exports.makeRequestPostBodyOptions = function makeRequestPostBodyOptions(url, payload, method, ContentType){
+	
+	if (method === undefined ){
+		method = 'POST';
+	}
+	if (ContentType === undefined ){
+		ContentType = 'application/json';
+	}
+	var body = JSON.stringify(payload);
+	var options = {
+	url: url,
+	method: method,
+	body: body,
+		
+		headers: {
+			'Content-Type': ContentType,
+			/*'Content-Type': 'application/x-www-form-urlencoded',*/
+			'Content-Length':  Buffer.byteLength(body)
+		}
+	};
 	return options;
 };
 
@@ -694,7 +728,7 @@ var makeProgramFileWindows = function makeProgramFileWindows(deviceId, whitelist
 	
 	var filePath = "./hardware/DeviceServerNodeMcu.ino";
 	if (deviceType === "1") {
-		filePath = "./hardware/DiviceServerEsp32.ino";
+		filePath = "./hardware/DeviceServerEsp32.ino";
 	}
 	
 	fs.readFile(filePath, "utf-8", function(err, file) {
@@ -824,7 +858,7 @@ var makeProgramFileLinux = function makeProgramFileLinux(deviceId, whitelist, de
 	
 	var filePath = "./hardware/DeviceServerNodeMcu.ino";
 	if (deviceType === "1") {
-		filePath = "./hardware/DiviceServerEsp32.ino";
+		filePath = "./hardware/DeviceServerEsp32.ino";
 	}
 	fs.readFile(filePath, "utf-8", function(err, file) {
 			if (err === null){

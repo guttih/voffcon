@@ -6,7 +6,6 @@ var hierarchy =
     [ "GUrl", "class_g_url.html", null ],
     [ "Json", "class_json.html", null ],
     [ "JsonData", "class_json_data.html", null ],
-    [ "KeyVal", "struct_key_val.html", null ],
     [ "LinkedList< T >", "class_linked_list.html", null ],
     [ "LinkedList< IPAddress * >", "class_linked_list.html", [
       [ "IPAddressList", "class_i_p_address_list.html", null ]

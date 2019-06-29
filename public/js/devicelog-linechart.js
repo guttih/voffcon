@@ -388,7 +388,7 @@ function addToTable(headers, logs){
 	for(i = 0; i<logs.length; i++){
 		row='<tr id="'+ logs[i].id +'">';
 		row+='<td class="datetime-td">' + 
-		' <a href="javascript:deleteLogItem(\''+ logs[i].id +'\');"><span class="glyphicon glyphicon glyphicon-remove" rel="tooltip" title="Delete this log record" style="color:red" aria-hidden="true"></span></a>' +
+		' <a href="javascript:deleteListItem(\'logs\',\''+ logs[i].id +'\');"><span class="glyphicon glyphicon glyphicon-remove" rel="tooltip" title="Delete this log record" style="color:red" aria-hidden="true"></span></a>' +
 
 		'<span>' +
 		formaTima(new Date(logs[i].datetime)); +'</span></td>';
@@ -432,12 +432,12 @@ function setDeviceLogsToChart(deviceLogs){
 	InitChart(chartData);
 }
 
-function deleteLogItem(logItemID){
+function deleteListItem(route,itemId){
 	var sendObj = {
-			"id":logItemID
+			"id":itemId
 		};
 
-	var url = SERVER+'/logs/'+logItemID;
+	var url = SERVER+'/'+route+'/'+itemId;
 		var deleting = $.delete( url, sendObj);
 
 		deleting.done(function(data){

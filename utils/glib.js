@@ -330,7 +330,6 @@ module.exports.authenticateAdminRequest = function authenticateAdminRequest(req,
 };
 module.exports.makeRequestPostOptions = function makeRequestPostOptions(url, payload, method, ContentType){
 	
-	var byteLength = Buffer.byteLength(payload);
 	if (method === undefined ){
 		method = 'POST';
 	}
@@ -730,7 +729,7 @@ var makeProgramFileWindows = function makeProgramFileWindows(deviceId, whitelist
 	
 	var filePath = "./hardware/DeviceServerNodeMcu.ino";
 	if (deviceType === "1") {
-		filePath = "./hardware/DiviceServerEsp32.ino";
+		filePath = "./hardware/DeviceServerEsp32.ino";
 	}
 	
 	fs.readFile(filePath, "utf-8", function(err, file) {
@@ -860,7 +859,7 @@ var makeProgramFileLinux = function makeProgramFileLinux(deviceId, whitelist, de
 	
 	var filePath = "./hardware/DeviceServerNodeMcu.ino";
 	if (deviceType === "1") {
-		filePath = "./hardware/DiviceServerEsp32.ino";
+		filePath = "./hardware/DeviceServerEsp32.ino";
 	}
 	fs.readFile(filePath, "utf-8", function(err, file) {
 			if (err === null){

@@ -539,6 +539,7 @@ router.get('/update/:deviceId', function (req, res) {
 	Device.getById(deviceId, function (err, device) {
 		if (err !== null || device === null) {
 			console.log({ text: 'Error 404: User device not found!' });
+			return;
 		}
 
 		var ipAddress = device.url;

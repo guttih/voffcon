@@ -1223,6 +1223,31 @@ void handleMonitors() {
     server.send(200, "application/json", monitors.toJson());
 }
 
+void handleCustom() {
+    String uri = server.uri();
+    Serial.println("Uri"); Serial.println(uri);
+    if ((server.method() == HTTP_POST || server.method() == HTTP_DELETE)
+        && server.hasArg("plain"))
+    {
+        Serial.println(server.arg("plain"));
+        Json parser(server.arg("plain").c_str());
+        if (parser.isValid()) {
+            if (server.method() == HTTP_POST) {
+                Serial.println("Valid post object parsed");
+            }
+            else if (server.method() == HTTP_DELETE) {
+                Serial.println("Valid delete object parsed");
+            }
+        }
+        else {
+            Serial.println("Invalid Json object");
+        }
+    }
+
+    Serial.println("client IP: " + server.client().remoteIP().toString());
+    server.send(200, "application/json", monitors.toJson());
+}
+
 //returns:
 //true :  if the calling client is autorized;
 // false:  if calling client is not autorized and send the text
@@ -1311,6 +1336,7 @@ void setup(void) {
     server.on("/setup",    handleSetup);
     server.on("/pinout",   handlePinout);
     server.on("/monitors", handleMonitors);
+    server.on("/custom", handleCustom);
     
     //todo: spurning um hvort við bætum við /addpins eða    /add
     //todo: spurning um hvort við bætum við /removepins eða /remove

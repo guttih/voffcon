@@ -232,74 +232,49 @@ function MakeIftttMakerWebhookTriggerUrl(event, key) {
 	return `https://maker.ifttt.com/trigger/${event}/with/key/${key}`;
 }
 	
-// here we need to make a request for google home
 router.post('/google/pins/:deviceId', function(req, res){
-	//var SERVERURL = 'http://192.168.1.154:5100';
-	//var urlid = SERVERURL+'/pins';
-	//var formData = {5: 999, 0: 999, 16: 999, 	4: 999, 	12: 999,	13:999,	15:999 };
+	var reqBody = req.body;
+	router.jsonRequestToDevice(res, req.params.deviceId, req.body, '/pins', 'POST', 
+		function(err, res, body) {
+			if (res){
+				console.log("statuscode:"+res.statusCode);
+			}
 
-	var deviceId = req.params.deviceId;
-	var b = req.body;	
-	Device.getById(deviceId, function(err, device) {
-		if (err !== null || device === null){
-			res.statusCode = 404;
-			var obj = {text:'Error 404: User device not found!'};
-			return res.json(obj);
-		}
-			//todo: use router.jsonRequestToDevice with a callback instead
-			var urlid = device._doc.url+'/pins';					
-			var formData = {};
-			
-			var keys = Object.keys(b);
-			keys.forEach(function(key) {
-					console.log(key+ ':' + b[key]);
-					formData[key] = Number(b[key]);
-				}, this);
-			
-			keys = Object.keys(formData);
+			if (err) {
+				return console.error(err);
+			}
+			if (body){
+				//todo: remove this line
+				var triggeringEvent;
+				if (reqBody['5']!== undefined)	{
+					triggeringEvent = 'filling_hottub';
+				} else if ( reqBody['4']!== undefined ){
+						triggeringEvent = 'draining_hottub';
+				}
 
-				formData = JSON.stringify(formData);
-				request(lib.makeRequestPostOptions(urlid, formData),
-					function (err, res, body) {
-							if (res){
-								console.log("statuscode:"+res.statusCode);
-							}
+				if (triggeringEvent !== undefined) {
+					var triggerUrl =  MakeIftttMakerWebhookTriggerUrl(triggeringEvent, config.iftttToken);
+					request(lib.makeRequestPostBodyOptions(triggerUrl, reqBody),
+							function (err, res, body) {
+									if (res){
+										console.log("statuscode: "+res.statusCode);
+									}
 
-						if (err) {
-							return console.error(err);
-						}
-						if (body){
-							//todo: remove this line
-							console.log(body);
-							if (keys !== undefined && keys.length > 0)	{
-								var triggeringEvent = 'filling_hottub';
-								if (keys[0] === '4'){
-									triggeringEvent = 'draining_hottub';
+								if (err) {
+									return console.error(err);
 								}
-								var triggerUrl =  MakeIftttMakerWebhookTriggerUrl(triggeringEvent, config.iftttToken);
-
-								request(lib.makeRequestPostOptions(triggerUrl, formData),
-										function (err, res, body) {
-												if (res){
-													console.log("statuscode: "+res.statusCode);
-												}
-
-											if (err) {
-												return console.error(err);
-											}
-											if (body){
-												console.log(body);
-												console.log("email sent.");
-											}
-											//return body;
-										}
-								);
+								if (body){
+									console.log(body);
+									console.log("email sent.");
+								}
+								//return body;
 							}
-						}
-						return body;
-					}
-				).pipe(res);
-	});
+					);
+				}
+			}
+			//return body;
+		});
+
 });
 /////////////////// google assistant IFTTT END /////////////////////
 
@@ -343,6 +318,16 @@ router.jsonRequestToDevice = function jsonRequestToDevice(res, deviceId, postBod
 	});
 };
 
+router.post('/custom/:deviceId'/*, lib.authenticateRequest*/, function(req, res){
+	router.jsonRequestToDevice(res, req.params.deviceId, req.body, '/custom', 'POST', 
+	function(err, res, body){
+		if (err){
+			console.error("error custom posting");
+		} else {
+			console.log("succsess custom posting")
+		}
+	});
+});
 
 router.post('/pins/:deviceId', lib.authenticateRequest, function(req, res){
 	router.jsonRequestToDevice(res, req.params.deviceId, req.body, '/pins', 'POST');
@@ -612,7 +597,7 @@ router.post('/program/:deviceID', lib.authenticatePowerUrl, function(req, res){
 					lib.makeProgramFile(dev , function(data){
 						var fileInfo = "attachment; filename=DeviceServerNodeMcu.ino";
 						if (device.type === "1") {
-							fileInfo = "attachment; filename=DiviceServerEsp32.ino";
+							fileInfo = "attachment; filename=DeviceServerEsp32.ino";
 						}	
 						res.writeHead(200, {
 							'Content-Type': 'application/force-download',

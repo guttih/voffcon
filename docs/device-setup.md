@@ -123,6 +123,6 @@ See also:
   - [ESP8266 Class libary](https://links2004.github.io/Arduino/annotated.html) from the [ESP8266 core](https://github.com/esp8266/Arduino)
 
 #### Esp32
-Here are all the [classes](http://voffcon.com/docs/hardware/esp32Docs/html/annotated.html) you have access to from the [Esp32 device server](https://github.com/guttih/voffcon/blob/master/hardware/DiviceServerEsp32.ino).
+Here are all the [classes](http://voffcon.com/docs/hardware/esp32Docs/html/annotated.html) you have access to from the [Esp32 device server](https://github.com/guttih/voffcon/blob/master/hardware/DeviceServerEsp32.ino).
  The esp32 device server is built using [Arduino-esp32](https://github.com/espressif/arduino-esp32) which is intended to provide an arduino compatible environment on the esp32 hardware. The basic arduino functional documentation can be found [here](https://www.arduino.cc/reference/en/).
  

@@ -287,7 +287,7 @@ function downloadFile(filename, data) {
 }
 function download(data) {
     if (device.type == 1){
-		downloadFile("DiviceServerEsp32.ino", data);
+		downloadFile("DeviceServerEsp32.ino", data);
 	} else {
 		downloadFile("DeviceServerNodeMcu.ino", data);
 	}

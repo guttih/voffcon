@@ -1256,6 +1256,42 @@ void handleMonitors(WiFiClient* client, unsigned int postMethod) {
     Serial.println(strSend);
 }
 
+void handleCustom(WiFiClient* client, unsigned int postMethod, String callingUrl) {
+    String strSend;
+    METHODS method = (METHODS)(unsigned int)postMethod;
+    Serial.println(postMethod);
+    Serial.println("Calling url " + callingUrl);
+    if (method == METHODS::METHOD_POST || METHODS::METHOD_DELETE)
+    {
+        Serial.println("custom");
+        //if (!isAuthorized(client)) return;
+        String payLoad = getBody(client);
+        Serial.println(payLoad);
+        Json parser(payLoad.c_str());
+        if (parser.isValid()) {
+            if (method == METHOD_POST) {
+                Serial.println("Valid post object parsed");
+                //to access the first key in a object of keys
+                //Serial.println(parser.getRootObject()->getChildAt(0)->getValue());
+
+            }
+            else if (method == METHOD_DELETE) {
+                Serial.println("Valid delete object parsed");
+            }
+        }
+        else {
+            Serial.println("Invalid custom Json object");
+        }
+    }
+
+    strSend = "{\"custom\":\"Some responce for getting started\",\"val\":123}";
+
+    client->println(makeJsonResponseString(200, strSend));
+    Serial.println("Sending custom response-----");
+    Serial.println(strSend);
+
+}
+
 void handleStatus(WiFiClient* client) {
 
     //if (!isAuthorized()) return;
@@ -1586,6 +1622,18 @@ void loop() {
                     }
                     else if (strstr(linebuf, "DELETE /monitors") > 0) {
                         handleMonitors(&client, METHODS::METHOD_DELETE);
+                        break;
+                    }
+                    else if (strstr(linebuf, "GET /custom") > 0) {
+                        handleCustom(&client, METHODS::METHOD_GET, linebuf);
+                        break;
+                    }
+                    else if (strstr(linebuf, "POST /custom") > 0) {
+                        handleCustom(&client, METHODS::METHOD_POST, linebuf);
+                        break;
+                    }
+                    else if (strstr(linebuf, "DELETE /custom") > 0) {
+                        handleCustom(&client, METHODS::METHOD_DELETE, linebuf);
                         break;
                     }
                     else if (strstr(linebuf, "POST /pins") > 0) {

@@ -698,7 +698,7 @@ module.exports.makePinSetupString = function makePinSetupString(deviceType, pins
 	// pinnar.addPin("D0", type, 15, 1, 0);
 	
 	for(var i = 0; i<pins.length; i++){
-		str ='    pinnar.addPin("' + pins[i].name + '", ' + module.exports.getMode(pins[i].m) + ', ' + pins[i].pin + ', ' + pins[i].val + ');\r\n';
+		str ='    devicePins.addPin("' + pins[i].name + '", ' + module.exports.getMode(pins[i].m) + ', ' + pins[i].pin + ', ' + pins[i].val + ');\r\n';
 		ret+= str;
 	}
 	return ret;

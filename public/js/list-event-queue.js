@@ -48,7 +48,7 @@ function addEventsToTable() {
 	var i;
 	var $elm = $('#table-event thead');
 	
-	var keys = Object.keys(events[1]);
+	var keys = Object.keys(events[0]);
 	//selecting properties to show
 	var keys2   =['firesAfter',     'triggerTime',        'type', 'method','url', 'body']; 
 	//setting header text
@@ -103,7 +103,7 @@ $(function () {
 		var event = events.find(e => e.id === id);
 		if (event !== undefined) {
 			var message = '';
-			var keys = Object.keys(events[1]);
+			var keys = Object.keys(events[0]);
 			keys.forEach(element => {
 				var text = encodeHTML(event[element]);
 				if (element === 'id'){

@@ -37,7 +37,7 @@ If you will be using the ESP32 Development Module you will need the ESP32 Arduin
  1. Open the Arduino IDE
  2. Open the preferences window, go to File > Preferences
  3. Enter `https://dl.espressif.com/dl/package_esp32_index.json` into Additional Board Manager URLs field.
-    - note, if you already have a path there, add a commma behind the last path and then add the path.
+    - note, if you already have a path there, add a comma and a single space behind the last path and then add the path.
  4. Click “OK” button
  5. select from menu > Tools > Board: "Arduino/Genuino Uno" > Boards Manager...
  6. type esp32 into the text box to find the "esp8266 by ESP8266 Community" click it and press the "install" button.
@@ -59,7 +59,7 @@ If you will be using the NodeMCU 1.0 (ESP-12E Module) you will need the ESP8266 
  1. Open the Arduino IDE
  2. Open the preferences window, go to File > Preferences
  3. Enter `http://arduino.esp8266.com/stable/package_esp8266com_index.json` into Additional Board Manager URLs field.
-     - note, if you already have a path there, add a commma behind the last path and then add the path.
+     - note, if you already have a path there, add a comma and a single behind the last path and then add the path.
  4. Click “OK” button
  5. select from menu > Tools > Board: "Arduino/Genuino Uno" > Boards Manager...
  6. type 82 into the text box to find the "esp8266 by ESP8266 Community" click it and press the "install" button.

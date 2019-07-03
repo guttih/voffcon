@@ -31,7 +31,15 @@ If there is no file called config.json in the root of the Arduino project, then 
 - [Click here](https://www.arduino.cc/en/Main/Software), download the Arduino Software and install it.
 
 ### ESP32 Arduino Core
-If you will be using the ESP32 Development Module you will need the ESP32 Arduino Core.  The ESP32 is still fairly new so the Arduino IDE Board manager cannot be used, like with the ESP8266.
+If you will be using the ESP32 Development Module you will need the ESP32 Arduino Core.  
+
+#### To add the esp32 core
+- goto File->Preferences 
+- add the url `https://dl.espressif.com/dl/package_esp32_index.json` to Additional Boards Manager URLs.
+
+note, if you already have a path there, add a commma behind the last path and then add the path.
+
+Also, seee [tutorial](https://randomnerdtutorials.com/installing-the-esp32-board-in-arduino-ide-windows-instructions/)
 
 [Click here](https://learn.sparkfun.com/tutorials/esp32-thing-hookup-guide/installing-the-esp32-arduino-core) to get information on how get the ESP32 Arduino Core.
 - Follow them to install the Core.

@@ -31,8 +31,22 @@ If there is no file called config.json in the root of the Arduino project, then 
 - [Click here](https://www.arduino.cc/en/Main/Software), download the Arduino Software and install it.
 
 ### ESP32 Arduino Core
-If you will be using the ESP32 Development Module you will need the ESP32 Arduino Core.  The ESP32 is still fairly new so the Arduino IDE Board manager cannot be used, like with the ESP8266.
+If you will be using the ESP32 Development Module you will need the ESP32 Arduino Core.  
 
+### Installing the esp32 core for Arduino
+ 1. Open the Arduino IDE
+ 2. Open the preferences window, go to File > Preferences
+ 3. Enter `https://dl.espressif.com/dl/package_esp32_index.json` into Additional Board Manager URLs field.
+    - note, if you already have a path there, add a comma and a single space behind the last path and then add the path.
+ 4. Click “OK” button
+ 5. select from menu > Tools > Board: "Arduino/Genuino Uno" > Boards Manager...
+ 6. type esp32 into the text box to find the "esp8266 by ESP8266 Community" click it and press the "install" button.
+ 7. select from menu > Tools > Board: "Arduino/Genuino Uno" > NodeMCU 1.0 (ESP-12E Module).
+ 8. now you can have fun with a lot of examples for the ESP8266 in File > Examples > ESP8266*
+#### Tutorial
+Click [click](https://randomnerdtutorials.com/installing-the-esp32-board-in-arduino-ide-windows-instructions/) to view a good tutorial. 
+
+##### The old method
 [Click here](https://learn.sparkfun.com/tutorials/esp32-thing-hookup-guide/installing-the-esp32-arduino-core) to get information on how get the ESP32 Arduino Core.
 - Follow them to install the Core.
 
@@ -41,10 +55,11 @@ If you will be using the NodeMCU 1.0 (ESP-12E Module) you will need the ESP8266 
 
 "Esp8266 by [ESP8266 community](https://github.com/esp8266)" is the [library](https://github.com/esp8266/Arduino/tree/633e48f3aec5f1c3c11d4498fc90d378d49e6e9f/libraries/ESP8266WiFi/src) I used to write the Device server.  You will need to install it.  Easiest way to do that is to use the Arduino IDE Board manager.
 
-### Follow these steps to install the ESP8266 core for Arduino:
+### Installing the ESP8266 core for Arduino
  1. Open the Arduino IDE
  2. Open the preferences window, go to File > Preferences
- 3. Enter http://arduino.esp8266.com/stable/package_esp8266com_index.json into Additional Board Manager URLs field and
+ 3. Enter `http://arduino.esp8266.com/stable/package_esp8266com_index.json` into Additional Board Manager URLs field.
+     - note, if you already have a path there, add a comma and a single behind the last path and then add the path.
  4. Click “OK” button
  5. select from menu > Tools > Board: "Arduino/Genuino Uno" > Boards Manager...
  6. type 82 into the text box to find the "esp8266 by ESP8266 Community" click it and press the "install" button.

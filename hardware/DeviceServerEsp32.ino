@@ -1225,7 +1225,7 @@ void handleMonitors(WiFiClient* client, unsigned int postMethod) {
     String strSend;
     METHODS method = (METHODS)(unsigned int)postMethod;
     Serial.println(postMethod);
-    if (  (method == METHODS::METHOD_POST || METHODS::METHOD_DELETE))
+    if (  (method == METHODS::METHOD_POST || method == METHODS::METHOD_DELETE))
     {
         Serial.println("1");
         //if (!isAuthorized(client)) return;
@@ -1261,7 +1261,7 @@ void handleCustom(WiFiClient* client, unsigned int postMethod, String callingUrl
     METHODS method = (METHODS)(unsigned int)postMethod;
     Serial.println(postMethod);
     Serial.println("Calling url " + callingUrl);
-    if (method == METHODS::METHOD_POST || METHODS::METHOD_DELETE)
+    if (method == METHODS::METHOD_POST || method == METHODS::METHOD_DELETE)
     {
         Serial.println("custom");
         //if (!isAuthorized(client)) return;

@@ -278,6 +278,20 @@ router.post('/google/pins/:deviceId', function(req, res){
 });
 /////////////////// google assistant IFTTT END /////////////////////
 
+router.detectNumeric = function detectNumeric(obj) {
+    for (var index in obj) {
+        if (!isNaN(obj[index])) {
+            obj[index] = Number(obj[index]);
+        } else if (typeof obj === "object") {
+            detectNumeric(obj[index]);
+        } else  if (Array.isArray(obj)) {
+			console.log("Array");
+			console.log(index);
+
+		}
+    }
+}
+
 router.jsonRequestToDevice = function jsonRequestToDevice(res, deviceId, postBody, subUrl, httpMethod, callback) {
 	
 	Device.getById(deviceId, function(err, device) {
@@ -289,11 +303,17 @@ router.jsonRequestToDevice = function jsonRequestToDevice(res, deviceId, postBod
             }
 			return res.json(obj);
 		}
+
+		//Deep copy;
+		let newObj = JSON.parse(JSON.stringify(postBody));
+
+		//Change string stored as numbers into numbers.
+		router.detectNumeric(newObj);
 	
 		var urlid = device._doc.url+subUrl;					
 		var contentType = 'application/json';
 		
-		var keys = Object.keys(postBody);
+		/*var keys = Object.keys(postBody);
 		var bodyData = {};
 		keys.forEach(function(key) {
 			console.log(key+ ':' + postBody[key]);
@@ -304,10 +324,10 @@ router.jsonRequestToDevice = function jsonRequestToDevice(res, deviceId, postBod
 			}
 
 			bodyData[key] = val;
-		}, this);
+		}, this);*/
 
 		
-		request(lib.makeRequestPostBodyOptions(urlid, bodyData, httpMethod, contentType),
+		request(lib.makeRequestPostBodyOptions(urlid, newObj, httpMethod, contentType),
 			function (err, res, body) {
 				if (callback !== undefined) {
 					callback(err, res, body);

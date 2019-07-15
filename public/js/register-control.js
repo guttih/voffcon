@@ -18,7 +18,7 @@
 You can contact the author by sending email to gudjonholm@gmail.com or 
 by regular post to the address Haseyla 27, 260 Reykjanesbar, Iceland.
 */
-function initControl(){
+function initControl() {
 	if (typeof itemUpload !== 'undefined' && itemUpload !== 'undefined') {
 
 			if (itemUpload.name !== undefined){
@@ -39,10 +39,12 @@ function initControl(){
 				editJsCtrl.setValue(itemUpload.code, -1);
 			}
 
-			
 			document.getElementById("control-form").action = "/controls/register";
+	}
 
-
+	var control    = $( '#item' ).data('control');
+	if (control !== undefined && control.id !== undefined){
+		$('span.save-check').show();
 	}
 	
 	$('#btnUserAccessControl').click(function() {

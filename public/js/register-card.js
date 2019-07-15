@@ -20,7 +20,7 @@ by regular post to the address Haseyla 27, 260 Reykjanesbar, Iceland.
 */
 
 
-function initCard(){
+function initCard() {
 		if (typeof itemUpload !== 'undefined' && itemUpload !== 'undefined') {
 
 			if (itemUpload.name !== undefined){
@@ -41,6 +41,12 @@ function initCard(){
 
 			document.getElementById("card-form").action = "/cards/register";
 	}
+
+	var card    = $( '#item' ).data('card');
+	if (card !== undefined && card.id !== undefined){
+		$('span.save-check').show();
+	}
+
 	$('#btnUserAccessCard').click(function() {
 		var card    = $( '#item' ).data('card');
 		if (card !== undefined && card.id !== undefined){

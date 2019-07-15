@@ -128,6 +128,36 @@ router.post('/register/:cardID', lib.authenticateCardOwnerUrl, function (req, re
 		});
 	}
 });
+              
+router.post('/register/no-close/:cardID', lib.authenticateCardOwnerUrl, function (req, res) {
+	var id = req.params.cardID;
+	req.checkBody('name', 'Name is required').notEmpty();
+	req.checkBody('description', 'description is required').notEmpty();
+	req.checkBody('code', 'javascript code is required').notEmpty();
+	var errors = req.validationErrors();
+
+	if (errors) {
+		res.status(422).json(errors);
+	} else {
+		var values = {
+			name: req.body.name,
+			description: req.body.description,
+			helpurl: req.body.helpurl,
+			code: req.body.code
+		};
+		Card.modify(id, values, function (err, result) {
+			if (err || result === null || result.ok !== 1) {//(result.ok===1 result.nModified===1)
+				res.status(400).json({ "error": "unable to update!" });
+			} else {
+				if (result.nModified === 0) {
+					res.status(200).json({"success":"Card is unchanged!"});
+				} else {
+					res.status(200).json({"success":"Card updated!"});
+				}
+			}
+		});
+	}
+});
 
 router.delete('/:cardID', lib.authenticateCardOwnerRequest, function (req, res) {
 	var id = req.params.cardID;
@@ -205,10 +235,14 @@ router.get('/run/:cardID', lib.authenticateCardUserUrl, function (req, res) {
 				code: code
 			};
 			Control.getByNames(using, function (err, controls) {
-				if (err || controls === null || controls.length < 1) {
+				
+				if (err || controls === null) {
 					req.flash('error', 'Could not find controls.');
 					res.redirect('/result');
 				} else {
+					if (controls === null) {
+						controls = [];
+					}
 					var ctrlCode = "", ctrlTemplate = "";
 					for (var i = 0; i < controls.length; i++) {
 						ctrlCode += '// control: ' + controls[i]._doc.name +

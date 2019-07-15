@@ -334,3 +334,19 @@ div.weekdays {
 	margin-bottom:8px;
 	border-radius: 4px;
   }
+
+
+  span.save-check {
+	display: none;
+  }
+
+  #close-on-save {
+    width: 34px;
+    height: 27px;
+    margin-right: 5px !important;
+    margin-top: 4px;
+}
+span.save-check > label {
+    margin-top: 7px;
+    margin-right: 5px;
+}

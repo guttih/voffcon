@@ -85,7 +85,25 @@ function saveControl(){
 		 $('#code').val(strCode);
 		 $('#template').val(strHtml);
 		 document.getElementById("template").value = strHtml;
-		 document.getElementById('control-form').submit();
+
+		var control    = $( '#item' ).data('control');
+		if (control !==undefined && control.id !==undefined && control.id.length > 0 && !$('#close-on-save').is(":checked")) {
+			console.log("valid control and, not checked");
+			var posting = $.post( 'no-close/'+control.id, sendObj);
+			posting
+				.done(function(data){
+					console.log(data);
+					showModal("Control saved", "Your control has been saved.");
+				})
+				.fail(function(data){
+					console.log("failed saving control");
+					console.log(data);
+					showModalError('Error saving your control', data);
+				});
+
+		} else {
+			 document.getElementById('control-form').submit();
+		}
 
 }
 function saveCard(){
@@ -101,7 +119,27 @@ function saveCard(){
 			code		: strCode
 		};
 	$('#code').val(strCode);
-	document.getElementById('card-form').submit();
+
+	var card = $( '#item' ).data('card');
+
+	if (card !==undefined && card.id !==undefined && card.id.length > 0 && !$('#close-on-save').is(":checked")) {
+		console.log("valid card and, not checked");
+		///register-no-close/:cardID
+		
+		var posting = $.post( 'no-close/'+card.id, sendObj);
+	posting
+		.done(function(data){
+			console.log(data);
+			showModal("Card saved", "Your card has been saved.");
+		})
+		.fail(function(data){
+			console.log("failed saving card");
+			console.log(data);
+			showModalError('Error saving your card', data);
+		});
+	} else {
+		document.getElementById('card-form').submit();
+	}
 
 }
 

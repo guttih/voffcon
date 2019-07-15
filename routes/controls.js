@@ -133,6 +133,42 @@ router.post('/register/:controlID', lib.authenticateControlOwnerUrl, function(re
 	}
 });
 
+router.post('/register/no-close/:controlID', lib.authenticateControlOwnerUrl, function(req, res){
+	var id = req.params.controlID;
+	req.checkBody('name', 'Name is required').notEmpty();
+	req.checkBody('description', 'description is required').notEmpty();
+	req.checkBody('template', 'a html template is required').notEmpty();
+	req.checkBody('code', 'javascript code is required').notEmpty();
+	var errors = req.validationErrors();
+
+	if(errors){
+		//todo: user must type all already typed values again, fix that
+		res.status(422).json(errors);
+	} else {
+				var values = {
+					name		: req.body.name,
+					description : req.body.description,
+					helpurl		: req.body.helpurl,
+					template	: req.body.template,
+					code		: req.body.code
+				};
+				Control.modify(id, values, function(err, result){
+					if(err || result === null || result.ok !== 1) {//(result.ok===1 result.nModified===1)
+						//res.send('Error 404 : Not found or unable to update! ');
+						res.status(400).json({ "error": "unable to update!" });
+					} else{
+							if (result.nModified === 0){
+								res.status(200).json({"success":"Control is unchanged!"});
+							} else {
+								res.status(200).json({"success":"Control updated!"});
+							}
+					}
+				});
+			
+	}
+});
+
+
 router.delete('/:controlID', lib.authenticateControlOwnerRequest, function(req, res){
 	var id = req.params.controlID;
 	Control.delete(id, function(err, result){

@@ -10,16 +10,17 @@ This branch should only be updated by merging from **dev** to **master**.
 When considering an update from **dev** to **master** only do so if you have tested the changes on **dev**.
 
 #### Updating process from dev to master
-```shell 
-git checkout dev
-git pull
-git checkout master
-git pull
-git merge origin/dev
-git push origin master
-```
 
+Updating from from **dev** to **master** should be done with a pull request.
+
+  1. Go to the github [voffcon page](https://github.com/guttih/voffcon)
+  2. Click the button **Compare & pull request**
+  3. Base should be **master** and compare should be **dev**.
+  4. Write some description about what issues you are merging with master.
+  5. Click button **Create pull request**
+  
 ## Branch dev
+
 The **dev** branch must never be merged into **master** without testing.
 The **dev** branch should always include last changes of the **master** branch.
 

@@ -687,7 +687,7 @@ router.addTriggerAction = function addTriggerAction(req, res, id) {
 				} else {
 					res.status(200).json({success: "Trigger action updated.",id: id});
 					TriggerAction.getById(id, function(err, modifiedTriggerAction){
-						req.app.locals.settings.eventQueue.modifyTimer(TriggerAction.copyValues(modifiedTriggerAction, true,true));
+						req.app.locals.settings.eventQueue.addOrModifyTimer(TriggerAction.copyValues(modifiedTriggerAction, true,true));
 					});
 					
 				}

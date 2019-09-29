@@ -407,6 +407,37 @@ module.exports.getConfig = function getConfig(){
 	return conf;
 };
 
+/**
+ *Returns the file package.json as an object
+ * @return An object representing values in the file
+ * @example 
+ * // Logging the version to the console.
+ * var lib = require('./utils/glib');
+ * var package = lib.getPackage();
+ * console.log(package.version);
+ */
+module.exports.getPackage = function getPackage(){
+	var file = __dirname + '/../package.json';
+	var conf;
+	var makeNewFile = true;
+	if (validator.fileExists(file)){
+		try{
+			conf = require(file);
+			makeNewFile = false;
+		} catch(e) {
+			makeNewFile = true;
+		}
+	}
+	if (makeNewFile === true){
+		conf = { 	port:6100,
+					allowUserRegistration: true 
+				};
+		module.exports.setConfig(conf);
+
+	}
+	return conf;
+};
+
 //create a helper function, remove dubicates from ipaddresses
 //create a helper function, remove prefix
 // if putFirstLanAddressAtTop is false then addresses will be returned in an unchanged order

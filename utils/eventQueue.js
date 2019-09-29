@@ -62,9 +62,9 @@ module.exports.addTimer = function addTimer(timer) {
    * Modifies a existing timer in the event queue
    * @param {Timer} timer 
    * @returns Success: returns true if the timer was modified
-   * @returns Fail: returns false if timer was not found or not modified
+   * @returns Fail: returns false if timer was not added or not modified
    */
-   module.exports.modifyTimer = function modifyTimer(timer) {
+   module.exports.addOrModifyTimer = function addOrModifyTimer(timer) {
 	var index = -1;
 	var tId = timer.id.toString();
 	for(var i = 0; i<module.events.length; i++) {
@@ -74,7 +74,8 @@ module.exports.addTimer = function addTimer(timer) {
 		}
 	}
 	if (index === -1) {
-		return false;
+		//This timer does not exist in the queue, let's add it
+		return module.exports.addTimer(timer);
 	}
 	module.events[i] = timer;
 	

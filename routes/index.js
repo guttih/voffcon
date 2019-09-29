@@ -39,7 +39,7 @@ router.get('/result', lib.authenticateUrl, function(req, res){
 	res.render('result');
 });
 router.get('/about', function(req, res){
-	res.render('about');
+	res.render('about', {package:lib.getPackage()});
 });
 router.get('/help', function(req, res){
 	res.render('help');

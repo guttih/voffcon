@@ -3,10 +3,35 @@
 </div>
 <br/><br/>
 <div>
-	<p>A System for controlling devices and appliances from anywere. It is made up from two components. A node server and A device server.</p>
-	<p><a href="mailto:gudjonholm@gmail.com?subject=About the system VoffCon&body=Your query:%0A%0A%0APlease provide details about you:%0A%0AWhere from did you get the system:%0A%0AHow did you find out that it existed:%0A%0A" target="_blank">Send a email</a> regarding the system.
-	</p>
+
+
+
+
+		<table id="table-device" class="table table-bordered table-hover">
+		<thead>
+			<tr>
+				<td colspan="2" style="text-align: center;font-weight: bold">Running version</td>
+			</tr>
+		</thead>
+		<!--<tfoot>
+			<tr>
+				<td>Sum</td>
+				<td>$180</td>
+			</tr>
+		</tfoot>-->
+		<tbody>
+			<tr><td>Name</td> 		     <td>{{package.name}}</td></tr>
+			<tr><td>Version</td> <td>{{package.version}}</td></tr>
+			<tr><td>Description</td>	 <td>{{package.description}}</td></tr>
+			
+			<tr><td>Homepage</td>	 <td><a target="_blank" href="{{package.homepage}}">{{package.homepage}}</a></td></tr>
+			<tr><td>Issues</td>	 <td><a target="_blank" href="{{package.bugs.url}}">{{package.bugs.url}}</a></td></tr>
+			
+		</tbody>
+	</table>
+
 </div>
+<br><br><br>
 <div>
 		<table id="table-device" class="table table-bordered table-hover">
 		<thead>

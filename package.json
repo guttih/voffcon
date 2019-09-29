@@ -1,7 +1,7 @@
 {
   "name": "voffcon",
   "version": "1.1.1",
-  "description": "A System for controlling electric devices and appliances from anywere. It is made up from two components. A node server and A device server.",
+  "description": "A System for controlling electric devices and appliances from anywhere. It is made up from two components. A node server and A device server.",
   "main": "voffcon.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

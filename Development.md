@@ -58,7 +58,7 @@ git push origin #NUM-bug-the_name_of_my_bug_fix_branch
 
 ### Merging your issue branch to dev
 
-When you have finished coding and testing for an issue, then it's time to merge it to the **dev** branch.  
+After coding, pushing and testing a issue, it's time to merge it to the **dev** branch.  
 
 Here is an example on how to merge the **#18-bug-Unable_to_reuse_TriggerAction_Type_Ones_at** branch to **dev** branch.
 
@@ -68,6 +68,7 @@ git pull
 git checkout dev
 git pull
 git merge origin/#18-bug-Unable_to_reuse_TriggerAction_Type_Ones_at
+git push
 ````
 
 

@@ -355,3 +355,7 @@ span.save-check > label {
 	margin-top: 10px;
 	right:0px
 }
+
+.date-and-time-selects > label {
+	font-weight: normal;
+}

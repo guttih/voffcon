@@ -64,12 +64,12 @@ function setDeviceLogsToTable(itemList, clearOldValues){
 	var row = '<tr>';
 	
 	//	adding header
-	var headers=[ 	{title:'Device'			     ,text:'Device'},
+	var headers=[ 	{title:'description'         ,text:'Description'},
+					{title:'Device'			     ,text:'Device'},
 					{title:'Destination device'	 ,text:'Destination device'}, 
-					{title:'url'			     ,text:'Url'}, 
 					{title:'Http method'	     ,text:'Method'},
 					{title:'date'	             ,text:'Date'},
-					{title:'description'         ,text:'Description'}];
+					{title:'delete'                   ,text:''}];
 	
 	row+='<td>Type</td>';
 	for(i = 0; i<headers.length; i++){
@@ -86,15 +86,15 @@ function setDeviceLogsToTable(itemList, clearOldValues){
 		strType =  itemList[i].type;
 		row='<tr id="'+ itemList[i]._id +'">';
 		row+='<td class="datetime-td">';
-		row+=' <a href="javascript:deleteListItem(\'triggeractions\',\''+ itemList[i]._id +'\');"><span class="glyphicon glyphicon glyphicon-remove" rel="tooltip" title="Delete this trigger action" style="color:red" aria-hidden="true"></span></a>';
 		row+=' <a href="javascript:window.location.href =\'/triggeractions/register/'+ itemList[i]._id + '\'">&nbsp;<span class="glyphicon glyphicon glyphicon-pencil" rel="tooltip" title="Modify this trigger action" style="color:black" aria-hidden="true"></span>&nbsp;</a>';
 		row+='<span>' + strType +'</span></td>';
+		row+='<td rel="tooltip" title="'+ itemList[i].description +'">' + itemList[i].description + '</td>';
 		row+='<td rel="tooltip" title="'+ itemList[i].deviceId   +'">' + itemList[i].deviceName + '</td>';
 		row+='<td rel="tooltip" title="'+ itemList[i].destDeviceId   +'">' + itemList[i].destDeviceName + '</td>';
-		row+='<td rel="tooltip" title="Url">' + encodeHTML(itemList[i].url) + '</td>';
+		//row+='<td rel="tooltip" title="Url">' + encodeHTML(itemList[i].url) + '</td>';
 		row+='<td rel="tooltip" title="'+ itemList[i].method   +'">' + itemList[i].method + '</td>';
-		row+='<td rel="tooltip" title="'+ itemList[i].date   +'">' + itemList[i].date + '</td>';
-		row+='<td rel="tooltip" title="'+ itemList[i].description +'">' + itemList[i].description + '</td>';
+		row+='<td  style="min-width:160px" rel="tooltip" title="'+ itemList[i].date   +'">' + formaTime(new Date(itemList[i].date)) + '</td>';
+		row+='<td> <a href="javascript:deleteListItem(\'triggeractions\',\''+ itemList[i]._id +'\');"><span class="glyphicon glyphicon glyphicon-remove" rel="tooltip" title="Delete this trigger action" style="color:red" aria-hidden="true"></span></a></td>';
 		row+='</tr>';
 		$elm.append(row);
 	}

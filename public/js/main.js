@@ -77,6 +77,13 @@ var str =  d.getDate() + "." + (d.getMonth()+1) + "." + d.getFullYear() + " " +
 return str;
 }
 
+function formaTime(d) {
+	var str =  d.getFullYear() + "-" + zeroFirst(d.getMonth()+1) +"-"+ zeroFirst(d.getDate()) + " " +
+				zeroFirst(d.getHours()) + ":" + zeroFirst(d.getMinutes()) + ":" + zeroFirst(d.getSeconds());
+	
+	return str;
+	}
+
 /*
 leadingZeros(10, 4);      // 0010
 leadingZeros(9, 4);       // 0009

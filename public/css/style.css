@@ -350,3 +350,8 @@ span.save-check > label {
     margin-top: 7px;
     margin-right: 5px;
 }
+
+.right-aligned-button {
+	margin-top: 10px;
+	right:0px
+}

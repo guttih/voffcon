@@ -505,9 +505,9 @@ $(function () {
 		var date = new Date();
 		$('#triggerAction-year option[value="'  + date.getFullYear() + '"]').prop('selected', true);
 		$('#triggerAction-month option[value="' + date.getMonth()    + '"]').prop('selected', true);
-		$('#triggerAction-year option[value="'  + date.getDay()      + '"]').prop('selected', true);
-		$('#triggerAction-day option[value="'   + date.getHours()    + '"]').prop('selected', true);
-		$('#triggerAction-hour option[value="'  + date.getMinutes()  + '"]').prop('selected', true);
+		$('#triggerAction-day option[value="'  + date.getDate()      + '"]').prop('selected', true);
+		$('#triggerAction-hour option[value="'   + date.getHours()    + '"]').prop('selected', true);
+		$('#triggerAction-minute option[value="'  + date.getMinutes()  + '"]').prop('selected', true);
 		$('#triggerAction-second option[value="'+ date.getSeconds()  + '"]').prop('selected', true);
 	  });
 

@@ -51,7 +51,7 @@ function addEventsToTable() {
 	//selecting properties to show
 	var keys2   =['firesAfter',     'triggerTime','description',        'type', 'method']; 
 	//setting header text
-	var headers=['Time until event','Time when triggered','description','Type', 'Method'];
+	var headers=['Time until event','Time when triggered','Description','Type', 'Method'];
 	var row = '<tr>';
 	for(i = 0; i<headers.length; i++){
 		row+='<td>'+ headers[i] + '</td>';

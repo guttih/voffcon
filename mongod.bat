@@ -1,1 +1,0 @@
-C:\MongoDB\Server\3.2\bin\mongod.exe --directoryperdb --dbpath C:\MongoDB\Server\3.2\data\db --logpath C:\MongoDB\Server\3.2\log\mongodb.log --logappend

@@ -6,8 +6,8 @@
 {{/if}}	
 	
 
-<div class="row"><h3 class="page-header" style="margin-bottom: 14px;">List up coming events</h3></div>			
-<table><tr><td>Server time:&nbsp;</td><td><b>{{serverDate}}</b></td><td>&nbsp;when this list was created</td></tr></table>
+<div class="row"><h3 class="page-header" style="margin-bottom: 14px;">Upcoming events</h3></div>			
+<table><tr><td>Server time:&nbsp;</td><td><b><span id="server-time" class="hidden">{{serverDate}}</span></b></td><td>&nbsp;when this list was created</td></tr></table>
 {{#if errors}}
       {{#each errors}}
         <div class="alert alert-danger">{{msg}}</div>
@@ -23,4 +23,9 @@
 	</tbody>
 </table>
 
+<p class="pull-right">
+	<button onclick="window.location.href='/triggeractions/list-all'" class="btn btn-xs btn-default pull-right"> 
+		<span class="glyphicon glyphicon-time"></span>&nbsp;List Trigger actions&nbsp;
+	</button>
+</p>
 <script src="/js/list-event-queue.js"></script>

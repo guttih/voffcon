@@ -41,18 +41,17 @@ function addEventsToTable() {
 	//add fires after
 	events.forEach(item => {
 		var date = new Date(item.triggerTime);
-		item.firesAfter = msToStr(date.getTime() - serverDate.getTime(), true);
+		item.firesAfter = msToStr(date.getTime() - serverDate.getTime(), false);
 	});
 
 
 	var i;
 	var $elm = $('#table-event thead');
 	
-	var keys = Object.keys(events[0]);
 	//selecting properties to show
-	var keys2   =['firesAfter',     'triggerTime',        'type', 'method','url', 'body']; 
+	var keys2   =['firesAfter',     'triggerTime','description',        'type', 'method']; 
 	//setting header text
-	var headers=['Time until event','Time when triggered','Type', 'Method','Url', 'Body'];
+	var headers=['Time until event','Time when triggered','Description','Type', 'Method'];
 	var row = '<tr>';
 	for(i = 0; i<headers.length; i++){
 		row+='<td>'+ headers[i] + '</td>';
@@ -62,17 +61,19 @@ function addEventsToTable() {
 	var itemList = events;
 	//now add data
 	$elm = $('#table-event tbody');
-	console.log(itemList);
-	var strType;
 	for(i = 0; i<itemList.length; i++) {
 		row='<tr class="trigger" id="'+itemList[i].id+'">';
 			keys2.forEach(function(item, index){
 				if (index === 0){
 					row+='<td>';
-					row+='<a title="Click to edit this trigger action" href="'+SERVER+'/triggeractions/register/'+itemList[i].id+'">'+itemList[i][item]+'</a>';
+					row+='<a class="time-until" title="Click to edit this trigger action" href="'+SERVER+'/triggeractions/register/'+itemList[i].id+'">'+itemList[i][item]+'</a>';
 				} else {
 					row+='<td class="item-property">';
-					row+=encodeHTML(itemList[i][item]);
+					if (item === 'triggerTime') {
+						row+=encodeHTML(formaTime(new Date(itemList[i][item])));
+					} else {
+						row+=encodeHTML(itemList[i][item]);
+					}
 				}
 				row+='</td>';
 		});
@@ -92,9 +93,27 @@ function eventsToList() {
 }
 
 
+//difference between page date and server date
+var ServerDateDifferenceInMillis = 0;
+
+function updateUntilTimers(){
+	var pageTime =  new Date(new Date().getTime() + ServerDateDifferenceInMillis);
+	$('#server-time.hidden').removeClass('hidden');
+	$('#server-time').text(formaTime(pageTime));
+	events.forEach(function(item){
+		var date = new Date(item.triggerTime);
+		if (date < pageTime) {
+			location.reload();
+		}
+		item.firesAfter = msToStr(date.getTime() - pageTime.getTime(), false);
+		var $elm = $('#' + item.id + ' a.time-until');
+		$elm.text(item.firesAfter);
+	});
+}
 
 $(function () {  
-	/* this is the *$( document ).ready(function( $ ) but jshint does not like that*/
+	var pageTime = new Date();
+	ServerDateDifferenceInMillis = serverDate.getTime() - pageTime.getTime();
 	SERVER = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ':'+window.location.port: '');
 	
 	addEventsToTable();
@@ -118,6 +137,9 @@ $(function () {
 			showModal('Event details', message);
 		}
 	});
+
+	setInterval(function(){updateUntilTimers();}, 1000);
+	
 
 });
 

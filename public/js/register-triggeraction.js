@@ -450,7 +450,7 @@ var updateTokenMenu = function updateTokenMenu(newTokens) {
 
 };
 
-var onSelectTypeChange = function onSelectTypeChange(){
+var onSelectTypeChange = function onSelectTypeChange() {
 	var val = $('#triggerAction-type').val();
 		switch(val){
 			case "ONES":		    showDateOrTime(true ,true, false);      break;
@@ -467,6 +467,10 @@ var onSelectTypeChange = function onSelectTypeChange(){
 									$('.year').hide();           			break;
 			case "LOG-INSTANT":		showDateOrTime(false,false,false);  	break;
 		}
+};
+
+function stuff(){
+	console.log("stuff");
 }
 
 $(function () {
@@ -496,6 +500,17 @@ $(function () {
 	$('input,select,textarea').on('change input', function(){
 		updateSubmitButtonState();
 	});
+
+	$('#get-button-current-time').click(function() {
+		var date = new Date();
+		$('#triggerAction-year option[value="'  + date.getFullYear() + '"]').prop('selected', true);
+		$('#triggerAction-month option[value="' + date.getMonth()    + '"]').prop('selected', true);
+		$('#triggerAction-day option[value="'  + date.getDate()      + '"]').prop('selected', true);
+		$('#triggerAction-hour option[value="'   + date.getHours()    + '"]').prop('selected', true);
+		$('#triggerAction-minute option[value="'  + date.getMinutes()  + '"]').prop('selected', true);
+		$('#triggerAction-second option[value="'+ date.getSeconds()  + '"]').prop('selected', true);
+	  });
+
 	updateTokenMenu();	
 	updateSubmitButtonState();
 

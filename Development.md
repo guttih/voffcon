@@ -28,20 +28,19 @@ The **dev** branch should always include last changes of the **master** branch.
 
 ### Creating a new branch
 
-When creating a new feature you should make sure that **dev** up-to-date with **master** and create a new feature branch from **dev**.
+When creating a new feature you should make sure that **dev** is up-to-date with **master** and create a new feature branch from **dev**.
 
 #### Naming an issue branch
 
 Names must be linked to a issue from the gitHub [issues page](https://github.com/guttih/voffcon/issues?q=is%3Aopen+is%3Aissue+label%3A%22feature+request%22).
 
-
-The name must start with a '#' followed by the number of the issue followed by an '-' followed by the issue [type](https://github.com/guttih/voffcon/labels) (feature|bug|refactoring) followed by '-' and finally followed by a descriptive text made from the name of the issue.
+The name must start with a the word 'issue', followed by  '#' followed by the number of the issue, followed by '-' and finally followed by a descriptive text made from the name of the issue.
 
 Naming example for issue:
-    [Unable to reuse TriggerAction Type "Ones at"](https://github.com/guttih/voffcon/issues/18) should be:
-
+    [Pages TriggerAction list and List EventQueue should be more user friendly](https://github.com/guttih/voffcon/issues/26) should be: issue#26-Pages_TriggerActionListAndEventQueue_ShouldBeMoreUserFriendly
+Created like so
 ```git
-#18-bug-Unable_to_reuse_TriggerAction_Type_Ones_at
+git checkout -b issue#26-Pages_TriggerActionListAndEventQueue_ShouldBeMoreUserFriendly
 ````
 
 ### Update your issue branch regularly
@@ -51,7 +50,7 @@ It's a good idea to sync your branch regularly with **dev** so issues or merge i
 ```shell
 git checkout dev
 git pull
-git checkout #NUM-bug-the_name_of_my_bug_fix_branch
+git checkout issue-#NUM-the_name_of_my_bug_fix_branch
 git merge origin/dev
 #Here is a good idea to test your branch, and better would be to test all the dev branch.
 git push origin #NUM-bug-the_name_of_my_bug_fix_branch
@@ -61,14 +60,14 @@ git push origin #NUM-bug-the_name_of_my_bug_fix_branch
 
 After coding, pushing and testing a issue, it's time to merge it to the **dev** branch.  
 
-Here is an example on how to merge the **#18-bug-Unable_to_reuse_TriggerAction_Type_Ones_at** branch to **dev** branch.
+Here is an example on how to merge the **issue#18-Unable_to_reuse_TriggerAction_Type_Ones_at** branch to **dev** branch.
 
 ```shell
-git checkout #18-bug-Unable_to_reuse_TriggerAction_Type_Ones_at
+git checkout issue#18-Unable_to_reuse_TriggerAction_Type_Ones_at
 git pull
 git checkout dev
 git pull
-git merge origin/#18-bug-Unable_to_reuse_TriggerAction_Type_Ones_at
+git merge origin/issue#18-Unable_to_reuse_TriggerAction_Type_Ones_at
 git push
 ````
 

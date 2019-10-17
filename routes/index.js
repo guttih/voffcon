@@ -50,6 +50,19 @@ router.get('/licence', function(req, res){
 router.get('/help_development', function(req, res){
 	res.render('help_development');
 });
+router.get('/settings-location', function(req, res){
+	var item = {
+		latitude : 0.00,
+		longitude: 0.00
+	};
+	var geoLocation = lib.getConfig().geoLocation;
+	
+	if (geoLocation !== undefined) {
+		item = geoLocation;
+	}
+	//var errors = {};
+	res.render('settings-location',{ /*errors:errors,*/ geoLocation:JSON.stringify(item) });
+});
 router.get('/message', function(req, res){
 	var success = req.flash('success_msg');
 	var krapp = req.session.krapp;

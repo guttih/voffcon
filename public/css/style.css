@@ -359,3 +359,10 @@ span.save-check > label {
 .date-and-time-selects > label {
 	font-weight: normal;
 }
+
+.hidden-if-not-https {
+	display:none;
+}
+#button-location{
+	margin-top: 25px;
+}

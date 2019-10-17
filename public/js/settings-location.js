@@ -21,6 +21,35 @@ by regular post to the address Haseyla 27, 260 Reykjanesbar, Iceland.
 
 var	SERVER;
 
+
+function setPositionToInputs(position) {
+	$('#latitude').val(position.coords.latitude);
+	$('#longitude').val(position.coords.longitude);
+	console.log(position.coords.latitude);
+	console.log(position.coords.longitude);
+	onSunRiseInputChange();
+}
+
+
+function showError(error) {
+	switch(error.code) {
+		case error.PERMISSION_DENIED    :   alert('Error: User denied the request for Geolocation.');    break;
+		case error.POSITION_UNAVAILABLE :   alert('Error: Location information is unavailable.');        break;
+		case error.TIMEOUT              :   alert('Error: The request to get user location timed out.'); break;
+		case error.UNKNOWN_ERROR        :   alert('Error: An unknown error occurred.');                  break;
+	}
+}
+
+
+function getLocation() {
+	if (navigator.geolocation) {
+		navigator.geolocation.getCurrentPosition(setPositionToInputs, showError);
+	} else { 
+		alert('Geolocation is not supported by this browser.');
+	}
+}
+
+
 function hideMyLocationButtonIfNotSupported() {
 
 	var isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
@@ -40,6 +69,9 @@ function init(){
 	console.log('init()');
 	console.log(geoLocation);
 	hideMyLocationButtonIfNotSupported();
+	$('.location-button.btn').on('click tap', function(){
+		getLocation();
+	});
 }
 
 $(function () {  

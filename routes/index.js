@@ -50,7 +50,7 @@ router.get('/licence', function(req, res){
 router.get('/help_development', function(req, res){
 	res.render('help_development');
 });
-router.get('/settings-location', function(req, res){
+router.get('/settings-location', lib.authenticateUrl, function(req, res){
 	var item = {
 		latitude : 0.00,
 		longitude: 0.00
@@ -63,6 +63,37 @@ router.get('/settings-location', function(req, res){
 	//var errors = {};
 	res.render('settings-location',{ /*errors:errors,*/ geoLocation:JSON.stringify(item) });
 });
+
+router.post('/settings-location', lib.authenticateAdminRequest, function(req, res){
+	var body = req.body;
+	var latitudeStr = body.latitude;
+	var longitudeStr = body.longitude;
+	var geoLocation, latitude, longitude;
+
+	if (latitudeStr !== undefined && longitudeStr !== undefined) {
+		latitude = parseFloat(latitudeStr);
+		longitude = parseFloat(longitudeStr);
+		if (!isNaN(latitude) && !isNaN(longitude) && latitude !== 0 && longitude !== 0) {
+			geoLocation = {
+				latitude:latitude,
+				longitude:longitude
+			};
+		}
+	}
+
+	
+	if (geoLocation !== undefined){
+		var config = lib.getConfig();
+		console.log("Ok, let's add location to config file.");
+		config.geoLocation = geoLocation;
+		lib.setConfig(config);
+		res.status(200).send('Location saved.');
+	} else {
+		res.status(422).send('Unable to save location.');
+	}
+});
+
+
 router.get('/message', function(req, res){
 	var success = req.flash('success_msg');
 	var krapp = req.session.krapp;

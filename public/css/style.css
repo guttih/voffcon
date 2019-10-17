@@ -363,6 +363,6 @@ span.save-check > label {
 .hidden-if-not-https {
 	display:none;
 }
-#button-location{
+button.btn.location-button{
 	margin-top: 25px;
 }

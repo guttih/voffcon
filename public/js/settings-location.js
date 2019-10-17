@@ -49,6 +49,27 @@ function getLocation() {
 	}
 }
 
+function saveLocation(){
+
+		var sendObj = {
+						latitude : $('#latitude').val(),
+						longitude: $('#longitude').val()
+			};
+			var posting = $.post( 'settings-location', sendObj);
+		posting
+			.done(function(data){
+				console.log(data);
+				showModal("Successfully saved", "Server location has been saved.");
+			})
+			.fail(function(data){
+				console.log("Error saving ");
+				console.log(data);
+				showModalErrorText('Not saved', 'There was an error saving the server location');
+			});
+	
+}
+
+
 
 function hideMyLocationButtonIfNotSupported() {
 
@@ -68,9 +89,16 @@ function hideMyLocationButtonIfNotSupported() {
 function init(){
 	console.log('init()');
 	console.log(geoLocation);
+	$('#latitude').val(geoLocation.latitude);
+	$('#longitude').val(geoLocation.longitude);
+
+
 	hideMyLocationButtonIfNotSupported();
-	$('.location-button.btn').on('click tap', function(){
+	$('#button-location').on('click tap', function(){
 		getLocation();
+	});
+	$('#button-save').on('click tap', function(){
+		saveLocation();
 	});
 }
 

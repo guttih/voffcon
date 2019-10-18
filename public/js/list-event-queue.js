@@ -66,13 +66,14 @@ function addEventsToTable() {
 			keys2.forEach(function(item, index){
 				if (index === 0){
 					row+='<td>';
-					row+='<a class="time-until" title="Click to edit this trigger action" href="'+SERVER+'/triggeractions/register/'+itemList[i].id+'">'+itemList[i][item]+'</a>';
+					row+='<a class="time-until" data-toggle="tooltip" data-container="body" data-placement="right" title="Click to edit the trigger action responsible for this event" href="'+SERVER+'/triggeractions/register/'+itemList[i].id+'">'+itemList[i][item]+'</a>';
 				} else {
 					row+='<td class="item-property">';
 					if (item === 'triggerTime') {
 						row+=encodeHTML(formaTime(new Date(itemList[i][item])));
 					} else {
-						row+=encodeHTML(itemList[i][item]);
+						row+='<span  data-toggle="tooltip" data-container="body" data-placement="top" title="Click to for event details" class="'+item+'">';
+						row+=encodeHTML(itemList[i][item]) + '<span>';
 					}
 				}
 				row+='</td>';

@@ -1,7 +1,10 @@
 <div class="row">
-	<h3 class="page-header pull-right">Trigger actions</h3>
+	<h3 class="page-header pull-right">{{header}}</h3>
 </div>
-<h4>Device: "{{item.name}}".</h4>
+
+<script type="text/javascript">
+	var setupData = {{{setupData}}};
+</script>
 
 {{#if errors}}
       {{#each errors}}
@@ -16,11 +19,6 @@
 	<!-- listItems will be added here-->
 	</div>
 </div>
-{{#if device}} <!-- if you want to edit a specific user -->
-			<script type="text/javascript">
-			var device = {{{device}}};
-		</script>
-{{/if}}
 
 <table id="table-triggerAction" class="table table-bordered table-hover">
 	<thead>
@@ -35,5 +33,12 @@
 	<span class="glyphicon glyphicon-plus"></span>&nbsp;Add Trigger action
 </button>
 
+<p class="pull-right">
+	<button onclick="window.location.href='/triggeractions/list-event-queue'" class="btn btn-xs btn-default"
+	data-toggle="tooltip" data-container="body" data-placement="left" title="All active trigger actions"
+	> 
+		<span class="glyphicon glyphicon-tasks"></span>&nbsp;Upcoming events&nbsp;
+	</button>
+</p>
 <script src="/js/bootstrap.min.js"></script>	
-<script src="/js/list-devicetriggeraction.js"></script>	
+<script src="/js/list-triggeraction-all.js"></script>	

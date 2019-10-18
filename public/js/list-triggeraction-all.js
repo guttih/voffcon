@@ -22,7 +22,7 @@ by regular post to the address Haseyla 27, 260 Reykjanesbar, Iceland.
 var SERVER;
 
 function getDeviceLogs(clearOldValues){
-	var url = SERVER+'/triggeractions/listall';
+	var url = SERVER+'/triggeractions/'+setupData.dataPath;
 		var request = $.get(url);
 	request.done(function( data ) {
 		setDeviceLogsToTable(data, clearOldValues);
@@ -33,7 +33,6 @@ function getDeviceLogs(clearOldValues){
 		});
 }
 
-
 function getPinIndexByName(strName, pins){
 	for(var i = 0; i<pins.length; i++){
 		if (strName === pins[i].name){
@@ -42,7 +41,6 @@ function getPinIndexByName(strName, pins){
 	}
 	return -1;
 }
-
 
 encodeHTML = function encodeHTML(str) {
     return str.replace(/&/g, '&amp;')
@@ -86,15 +84,22 @@ function setDeviceLogsToTable(itemList, clearOldValues){
 		strType =  itemList[i].type;
 		row='<tr id="'+ itemList[i]._id +'">';
 		row+='<td class="datetime-td">';
-		row+=' <a href="javascript:window.location.href =\'/triggeractions/register/'+ itemList[i]._id + '\'">&nbsp;<span class="glyphicon glyphicon glyphicon-pencil" rel="tooltip" title="Modify this trigger action" style="color:black" aria-hidden="true"></span>&nbsp;</a>';
+		row+=' <a href="javascript:window.location.href =\'/triggeractions/register/'+ itemList[i]._id + '\'">&nbsp;<span class="glyphicon glyphicon glyphicon-pencil" data-toggle="tooltip" data-placement="right" title="Modify this trigger action" style="color:black" aria-hidden="true"></span>&nbsp;</a>';
 		row+='<span>' + strType +'</span></td>';
-		row+='<td rel="tooltip" title="'+ itemList[i].description +'">' + itemList[i].description + '</td>';
-		row+='<td rel="tooltip" title="'+ itemList[i].deviceId   +'">' + itemList[i].deviceName + '</td>';
-		row+='<td rel="tooltip" title="'+ itemList[i].destDeviceId   +'">' + itemList[i].destDeviceName + '</td>';
+		var bodyString = JSON.stringify(itemList[i].body);
+		if (bodyString.length < 3) {
+			bodyString = "";
+		} else {
+			bodyString = bodyString.substr(1, bodyString.length-2); //removing first " and last "
+			bodyString = bodyString.replaceAll('\\\"', '\'');
+		}
+		row+='<td data-toggle="tooltip" data-container="body" data-placement="top" title="'+ bodyString +'">' + itemList[i].description + '</td>';
+		row+='<td data-toggle="tooltip" data-container="body" data-placement="top" title="'+ itemList[i].deviceId   +'">' + itemList[i].deviceName + '</td>';
+		row+='<td data-toggle="tooltip" data-container="body" data-placement="top" title="'+ itemList[i].destDeviceId   +'">' + itemList[i].destDeviceName + '</td>';
 		//row+='<td rel="tooltip" title="Url">' + encodeHTML(itemList[i].url) + '</td>';
-		row+='<td rel="tooltip" title="'+ itemList[i].method   +'">' + itemList[i].method + '</td>';
-		row+='<td  style="min-width:160px" rel="tooltip" title="'+ itemList[i].date   +'">' + formaTime(new Date(itemList[i].date)) + '</td>';
-		row+='<td> <a href="javascript:deleteListItem(\'triggeractions\',\''+ itemList[i]._id +'\');"><span class="glyphicon glyphicon glyphicon-remove" rel="tooltip" title="Delete this trigger action" style="color:red" aria-hidden="true"></span></a></td>';
+		row+='<td data-toggle="tooltip" data-container="body" data-placement="top" title="'+ itemList[i].url   +'">' + itemList[i].method + '</td>';
+		row+='<td  style="min-width:160px" data-toggle="tooltip" data-container="body" data-placement="top" title="'+ formaTima(new Date(itemList[i].date))   +'">' + formaTime(new Date(itemList[i].date)) + '</td>';
+		row+='<td data-toggle="tooltip" data-container="body" data-placement="left" title="Delete this trigger action"> <a href="javascript:deleteListItem(\'triggeractions\',\''+ itemList[i]._id +'\');"><span class="glyphicon glyphicon glyphicon-remove" rel="tooltip" title="Delete this trigger action" style="color:red" aria-hidden="true"></span></a></td>';
 		row+='</tr>';
 		$elm.append(row);
 	}
@@ -104,24 +109,43 @@ function setDeviceLogsToTable(itemList, clearOldValues){
 	row+='<td id="record-count" colspan="' + (headers.length) + '">'+itemList.length+'</td>';
 	row+="</tr>";
 	$elm.append(row);
-		
-	
-	
-	
+	// documentation https://getbootstrap.com/docs/4.1/components/tooltips/
+	$('[data-toggle="tooltip"]').tooltip();
 }
 
-function deleteListItem(route,itemId){
-	var sendObj = {
-			"id":itemId
-		};
+function deleteListItem(routeText,itemId){
+	console.log("testing");
 
-	var url = SERVER+'/'+route+'/'+itemId;
-		var deleting = $.delete( url, sendObj);
-		deleting.done(function( data ) {
-			window.location.assign('list-all');
-		}).fail(function( data ) {
-			window.location.assign('list-all');
-		});
+	var singular;
+	singular = routeText.substring(0, routeText.length-1);
+	//showModal('Delete item',	'Are you sure you want to delete this '+ routeText +'?');
+	
+	showModalConfirm('Delete ' + singular+ ' ('+itemId+')',	
+		'Are you sure you want to delete this '+ singular +'?',
+		'Delete', 
+		function(){
+			var sendObj = {
+				"id":itemId
+			};
+	
+			var url = SERVER+'/'+routeText+'/'+itemId;
+			var deleting = $.delete( url, sendObj);
+			deleting.done(function( data ) {
+				window.location.assign('list-all');
+			}).fail(function( data ) {
+				//var errorText = 'Unable to delete this trigger action';
+				var errorText = '';
+				if (data !== undefined) {
+					if (data.status !== undefined)     {errorText += ' (' +data.status+ ') '; 	}
+					if (data.statusText !== undefined) { errorText += ' ' + data.statusText; } else { errorText += 'Unable to delete this trigger action';}
+				} else {
+					errorText = 'Unable to delete this trigger action';
+				}
+				
+				setTimeout(function(){ showModalErrorText("Error deleting trigger action "+itemId, errorText); }, 1000	);
+			});
+		}
+	);	
 }
 
 function openChartPage() {
@@ -146,25 +170,6 @@ $(function () {
 			});
 		}
 	);
-
-
-
-
-		
-		
-		
-		
-	
-
-
-
-
-
-
-
-
-
-
 	});
-
+	console.log(setupData);
 });

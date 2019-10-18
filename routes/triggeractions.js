@@ -527,10 +527,17 @@ router.get('/register/:triggerActionId', lib.authenticatePowerUrl, function(req,
 
 //render a page with list of trigger actions
 router.get('/list', lib.authenticateUrl, function (req, res) {
-	res.render('list-triggeraction');
+	res.render('list-devices-with-triggeractions');
 });
+
+//all trigger actions
 router.get('/list-all', lib.authenticateUrl, function (req, res) {
-	res.render('list-devicetriggeraction-all');
+	var obj = {
+		dataPath: 'listall'
+	};
+
+		res.render('list-triggeraction-all', {setupData:JSON.stringify(obj), header:'All Trigger actions'});
+	//res.render('list-triggeraction-all', {dataPath:JSON.stringify('listall'), header:'All Trigger actions'});
 });
 //opens a page which shows trigger actions as a table for a specific device
 router.get('/device/:deviceID', lib.authenticateRequest, function (req, res) {
@@ -551,7 +558,12 @@ router.get('/device/:deviceID', lib.authenticateRequest, function (req, res) {
 					id: deviceId,
 					name: retDevice._doc.name
 				};
-				res.render('list-devicetriggeraction', { item: device, device: JSON.stringify(device), deviceId: deviceId });
+				//res.render('list-devicetriggeraction', { item: device, device: JSON.stringify(device), deviceId: deviceId });
+				var obj = {
+					device: device,
+					dataPath:'list/'+device.id
+				};
+				res.render('list-triggeraction-all', {setupData:JSON.stringify(obj), header: '\"'+device.name+'\" trigger actions'});
 			}
 		});
 	}
@@ -567,7 +579,28 @@ router.get('/list/:deviceID', lib.authenticateRequest, function (req, res) {
 	}
 	else {
 		TriggerAction.listByDeviceId(deviceId, function (err, data) {
-			res.json(data);
+			if (err) {
+				res.status(404).send('unable to find devices');
+			} else {
+				//get all trigger actions to be able to extract names of devices
+				Device.find({}, function(err, devices) {
+					if (err) {
+						res.status(404).send('unable to find devices');
+					} else {
+						TriggerAction.list(function (err, triggerActions) {
+							if (err) {
+								res.status(404).send('unable to find trigger actions');
+							} else {
+								data.forEach(item => {
+										item._doc.deviceName = getDeviceName(item._doc.deviceId,devices);
+										item._doc.destDeviceName = getDeviceName(item._doc.destDeviceId,devices);
+								});
+								res.json(data);
+							}
+						});
+					}
+				});
+			}
 		});
 	}
 });
@@ -597,7 +630,6 @@ router.get('/listall', lib.authenticateRequest, function (req, res) {
 				if (err) {
 					res.status(404).send('unable to find trigger actions');
 				} else {
-					var name;
 					triggerActions.forEach(triggerAction => {
 							triggerAction._doc.deviceName = getDeviceName(triggerAction._doc.deviceId,devices);
 							triggerAction._doc.destDeviceName = getDeviceName(triggerAction._doc.destDeviceId,devices);
@@ -606,7 +638,7 @@ router.get('/listall', lib.authenticateRequest, function (req, res) {
 				}
 			});
 		}
-	})
+	});
 	
 });
 

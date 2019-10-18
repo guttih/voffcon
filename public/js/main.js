@@ -82,8 +82,12 @@ function formaTime(d) {
 				zeroFirst(d.getHours()) + ":" + zeroFirst(d.getMinutes()) + ":" + zeroFirst(d.getSeconds());
 	
 	return str;
-	}
+}
 
+String.prototype.replaceAll = function(search, replacement) {
+    var target = this;
+    return target.split(search).join(replacement);
+};
 /*
 leadingZeros(10, 4);      // 0010
 leadingZeros(9, 4);       // 0009
@@ -447,6 +451,7 @@ $(function () {
 	var SERVER = getServer();
 	//todo: run this only if logged in getWhenServerStarted();
 	$('.dropdown-toggle').dropdown();/*for the dropdown-toggle bootstrap class*/
-	$("[rel='tooltip']").tooltip();/*activate boostrap tooltips*/
+	//$("[rel='tooltip']").tooltip();/*activate boostrap tooltips*/
+	$('[data-toggle="tooltip"]').tooltip();
 
 });

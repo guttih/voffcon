@@ -736,6 +736,7 @@ router.delete('/:triggerActionId', lib.authenticateDeviceOwnerRequest, function 
 	});
 });
 
+
 router.addTriggerAction = function addTriggerAction(req, res, id) {
 	var newTriggerAction = utils.newTriggerAction(req.body);
 	if ( id === undefined ) {
@@ -804,6 +805,12 @@ router.post('/register', lib.authenticatePowerRequest, function (req, res) {
 router.post('/register/:triggerActionId', lib.authenticatePowerRequest, function (req, res) {
 
 	router.postRegistering(req, res);
+});
+
+router.get('/resetEventQueue', lib.authenticatePowerRequest, function (req, res) {
+
+	req.app.locals.settings.eventQueue.initialize();
+	res.redirect('list-event-queue');
 });
 
 router.postRegistering = function postRegistering(req, res) {

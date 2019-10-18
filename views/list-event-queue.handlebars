@@ -22,12 +22,21 @@
 	<tbody>
 	</tbody>
 </table>
-
-<p class="pull-right">
-	<button onclick="window.location.href='/triggeractions/list-all'" class="btn btn-xs btn-default pull-right"
-	data-toggle="tooltip" data-placement="left" title="Both active and inactive trigger actions"
-	> 
-		<span class="glyphicon glyphicon-time"></span>&nbsp;List trigger actions&nbsp;
-	</button>
-</p>
+<br>
+<div>
+	<div>
+		<button onclick="window.location.href='/triggeractions/resetEventQueue'" class="btn btn-xs btn-default pull-left"
+		data-toggle="tooltip" data-placement="right" title="Recalculate all trigger events"
+		> 
+			<span class="glyphicon glyphicon-time"></span>&nbsp;Reset EventQueue&nbsp;
+		</button>
+	</div>
+	<div class="pull-right">
+		<button onclick="window.location.href='/triggeractions/list-all'" class="btn btn-xs btn-default pull-right"
+		data-toggle="tooltip" data-placement="left" title="Both active and inactive trigger actions"
+		> 
+			<span class="glyphicon glyphicon-time"></span>&nbsp;List trigger actions&nbsp;
+		</button>
+	</div>
+</div>
 <script src="/js/list-event-queue.js"></script>

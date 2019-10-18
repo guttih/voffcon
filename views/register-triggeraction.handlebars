@@ -22,14 +22,18 @@
 	<div class="form-group type">
 		<label>Trigger action type</label>
 		<select id="triggerAction-type" name="type" class="access-select form-control" required>
-			<option title="No need to provide additional date or time"      value="LOG-INSTANT" selected="">Instantly after each new record</option>
-			<option title="Provide a date and time when the action should fire"                 value="ONES"        >Ones at</option>
-			<option title="Provide how much time must pass between action fires" value="TIMELY"      >Every</option>
-			<option title="Provide the hour, and second when the action should fire every day"            value="DAILY"       >Every day at</option>
-			<option title="Provide the weekdays hour and second when the action should fire"    value="WEEKLY"      >Every week at</option>
-			<option title="Provide the day hour and second when the action should fire"         value="MONTHLY"     >Every month at</option>
-			<option title="Provide the number of days before the last day of the month and hour and second when the action should fire" value="MONTHLY-LAST">Every month at, days before the last of the day of the month</option>
-			<option title="Provide the month, hour and second"      value="YEARLY"      >Every year at</option>
+			<option value="LOG-INSTANT"  title="No need to provide additional date or time"                     selected=""      >Instantly after each new record</option>
+			<option value="ONCE"         title="Provide a date and time when the action should fire"                             >Once at</option>
+			<option value="TIMELY"       title="Provide how much time must pass between action fires"                            >Every</option>
+			<option value="DAILY"        title="Provide the hour, minutes and second when the action should fire every day"      >Every day at</option>
+			<option value="SUNRISE"      title="You can select offset time in hour minutes and second from when the event occurs">Sunrise</option>
+			<option value="SOLAR-NOON"   title="You can select offset time in hour minutes and second from when the event occurs">Solar noon</option>
+			<option value="SUNSET"       title="You can select offset time in hour minutes and second from when the event occurs">Sunset</option>
+			<option value="WEEKLY"       title="Provide the weekdays hour minutes and second when the action should fire"        >Every week at</option>
+			<option value="MONTHLY"      title="Provide the day hour minutes and second when the action should fire"             >Every month at</option>
+			<option value="MONTHLY-LAST" title="Provide the number of days before the last day of the              
+			                                    month and hour minutes and second when the action should fire"                   >Every month at, days before the last of the day of the month</option>
+			<option title="Provide the month, hour minutes and second"      value="YEARLY"      >Every year at</option>
 			
 		</select>
 		<p class="triggerAction-input-text"></p>
@@ -78,7 +82,14 @@
 					<option value="11">11 days</option>
 					<option value="12">12 days</option>
 				</select>
-			</span>	
+			</span>
+            <span class="after">
+				<label class="form">Time offset</label>
+				<select id="triggerAction-after" name="after" class="inline-form-control">
+					<option value="0" selected="">Before</option>
+					<option value="1" >After</option>
+				</select>
+			</span>
 			<label class="form time-select hour">Hour</label>
 			<select id="triggerAction-hour" name="hour" class="inline-form-control time-select hour" required></select>
 			<label class="form time-select minute">Minute</label>

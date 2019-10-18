@@ -45,7 +45,7 @@ var TriggerActionSchema = mongoose.Schema({
                 dateData     : String,
                 /*
                         LOG-INSTANT  : Fires instantly after a new log arrives from a device
-                        ONES         : Fires ones, on a specified date and time.
+                        ONCE         : Fires once, on a specified date and time.
                         TIMELY       : Fires every specified time.  
                                         Some examples: 
                                                 Date(             30000) :Will Fire every 30 seconds
@@ -54,15 +54,21 @@ var TriggerActionSchema = mongoose.Schema({
 
                         DAILY        : Fires every day at a specified time (date part of date is ignored)
                         WEEKLY       : Fires every week on the days listed in a array in dayData
-                        MONTHLY      : Fires ones a month.  Note if day is more than 28 then this will not fire in february.  
+                        MONTHLY      : Fires once a month.  Note if day is more than 28 then this will not fire in february.  
                                         When MONTHLY timer is suppose to fire near the last day of month use MONTHLY-LAST type.
-                        MONTHLY-LAST : Fires ones a month, but counting the days from the last day of the month.  F.example. 
-                                    if date is 1.1.2018 11:21:00 and dateData is 0.  Then this triggerAction will fire first on 30 jan 2018 and next on 28.2.1019.  In february 2020 (a leap year) this triggerAction would fire on the 29.2.2020 at 11:21.  If dateData is 1 then the fire will be the day before last day of month.  
-                        YEARLY       : Fires ones a year.
+                        SUNRISE      : Fires every day before or after sunrise.    dateData if offset time from event is before or after.
+                                        Offset can be specified in hours, minutes and seconds.
+                        SOLAR-NOON   : Fires every day before or after sunrise.    dateData if offset time from event is before or after.
+                                        Offset can be specified in hours, minutes and seconds.
+                        SUNSET       : Fires every day before or after sunrise.    dateData if offset time from event is before or after.
+                                        Offset can be specified in hours, minutes and seconds.
+                        MONTHLY-LAST : Fires once a month, but counting the days from the last day of the month.  F.example. 
+                                        if date is 1.1.2018 11:21:00 and dateData is 0.  Then this triggerAction will fire first on 30 jan 2018 and next on 28.2.1019.  In february 2020 (a leap year) this triggerAction would fire on the 29.2.2020 at 11:21.  If dateData is 1 then the fire will be the day before last day of month.  
+                        YEARLY       : Fires once a year.
                 */
                 type         : {type   : String,
-                            enum   : ['LOG-INSTANT','ONES','TIMELY','DAILY','WEEKLY','MONTHLY','YEARLY', 'MONTHLY-LAST'],
-                            default: 'ONES'},
+                            enum   : ['LOG-INSTANT','ONCE','TIMELY','DAILY','WEEKLY','MONTHLY','YEARLY','MONTHLY-LAST','SUNRISE','SOLAR-NOON','SUNSET'],
+                            default: 'ONCE'},
                 /*      The date when this triggerAction expires (currently not used)*/
                 dateExpires  : Date,
                 method       : {type   : String,
@@ -562,13 +568,52 @@ module.exports.getTriggerTime = function(triggerAction){
                                                              date.getUTCHours(),  date.getUTCMinutes(), date.getUTCSeconds()  );
                                         if (fireTime < dateNow){
                                             //Need to run on next day
-                                            dateNow.setDate(dateNow.getDate()+1);
-                                            fireTime = new Date(  dateNow.getUTCFullYear(), dateNow.getUTCMonth(), dateNow.getUTCDate(),
-                                                             date.getUTCHours(),  date.getUTCMinutes(), date.getUTCSeconds()  );
+                                            fireTime.setDate(fireTime.getDate()+1);
                                         }
                                       break;
-                case 'ONES'  :        fireTime = date;
+                case 'ONCE'  :        fireTime = date;
                                       break;
+
+                case 'SUNRISE'    :
+                case 'SOLAR-NOON' :
+                case 'SUNSET'     :
+                                     var sun  = require('../utils/calculateSun');
+                                     var location = lib.getConfig().geoLocation;
+                                     if (location === undefined || location.latitude === undefined || location.longitude === undefined) {
+                                         return; //returns undefined which should be handled by caller
+                                     }
+                                     var key;
+                                     switch(ta.type) {
+                                        case 'SUNRISE'    : key='sunrise'  ; break;
+                                        case 'SOLAR-NOON' : key='solarNoon'; break;
+                                        case 'SUNSET'     : key='sunset'   ; break;
+                                     }
+                                     
+                                     var solarValues = sun.calculateSun(location.latitude, location.longitude, new Date(), 0, false);
+                                     var time = solarValues[key];
+                                    fireTime = new Date(dateNow.getUTCFullYear(), dateNow.getUTCMonth(), dateNow.getUTCDate(),
+                                                        time.hour, time.minute, time.second);
+                                    
+                                    if (date.getHours() > 0 || date.getMinutes() > 0 || date.getSeconds() > 0) {
+                                        var changeInMillis = date.getSeconds(); //seconds
+                                        changeInMillis+=date.getMinutes()*60;   //converting minutes to seconds
+                                        changeInMillis+=date.getHours()*60*60;  //converting hours to seconds
+                                        changeInMillis*=1000;                   //converting seconds to milliseconds
+                                        if (ta.dateData === "0") {
+                                            changeInMillis*=-1;
+                                        }
+                                        var oldTimeMs = fireTime.getTime();
+                                        oldTimeMs+= changeInMillis;
+                                        fireTime.setTime(oldTimeMs);
+                                    }
+                                    
+                                    if (fireTime < dateNow) {
+                                        fireTime.setDate(fireTime.getDate() +1);
+                                    }
+                                     //bæta við offset tíma
+                                     //setja inn firetime með nuna dagsetningu
+                                     
+                                 break;
         }
 
         return fireTime;

@@ -239,7 +239,7 @@ var utilParser = {
 	},
 
 	/**
-	 * Checks body part of a request has all the required values to
+	 * Checks if body part of a request has all the required values to
 	 * create a TriggerAction object of the type WEEKLY.
 	 * Returns false if no errors found
 	 * Returns array of error objects with a msg and a param part
@@ -282,13 +282,13 @@ var utilParser = {
 	},
 	
 	/**
-	 * Checks body part of a request has all the required values to
-	 * create a TriggerAction object of the type ONES.
+	 * Checks if body part of a request has all the required values to
+	 * create a TriggerAction object of the type ONCE.
 	 * Returns false if no errors found
 	 * Returns array of error objects with a msg and a param part
 	 * @param {Object} body The body of a post request to check 
 	 */
-	checkTriggerActionBodyOnes : function checkTriggerActionBodyOnes(body){
+	checkTriggerActionBodyOnce : function checkTriggerActionBodyOnce(body){
 		var errors = [];
 		error = this.checkTriggerActionBodyDate(body);        if (error) { return error; }
 		error = this.checkTriggerActionBodyTime(body);        if (error) { return error; }
@@ -306,7 +306,7 @@ var utilParser = {
 
 	
 	/**
-	 * Checks body part of a request has all the required values to
+	 * Checks if body part of a request has all the required values to
 	 * create a TriggerAction object of the type LOG-INSTANT.
 	 * Returns false if no errors found
 	 * Returns array of error objects with a msg and a param part
@@ -327,14 +327,14 @@ var utilParser = {
 	},
 
 	/**
-	 * Checks body part of a request has all the required values to
+	 * Checks if body part of a request has all the required values to
 	 * create a TriggerAction object of the type MONTHLY-LAST.
 	 * Returns false if no errors found
 	 * Returns array of error objects with a msg and a param part
 	 * @param {Object} body The body of a post request to check 
 	 */
 	 checkTriggerActionBodyMonthlyLast : function checkTriggerActionBodyMonthlyLast(body){
-		var errors = this.checkTriggerActionBodyOnes(body);
+		var errors = this.checkTriggerActionBodyOnce(body);
 		if (errors){
 			return errors;
 		}
@@ -345,9 +345,27 @@ var utilParser = {
 		//All values are valid
 		return false;
 	},
+	/**
+	 * Checks if body part of a request has all the required values to
+	 * create a TriggerAction object of the types SUNRISE, SOLAR-NOON or SUNSET.
+	 * Returns false if no errors found
+	 * Returns array of error objects with a msg and a param part
+	 * @param {Object} body The body of a post request to check 
+	 */
+	 checkTriggerActionBodySolarEvent : function checkTriggerActionBodySolarEvent(body){
+		var errors = this.checkTriggerActionBodyOnce(body);
+		if (errors){
+			return errors;
+		}
+
+		errors = this.checkBodyVariableNumber(body, 'after',   0, 1); if (errors.length > 0 ) {return errors;}
+		
+		//All values are valid
+		return false;
+	},
 
 	/**
-	 * Checks body part of a request has all the required values to
+	 * Checks if body part of a request has all the required values to
 	 * create a TriggerAction object of the type TIMELY.
 	 * Returns false if no errors found
 	 * Returns array of error objects with a msg and a param part
@@ -384,8 +402,12 @@ var utilParser = {
 			case 'TIMELY'      : return this.checkTriggerActionBodyTimely(body);
 			case 'YEARLY'      :
 			case 'MONTHLY'     :
-			case 'ONES'        : return this.checkTriggerActionBodyOnes(body);
+			case 'ONCE'        : return this.checkTriggerActionBodyOnce(body);
 			case 'MONTHLY-LAST': return this.checkTriggerActionBodyMonthlyLast(body);
+
+			case 'SUNRISE'     : 
+			case 'SOLAR-NOON'  : 
+			case 'SUNSET'      : return this.checkTriggerActionBodySolarEvent(body);
 			
 		}
 		return [{msg:'Type is missing or invalid', param:'type', value:undefined}];
@@ -396,11 +418,11 @@ var utilParser = {
 	 * @returns a new TriggerAction object.  Returns undefined if unable to create the object from body values.
 	 */
 	newTriggerAction : function newTriggerAction(body){
-		switch(body	.type) {
+		switch(body.type) {
 			case 'LOG-INSTANT':
 			case "YEARLY":
 			case 'MONTHLY': 
-			case 'ONES': 
+			case 'ONCE': 
 								
 								return new TriggerAction({
 															deviceId     : body.deviceId,
@@ -413,7 +435,6 @@ var utilParser = {
 															date         : new Date(Date.UTC(body.year, body.month, body.day,
 																		  		body.hour, body.minute,body.second))
 														});
-
 			case 'MONTHLY-LAST':
 									return new TriggerAction({
 															deviceId     : body.deviceId,
@@ -428,7 +449,6 @@ var utilParser = {
 																				body.hour, body.minute,body.second))
 														});
 
-				case 'DAILY' :
 				case 'TIMELY': 
 									return new TriggerAction({
 																deviceId     : body.deviceId,
@@ -451,6 +471,24 @@ var utilParser = {
 															url          : body.url,
 															body         : body.body,
 															dateData     : body.weekdays,
+															description  : body.description,
+															date         : new Date(  ((Number(body.hour   ))*60*60*1000) +
+																					  ((Number(body.minute ))   *60*1000) +
+																					  ((Number(body.second ))      *1000)   )
+															
+															});
+			case 'SUNRISE'   :
+			case 'SOLAR-NOON':
+			case 'SUNSET'    :
+			case 'DAILY'     :
+								return new TriggerAction({
+															deviceId     : body.deviceId,
+															destDeviceId : body.destDeviceId,
+															type         : body.type,
+															method       : body.method,
+															url          : body.url,
+															body         : body.body,
+															dateData     : body.after,
 															description  : body.description,
 															date         : new Date(  ((Number(body.hour   ))*60*60*1000) +
 																					  ((Number(body.minute ))   *60*1000) +

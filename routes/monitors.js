@@ -64,7 +64,7 @@ var getRequest = function (url, callback) {
 	});
 };
 /**
- * Gets all pins from a device and removes the ones that have already
+ * Gets all pins from a device and removes the once that have already
  * A monitor connected to them.
  * @param {String} device The id of the device
  * @param {int} addThisPin If you want a pin to exitst, even though it is connected to a monitor, provide it here.  Pass null if you do not want to exclude any pin.

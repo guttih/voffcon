@@ -60,14 +60,14 @@ git push origin #NUM-bug-the_name_of_my_bug_fix_branch
 
 After coding, pushing and testing a issue, it's time to merge it to the **dev** branch.  
 
-Here is an example on how to merge the **issue#18-Unable_to_reuse_TriggerAction_Type_Ones_at** branch to **dev** branch.
+Here is an example on how to merge the **issue#18-Unable_to_reuse_TriggerAction_Type_Once_at** branch to **dev** branch.
 
 ```shell
-git checkout issue#18-Unable_to_reuse_TriggerAction_Type_Ones_at
+git checkout issue#18-Unable_to_reuse_TriggerAction_Type_Once_at
 git pull
 git checkout dev
 git pull
-git merge origin/issue#18-Unable_to_reuse_TriggerAction_Type_Ones_at
+git merge origin/issue#18-Unable_to_reuse_TriggerAction_Type_Once_at
 git push
 ````
 

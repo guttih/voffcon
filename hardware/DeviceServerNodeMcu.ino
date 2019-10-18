@@ -1366,7 +1366,7 @@ void setup(void) {
 	//SETTING_UP_PINS_END
 
     Serial.println(devicePins.toJson());
-    //monitors.addTimer(1000 * 60 * 60 * 24); //ones per day
+    //monitors.addTimer(1000 * 60 * 60 * 24); //once per day
     //monitors.addPinValueMonitoringAndTimer(devicePins.get(D1), 1, 2, 500, (1000 * 60 * 60 * 24 * 6));//the 6 day timer will never ve triggered because of the other 1 day timer
     tellServerToSendMonitors();
 }

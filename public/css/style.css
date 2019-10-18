@@ -366,3 +366,22 @@ span.save-check > label {
 button.btn.location-button{
 	margin-top: 25px;
 }
+
+table.table.sunrise th,table.table.sunrise td {
+	text-align: center;
+}
+
+table.table.sunrise td.time {
+	padding-top:15px;
+}
+
+@media only screen and (max-width: 450px) {
+	.hide-small {
+		display: none;
+	}
+
+	.show-small {
+		display: inherit;
+	}
+
+}

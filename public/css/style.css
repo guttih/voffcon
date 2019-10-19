@@ -384,4 +384,36 @@ table.table.sunrise td.time {
 		display: inherit;
 	}
 
+	.settings label {
+		font-size: smaller;
+	}
+
 }
+
+.show-if-localhost {
+	display:none;
+}
+
+.settings label {
+	font-size: small;
+}
+
+h3.page-header {
+	font-style: italic;
+	font-size: 20px;
+}
+h3.page-header::before {
+	font-size: 10px;
+	content: '-';
+	position: relative;
+	right:5px;
+	top: -4px;
+}
+h3.page-header::after {
+	font-size: 10px;
+	content: '-';
+	position: relative;
+	left: 5px;
+	top: -4px;
+	
+  }

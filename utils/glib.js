@@ -385,13 +385,22 @@ module.exports.setConfig = function setConfig(conf){
 		});
 };
 
-module.exports.getConfig = function getConfig(){
+module.requireUncached = function requireUncached(module) {
+    delete require.cache[require.resolve(module)];
+    return require(module);
+};
+
+module.exports.getConfig = function getConfig(unChased){
 	var file = __dirname + '/../config.json';
 	var conf;
 	var makeNewFile = true;
 	if (validator.fileExists(file)){
 		try{
-			conf = require(file);
+			if (unChased !== undefined && unChased === true) {
+				conf = module.requireUncached(file);
+			} else {
+				conf = require(file);
+			}
 			makeNewFile = false;
 		} catch(e) {
 			makeNewFile = true;

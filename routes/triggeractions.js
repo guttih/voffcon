@@ -546,6 +546,10 @@ router.getRegisterPage = function getRegisterPage(req, res, id){
 	});
 };
 
+router.get('/', lib.authenticateUrl, function (req, res) {
+	res.redirect('/triggeractions//list-all');
+});
+
 router.get('/register', lib.authenticatePowerUrl, function(req, res){
 	router.getRegisterPage(req, res);
 });
@@ -567,6 +571,7 @@ router.get('/register/:triggerActionId', lib.authenticatePowerUrl, function(req,
 router.get('/list', lib.authenticateUrl, function (req, res) {
 	res.render('list-devices-with-triggeractions');
 });
+
 
 //all trigger actions
 router.get('/list-all', lib.authenticateUrl, function (req, res) {

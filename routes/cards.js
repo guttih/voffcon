@@ -32,7 +32,8 @@ var upload = multer({
 }).single('card');
 
 router.get('/', lib.authenticateUrl, function (req, res) {
-	res.render('index-card');
+	//res.render('index-card');
+	res.redirect('/cards/list');
 });
 
 router.get('/register', lib.authenticateUrl, function (req, res) {

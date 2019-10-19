@@ -239,7 +239,7 @@ var utilParser = {
 	},
 
 	/**
-	 * Checks body part of a request has all the required values to
+	 * Checks if body part of a request has all the required values to
 	 * create a TriggerAction object of the type WEEKLY.
 	 * Returns false if no errors found
 	 * Returns array of error objects with a msg and a param part
@@ -282,13 +282,13 @@ var utilParser = {
 	},
 	
 	/**
-	 * Checks body part of a request has all the required values to
-	 * create a TriggerAction object of the type ONES.
+	 * Checks if body part of a request has all the required values to
+	 * create a TriggerAction object of the type ONCE.
 	 * Returns false if no errors found
 	 * Returns array of error objects with a msg and a param part
 	 * @param {Object} body The body of a post request to check 
 	 */
-	checkTriggerActionBodyOnes : function checkTriggerActionBodyOnes(body){
+	checkTriggerActionBodyOnce : function checkTriggerActionBodyOnce(body){
 		var errors = [];
 		error = this.checkTriggerActionBodyDate(body);        if (error) { return error; }
 		error = this.checkTriggerActionBodyTime(body);        if (error) { return error; }
@@ -306,7 +306,7 @@ var utilParser = {
 
 	
 	/**
-	 * Checks body part of a request has all the required values to
+	 * Checks if body part of a request has all the required values to
 	 * create a TriggerAction object of the type LOG-INSTANT.
 	 * Returns false if no errors found
 	 * Returns array of error objects with a msg and a param part
@@ -327,14 +327,14 @@ var utilParser = {
 	},
 
 	/**
-	 * Checks body part of a request has all the required values to
+	 * Checks if body part of a request has all the required values to
 	 * create a TriggerAction object of the type MONTHLY-LAST.
 	 * Returns false if no errors found
 	 * Returns array of error objects with a msg and a param part
 	 * @param {Object} body The body of a post request to check 
 	 */
 	 checkTriggerActionBodyMonthlyLast : function checkTriggerActionBodyMonthlyLast(body){
-		var errors = this.checkTriggerActionBodyOnes(body);
+		var errors = this.checkTriggerActionBodyOnce(body);
 		if (errors){
 			return errors;
 		}
@@ -345,9 +345,27 @@ var utilParser = {
 		//All values are valid
 		return false;
 	},
+	/**
+	 * Checks if body part of a request has all the required values to
+	 * create a TriggerAction object of the types SUNRISE, SOLAR-NOON or SUNSET.
+	 * Returns false if no errors found
+	 * Returns array of error objects with a msg and a param part
+	 * @param {Object} body The body of a post request to check 
+	 */
+	 checkTriggerActionBodySolarEvent : function checkTriggerActionBodySolarEvent(body){
+		var errors = this.checkTriggerActionBodyOnce(body);
+		if (errors){
+			return errors;
+		}
+
+		errors = this.checkBodyVariableNumber(body, 'after',   0, 1); if (errors.length > 0 ) {return errors;}
+		
+		//All values are valid
+		return false;
+	},
 
 	/**
-	 * Checks body part of a request has all the required values to
+	 * Checks if body part of a request has all the required values to
 	 * create a TriggerAction object of the type TIMELY.
 	 * Returns false if no errors found
 	 * Returns array of error objects with a msg and a param part
@@ -384,8 +402,12 @@ var utilParser = {
 			case 'TIMELY'      : return this.checkTriggerActionBodyTimely(body);
 			case 'YEARLY'      :
 			case 'MONTHLY'     :
-			case 'ONES'        : return this.checkTriggerActionBodyOnes(body);
+			case 'ONCE'        : return this.checkTriggerActionBodyOnce(body);
 			case 'MONTHLY-LAST': return this.checkTriggerActionBodyMonthlyLast(body);
+
+			case 'SUNRISE'     : 
+			case 'SOLAR-NOON'  : 
+			case 'SUNSET'      : return this.checkTriggerActionBodySolarEvent(body);
 			
 		}
 		return [{msg:'Type is missing or invalid', param:'type', value:undefined}];
@@ -396,11 +418,11 @@ var utilParser = {
 	 * @returns a new TriggerAction object.  Returns undefined if unable to create the object from body values.
 	 */
 	newTriggerAction : function newTriggerAction(body){
-		switch(body	.type) {
+		switch(body.type) {
 			case 'LOG-INSTANT':
 			case "YEARLY":
 			case 'MONTHLY': 
-			case 'ONES': 
+			case 'ONCE': 
 								
 								return new TriggerAction({
 															deviceId     : body.deviceId,
@@ -413,7 +435,6 @@ var utilParser = {
 															date         : new Date(Date.UTC(body.year, body.month, body.day,
 																		  		body.hour, body.minute,body.second))
 														});
-
 			case 'MONTHLY-LAST':
 									return new TriggerAction({
 															deviceId     : body.deviceId,
@@ -428,7 +449,6 @@ var utilParser = {
 																				body.hour, body.minute,body.second))
 														});
 
-				case 'DAILY' :
 				case 'TIMELY': 
 									return new TriggerAction({
 																deviceId     : body.deviceId,
@@ -451,6 +471,24 @@ var utilParser = {
 															url          : body.url,
 															body         : body.body,
 															dateData     : body.weekdays,
+															description  : body.description,
+															date         : new Date(  ((Number(body.hour   ))*60*60*1000) +
+																					  ((Number(body.minute ))   *60*1000) +
+																					  ((Number(body.second ))      *1000)   )
+															
+															});
+			case 'SUNRISE'   :
+			case 'SOLAR-NOON':
+			case 'SUNSET'    :
+			case 'DAILY'     :
+								return new TriggerAction({
+															deviceId     : body.deviceId,
+															destDeviceId : body.destDeviceId,
+															type         : body.type,
+															method       : body.method,
+															url          : body.url,
+															body         : body.body,
+															dateData     : body.after,
 															description  : body.description,
 															date         : new Date(  ((Number(body.hour   ))*60*60*1000) +
 																					  ((Number(body.minute ))   *60*1000) +
@@ -527,10 +565,17 @@ router.get('/register/:triggerActionId', lib.authenticatePowerUrl, function(req,
 
 //render a page with list of trigger actions
 router.get('/list', lib.authenticateUrl, function (req, res) {
-	res.render('list-triggeraction');
+	res.render('list-devices-with-triggeractions');
 });
+
+//all trigger actions
 router.get('/list-all', lib.authenticateUrl, function (req, res) {
-	res.render('list-devicetriggeraction-all');
+	var obj = {
+		dataPath: 'listall'
+	};
+
+		res.render('list-triggeraction-all', {setupData:JSON.stringify(obj), header:'All Trigger actions'});
+	//res.render('list-triggeraction-all', {dataPath:JSON.stringify('listall'), header:'All Trigger actions'});
 });
 //opens a page which shows trigger actions as a table for a specific device
 router.get('/device/:deviceID', lib.authenticateRequest, function (req, res) {
@@ -551,7 +596,12 @@ router.get('/device/:deviceID', lib.authenticateRequest, function (req, res) {
 					id: deviceId,
 					name: retDevice._doc.name
 				};
-				res.render('list-devicetriggeraction', { item: device, device: JSON.stringify(device), deviceId: deviceId });
+				//res.render('list-devicetriggeraction', { item: device, device: JSON.stringify(device), deviceId: deviceId });
+				var obj = {
+					device: device,
+					dataPath:'list/'+device.id
+				};
+				res.render('list-triggeraction-all', {setupData:JSON.stringify(obj), header: '\"'+device.name+'\" trigger actions'});
 			}
 		});
 	}
@@ -567,7 +617,28 @@ router.get('/list/:deviceID', lib.authenticateRequest, function (req, res) {
 	}
 	else {
 		TriggerAction.listByDeviceId(deviceId, function (err, data) {
-			res.json(data);
+			if (err) {
+				res.status(404).send('unable to find devices');
+			} else {
+				//get all trigger actions to be able to extract names of devices
+				Device.find({}, function(err, devices) {
+					if (err) {
+						res.status(404).send('unable to find devices');
+					} else {
+						TriggerAction.list(function (err, triggerActions) {
+							if (err) {
+								res.status(404).send('unable to find trigger actions');
+							} else {
+								data.forEach(item => {
+										item._doc.deviceName = getDeviceName(item._doc.deviceId,devices);
+										item._doc.destDeviceName = getDeviceName(item._doc.destDeviceId,devices);
+								});
+								res.json(data);
+							}
+						});
+					}
+				});
+			}
 		});
 	}
 });
@@ -597,7 +668,6 @@ router.get('/listall', lib.authenticateRequest, function (req, res) {
 				if (err) {
 					res.status(404).send('unable to find trigger actions');
 				} else {
-					var name;
 					triggerActions.forEach(triggerAction => {
 							triggerAction._doc.deviceName = getDeviceName(triggerAction._doc.deviceId,devices);
 							triggerAction._doc.destDeviceName = getDeviceName(triggerAction._doc.destDeviceId,devices);
@@ -606,7 +676,7 @@ router.get('/listall', lib.authenticateRequest, function (req, res) {
 				}
 			});
 		}
-	})
+	});
 	
 });
 
@@ -665,6 +735,7 @@ router.delete('/:triggerActionId', lib.authenticateDeviceOwnerRequest, function 
 		}
 	});
 });
+
 
 router.addTriggerAction = function addTriggerAction(req, res, id) {
 	var newTriggerAction = utils.newTriggerAction(req.body);
@@ -734,6 +805,12 @@ router.post('/register', lib.authenticatePowerRequest, function (req, res) {
 router.post('/register/:triggerActionId', lib.authenticatePowerRequest, function (req, res) {
 
 	router.postRegistering(req, res);
+});
+
+router.get('/resetEventQueue', lib.authenticatePowerRequest, function (req, res) {
+
+	req.app.locals.settings.eventQueue.initialize();
+	res.redirect('list-event-queue');
 });
 
 router.postRegistering = function postRegistering(req, res) {

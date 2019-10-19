@@ -4,10 +4,13 @@
 	<title>VoffCon</title>
 	<meta charset="utf-8">
 	<link rel="stylesheet" href="/css/bootstrap.css" />
+	<link rel="stylesheet" href="/css/bootstrap-datepicker.min.css" />
 	<link rel="stylesheet" href="/css/style.css" />
 	<link rel="stylesheet" href="/css/ace.css" />
+	
 	<script src="/js/jquery-3.1.0.min.js"></script>
 	<script src="/js/bootstrap.min.js"></script>
+	<script src="/js/bootstrap-datepicker.min.js"></script>
 	<link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=2" />
 	
 </head>
@@ -20,15 +23,16 @@
 		{{#if user}}
 			<!-- <li role="presentation"><a href="/">Dashboard</a></li> --> 
 		{{/if}}
+		
 		{{#if admin}}
 			<li class="dropdown">
-				<a  data-toggle="dropdown" href="#">Users</a>
+				<a  data-toggle="dropdown" href="#">Settings</a>
 				<ul class="dropdown-menu">
-					<li><a  href="/users/register">Register a new user</a></li>
-					<li><a href="/users/list">List users</a></li>
-
-					<li class="menu-item dropdown dropdown-submenu"><a href="#">Settings</a>
+					<li><a  href="/settings-location">Server location</a></li>
+					<li class="menu-item dropdown dropdown-submenu"><a href="#">Users</a>
 					<ul class="dropdown-menu">
+						<li><a  href="/users/register"><span class="glyphicon glyphicon-ok"></span>Register a new user...</a></li>
+						<li ><a href="/users/list"><span class="glyphicon glyphicon-ok"></span>List users...</a></li>
 						<li class="menu-item {{allowUserRegistration}}" id="allow-user-registration"><a href="javascript:changeUsersCanRegister()"><span class="glyphicon glyphicon-ok"></span>New users can register</a></li>
 					</ul>
 					</li>
@@ -80,11 +84,10 @@
 					<li><a href="/monitors/list">Monitors</a></li>
 					<li class="menu-item dropdown dropdown-submenu"><a href="#">Trigger actions</a>
 						<ul class="dropdown-menu">
-							<li class="menu-item"><a href="/triggeractions/list-all">All</a></li>
-							<li class="menu-item"><a href="/triggeractions/list">By devices</a></li>
+							<li class="menu-item"><a href="/triggeractions/list-all">List all</a></li>
+							<li class="menu-item"><a href="/triggeractions/list">List devices with trigger actions</a></li>
 							<li class="menu-item"><a href="/triggeractions/register">Register a new trigger action</a></li>
 							<li class="menu-item"><a href="/triggeractions/list-event-queue">List eventQueue</a></li>
-							
 						</ul>
 					</li>
 				</ul>
@@ -109,39 +112,22 @@
 				<a class="dropdown-toggle" data-toggle="dropdown" href="#">?</a>
 				<ul class="dropdown-menu">
 					<li><a href="/about">About the system</a></li>
-					<li><a href="/help"></a></li>
-					
+					<li><a href="/help">Help</a></li>
 					<li class="menu-item"><a href="https://github.com/guttih/voffcon/blob/master/README.md" target="_blank">Readme.md</a></li>
 					<li class="menu-item"><a href="https://github.com/guttih/voffcon/blob/master/docs/device-setup.md" target="_blank">Setup a device</a></li>
-
-
-
-
 					<li class="menu-item dropdown dropdown-submenu"><a href="https://github.com/guttih/voffcon/issues" target="_blank">Issues</a>
 							<ul class="dropdown-menu">
 								<li class="menu-item"><a href="https://github.com/guttih/voffcon/issues" target="_blank">Issues</a></li>
 								<li class="menu-item"><a href="https://github.com/guttih/voffcon/issues/new?assignees=&labels=&template=bug_report.md&title=" target="_blank">Report a bug (You need to be logged in to github)</a></li>
 								<li class="menu-item"><a href="https://github.com/guttih/voffcon/issues/new?assignees=&labels=&template=feature_request.md&title=" target="_blank">Make a feature request (You need to be logged in to github)</a></li>
-								
 							</ul>
 						</li>
-
-
-
-
-
-
-
-
-
-
 					<li class="menu-item dropdown dropdown-submenu"><a href="#">Development</a>
 						<ul class="dropdown-menu">
 							<li class="menu-item"><a href="/help_development">General</a></li>
 							<li class="menu-item"><a href="https://www.github.com/guttih/voffcon" target="_blank">Repository on Github</a></li>
 							<li class="menu-item"><a href="/docs/hardware/esp32Docs/html/" target="_blank">Available classes from the Esp32 Device Server</a></li>
 							<li class="menu-item"><a href="/docs/hardware/nodeMcuDocs/html/" target="_blank">Available classes from the nodeMcu Device Server</a></li>
-							
 						</ul>
 					</li>
 					<li><a href="/licence">Licence</a></li>
@@ -177,7 +163,6 @@
 		</div>
 	</div>
 
-
 	<div class="row">
 		<div class="col-lg-12">
 			{{#if success_msg}}
@@ -196,8 +181,6 @@
 	</div>
 	
 	
-
-
 	<footer class="footer">
 	<p>&copy; 2016 VoffCon, Inc.</p>
 	</footer>

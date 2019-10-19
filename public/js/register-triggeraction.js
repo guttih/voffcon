@@ -266,7 +266,14 @@ function setFormTriggerActionValues(triggerAction) {
 	$('#triggerAction-url').val(triggerAction.url);
 	$('#triggerAction-body').val(triggerAction.body);
 	$('#triggerAction-description').val(triggerAction.description);
-	$('#triggerAction-last-day').val(triggerAction.dateData);
+	switch(triggerAction.type){
+			case "SUNRISE":
+			case "SOLAR-NOON":
+			case "SUNSET":			$('#triggerAction-after').val(triggerAction.dateData); break;
+			case "MONTHLY-LAST":	$('#triggerAction-last-day').val(triggerAction.dateData); break;
+	}
+	
+
 	
 	if (triggerAction.dateData !== undefined && triggerAction.dateData !== null){
 		var weekdays = triggerAction.dateData.split(';');
@@ -384,6 +391,7 @@ var onSelectYearOrMonthChange = function onSelectYearOrMonthChange(){
  */
 function showDateOrTime(showDate, showTime, showWeekDays){
 	$('.last-day').hide();
+	$('.after').hide();
 
 	if (showDate || showTime) {
 			$('.date-and-time-selects').show();
@@ -453,15 +461,19 @@ var updateTokenMenu = function updateTokenMenu(newTokens) {
 var onSelectTypeChange = function onSelectTypeChange() {
 	var val = $('#triggerAction-type').val();
 		switch(val){
-			case "ONES":		    showDateOrTime(true ,true, false);      break;
+			case "ONCE":		    showDateOrTime(true ,true, false);      break;
+			case "SUNRISE":
+			case "SOLAR-NOON":
+			case "SUNSET":			showDateOrTime(false ,true, false); 
+									$('.after').show();
+																			break;
 			case "TIMELY":          
 									showDateOrTime(false,true, false);      break;
 			case "DAILY":		    showDateOrTime(false,true, false);      break;
 			case "WEEKLY":		    showDateOrTime(true , true,true );  	break;
 			case "MONTHLY":		    showDateOrTime(true , true, false);
 									$('.year,.month').hide();           	break;
-			case "MONTHLY-LAST":	showDateOrTime(true ,true, false);
-									$('.year,.month,.day').hide();
+			case "MONTHLY-LAST":	showDateOrTime(false ,true, false);
 									$('.last-day').show();					break;
 			case "YEARLY":			showDateOrTime(true , true, false);
 									$('.year').hide();           			break;

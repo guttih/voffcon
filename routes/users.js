@@ -38,9 +38,15 @@ router.get('/register', function(req, res){
 });
 
 // Login
-router.get('/login', function(req, res){
+router.get('/login', function(req, res) {
 	res.render('login');
 });
+
+router.post('/login',
+  passport.authenticate('local', {successRedirect:'/', failureRedirect:'/users/login',failureFlash: true}),
+  function(req, res) {
+    res.redirect('/cards');
+  });
 
 
 
@@ -53,7 +59,6 @@ if (config.allowUserRegistration === true) {
 		var email = req.body.email;
 		var username = req.body.username;
 		var password = req.body.password;
-		var password2 = req.body.password2;
 		
 		// Validation
 		req.checkBody('name', 'Name is required').notEmpty();
@@ -251,11 +256,7 @@ passport.deserializeUser(function(id, done) {
   });
 });
 
-router.post('/login',
-  passport.authenticate('local', {successRedirect:'/', failureRedirect:'/users/login',failureFlash: true}),
-  function(req, res) {
-    res.redirect('/');
-  });
+
 
 router.get('/logout', function(req, res){
 	req.logout();

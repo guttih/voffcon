@@ -373,15 +373,18 @@ function changeUsersCanRegister(){
 	}
 	var sendObj = {};
 	sendObj.allowUserRegistration = allow;
-	//var posting = $.post( '/users/settings', sendObj);
-	var posting = $.post( '/settings', sendObj);
+	var posting = $.post( '/settings-allow-user-registration', sendObj);
 	posting
 		.done(function(data){
 			//successful update let's change the class "checked"
 			if (allow === true) {//successfully able to ALLOW users to register 
 				$elm.addClass("checked");
+				$(".user-registration-link").removeClass('hidden');
+
 			} else { //successfully able to DENY users to register 
 				$elm.removeClass("checked");
+				$(".user-registration-link").removeClass('hidden').addClass('hidden');
+				
 			}
 		})
 		.fail(function(data){
@@ -453,5 +456,9 @@ $(function () {
 	$('.dropdown-toggle').dropdown();/*for the dropdown-toggle bootstrap class*/
 	//$("[rel='tooltip']").tooltip();/*activate boostrap tooltips*/
 	$('[data-toggle="tooltip"]').tooltip();
+
+	if (location.hostname.toLowerCase().indexOf('localhost') === 0) {
+		$('.show-if-localhost').removeClass('show-if-localhost');
+	}
 
 });

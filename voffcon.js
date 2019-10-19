@@ -58,8 +58,6 @@ var app = express();
 
 eventQueue.initialize();
 
-
-///////////////////// TEST EVENTS  END  //////////////////////////
 mongoose.connection.on('open', function () {
 	mongoose.connection.db.listCollections().toArray(function (err, names) {
 		if (err) {
@@ -99,7 +97,16 @@ var gracefulExit = function () {
 
 // View Engine
 app.set('views', path.join(__dirname, 'views'));
-app.engine('handlebars', exprHandleBars({ defaultLayout: 'layout' }));
+
+app.engine('handlebars', exprHandleBars(
+	{ defaultLayout: 'layout',
+		helpers: {
+			userRegistrationLinkClasses: function() {
+				return lib.getConfig().allowUserRegistration === undefined || lib.getConfig().allowUserRegistration === true? '':'hidden';
+			},
+		}
+	}
+));
 app.set('view engine', 'handlebars');
 
 // BodyParser Middleware
@@ -173,7 +180,7 @@ app.use(function (req, res, next) {
 	} else {
 		res.locals.allowUserRegistration = "unchecked";
 	}
-
+	
 	next();
 });
 

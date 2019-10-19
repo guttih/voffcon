@@ -34,7 +34,8 @@ var upload = multer({
 //Þegar query er gert á device þá þarf url á devicesið að vera með 
 //í query objectinu
 router.get('/', lib.authenticateUrl, function(req, res){
-	res.render('index-control');
+	//res.render('index-control');
+	res.redirect('/controls/list');
 });
 router.get('/register', lib.authenticatePowerUrl, function(req, res){
 			res.render('register-control');

@@ -1,0 +1,34 @@
+<div class="row"><h3 class="page-header pull-right">General server settings</h3></div>
+{{#if errors}}
+	{{#each errors}}
+		<div class="alert alert-danger">{{msg}}</div>
+	{{/each}}
+{{/if}}
+
+<br><br>
+<span class="settings">
+	<div class="container">
+					<div class="col-xs-6 col-sm-4  col-xs-offset-01 col-sm-offset-1 col-md-offset-1">
+						<label for="ssid">Name of Wifi access point</label>
+						<input id="ssid" type="text" class="form-control" value=""/>
+					</div>
+					<div class="col-xs-6 col-sm-4 col-xs-offset-0 col-sm-offset-1 col-md-offset-1">
+						<label for="ssidPwd">Password for Wifi access point</label>
+						<input id="ssidPwd" type="password" class="form-control" value=""/>
+					</div>
+	</div>				
+	<div class="container">
+					<div class="col-xs-6 col-sm-4  col-xs-offset-01 col-sm-offset-1 col-md-offset-1">
+						<label for="port">Port</label>
+						<input id="port" type="number" class="form-control" min="1" max="65535" value=""/>
+					</div>
+					<div class="col-xs-6 col-sm-4  col-xs-offset-01 col-sm-offset-1 col-md-offset-1">
+						<button id="button-save"     type="button" class="form-control location-button btn btn-success">Save location</button>
+					</div>
+	</div>
+</span>
+
+<script type="text/javascript">
+			var item = {{{item}}};
+</script>    
+<script src="/js/settings.js" type="text/javascript" charset="utf-8"></script>

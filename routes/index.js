@@ -50,18 +50,63 @@ router.get('/licence', function(req, res){
 router.get('/help_development', function(req, res){
 	res.render('help_development');
 });
-router.get('/settings-location', lib.authenticateUrl, function(req, res){
+router.get('/settings-location', lib.authenticateAdminRequest, function(req, res){
 	var item = {
 		latitude : 0.00,
 		longitude: 0.00
 	};
-	var geoLocation = lib.getConfig().geoLocation;
+	var geoLocation = lib.getConfig(true).geoLocation;
 	
 	if (geoLocation !== undefined) {
 		item = geoLocation;
 	}
 	//var errors = {};
 	res.render('settings-location',{ /*errors:errors,*/ geoLocation:JSON.stringify(item) });
+});
+
+router.get('/settings', lib.authenticateAdminRequest, function(req, res){
+	var host = req.headers.host;
+	if (host === undefined || host.toLowerCase().indexOf('localhost') !== 0) {
+		return res.render('result', {error:"For security reasons this page can only be opened from localhost.  That is if the url starts with \"http://localhost\" or \"https://localhost\""});
+	}
+	var item = {
+		port : '',
+		ssid : '',
+		ssidPwd: ''
+	};
+	var config = lib.getConfig(true);
+	
+	if (config !== undefined) {
+		item.port = config.port       === undefined? '' : config.port,
+		item.ssid = config.ssid       === undefined? '' : config.ssid,
+		item.ssidPwd = config.ssidPwd === undefined? '' : config.ssidPwd;
+	}
+	//var errors = {};
+	res.render('settings',{ /*errors:errors,*/ item:JSON.stringify(item) });
+});
+
+router.post('/settings', lib.authenticateAdminRequest, function(req, res){
+	var body    = req.body;
+	var port    = body.port    !== undefined && !isNaN(parseInt(body.port))? parseInt(body.port) : undefined;
+	var ssid    = body.ssid    === undefined || body.ssid    ===''? undefined : body.ssid;
+	var ssidPwd = body.ssidPwd === undefined || body.ssidPwd ===''? undefined : body.ssidPwd;
+
+	if (port === undefined ) {
+		res.status(422).send('Unable to save settings, port missing');
+		return; 
+	}
+
+		var config = lib.getConfig(true);
+		config.port = port;
+		if (ssid !== undefined) {
+			config.ssid = ssid;
+		}
+		if (ssidPwd !== undefined) {
+			config.ssidPwd = ssidPwd;
+		}
+		lib.setConfig(config);
+		res.status(200).send('settings saved.');
+
 });
 
 router.post('/settings-location', lib.authenticateAdminRequest, function(req, res){
@@ -83,7 +128,7 @@ router.post('/settings-location', lib.authenticateAdminRequest, function(req, re
 
 	
 	if (geoLocation !== undefined){
-		var config = lib.getConfig();
+		var config = lib.getConfig(true);
 		console.log("Ok, let's add location to config file.");
 		config.geoLocation = geoLocation;
 		lib.setConfig(config);
@@ -123,16 +168,13 @@ router.get('/file', lib.authenticateFileRequest, function(req, res){
 
 
 
-
-
-
 //todo: this route shoud not be in users route, but a new route called maybe "settings"
-router.post('/settings', lib.authenticateCardOwnerRequest, function(req, res){
+router.post('/settings-allow-user-registration', lib.authenticateCardOwnerRequest, function(req, res){
 	var allowUserRegistration = JSON.parse(req.body.allowUserRegistration);
 	//read the config file into a variable.
 	var str ='';
 	var changes = 0;
-	var config = lib.getConfig();
+	var config = lib.getConfig(true);
 	if (allowUserRegistration !== undefined){
 		console.log("Ok, let's add this value to the config file.");
 		config.allowUserRegistration = allowUserRegistration;

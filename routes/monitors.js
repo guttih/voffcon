@@ -101,6 +101,10 @@ router.getAvailableMonitorPins = function getAvailableMonitorPins(device, addThi
 	});
 };
 
+router.get('/', lib.authenticateUrl, function (req, res) {
+	res.redirect('/monitors/list');
+});
+
 router.get('/register/:deviceID', lib.authenticateDeviceOwnerRequest, function (req, res) {
 	var deviceId = req.params.deviceID;
 	if (deviceId != undefined) {
@@ -346,6 +350,7 @@ router.updateDeviceAndDatabase = function updateDeviceAndDatabase(res, deviceID,
 }
 
 //render a page with list of monitors
+
 router.get('/list', lib.authenticateUrl, function (req, res) {
 	res.render('list-monitor');
 });

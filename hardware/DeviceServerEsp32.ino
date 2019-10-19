@@ -1446,7 +1446,7 @@ bool connectWifi() {
 }
 
 /// <summary>
-/// This function is only run ones in the beginning of the device startup
+/// This function is only run once in the beginning of the device startup
 /// </summary>
 void printHeapSize(String strAddInfront = String("")) {
     Serial.println(strAddInfront + " ESP32 SDK version:" + String(system_get_sdk_version()) + ", RAM left " + String(esp_get_free_heap_size()) + "\n");
@@ -1511,7 +1511,7 @@ void setup() {
     Serial.println();
     Serial.println("\"http" + subPath + ".");
     server.begin();
-    //monitors.addTimer(1000 * 60 * 60 * 24); //ones per day
+    //monitors.addTimer(1000 * 60 * 60 * 24); //once per day
     //monitors.addPinValueMonitoringAndTimer(devicePins.get(5), 1, 2, 500, (1000 * 60 * 60 * 24 * 6));//the 6 day timer will never ve triggered because of the other 1 day timer
     tellServerToSendMonitors();
 }

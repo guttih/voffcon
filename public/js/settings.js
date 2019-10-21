@@ -24,9 +24,11 @@ var	SERVER;
 function saveLocation(){
 
 		var sendObj = {
-						ssid : $('#ssid').val(),
-						ssidPwd: $('#ssidPwd').val(),
-						port : $('#port').val()
+						ssid        : $('#ssid').val(),
+						ssidPwd     : $('#ssidPwd').val(),
+						port        : $('#port').val(),
+						iftttToken  : $('#iftttToken').val()
+						
 			};
 
 			var posting = $.post( 'settings', sendObj);
@@ -50,6 +52,7 @@ function init(){
 	$('#ssid')   .val(item.ssid);
 	$('#ssidPwd').val(item.ssidPwd);
 	$('#port')   .val(item.port);
+	$('#iftttToken')   .val(item.iftttToken);
 
 	$('#button-save').on('click tap', function(){
 		saveLocation();

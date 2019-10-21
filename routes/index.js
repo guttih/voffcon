@@ -72,40 +72,41 @@ router.get('/settings', lib.authenticateAdminRequest, function(req, res){
 	var item = {
 		port : '',
 		ssid : '',
-		ssidPwd: ''
+		ssidPwd: '',
+		iftttToken: ''
 	};
 	var config = lib.getConfig(true);
 	
 	if (config !== undefined) {
 		item.port = config.port       === undefined? '' : config.port,
 		item.ssid = config.ssid       === undefined? '' : config.ssid,
-		item.ssidPwd = config.ssidPwd === undefined? '' : config.ssidPwd;
+		item.ssidPwd = config.ssidPwd === undefined? '' : config.ssidPwd,
+		item.iftttToken = config.iftttToken === undefined? '' : config.iftttToken
 	}
+	
 	//var errors = {};
 	res.render('settings',{ /*errors:errors,*/ item:JSON.stringify(item) });
 });
 
 router.post('/settings', lib.authenticateAdminRequest, function(req, res){
-	var body    = req.body;
-	var port    = body.port    !== undefined && !isNaN(parseInt(body.port))? parseInt(body.port) : undefined;
-	var ssid    = body.ssid    === undefined || body.ssid    ===''? undefined : body.ssid;
-	var ssidPwd = body.ssidPwd === undefined || body.ssidPwd ===''? undefined : body.ssidPwd;
+	var body       = req.body;
+	var port       = body.port       !== undefined && !isNaN(parseInt(body.port))? parseInt(body.port) : undefined;
+	var ssid       = body.ssid       === undefined || body.ssid    ===''?    undefined : body.ssid;
+	var ssidPwd    = body.ssidPwd    === undefined || body.ssidPwd ===''?    undefined : body.ssidPwd;
+	var iftttToken = body.iftttToken === undefined || body.iftttToken ===''? undefined : body.iftttToken;
 
 	if (port === undefined ) {
 		res.status(422).send('Unable to save settings, port missing');
 		return; 
 	}
 
-		var config = lib.getConfig(true);
-		config.port = port;
-		if (ssid !== undefined) {
-			config.ssid = ssid;
-		}
-		if (ssidPwd !== undefined) {
-			config.ssidPwd = ssidPwd;
-		}
-		lib.setConfig(config);
-		res.status(200).send('settings saved.');
+	var config = lib.getConfig(true);
+	config.port = port;
+	config.ssid = ssid;
+	config.ssidPwd = ssidPwd;
+	config.iftttToken = iftttToken;
+	lib.setConfig(config);
+	res.status(200).send('settings saved.');
 
 });
 

@@ -1,34 +1,46 @@
 # VoffCon - How to setup the devices 
 <img src="images/logo.png" width="100" height="100"/>
 
- [Readme](https://guttih.github.io/voffcon) [Device setup](https://guttih.github.com/voffcon/docs/device-setup.html) 
+ [Readme](https://guttih.github.io/voffcon) | [Device setup](https://guttih.github.com/voffcon/docs/device-setup.html) | [YouTube channel](https://www.youtube.com/channel/UCmZFs6SCoeuphnKucBkvcEg)
+:-------------------------:|:-------------------------:|:-------------------------:
+<br/><br/>
 
- Description on how to setup these two devices
- - The **NodeMCU 1.0 (ESP-12E Module)** which has the Esp8266 wifi chip on board.
- - The **ESP32 DEV Module** which has the Esp32 Wifi and bluetooth chip on board.
 
-<div style="text-align:center">
- <img src="images/esp8266.png" width="200" alt="The esp8266 module">
- <div width="100"> </div>
- <img src="images/esp32DevModule.PNG" width="200" alt="The esp8266 module">
-</div>
+ 
+
+NodeMcu             |  Esp32
+:-------------------------:|:-------------------------:
+<img src="images/esp8266.png" width="200" alt="The esp8266 module">  |  <img src="images/esp32DevModule.PNG" width="200" alt="The esp8266 module">
+**NodeMCU 1.0 (ESP-12E Module)** which has the Esp8266 wifi chip on board.|**ESP32 DEV Module** which has the Esp32 Wifi and bluetooth chip on board
 
 ## Why we need to setup a device
-In order to be able to communicate with the device using VoffCon, you will need to setup your computer so you can use it to send a program to the device.  This program is called the Device server.  The device server will allow the Node server to view and change values on the device it self.  To get the device server onto the device you will need to follow the instructions below.  
+In order to be able to communicate with the device using VoffCon, you will need to setup your computer so you can use it to send a program to the device.  This program is called the Device server.  The device server will allow the Node server to view and change values on the device it self.  To get the device server onto the device you will need to follow the instructions below.
 
-## create the file config.json
-If there is no file called config.json in the root of the Arduino project, then you will need to create it.  After that you should provide a ssid and a ssid password.  ssid is the name of your whifi network.  the ssid is the password needed to connect to that network.  These are the same values you need to connect your smart mobile phone to your wifi. These values will be used by the node server to create the program (the device server) which will be uploaded to your device.
+Please see [Video tutorial](https://youtu.be/UtBYKEz3RVs) on how to setup VoffCon.
 
-#### config.json
-```json
-{"port":6100,
-"allowUserRegistration":true,
-"ssid":"nameOfYourWifi",
-"ssidPwd":"passwordToYourWifi"}
-```
+### Provide Wifi informatin
+These are the same values you need to connect your smart mobile phone to your wifi.  The node server will create a program (the device server) and upload it to the device.  These values will be injected into the program allowing the device to connect to your wifi network.
+
+After running VoffCon, you will need to 
+ - start a web browser on the same computer, VoffCon is running on.  
+ - In the address bar type the url `http://localhost:6100/`.
+ - Hover the mouse over and click Settings-> General server settings.
+ - Provide the name and password of your wifi access point.
+ - Click Save settings
+
+### Location
+If you want to be able to automate commands (TriggerActions) based on when there is sunrise or sunset VoffCon will need to know your location, or a location near you.  This location is used to calculate when sunrise, solar-noon and sunset.
+Hover the mouse over and click Settings-> Server location.
+ 
 
 ## Install the Arduino IDE
 - [Click here](https://www.arduino.cc/en/Main/Software), download the Arduino Software and install it.
+
+You could also checkout these three video tutorials on how install the Arduino Ide and needed libraries for the two suppored devices.
+ - [Installing Arduino IDE on Windows 10](https://youtu.be/6uPTaGaAUjk)
+ - [How to install needed library for NodeMcu](https://youtu.be/hQYEQ4Hrih8)
+ - [How to install needed library for Esp32](https://youtu.be/4gLXqaICsvQ)
+
 
 ### ESP32 Arduino Core
 If you will be using the ESP32 Development Module you will need the ESP32 Arduino Core.  
@@ -83,19 +95,14 @@ We will need to send the Device server program to the device.  We can do that by
  9. Select the COM port the device is connected to.
  10. Select from the menu File -> New to create a new sketch.
  11. Open the .ino program you downloaded.
- 12. Copy all text in the downloaded file and paste it into the new sketch in the arduino IDE.
- 13. If VoffCon Node server has not automaticly changed the values below for you in the device server program, you will need to change them manually.
- ```
-       IPV4_IPADDRESS  : (IP) Provide an ip address (IPV4) which you want the device to ask operating system for.
-       PORT_NUMBER     : (Port) Provide the port number you want the device to listen and serve from.
-       IPV4_GATEWAY    : (Default Gateway) The device needs to know the default gateway it will be using.
-       IPV4_SUBNET     : (Subnet mask / netmask) The subnet mask it is on.
-       WIFI_ACCESSPOINT: (SSID) Service set identifier of the wifi network the device will be connecting to.
-       WIFI_PASSWORD   : (SSID password) The password to your wifi network. 
-```       
- 15. Compile, build and send the Device Server program to the device.
+ 12. Copy all text in the downloaded file and paste it into the new sketch in the arduino IDE.  
+ 13. Compile, build and send the Device Server program to the device.
   
   Now the device has been setup and you should be able to connect to it.
+
+  Checkout these two tutorials on how to program the devices
+  - [Add a device to VoffCon](https://youtu.be/3ypXcRsjKF0)
+  - [Add device and change pins](https://youtu.be/uwkq1JAt5bY)
 
 
 ## The Device server
@@ -106,7 +113,7 @@ This server will only allow request to it, if the request comes from a client wh
 
 
 ### Device server commands
-These are possible commands a client (the Node server) can send to the device.
+Some of the commands a client (the Node server) can send to the device.
 
 - /pins
   - __get__ Get status of all pins
@@ -131,7 +138,7 @@ These are possible commands a client (the Node server) can send to the device.
 ### Device server Documentation
 #### NodeMcu
 Here are all the [classes](http://voffcon.com/docs/hardware/nodeMcuDocs/html/annotated.html) you have access to from the [NodeMcu VoffCon device server](https://github.com/guttih/voffcon/blob/master/hardware/DeviceServerNodeMcu.ino).
-In the node server is a variable called server which is of the type [ESP8266WebServer](https://links2004.github.io/Arduino/d3/d58/class_e_s_p8266_web_server.html)
+In the device server code, there is a variable called __server__ which is of the type [ESP8266WebServer](https://links2004.github.io/Arduino/d3/d58/class_e_s_p8266_web_server.html)
 
 See also:
   - [esp8266 documentation](http://esp8266.github.io/Arduino/versions/2.2.0/doc/libraries.html) from the ESP8266 Community libraries.

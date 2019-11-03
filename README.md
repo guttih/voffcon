@@ -1,11 +1,13 @@
 # VoffCon
 <img src="public/images/logo.png" width="100" height="100" border="0" title="Click to view in nicer format" />
 
- [Documentation](https://guttih.github.io/voffcon) [Device setup](https://guttih.github.com/voffcon/docs/device-setup.html) 
+  [Readme](https://guttih.github.io/voffcon) | [Device setup](https://guttih.github.com/voffcon/docs/device-setup.html) | [YouTube channel](https://www.youtube.com/channel/UCmZFs6SCoeuphnKucBkvcEg)
+:-------------------------:|:-------------------------:|:-------------------------:
+<br/>
 
 VoffCon is a system for controlling devices and appliances from anywere.  It is made up by two components.  A node server and A device server.  The main benefits of this system is your ability to create your own controls and cards, which other users logged in to your system can use to control devices you deside to put on your cards.
 
-## Video intoduction
+## Intoduction
 
 <div style="text-align:center">
   <a href="http://www.youtube.com/watch?feature=player_embedded&v=zGagaUuTqe0
@@ -28,10 +30,10 @@ This application is a server intended to run on a computer where it can access t
 You will need to install the following if you haven't already.
 + [MongoDb](https://www.mongodb.com) To store users cards, controls and device information. ([Install tutorials](https://docs.mongodb.com/manual/installation/) or [installing with package manager](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions) ) 
 + [Node.js](https://nodejs.org/en/) To run the Node server
-+ [Arduino IDE](https://www.arduino.cc/en/Main/Software)  To program the devices.
++ [Arduino IDE](https://www.arduino.cc/en/Main/Software)  To program the devices.  ( [Video tutorial for windows](https://youtu.be/6uPTaGaAUjk) )
 + **Device Core** libraries for the device servers running on the two devices listed below. ([Install instructions](docs/device-setup.md))
-    - *ESP32 Development Module* will need the [ESP32 Arduino Core](https://github.com/espressif/arduino-esp32) 
-    - *NodeMCU 1.0 (ESP-12E Module)* will need the [ESP8266 core for Arduino](https://github.com/esp8266/Arduino)  
+    - *ESP32 Development Module* will need the [ESP32 Arduino Core](https://github.com/espressif/arduino-esp32)   ( [Video tutorial](https://youtu.be/4gLXqaICsvQ) )
+    - *NodeMCU 1.0 (ESP-12E Module)* will need the [ESP8266 core for Arduino](https://github.com/esp8266/Arduino) ( [Video tutorial](https://youtu.be/hQYEQ4Hrih8) )
     
 ## Getting up and running
 ### Run the mongodb server
@@ -45,17 +47,19 @@ Use windows file explorer to:
 
 Or just use the windows command shell, by typing the following commands.
 ```shell
-mkdir C:\data
-mkdir C:\data\db
 "C:\Program Files\MongoDB\mongod.exe"
 ```
 
 #### Linux
+
+##### Rasbian
+Please see this [video tutorial](https://youtu.be/_s6m6bRXeGA) on how install VoffCon on Raspbian
+
+how to run mongodb on run on linux
 ```shell
 mongod
 ```
-
-#### Installing VoffCon node server on Ubuntu 16.04 (Linux) when all prerequisites are missing
+#### Installing VoffCon on Ubuntu 16.04 (Linux) when all prerequisites are missing
 Assuming that you do not have Mongodb, nodejs or npm installed.  This would be the process you would follow.
 
 ##### Reload local package database
@@ -80,23 +84,22 @@ sudo apt install npm
 
 ```
 
-#### Install packages which the VoffCon app server uses and running the server
+##### Install packages which the VoffCon app server uses and running the server
 ```shell
 npm install
-node app
+node voffcon
 
 ```
 And the go to a modern web browser and visit the url [http://localhost:6100](http://localhost:6100) to see VoffCon running.
 ## Devices
-### The Esp8266 Developement Module
-<img src="docs/images/esp8266.png" width="200" alt="The esp8266 module">
-NodeMcu Developement Module with ESP8266 is a pretty powerful device compared with the Arduino.  it has a on board WiFi, allowing you to control it with a web-brower or a phone.  It is a small and cheap device which allows you to control real world devices and appliances via a WiFi connection.  A device server needs to be uploaded to this device so the Node server and the Device can comunicate.
 
-### The Esp32 Developement Module
-<img src="docs/images/esp32DevModule.PNG" width="200" alt="The esp32 development module">
-Esp32 Is the next version of the Esp8266 module.  This dual-processor development board has also WiFi on board.  Additionally it has Bluetooth and is more powerful than the Esp8266.  It is also a small and cheap device which allows you to control real world devices and appliances via a WiFi connection.  A device server needs to be uploaded to this device so the Node server and the Device can comunicate.
+| Device                | Description    |
+:-------------------------:|:-------------------------:|
+ <img src="docs/images/esp8266.png" width="300" alt="The esp8266 module"> | NodeMcu Developement Module with ESP8266 is a pretty powerful device compared with the Arduino.  it has a on board WiFi, allowing you to control it with a web-brower or a phone.  It is a small and cheap device which allows you to control real world devices and appliances via a WiFi connection.  A device server needs to be uploaded to this device so the Node server and the Device can comunicate.               |
+<img src="docs/images/esp32DevModule.PNG" width="100" alt="The esp32 development module"> | Esp32 Is the next version of the Esp8266 module.  This dual-processor development board has also WiFi on board.  Additionally it has Bluetooth and is more powerful than the Esp8266.  It is also a small and cheap device which allows you to control real world devices and appliances via a WiFi connection.  A device server needs to be uploaded to this device so the Node server and the Device can comunicate. |
 
-## Setting up the device server.
+
+## Setting up the device server
 [Click here](docs/device-setup.md) to get instructions on how to setup the device server.
 
 

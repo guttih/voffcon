@@ -2,7 +2,8 @@
 <img src="images/logo.png" width="100" height="100"/>
 
  [Readme](https://guttih.github.io/voffcon) | [Device setup](https://guttih.github.com/voffcon/docs/device-setup.html) | [YouTube channel](https://www.youtube.com/channel/UCmZFs6SCoeuphnKucBkvcEg)
-:-------------------------:|:-------------------------:|:-------------------------:
+
+
 <br/><br/>
 
 

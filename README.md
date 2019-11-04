@@ -95,7 +95,7 @@ And the go to a modern web browser and visit the url [http://localhost:6100](htt
 
 | Device                | Description    |
 :-------------------------:|:-------------------------:|
- <img src="docs/images/esp8266.png" width="300" alt="The esp8266 module"> | NodeMcu Developement Module with ESP8266 is a pretty powerful device compared with the Arduino.  it has a on board WiFi, allowing you to control it with a web-brower or a phone.  It is a small and cheap device which allows you to control real world devices and appliances via a WiFi connection.  A device server needs to be uploaded to this device so the Node server and the Device can comunicate.               |
+ <img src="docs/images/esp8266.png" width="100" alt="The esp8266 module"> | NodeMcu Developement Module with ESP8266 is a pretty powerful device compared with the Arduino.  it has a on board WiFi, allowing you to control it with a web-brower or a phone.  It is a small and cheap device which allows you to control real world devices and appliances via a WiFi connection.  A device server needs to be uploaded to this device so the Node server and the Device can comunicate.               |
 <img src="docs/images/esp32DevModule.PNG" width="100" alt="The esp32 development module"> | Esp32 Is the next version of the Esp8266 module.  This dual-processor development board has also WiFi on board.  Additionally it has Bluetooth and is more powerful than the Esp8266.  It is also a small and cheap device which allows you to control real world devices and appliances via a WiFi connection.  A device server needs to be uploaded to this device so the Node server and the Device can comunicate. |
 
 

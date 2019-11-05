@@ -1,8 +1,8 @@
 # VoffCon
 <img src="public/images/logo.png" width="100" height="100" border="0" title="Click to view in nicer format" />
 
-  [Readme](https://guttih.github.io/voffcon) | [Device setup](https://guttih.github.com/voffcon/docs/device-setup.html) | [YouTube channel](https://www.youtube.com/channel/UCmZFs6SCoeuphnKucBkvcEg)
-:-------------------------:|:-------------------------:|:-------------------------:
+ | [Readme](https://guttih.github.io/voffcon) | [Device setup](https://guttih.github.com/voffcon/docs/device-setup.html) | [YouTube channel](https://www.youtube.com/channel/UCmZFs6SCoeuphnKucBkvcEg) |
+
 <br/>
 
 VoffCon is a system for controlling devices and appliances from anywere.  It is made up by two components.  A node server and A device server.  The main benefits of this system is your ability to create your own controls and cards, which other users logged in to your system can use to control devices you deside to put on your cards.

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title></title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<script src="/js/jquery-3.1.0.min.js"></script>
+		<script src="/js/bootstrap.min.js"></script>
+		<style type="text/css" media="screen">
+			#editor1 { 
+				position: absolute;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				left: 0;
+			}
+			.code{
+				position:absolute;
+				width:600px;
+				height:180px;
+			}
+		</style>
+	</head>
+	<body>
+
+	<h2>SvgCtrl documentation.</h2>
+	<p>
+		description
+	</p>
+	<p>Code example on a card:</p>
+	<div class="code">
+		
+<div id="editor1" class="eddi">
+	var using = ["SvgCtrl"];
+	var pin1, ctrl;
+
+	$(function () {
+		//todo: add example
+	});
+</div>
+	</div>
+<script src="/vendor/ace-builds/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    var editor = ace.edit("editor1");
+    editor.setTheme("ace/theme/monokai");
+    editor.getSession().setMode("ace/mode/javascript");
+	editor.setReadOnly(true);
+	editor.session.setUseWorker(false);
+</script>
+ 
+	</body>
+</html>

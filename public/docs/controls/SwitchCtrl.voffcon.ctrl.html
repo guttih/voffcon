@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title></title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<script src="/js/jquery-3.1.0.min.js"></script>
+		<script src="/js/bootstrap.min.js"></script>
+		<style type="text/css" media="screen">
+			#editor1 { 
+				position: absolute;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				left: 0;
+			}
+			.code{
+				position:absolute;
+				width:600px;
+				height:180px;
+			}
+		</style>
+	</head>
+	<body>
+
+	<h2>SwitchCtrl documentation.</h2>
+	<p>
+		description
+	</p>
+	<p>Code example on a card:</p>
+	<div class="code">
+		
+<div id="editor1" class="eddi">
+	var using = ["SwitchCtrl"];
+	var button;
+	
+	function initView(pinObject) {
+		//Create the button object and position it x=10 and y=20
+		button = new SwitchCtrl(10, 20, pinObject, 1);
+		
+		// Tell the pinObject to call this function when something connected to it is clicked
+		// In this case, the button object.
+		pinObject.registerClicks(function(data) {
+			button.active(false);
+			var pin = data.pinObject;
+			var sendObj = {};
+			sendObj[pin.getNumber()] = button.pinValue;
+			var url = getServer()+'/devices/pins/'+ pin.savedDeviceID;
+			var posting = $.post( url, sendObj);
+			posting.done(function(data) {
+				var pinInfo = data.pins.filter(info => info.pin === 13);
+				button.setValue(pinInfo[0].val);
+			}).fail(function(data) {
+				showModalErrorText('Device not found', 'Unable to get data from device "'+pin.savedDeviceID+'".');
+			});
+		});
+	}
+	
+	
+	$(function () {
+		var deviceId = '5db9d65d3c3aed0b60b932bc';
+		
+		//Get pin value from device
+		var url = getServer()+'/devices/pins/'+ deviceId;
+		$.get(url).done(function(data) {
+			var pinInfo = data.pins.filter(info => info.pin === 13);
+			//Create the pin object which will be used by the button object
+			var pin13 = new Pin(pinInfo[0].pin, pinInfo[0].val, deviceId, 1, deviceId);
+			//Setup the button with the current pin value
+			initView(pin13);
+		}).fail(function(data) {
+			showModalErrorText('Device not found', 'Unable to get data from device "'+deviceId+'".');
+		});
+	});
+</div>
+	</div>
+<script src="/vendor/ace-builds/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    var editor = ace.edit("editor1");
+    editor.setTheme("ace/theme/monokai");
+    editor.getSession().setMode("ace/mode/javascript");
+	editor.setReadOnly(true);
+	editor.session.setUseWorker(false);
+</script>
+ 
+	</body>
+</html>

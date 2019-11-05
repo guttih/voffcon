@@ -21,6 +21,7 @@ by regular post to the address Haseyla 27, 260 Reykjanesbar, Iceland.
 var express = require('express');
 var router = express.Router();
 var request = require('request');
+var fs = require('fs');
 var lib = require('../utils/glib');
 var Control = require('../models/control');
 var multer  = require('multer');
@@ -324,6 +325,57 @@ upload(req,res,function(err) {
 			res.redirect('/result');
 		}		
     });
+});
+
+router.get('/help/ctrl/:controlName', function(req, res) {
+	var ctrlName = req.params.controlName;
+	var ctrlFileName = ctrlName+'.voffcon.ctrl';
+	fs.readFile('./public/docs/controls/'+ctrlFileName, "utf-8", function(err, ctrlFile) {
+		if (err !== null) {
+			req.flash('error',	'Filename "' + ctrlFileName + '" not found!' );
+			res.redirect('/result');
+			return;
+		}
+
+		var ctrlObject;
+		try {
+			ctrlObject = JSON.parse(ctrlFile);
+			
+			if (ctrlObject.name === undefined || ctrlObject.description === undefined || ctrlObject.code === undefined || ctrlObject.template === undefined){
+				req.flash('error',	'Invalid control!' );
+				res.redirect('/result');
+				return;
+			} 
+		}
+		catch(e) {
+			req.flash('error',	'Error parsing control file.' );
+			res.redirect('/result');
+			return;
+		}
+		// We have a valid control
+
+
+
+		var filePath = './public/docs/controls/'+ctrlName+'.example.js'
+		
+		
+		fs.readFile(filePath, "utf-8", function(err, file) {
+			if (err === null) {
+				//We got an example file, let's add it to the control object
+				ctrlObject.example=file;
+			} 
+				
+			strObject = JSON.stringify(ctrlObject);
+			res.render('control-help', {
+				item:strObject,
+				name:ctrlObject.name,
+				description:ctrlObject.description});
+			
+		});
+		
+	});
+	
+	
 });
 
 module.exports = router;

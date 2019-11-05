@@ -1,0 +1,32 @@
+<div class="row"><h3 class="page-header pull-right">{{name}} help</h3></div>
+	
+	<h5 style="font-weight: bold;">Description</h5>
+	<div id="description"></div>
+{{#if errors}}
+	{{#each errors}}
+		<div class="alert alert-danger">{{msg}}</div>
+	{{/each}}
+	
+		<script type="text/javascript">
+			var item = {{{item}}};
+		</script>
+{{/if}}
+<br>
+<h5 style="font-weight: bold;">Example code in a Card using this control</h5>
+<div class="code">
+	<div id="editor1" class="eddi" style="height:120px;width: 100%;">
+	var using = ["{{name}}"];
+	var pin1, ctrl;
+
+	$(function () {
+		//todo: Start coding
+	});
+	</div>
+</div>
+
+
+<script type="text/javascript">
+	var item = {{{item}}};
+</script>
+<script src="/vendor/ace-builds/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="/js/control-help.js" type="text/javascript" charset="utf-8"></script>

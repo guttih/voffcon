@@ -408,7 +408,8 @@ module.exports.getConfig = function getConfig(unChased){
 	}
 	if (makeNewFile === true){
 		conf = { 	port:6100,
-					allowUserRegistration: true 
+					allowUserRegistration: true,
+					importBasicControls:true 
 				};
 		module.exports.setConfig(conf);
 

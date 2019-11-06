@@ -4,7 +4,6 @@
 	var using = ["SelectCtrl"];
 	
 	var deviceId = '5dc29ce39af1a042287a2897',
-	    pin1, 
 	    ctrl;
 
     function initView(pinObject) {

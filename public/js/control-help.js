@@ -32,7 +32,7 @@ function init(){
 	$('#description').html(des);
 	if (item.example !== undefined) {
 		var lineCount = item.example.split(/\r\n|\r|\n/).length;
-		var height = Math.round(lineCount*14.8780487805)+15;
+		var height = Math.round(lineCount*14.0)+15;
 		$('#editor1').css('height',height+'px');
 		editor.setValue(item.example, -1);
 	}

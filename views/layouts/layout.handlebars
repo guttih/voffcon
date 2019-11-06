@@ -114,26 +114,27 @@
 			<li class="dropdown">
 				<a class="dropdown-toggle" data-toggle="dropdown" href="#">?</a>
 				<ul class="dropdown-menu">
-					<li><a href="/about">About the system</a></li>
-					<li><a href="/help">Help</a></li>
-					<li class="menu-item"><a href="https://github.com/guttih/voffcon/blob/master/README.md" target="_blank">Readme.md</a></li>
-					<li class="menu-item"><a href="https://github.com/guttih/voffcon/blob/master/docs/device-setup.md" target="_blank">Setup a device</a></li>
+					<li class="menu-item"><a href="https://github.com/guttih/voffcon/blob/master/README.md" target="_blank">Help</a></li>
+					<li class="menu-item dropdown dropdown-submenu"><a href="#">Controls</a>
+						<ul class="dropdown-menu">
+							<li class="menu-item"><a href="/help_development">Available objects</a></li>
+						</ul>
+					</li>
+					<li class="menu-item dropdown dropdown-submenu"><a href="#">Devices</a>
+						<ul class="dropdown-menu">
+							<li class="menu-item"><a href="/docs/hardware/esp32Docs/html/" target="_blank"  >Esp32 classes</a></li>
+							<li class="menu-item"><a href="/docs/hardware/nodeMcuDocs/html/" target="_blank">NodeMcu classes</a></li>
+						</ul>
+					</li>
+					<li><a href="/licence">Licence</a></li>
 					<li class="menu-item dropdown dropdown-submenu"><a href="https://github.com/guttih/voffcon/issues" target="_blank">Issues</a>
 							<ul class="dropdown-menu">
 								<li class="menu-item"><a href="https://github.com/guttih/voffcon/issues" target="_blank">Issues</a></li>
 								<li class="menu-item"><a href="https://github.com/guttih/voffcon/issues/new?assignees=&labels=&template=bug_report.md&title=" target="_blank">Report a bug (You need to be logged in to github)</a></li>
 								<li class="menu-item"><a href="https://github.com/guttih/voffcon/issues/new?assignees=&labels=&template=feature_request.md&title=" target="_blank">Make a feature request (You need to be logged in to github)</a></li>
 							</ul>
-						</li>
-					<li class="menu-item dropdown dropdown-submenu"><a href="#">Development</a>
-						<ul class="dropdown-menu">
-							<li class="menu-item"><a href="/help_development">General</a></li>
-							<li class="menu-item"><a href="https://www.github.com/guttih/voffcon" target="_blank">Repository on Github</a></li>
-							<li class="menu-item"><a href="/docs/hardware/esp32Docs/html/" target="_blank">Available classes from the Esp32 Device Server</a></li>
-							<li class="menu-item"><a href="/docs/hardware/nodeMcuDocs/html/" target="_blank">Available classes from the nodeMcu Device Server</a></li>
-						</ul>
 					</li>
-					<li><a href="/licence">Licence</a></li>
+					<li><a href="/about">About the system</a></li>
 				</ul>
 			</li>
 		</ul>

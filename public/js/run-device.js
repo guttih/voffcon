@@ -341,8 +341,6 @@ function init(){
 		var posting = $.post( url, sendObj);
 
 		posting.done(function(data){
-			console.log("did get this shit");
-			console.log(data);
 			download(data);
 		});
 	});

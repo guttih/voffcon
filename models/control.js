@@ -90,6 +90,31 @@ module.exports.delete = function (id, callback){
 	Control.findByIdAndRemove(id, callback);
 };
 
+//get all controls
+module.exports.list = function(callback){
+	var query = {};
+	Control.find(query, callback);
+};
+//gets an array of control names
+module.exports.listNames = function(callback){
+	var query = {};
+	var x = Control.find(query,{"name" : 1},function(err, list){
+		if (err !== null) {
+			callback(err, list);
+		} else {
+			//let's convert list to array of strings
+			var nameArray = [];
+			if (list !== undefined && list.length > 0) {
+				list.forEach(function(item){
+					nameArray.push(item._doc.name);
+				});
+			}
+			nameArray.sort();
+			callback(err, nameArray);
+		}
+	});
+};
+
 //get all controls owned by the given user
 module.exports.listByOwnerId = function (userId, callback){
 	var query = {owners:{$elemMatch: { _id:userId }}};

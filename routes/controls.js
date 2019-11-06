@@ -21,6 +21,7 @@ by regular post to the address Haseyla 27, 260 Reykjanesbar, Iceland.
 var express = require('express');
 var router = express.Router();
 var request = require('request');
+var fs = require('fs');
 var lib = require('../utils/glib');
 var Control = require('../models/control');
 var multer  = require('multer');
@@ -182,13 +183,99 @@ router.delete('/:controlID', lib.authenticateControlOwnerRequest, function(req, 
 	
 });
 
-router.get('/list', lib.authenticateUrl, function(req, res){
-	res.render('list-control');
+router.get('/list', lib.authenticateUrl, function(req, res) {
+	var config = lib.getConfig(true);
+	if (config.importBasicControls !== undefined && config.importBasicControls === true )
+	{
+		config.importBasicControls = false;
+		lib.setConfig(config);
+		res.redirect('/controls/upload-basic-controls');
+	} else {
+		res.render('list-control');
+	}
+});
+
+/**
+ * Converts a stringified control to an Control object
+ * @param {String} strControl Control object as a string, like you get it when you read it from a file.
+ * @param {boolean} convertToModelObject If true then string will be converted to Control Model Object otherwise an normal Json object
+ * @returns An Control object.  On error the function returns null.
+ */
+
+ router.ControlStringToObject = function ControlStringToObject(strControl, convertToModelObject){
+	var ctrlObject;
+	try {
+		ctrlObject = JSON.parse(strControl);
+		
+		if (ctrlObject.name    === undefined || ctrlObject.description === undefined || 
+			ctrlObject.helpurl === undefined || ctrlObject.template    === undefined || 
+			ctrlObject.code    === undefined  ) 
+		{
+			return null;
+		} 
+		if (convertToModelObject !== undefined && convertToModelObject === true) {
+			return newControl = new Control({
+												name        : ctrlObject.name,
+												description : ctrlObject.description,
+												helpurl     : ctrlObject.helpurl,
+												template    : ctrlObject.template,
+												code        : ctrlObject.code,
+												owners:[]
+											});
+		}
+	}
+	catch(e) {
+		return null;
+	}
+
+	return ctrlObject;
+}
+
+router.uploadBasicControls = function uploadBasicControls (userId, callback) {
+
+	//Need a namelist of list of all installed controls
+	Control.listNames(function(err, savedControlNames) {
+		var dir = './public/docs/controls';
+		fs.readdirSync(dir)
+		.filter(file => (file.indexOf('.voffcon.ctrl') !== 0) && (file.slice(-13) === '.voffcon.ctrl'))
+		.forEach((file) => {
+			var fullPath = dir +'/'+ file;
+			try {
+				var content = fs.readFileSync(fullPath, "utf-8");
+				var ControlObject = router.ControlStringToObject(content, true);
+				if (ControlObject !== null) {
+					//add this control if it is not in the name list
+					if (savedControlNames.filter(item => item === ControlObject.name).length < 1) {
+						//Control with this name does not exist in this database lets add it
+						ControlObject.owners.push(userId);
+						Control.create(ControlObject, function(err, control){
+							if(err=== null) {
+								console.log('Added to database control "'+ControlObject.name+'" ');
+							}
+						});
+					}
+
+				} else {
+					console.log('Unable to import control: "'+ fullPath+'".  Parsing failed.');	 
+				}
+			} catch(e) {
+				console.log('Unable to import control: "'+ fullPath+'"');
+			}
+		});
+		callback();
+	});
+};
+
+router.get('/upload-basic-controls', lib.authenticatePowerRequest, function(req, res){
+	router.uploadBasicControls(req.user._id, function(){
+		res.redirect('/controls/list');
+	});
+	
 });
 
 /*listing all controls and return them as a json array*/
 router.get('/control-list', lib.authenticatePowerRequest, function(req, res){
-	Control.listByOwnerId(req.user._id, function(err, controlList){
+	Control.listByOwnerId(req.user._id, function(err, controlList) {
 		
 		var arr = [];
 		var item;
@@ -324,6 +411,57 @@ upload(req,res,function(err) {
 			res.redirect('/result');
 		}		
     });
+});
+
+router.get('/help/ctrl/:controlName', function(req, res) {
+	var ctrlName = req.params.controlName;
+	var ctrlFileName = ctrlName+'.voffcon.ctrl';
+	fs.readFile('./public/docs/controls/'+ctrlFileName, "utf-8", function(err, ctrlFile) {
+		if (err !== null) {
+			req.flash('error',	'Filename "' + ctrlFileName + '" not found!' );
+			res.redirect('/result');
+			return;
+		}
+
+		var ctrlObject;
+		try {
+			ctrlObject = JSON.parse(ctrlFile);
+			
+			if (ctrlObject.name === undefined || ctrlObject.description === undefined || ctrlObject.code === undefined || ctrlObject.template === undefined){
+				req.flash('error',	'Invalid control!' );
+				res.redirect('/result');
+				return;
+			} 
+		}
+		catch(e) {
+			req.flash('error',	'Error parsing control file.' );
+			res.redirect('/result');
+			return;
+		}
+		// We have a valid control
+
+
+
+		var filePath = './public/docs/controls/'+ctrlName+'.example.js'
+		
+		
+		fs.readFile(filePath, "utf-8", function(err, file) {
+			if (err === null) {
+				//We got an example file, let's add it to the control object
+				ctrlObject.example=file;
+			} 
+				
+			strObject = JSON.stringify(ctrlObject);
+			res.render('control-help', {
+				item:strObject,
+				name:ctrlObject.name,
+				description:ctrlObject.description});
+			
+		});
+		
+	});
+	
+	
 });
 
 module.exports = router;

@@ -449,6 +449,28 @@ function changeHelpHref(caller, id){
 
 
 
+/**
+ * Add a custom style(s) from JavaScript
+ *
+ * @param {string} selector
+ * @param {string} rules
+ * @param {Number} index
+ * 
+ * @example 
+ * // Adding red background to elements with class test
+ * addCss(".test", "background: red;");
+ */
+var addCss = function addCss(selector, rules, index) {
+    var sheet = document.styleSheets[0];
+	if("insertRule" in sheet) {
+		sheet.insertRule(selector + "{" + rules + "}", index);
+	}
+	else if("addRule" in sheet) {
+		sheet.addRule(selector, rules, index);
+	}
+};
+
+
 $(function () {  
 	/* this is the $( document ).ready(function( $ ) but jshint does not like that*/
 	var SERVER = getServer();

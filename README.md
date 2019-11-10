@@ -5,7 +5,7 @@
 
 <br/>
 
-VoffCon is a system for controlling devices and appliances from anywere.  It is made up by two components.  A node server and A device server.  The main benefits of this system is your ability to create your own controls and cards, which other users logged in to your system can use to control devices you deside to put on your cards.
+VoffCon is a system for controlling devices and appliances from anywere.  It is made up by two components.  A node server and A device server.  The main benefits of this system is your ability to create your own Controls and Cards, which other users logged in to your system can use to control devices you deside to put on your Cards.
 
 ## Intoduction
 
@@ -28,7 +28,7 @@ This application is a server intended to run on a computer where it can access t
 
 ### requirements:
 You will need to install the following if you haven't already.
-+ [MongoDb](https://www.mongodb.com) To store users cards, controls and device information. ([Install tutorials](https://docs.mongodb.com/manual/installation/) or [installing with package manager](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions) ) 
++ [MongoDb](https://www.mongodb.com) To store users Cards, Controls and device information. ([Install tutorials](https://docs.mongodb.com/manual/installation/) or [installing with package manager](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions) ) 
 + [Node.js](https://nodejs.org/en/) To run the Node server
 + [Arduino IDE](https://www.arduino.cc/en/Main/Software)  To program the devices.  ( [Video tutorial for windows](https://youtu.be/6uPTaGaAUjk) )
 + **Device Core** libraries for the device servers running on the two devices listed below. ([Install instructions](docs/device-setup.md))
@@ -108,32 +108,32 @@ And the go to a modern web browser and visit the url [http://localhost:6100](htt
 There are three kinds of users (actors). "administrator", "power user/card creator" and a "normal user".
 
 ##### Administrator
-Has the power to change/modify or delete all cards, and devices. He can also give a user access to a card, or a device, just like a card creator. This user is the only one who can upgrade, downgrade or delete users. He can f.example change a normal user to "administrator" or a "power user". He can also change a power user back to a normal user. He has total control of everything.
+Has the power to change/modify or delete all Cards, and devices. He can also give a user access to a Card, or a device, just like a card creator. This user is the only one who can upgrade, downgrade or delete users. He can f.example change a normal user to "administrator" or a "power user". He can also change a power user back to a normal user. He has total control of everything.
 
 
 ##### Power user 
-Is a person who is able to change or create cards or devices. He needs to know how to upload programs to the devices. He needs to know what a subnet is and basic information about networking. He needs to have access to the routers so he can setup IP addresses for the devices. He is the one who will be adding the available devices for everybody. This person will also be creating control-cards. A power user will become a Card creator when he has created a Card or has been given access to change a card.
+Is a person who is able to change or create Cards or devices. He needs to know how to upload programs to the devices. He needs to know what a subnet is and basic information about networking. He needs to have access to the routers so he can setup IP addresses for the devices. He is the one who will be adding the available devices for everybody. This person will also be creating Cards. A power user will become a card creator when he has created a Card or has been given access to change a Card.
 
 ##### Card creator
-A card creator is a power user which has created a control card. He has the power to grant others access to his card. He can grant a normal user access to his card and that will allow the normal user to use his card. The normal user will also be able to press or view controls on his card. A card creator can also grant another power user to have a card creator privileges for his card. 
+A card creator is a power user which has created a Card. He has the power to grant others access to his Card. He can grant a normal user access to his Card and that will allow the normal user to use his Card. The normal user will also be able to press or view controls on his Card. A Card creator can also grant another power user to have a Card creator privileges for his Card. 
 
 ##### User (normal user)
-He knows how to use a browser and he also has recived information from the power user on how the control-cards work. He knows what the cards control and Do's and Don'ts about a device he Is able to control using the control-cards. All knowledge about the control-cards should be supplied by the power user. 
+He knows how to use a browser and he also has recived information from the power user on how the Cards work. He knows what the Cards and Do's and Dont's about a device he is able to control using the Cards. All knowledge about the Cards should be supplied by the power user. 
 
-#### Control card
-A control card is a web-page which the normal user works with. On this card there are buttons or controls which allow the user to change or view the state of the different devices. One card can include controls for many devices. 
-This control card is created by a power user. The creator of the card will also be the one who will give other users access to a card. By default only the user which created the card will have access to the card he created. The creator user can select any user and grant him an access to his card. The card creator is the only one who can modify it(with the exeption of the Administrator). He can grant other power user access to his card giving them the card-creator privileges. No other power user can access his card without the card-creator’s permission.
+#### Card
+A Card is a web-page which the normal user works with. On this Card there are buttons and/or controls which allow the user to change or view the state of the different devices. One Card can include controls for many devices. 
+This Card is created by a power user. The creator of the Card will also be the one who will give other users access to a Card. By default only the user which created the Card will have access to the Card he created. The user card creator can select any user and grant him an access to his Card. The card creator is the only one who can modify it(with the exeption of the administrator). He can grant other power user access to his Card giving them card-creator privileges. No other power user can access his Card without the card-creator’s permission.
 
 #### Control
-A Control is a control class which can be used when creating a card.  These Controls can be thought of as a library.  One control could be f.example DiodeCtrl.  DiodeCtrl could be a class which shows an image of a diode which a Card creator can use to display a pins values as a diode.  Another control could be a slider which allows the Card creator to provide the user an easy control of a pins value by allowing the user to drag a button on a slider around to change a device pin value.  The same user access rules apply to Control as where described in the Control Card section above. 
+A Control is a control class which can be used when creating a Card.  These Controls can be thought of as a library.  For example, the DiodeCtrl is one of the basic controls.  DiodeCtrl is a class which shows an image of a diode.  A card creator can use this Control to display a pins values as a diode.  SliderCtrl is another basic Control for the the card creator.  It provides the user with a easy control of a pins value by allowing him to drag a button on a slider around, to change a pins value.  The same user access rules apply to a Control as where described in the Card section above. 
 
 #### Access to devices
-If a user wants to access a device then the system will grant him access if the user is a power user. The system will only give a normal user access to a device through a control card that controls the device.
+If a user wants to access a device then the system will grant him access if the user is a power user. The system will only give a normal user access to a device through a Card that controls the device.
 
 ### Later additions to the system / nice to have
-- Create a visual/drag'n drop editor, allowing power users create cards more easier.
+- Create a visual/drag'n drop editor, allowing power users create Cards more easier.
 - Create a visual/drag'n drop editor, allowing power users create controls more easier.
-- Show running cards without the VoffCon menu.
+- Show running Cards without the VoffCon menu.
 
 
 # Licence  

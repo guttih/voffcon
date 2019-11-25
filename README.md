@@ -135,6 +135,15 @@ If a user wants to access a device then the system will grant him access if the 
 - Create a visual/drag'n drop editor, allowing power users create controls more easier.
 - Show running Cards without the VoffCon menu.
 
+### If you are not running VoffCon on Rasbian (32-bit system)
+I recommend updating "mongoose" to version "^5.7.6".  The version "^4.6.1" is currently selected because it will work on Rasbian.  If you will not be running VoffCon on Rasbian, I recommend updating mongoose because of vulnerabilities in mongoose.
+You can change this in the file package.json
+ 1. Open the root directory of voffcon
+ 2. Open the file "package.json" in a text editor
+ 2. Change this line `"mongoose": "^4.6.1",` to `"mongoose": "^5.7.6",`.
+ 3. Save and exit text editor
+ 4. call this command `npm i`
+ 5. run VoffCon again by calling `node voffcon.js`
 
 # Licence  
         VoffCon is a system for controlling devices and appliances from anywhere.

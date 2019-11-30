@@ -273,7 +273,7 @@ router.post('/google/pins/:deviceId', function(req, res){
 				}
 			}
 			//return body;
-		});
+		}, true);
 
 });
 
@@ -290,7 +290,7 @@ router.post('/google/custom/:deviceId', function(req, res){
 				return console.error(err);
 			}
 			return body;
-		});
+		}, true);
 
 });
 /////////////////// google assistant IFTTT END /////////////////////
@@ -309,7 +309,7 @@ router.detectNumeric = function detectNumeric(obj) {
     }
 }
 
-router.jsonRequestToDevice = function jsonRequestToDevice(res, deviceId, postBody, subUrl, httpMethod, callback) {
+router.jsonRequestToDevice = function jsonRequestToDevice(res, deviceId, postBody, subUrl, httpMethod, callback, checkIfTttToken) {
 	
 	Device.getById(deviceId, function(err, device) {
 		if (err !== null || device === null){
@@ -326,21 +326,23 @@ router.jsonRequestToDevice = function jsonRequestToDevice(res, deviceId, postBod
 
 		//Change string stored as numbers into numbers.
 		router.detectNumeric(newObj);
-		var urlKey = newObj.urlKey;
-		if (urlKey === undefined || config.iftttToken !== urlKey)  {
-			res.statusCode = 404;
-			var message = 'urlKey missing or wrong.';
-			console.log(message);
-			var obj = {text:message};
-			if (callback !== undefined){
-                callback(err, null);
+		if (checkIfTttToken !== undefined && checkIfTttToken === true) {
+			var urlKey = newObj.urlKey;
+			
+			if (urlKey === undefined || config.iftttToken !== urlKey)  {
+				res.statusCode = 404;
+				var message = 'urlKey missing or wrong.';
+				console.log(message);
+				var obj = {text:message};
+				if (callback !== undefined){
+					callback(err, null);
+				}
+				return res.json(obj);
 			}
-			return res.json(obj);
+			delete newObj['urlKey'];
 		}
-		delete newObj['urlKey'];
 		var urlid = device._doc.url+subUrl;					
 		var contentType = 'application/json';
-		console.log(newObj);
 		request(lib.makeRequestPostBodyOptions(urlid, newObj, httpMethod, contentType),
 			function (err, res, body) {
 				if (callback !== undefined) {

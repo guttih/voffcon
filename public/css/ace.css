@@ -36,3 +36,11 @@
 .add-top-margin {
 	margin-top:15px;
 }
+
+.ace_search_field {
+  background-color: #43443c !important;
+}
+
+.ace_searchbtn, .ace_replacebtn {
+  color: #43443c!important;
+}

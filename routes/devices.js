@@ -276,6 +276,23 @@ router.post('/google/pins/:deviceId', function(req, res){
 		});
 
 });
+
+router.post('/google/custom/:deviceId', function(req, res){
+	var reqBody = req.body;
+	console.log(reqBody);
+	router.jsonRequestToDevice(res, req.params.deviceId, req.body, '/custom', 'POST', 
+		function(err, res, body) {
+			if (res){
+				console.log("statuscode:"+res.statusCode);
+			}
+
+			if (err) {
+				return console.error(err);
+			}
+			return body;
+		});
+
+});
 /////////////////// google assistant IFTTT END /////////////////////
 
 router.detectNumeric = function detectNumeric(obj) {
@@ -309,24 +326,21 @@ router.jsonRequestToDevice = function jsonRequestToDevice(res, deviceId, postBod
 
 		//Change string stored as numbers into numbers.
 		router.detectNumeric(newObj);
-	
+		var urlKey = newObj.urlKey;
+		if (urlKey === undefined || config.iftttToken !== urlKey)  {
+			res.statusCode = 404;
+			var message = 'urlKey missing or wrong.';
+			console.log(message);
+			var obj = {text:message};
+			if (callback !== undefined){
+                callback(err, null);
+			}
+			return res.json(obj);
+		}
+		delete newObj['urlKey'];
 		var urlid = device._doc.url+subUrl;					
 		var contentType = 'application/json';
-		
-		/*var keys = Object.keys(postBody);
-		var bodyData = {};
-		keys.forEach(function(key) {
-			console.log(key+ ':' + postBody[key]);
-			//only convert value to number if it is a number
-			var val = Number(postBody[key]);
-			if (Number.isNaN(val)) {
-				val = postBody[key];
-			}
-
-			bodyData[key] = val;
-		}, this);*/
-
-		
+		console.log(newObj);
 		request(lib.makeRequestPostBodyOptions(urlid, newObj, httpMethod, contentType),
 			function (err, res, body) {
 				if (callback !== undefined) {

@@ -30,6 +30,8 @@ var upload = multer({
   storage: storage,
   limits: { fileSize: 100024 }
 }).single('control');
+
+Control.initVersionChange();
 //Hér á að búa til module fyrir queries á devices
 //Öll köll til servera sem keyra á device ættu að vera hér.
 //Þegar query er gert á device þá þarf url á devicesið að vera með 
@@ -81,7 +83,8 @@ router.post('/register', lib.authenticatePowerRequest, function(req, res){
 					helpurl     : req.body.helpurl,
 					template    : req.body.template,
 					code        : req.body.code,
-					owners:[]
+					owners:[],
+					active      : req.body.active === undefined ? false : true
 			});
 			newControl.owners.push(req.user._id);
 			//todo: update if control already exists
@@ -116,7 +119,8 @@ router.post('/register/:controlID', lib.authenticateControlOwnerUrl, function(re
 					description : req.body.description,
 					helpurl		: req.body.helpurl,
 					template	: req.body.template,
-					code		: req.body.code
+					code		: req.body.code,
+					active      : req.body.active === undefined ? false : true
 				};
 				Control.modify(id, values, function(err, result){
 					if(err || result === null || result.ok !== 1) {//(result.ok===1 result.nModified===1)
@@ -152,7 +156,8 @@ router.post('/register/no-close/:controlID', lib.authenticateControlOwnerUrl, fu
 					description : req.body.description,
 					helpurl		: req.body.helpurl,
 					template	: req.body.template,
-					code		: req.body.code
+					code		: req.body.code,
+					active      : req.body.active === undefined ? false : true
 				};
 				Control.modify(id, values, function(err, result){
 					if(err || result === null || result.ok !== 1) {//(result.ok===1 result.nModified===1)
@@ -220,7 +225,8 @@ router.get('/list', lib.authenticateUrl, function(req, res) {
 												helpurl     : ctrlObject.helpurl,
 												template    : ctrlObject.template,
 												code        : ctrlObject.code,
-												owners:[]
+												owners:[],
+												active      : ctrlObject.active === undefined ? true : ctrlObject.active
 											});
 		}
 	}
@@ -273,16 +279,16 @@ router.get('/upload-basic-controls', lib.authenticatePowerRequest, function(req,
 	
 });
 
-/*listing all controls and return them as a json array*/
-router.get('/control-list', lib.authenticatePowerRequest, function(req, res){
-	Control.listByOwnerId(req.user._id, function(err, controlList) {
+router.listByOwner = function listByOwner(userId, callback, active) {
+
+	Control.listByOwnerId(userId, function(err, controlList) {
 		
 		var arr = [];
 		var item;
 		var isOwner;
 		for(var i = 0; i < controlList.length; i++){
 			item = controlList[i];
-			isOwner = lib.findObjectID(item._doc.owners, req.user._id);
+			isOwner = lib.findObjectID(item._doc.owners, userId);
 
 					arr.push({	name       :controlList[i].name, 
 								description:controlList[i].description,
@@ -291,9 +297,29 @@ router.get('/control-list', lib.authenticatePowerRequest, function(req, res){
 								isOwner    :isOwner
 							});
 		}
-		res.json(arr);
-	});
+		callback(arr);
+	}, active);
+};
+
+/*listing all controls and return them as a json array*/
+router.get('/control-list', lib.authenticatePowerRequest, function(req, res){
+	router.listByOwner(req.user._id, function(list) {
+		res.json(list);
+	}, true);
 });
+
+router.get('/control-list/active', lib.authenticatePowerRequest, function(req, res){
+	router.listByOwner(req.user._id, function(list) {
+		res.json(list);
+	}, true);
+});
+
+router.get('/control-list/inactive', lib.authenticatePowerRequest, function(req, res){
+	router.listByOwner(req.user._id, function(list) {
+		res.json(list);
+	}, false);
+});
+
 router.get('/item/:controlID', lib.authenticateRequest, function(req, res){
 	// todo: how to authenticate? now a logged in user can use all controls
 	var id = req.params.controlID;
@@ -368,7 +394,8 @@ router.get('/export/:controlID', lib.authenticatePowerUrl, function(req, res){
 						description : control._doc.description,
 						code        : control._doc.code,
 						helpurl     : control._doc.helpurl,
-						template    : control._doc.template
+						template    : control._doc.template,
+						active      : true
 					};
 						var data = JSON.stringify(obj);
 						res.writeHead(200, {'Content-Type': 'application/force-download','Content-disposition':'attachment; filename=' + lib.makeValidFilename(control.name) + '.voffcon.ctrl'});

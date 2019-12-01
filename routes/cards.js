@@ -31,6 +31,8 @@ var upload = multer({
 	limits: { fileSize: 100024 }
 }).single('card');
 
+Card.initVersionChange();
+
 router.get('/', lib.authenticateUrl, function (req, res) {
 	//res.render('index-card');
 	res.redirect('/cards/list');
@@ -64,7 +66,7 @@ router.post('/register', lib.authenticatePowerRequest, function (req, res) {
 	// Validation
 	req.checkBody('name', 'Name is required').notEmpty();
 	req.checkBody('description', 'description is required').notEmpty();
-	req.checkBody('code', 'javascript code is required').notEmpty();
+  req.checkBody('code', 'javascript code is required').notEmpty();
 	var errors = req.validationErrors();
 
 	if (errors) {
@@ -72,12 +74,13 @@ router.post('/register', lib.authenticatePowerRequest, function (req, res) {
 		res.render('register-card', { errors: errors });
 	} else {
 		var newCard = new Card({
-			name: req.body.name,
+			name       : req.body.name,
 			description: req.body.description,
-			helpurl: req.body.helpurl,
-			code: req.body.code,
-			owners: [],
-			users: []
+			helpurl    : req.body.helpurl,
+			code       : req.body.code,
+			owners     : [],
+			users      : [],
+			active     : req.body.active === undefined ? false : true
 		});
 
 		newCard.owners.push(req.user._id);
@@ -108,11 +111,13 @@ router.post('/register/:cardID', lib.authenticateCardOwnerUrl, function (req, re
 		//todo: user must type all already typed values again, fix that
 		res.render('register-card', { errors: errors });
 	} else {
+		
 		var values = {
-			name: req.body.name,
-			description: req.body.description,
-			helpurl: req.body.helpurl,
-			code: req.body.code
+			name        : req.body.name,
+		    description : req.body.description,
+			helpurl     : req.body.helpurl,
+			code        : req.body.code,
+			active      : req.body.active === undefined ? false : true
 		};
 		Card.modify(id, values, function (err, result) {
 			if (err || result === null || result.ok !== 1) {//(result.ok===1 result.nModified===1)
@@ -141,10 +146,11 @@ router.post('/register/no-close/:cardID', lib.authenticateCardOwnerUrl, function
 		res.status(422).json(errors);
 	} else {
 		var values = {
-			name: req.body.name,
-			description: req.body.description,
-			helpurl: req.body.helpurl,
-			code: req.body.code
+			name        : req.body.name,
+			description : req.body.description,
+			helpurl     : req.body.helpurl,
+			code        : req.body.code,
+			active      : req.body.active === undefined ? false : true
 		};
 		Card.modify(id, values, function (err, result) {
 			if (err || result === null || result.ok !== 1) {//(result.ok===1 result.nModified===1)
@@ -179,9 +185,9 @@ router.get('/list', lib.authenticateUrl, function (req, res) {
 
 
 
-/*listing all devices and return them as a json array*/
-router.get('/card-list', lib.authenticateRequest, function (req, res) {
-	Card.listByOwnerAndUserId(req.user._id, function (err, cardList) {
+router.listByOwner = function listByOwner(userId, callback, active) {
+
+	Card.listByOwnerAndUserId(userId, function (err, cardList) {
 
 		var arr = [];
 		var isOwner;
@@ -190,7 +196,7 @@ router.get('/card-list', lib.authenticateRequest, function (req, res) {
 			isOwner = false;
 			item = cardList[i];
 
-			isOwner = lib.findObjectID(item._doc.owners, req.user._id);
+			isOwner = lib.findObjectID(item._doc.owners, userId);
 			arr.push({
 				id: item._id,
 				name: item.name,
@@ -199,8 +205,33 @@ router.get('/card-list', lib.authenticateRequest, function (req, res) {
 				isOwner: isOwner
 			});
 		}
-		res.json(arr);
-	});
+		callback(arr);
+	}, active);
+
+
+};
+
+/*listing all devices and return them as a json array*/
+router.get('/card-list', lib.authenticateRequest, function (req, res) {
+
+	router.listByOwner(req.user._id, function(list) {
+		res.json(list);
+	}, true);
+
+});
+router.get('/card-list/active', lib.authenticateRequest, function (req, res) {
+
+	router.listByOwner(req.user._id, function(list) {
+		res.json(list);
+	}, true);
+	
+});
+router.get('/card-list/inactive', lib.authenticateRequest, function (req, res) {
+
+	router.listByOwner(req.user._id, function(list) {
+		res.json(list);
+	}, false);
+	
 });
 
 
@@ -312,10 +343,11 @@ router.get('/export/:cardID', lib.authenticatePowerUrl, function (req, res) {
 			} else {
 
 				var obj = {
-					name: card._doc.name,
+					name       : card._doc.name,
 					description: card._doc.description,
-					code: card._doc.code,
-					helpurl: card._doc.helpurl,
+					code       : card._doc.code,
+					helpurl    : card._doc.helpurl,
+					active     : true
 				};
 				var data = JSON.stringify(obj);
 				res.writeHead(200, { 'Content-Type': 'application/force-download', 'Content-disposition': 'attachment; filename=' + lib.makeValidFilename(card.name) + '.voffcon.card' });

@@ -23,7 +23,11 @@ var SERVER;
 
 function getUserControlList(){
 	var url = SERVER+'/controls/control-list';
-		var request = $.get(url);
+	var checked = $('#active').is(':checked');
+	if (!checked) {
+		url+='/inactive';
+	}
+	var request = $.get(url);
 	request.done(function( data ) {
 		setControllistValues(data);
 		}).fail(function( data ) {
@@ -35,6 +39,8 @@ function getUserControlList(){
 
 function setControllistValues(controlList){
 	var id, name, description, isOwner;
+	
+	$("#control-list").empty();
 	for(var i = 0; i < controlList.length; i++){
 		id 		= controlList[i].id;
 		name 		= controlList[i].name;
@@ -51,6 +57,9 @@ function setControllistValues(controlList){
 $(function () {  
 	/* this is the *$( document ).ready(function( $ ) but jshint does not like that*/
 	SERVER = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ':'+window.location.port: '');
-	
+	$('#active').on('change', function() {
+		getUserControlList();	
+	});
+
 	getUserControlList();
 });

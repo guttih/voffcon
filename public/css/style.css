@@ -2,6 +2,7 @@
 body {
 	padding-top: 20px;
 	padding-bottom: 20px;
+	background:whitesmoke;
 }
 
 /* Everything but the jumbotron gets side spacing for mobile first views */
@@ -417,3 +418,35 @@ h3.page-header::after {
 	top: -4px;
 	
   }
+
+  .active-item {
+	position: relative;
+	margin-top:-40px;
+	margin-bottom: 0px;
+	float: right;
+   
+  }
+  .active-item .active-input {
+    position: relative;
+    width: 25px;
+    height: 25px;
+    top: 7px;
+}
+
+.active-list {
+	position: relative;
+	margin-top:-20px;
+	margin-bottom: 0px;
+	float: right;
+   
+  }
+#active {
+    position: relative;
+    width: 25px;
+    height: 25px;
+    top: 7px;
+}
+
+.active-item > label{
+	margin-bottom:0px;
+}

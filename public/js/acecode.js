@@ -361,6 +361,7 @@ function setCommonValues(item){
 	$("#description").val(item.description);
 	$("#helpurl").val(item.helpurl);
 	$("#a-open-helpurl").attr({href: item.helpurl});
+	$( "#active" ).prop( "checked", item.active );
 }
 
 function setControlValues(item){

@@ -52,15 +52,42 @@ var ControlSchema = mongoose.Schema({
 		type: String
 	},
 	 owners: [{ObjectId}],
-	 users: [{ObjectId}]
+	 users: [{ObjectId}],
+	 active:{
+		 type: Boolean
+	 }
 });
 	/*owners are users, allowed to modify or delete this control*/
 var Control = module.exports = mongoose.model('Control', ControlSchema);
+
+module.exports.initVersionChange = function() {
+	Control.find({}, function(err, items) {
+		items.forEach(function(item) {
+			if (item.active === undefined) {
+				console.log(`Active missing, so adding it to control: name: ${item.name}  active: ${item.active}`);
+				item.active = true;
+				console.log(item.id);
+				Control.modify(item.id, item, function (err, result) {
+					if (err || result === null || result.ok !== 1) {
+						console.log('Unable to update');
+					} else {
+						if (result.nModified === 0) {
+						console.log('Unchanged!');
+						} else {
+							console.log('Updated!');
+						}
+					}
+				});
+			}
+		});
+	});
+};
 
 /*
 userId Must be provided, because there needs to be at least one user who can access
 and modify this Control.
 */
+
 module.exports.create = function(newControl,  callback){
 		newControl.save(callback);
 };
@@ -91,8 +118,13 @@ module.exports.delete = function (id, callback){
 };
 
 //get all controls
-module.exports.list = function(callback){
+module.exports.list = function(callback, active){
 	var query = {};
+	if (active === false) {
+		query.active = {$elemMatch: { active:false }};
+	} else {
+		query.active = {$elemMatch: { active:true }};
+	}
 	Control.find(query, callback);
 };
 //gets an array of control names
@@ -116,8 +148,13 @@ module.exports.listNames = function(callback){
 };
 
 //get all controls owned by the given user
-module.exports.listByOwnerId = function (userId, callback){
+module.exports.listByOwnerId = function (userId, callback, active) {
 	var query = {owners:{$elemMatch: { _id:userId }}};
+
+	if (active === true || active === false) {
+		query = { $and: [ query, { active:active } ] };
+	}
+
 	Control.find(query, callback);
 };
 

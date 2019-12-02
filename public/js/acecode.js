@@ -75,12 +75,14 @@ function saveControl(){
 		var strName = $('#name').val();
 		var strDesc = $('#description').val();
 		var strHelp = $('#helpurl').val();
+		var active =  $('#active').is(':checked');
 		 var sendObj = {
 			 name			: strName,
 			 description	: strDesc,
 			 helpurl        : strHelp,
 			 template		: strHtml,
-			  code			: strCode
+			  code			: strCode,
+			  active		: active
 		 };
 		 $('#code').val(strCode);
 		 $('#template').val(strHtml);
@@ -112,11 +114,13 @@ function saveCard(){
 	var strName = $('#name').val();
 	var strDesc = $('#description').val();
 	var strHelp = $('#helpurl').val();
+	var active =  $('#active').is(':checked');
 	var sendObj = {
 			name		: strName,
 			description	: strDesc,
 			helpurl     : strHelp,
-			code		: strCode
+			code		: strCode,
+			active      : active
 		};
 	$('#code').val(strCode);
 

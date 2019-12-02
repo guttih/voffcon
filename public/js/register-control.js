@@ -39,6 +39,11 @@ function initControl() {
 				editJsCtrl.setValue(itemUpload.code, -1);
 			}
 
+			if (itemUpload.active !== undefined){
+
+				$("#active").prop("checked", active);
+			}
+
 			document.getElementById("control-form").action = "/controls/register";
 	}
 

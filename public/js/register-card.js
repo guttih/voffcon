@@ -39,6 +39,11 @@ function initCard() {
 				editJsCard.setValue(itemUpload.code, -1);
 			}
 
+			if (itemUpload.active !== undefined){
+
+				$("#active").prop("checked", active);
+			}
+
 			document.getElementById("card-form").action = "/cards/register";
 	}
 

@@ -23,7 +23,11 @@ var SERVER;
 
 function getUserCardList(){
 	var url = SERVER+'/cards/card-list';
-		var request = $.get(url);
+	var checked = $('#active').is(':checked');
+	if (!checked) {
+		url+='/inactive';
+	}
+	var request = $.get(url);
 	request.done(function( data ) {
 		setCardlistValues(data);
 		}).fail(function( data ) {
@@ -36,6 +40,7 @@ function getUserCardList(){
 
 function setCardlistValues(cardList){
 	var id, name, description, isOwner;
+	$("#card-list").empty();
 	for(var i = 0; i < cardList.length; i++){
 		id          = cardList[i].id;
 		name 		= cardList[i].name;
@@ -49,7 +54,9 @@ function setCardlistValues(cardList){
 $(function () {  
 	/* this is the *$( document ).ready(function( $ ) but jshint does not like that*/
 	SERVER = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ':'+window.location.port: '');
-	
+	$('#active').on('change', function() {
+		getUserCardList();	
+	});
 	getUserCardList();
 	
 });

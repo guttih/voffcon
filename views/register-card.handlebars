@@ -19,7 +19,11 @@
         <div class="alert alert-danger">{{msg}}</div>
       {{/each}}
 {{/if}}
-
+<style> 
+.tooltip-inner {
+    text-align: left;
+}
+</style>
 <form  method="post" id="card-form">
 	<div class="row row-padd">
 		
@@ -28,6 +32,12 @@
 		<input type="text"   id="name"     name="name" class="form-control" value="" placeholder="Name of your card">
 		<input type="hidden" id="id"       name="id" value="">
 		<input type="hidden" id="code"     name="code" value="">
+	</div>
+	<div class ="active-item" data-toggle="tooltip" data-container="body" data-placement="left" 
+		title="If not checked this card will become in-active, and will not be listed in the default card list.">
+		<label class="active-label" for="scales"
+		>&nbsp;Active&nbsp;</label>
+		<input type="checkbox" id="active" class="active-input" name="active" checked>
 	</div>
 	
 	<div class="form-horizontal">

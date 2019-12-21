@@ -43,16 +43,45 @@ var CardSchema = mongoose.Schema({
 	/*These users are allowed to modify or delete this card*/
 	 owners: [{ObjectId}],
 	 /*These users are allowed to use this card*/
-	 users: [{ObjectId}]
+	 users: [{ObjectId}],
+	 active:{
+		 type: Boolean
+	 }
 });
 
 var Card = module.exports = mongoose.model('Card', CardSchema);
+
+module.exports.initVersionChange = function() {
+	Card.find({}, function(err, items) {
+		items.forEach(function(item) {
+			if (item.active === undefined) {
+				console.log(`Active missing, so adding it to card: name: ${item.name}  active: ${item.active}`);
+				item.active = true;
+				console.log(item.id);
+				Card.modify(item.id, item, function (err, result) {
+					if (err || result === null || result.ok !== 1) {
+						console.log('Unable to update');
+					} else {
+						if (result.nModified === 0) {
+						console.log('Unchanged!');
+						} else {
+							console.log('Updated!');
+						}
+					}
+				});
+			}
+		});
+	});
+};
 
 /*
 userId Must be provided, because there needs to be at least one user who can access
 and modify this Card.
 */
 module.exports.create = function(newCard,  callback){
+	if (newCard.active === undefined) {
+		newCard.active = true;
+	}
 		newCard.save(callback);
 };
 
@@ -67,6 +96,10 @@ module.exports.getById = function(id, callback){
 
 
 module.exports.modify = function (id, newValues, callback){
+	if (newValues.active === undefined) {
+		newValues.active = true;
+	}
+
 	var val = {$set: newValues};
 	Card.update({_id: id}, val, callback);
 };
@@ -131,32 +164,20 @@ module.exports.listByOwnerId = function (userId, callback){
 	var query = {owners:{$elemMatch: { _id:userId }}};
 	Card.find(query, callback);
 };
-module.exports.listByOwnerAndUserId = function (userId, callback){
-		var query = {
-					$or:[
-							{users:{$elemMatch: { _id:userId }}},
-							{owners:{$elemMatch: { _id:userId }}}
-						]
-				};
+
+module.exports.listByOwnerAndUserId = function (userId, callback, active){
+	var query = {
+				$or:[
+						{users:{$elemMatch: { _id:userId }}},
+						{owners:{$elemMatch: { _id:userId }}}
+					]
+			};
+
+	if (active === true || active === false) {
+		query = { $and: [ query, { active:active } ] };
+	}
 	Card.find(query, callback);
 
-	/*var queryUsers = {users:{$elemMatch: { _id:userId }}};
-	var queryOwners = {owners:{$elemMatch: { _id:userId }}};
-
-	Card.find(queryUsers, function(err, users){
-		users.forEach(function(element) {
-			console.log(element.name);
-		}, this);*/
-		/*users.each(function(err, data){
-						console.log('user:' + data.name);
-				});
-		Card.find(queryOwners, function(err, owners){
-				owners.each(function(err, data){
-						console.log('owner:' + data.name);
-				});
-		});
-
-	})*/
 };
 /*if you only want users to get cards that they have access to, use this function*/
 module.exports.getUserCardById = function (CardId, userId, callback){

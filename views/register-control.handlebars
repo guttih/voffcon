@@ -18,7 +18,11 @@
         <div class="alert alert-danger">{{msg}}</div>
       {{/each}}
 {{/if}}
-
+<style> 
+.tooltip-inner {
+    text-align: left;
+}
+</style>
 <form  method="post" id="control-form">
 	<div class="row row-padd">
 		<label>Name</label>
@@ -27,6 +31,13 @@
 		<input type="hidden" id="id"       name="id" value="">
 		<input type="hidden" id="code"     name="code" value="">
 		<input type="hidden" id="template" name="template" value="">
+	</div>
+
+	<div class ="active-item" 
+		data-toggle="tooltip" data-container="body" data-placement="left" title="If not checked this control will become in-active, and will not be listed in the default control list.">
+		<label class="active-label" for="scales"
+		>&nbsp;Active&nbsp;</label>
+		<input type="checkbox" id="active" class="active-input" name="active" checked>
 	</div>
 
 	<div class="form-horizontal">

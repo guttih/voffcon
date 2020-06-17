@@ -36,10 +36,14 @@ module.exports.initialize = function initialize() {
 module.exports.addTimer = function addTimer(timer) {
 	//set timeoute bla removea úr array og gera eitthvað	
 	var now = new Date();
-	if (timer.triggerTime === undefined) {
-		console.log('triggerTime is missing: ' + timer.id);
+	
+	if (timer.triggerTime === undefined || timer.triggerTime === null) {
+		
+		console.error('triggerTime is missing: ' + timer.id);
+		console.log(timer);
 		return false;
 	}
+
 	if (timer.triggerTime < now) {
 		//time has passed
 		console.log('triggerTime '+timer.triggerTime.toISOString()+' has passed type:' + timer.type + ' id:' + timer.id);
@@ -150,6 +154,10 @@ module.compareEvent = function compareEvent(a, b) {
  */
 module.runFirstTriggerAndSetTimeout = function runFirstTriggerAndSetTimeout() {
 	timer = module.events.shift();
+	if (timer === undefined) {
+		console.log('No timers in events array');
+		return;
+	}
 	console.log('Running event "'+timer.id+'" at '+ (new Date).toISOString());
 	//Add this ActionTrigger back to the queue with a newly calculated trigger time. 
 	var timerToRun = TriggerAction.cloneRawObject(timer);

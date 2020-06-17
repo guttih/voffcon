@@ -591,6 +591,12 @@ module.exports.getTriggerTime = function(triggerAction){
                                      
                                      var solarValues = sun.calculateSun(location.latitude, location.longitude, new Date(), 0, false);
                                      var time = solarValues[key];
+                                     
+                                     if (time === undefined) {
+                                        console.log('Error, could not calculate "'+ key+'".');
+                                        console.log(solarValues);
+                                        return null;
+                                    }
                                     fireTime = new Date(dateNow.getUTCFullYear(), dateNow.getUTCMonth(), dateNow.getUTCDate(),
                                                         time.hour, time.minute, time.second);
                                     

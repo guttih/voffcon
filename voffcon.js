@@ -35,7 +35,19 @@ var eventQueue       = require('./utils/eventQueue');
 ///////////////////// start mongo /////////////////////////
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/voffcon');
+
+mongoose.connect('mongodb://localhost/voffcon')
+	.then(function (db) { // <- db as first argument
+		console.log('Connected to voffcon');
+		//console.log(db)
+  	})
+  	.catch(function (err) {
+		console.log('error connecting to voffcon');
+		console.log('did you forget to start the mongo database server (mongod.exe)?');
+		process.exit(0);
+
+	});
+
 var db = mongoose.connection;
 
 
@@ -57,16 +69,6 @@ var app = express();
 
 
 eventQueue.initialize();
-
-mongoose.connection.on('open', function () {
-	mongoose.connection.db.listCollections().toArray(function (err, names) {
-		if (err) {
-			console.log(err);
-		} else {
-			console.log(names);
-		}
-	});
-});
 
 mongoose.connection.on('connecting', function () {
 	console.log("trying to establish a connection to mongo");

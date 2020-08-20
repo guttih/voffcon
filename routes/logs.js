@@ -37,10 +37,7 @@ router.get('/ids/:deviceId', function(req, res){
 		error = "invalid device id provided!";
 	}
 	if (isValid){
-		/*LogItem.logInformation('57e2a6f74a43074811a0720f','Þessi texti á að vistast þriðji', function(err, item){
-				if(err) {throw err;}
-				console.log(item);
-		});*/
+
 		LogItem.listByDeviceId(id, function(err, items){
 			if(err) {
 				req.flash('error_msg', err.message);
@@ -120,9 +117,6 @@ router.get('/device/:deviceID', lib.authenticateRequest, function(req, res){
 						res.render('devicelog', { item:device, device:JSON.stringify(device) });
 					}
 				});
-			/*LogItem.listByDeviceId(deviceId, function(err, data){
-				res.json(data);
-	});*/
 	}
 });
 
@@ -134,7 +128,7 @@ router.get('/device/linechart/:deviceID', lib.authenticateRequest, function(req,
 	if (deviceId === undefined){ 
 		res.status(422).json({"error":"No device id provided!"});
 	}
-	else{
+	else {
 
 			Device.getById(deviceId, function(err, retDevice){
 					if(err || retDevice === null) {
@@ -148,9 +142,6 @@ router.get('/device/linechart/:deviceID', lib.authenticateRequest, function(req,
 						res.render('devicelog-linechart', { item:device, device:JSON.stringify(device) });
 					}
 				});
-			/*LogItem.listByDeviceId(deviceId, function(err, data){
-				res.json(data);
-	});*/
 	}
 });
 

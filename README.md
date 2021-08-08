@@ -167,5 +167,5 @@ You can change this in the file package.json
 [Click here](/public/COPYING.txt) for a copy of the licence.
 
 You can contact the author by sending email to gudjonholm@gmail.com or 
-by regular post to the address Haseyla 27, 260 Reykjanesbar, Iceland.
+by regular post to the address Haseyla 27, 260 Reykjanesbar, Iceland..
 

@@ -37,7 +37,7 @@ function setDevicelistValues(deviceList) {
             })
             .catch(id => {
                 $(`#${id}`).removeClass('live').addClass('dead');
-                // $($elm).attr("onclick", "").unbind("click");
+                $($elm).attr("onclick", "").unbind("click");
             })
     });
 }
@@ -66,10 +66,4 @@ function doQuery(deviceId) {
 $(function() {
     SERVER = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
     setDevicelistValues(allDevices)
-});
-
-$(".card").click(function() {
-    var id = $(this).attr("id");
-    // location.href = `/devices/run/${id}`;
-    window.open(`/devices/run/${id}`);
 });

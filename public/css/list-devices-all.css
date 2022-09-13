@@ -1,0 +1,67 @@
+    .name-num {
+        display: flex;
+        justify-content: space-between;
+    }
+    
+    .card .number {
+        color: rgb(108, 108, 119);
+        font-size: smaller;
+    }
+    
+    .card .name {
+        font-size: larger;
+    }
+    
+    .card.dead {
+        background-color: rgb(255 137 137);
+        border-color: rgb(117, 34, 1);
+    }
+    
+    .card.live {
+        background-color: #7df78a;
+        border-color: #3fcb92;
+        /* cursor: pointer; */
+        cursor: alias;
+    }
+    
+    .card-list {
+        /* display: flexbox; */
+    }
+    
+    .cards {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+    
+    .card-title {}
+    
+    .card {
+        flex: 1 0 800px;
+        flex-wrap: wrap;
+        box-sizing: border-box;
+        margin: 1rem .25em;
+        background-color: rgb(247 251 250);
+        max-width: 340px;
+        border-radius: 8px;
+        border-color: #505353;
+        border-style: solid;
+        border-width: 1px;
+        padding: 8px;
+    }
+    
+    @media only screen and (max-width: 800px) {
+        .cards {
+            justify-content: center;
+        }
+        .card {
+            max-width: 500px;
+            margin: 0.5rem .12em;
+        }
+    }
+    
+    @media only screen and (max-width: 520px) {
+        .card {
+            max-width: 250px;
+        }
+    }

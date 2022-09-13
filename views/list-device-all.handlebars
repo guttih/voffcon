@@ -1,0 +1,42 @@
+{{#if stringifyedDevices}}
+    <script type="text/javascript">
+        var allDevices =
+        {{{stringifyedDevices}}};
+    </script>
+{{/if}}
+<div class="row">
+    <h3 class="page-header pull-right">All registered devices</h3>
+</div>
+{{#if errors}}
+    {{#each errors}}
+        <div class="alert alert-danger">{{msg}}</div>
+    {{/each}}
+{{/if}}
+
+
+<div >
+    <dev class="cards" data-count="{{deviceCount}}">
+
+        {{#each devices as |devices index|}}
+            <dev class="card dead" id="{{devices.id}}">
+                <dev class="name-num">
+                    <dev class="name">
+                        {{devices.name}}
+                    </dev>
+                    <dev class="number">{{devices.number}}</dev>
+                </dev>
+                <dev class="id-url">
+                    <dev>{{devices.id}}</dev>
+                    <dev>{{devices.url}}</dev>
+                </dev>
+                <dev>
+                    Type
+                    {{devices.type}}
+                </dev>
+
+            </dev>
+        {{/each}}
+    </dev>
+</div>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/list-device-all.js"></script>

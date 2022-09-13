@@ -7,7 +7,9 @@
 	<link rel="stylesheet" href="/css/bootstrap-datepicker.min.css" />
 	<link rel="stylesheet" href="/css/style.css" />
 	<link rel="stylesheet" href="/css/ace.css" />
-	
+	{{#if style}}
+		<link rel="stylesheet" href="/css/{{style}}" />
+	{{/if}}
 	<script src="/js/jquery-3.1.0.min.js"></script>
 	<script src="/js/bootstrap.min.js"></script>
 	<script src="/js/bootstrap-datepicker.min.js"></script>
@@ -77,6 +79,9 @@
 				<a class="dropdown-toggle" data-toggle="dropdown" href="#">Devices </a>
 				<ul class="dropdown-menu">
 					<li><a href="/devices/list">List devices</a></li>
+					{{#if admin}}
+						<li><a href="/devices/list-all">List All devices</a></li>
+					{{/if}}
 					<li><a href="/devices/register">Register a new device</a></li>
 				</ul>
 			</li>

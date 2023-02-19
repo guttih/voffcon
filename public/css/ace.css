@@ -1,46 +1,56 @@
 #editor-js-ctrl,
 #editor-js-card,
 #editor-html-ctrl,
-#editor-desc {position: absolute; top: 0; right: 0; bottom: 0; left: 0;}
+#editor-desc {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
 
+.acediv {
+    position: relative;
+    height: 250px;
+    margin-left: 0px;
+    margin-right: 0px;
+}
 
-.acediv{
-  position:relative;
-  height:250px;
-    margin-left:0px;
-  margin-right:0px;
+.ace_editor {
+    border-radius: 6px;
 }
-.ace_editor  {
-  border-radius: 6px;
+
+.ace-text-container {
+    height: 85px;
 }
-.ace-text-container{
-  height:85px;
+
+.ace-text {
+    color: black !important;
+    /*background: rgba(0, 0, 0, 0.005) !important;*/
+    border: 1px solid #ccc;
 }
-.ace-text{
-  color:black !important; 
- /*background: rgba(0, 0, 0, 0.005) !important;*/
-  border: 1px solid #ccc;
-}
+
 .text-left {
-  text-align: left;
+    text-align: left;
 }
 
 .text-right {
-  text-align: right;
+    text-align: right;
 }
 
 .text-center {
-  text-align: center;
+    text-align: center;
 }
 
 .add-top-margin {
-	margin-top:15px;
+    margin-top: 15px;
 }
 
 .ace_search_field {
-  background-color: #43443c !important;
+    background-color: #43443c !important;
 }
 
-.ace_searchbtn, .ace_replacebtn {
-  color: #43443c!important;
+.ace_searchbtn,
+.ace_replacebtn {
+    color: #43443c!important;
 }

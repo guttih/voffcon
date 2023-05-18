@@ -233,8 +233,13 @@ function addLegend(keys){
 
 	keys.forEach(function(key, index){
 		var strokeColor = (chartData[key].hideKey === true)?LEGENTSTROKE_OFF:LEGENTSTROKE_ON;
+		let charCount=0;
+		for(var i = 0 ; i < index; i++) {
+			charCount+=keys[i].length;
+		}
+		let marginX=(index * 35) + (charCount * 6);
 		leg.append("rect")
-			.attr("x", (posX+(index*50)))
+			.attr("x", (posX+marginX))
 			.attr("y", posY)
 			.attr("width", width)
 			.attr("data-key", key)
@@ -256,7 +261,7 @@ function addLegend(keys){
 				InitChart(chartData);
 			});
 			leg.append("text")
-			.attr("x", (posX + 18 + (index*50)))
+			.attr("x", (posX + 18 + marginX))
 			.attr("y", posY+3)
 			.attr("dy", "10px")
 			.text(function(d) { return key; });

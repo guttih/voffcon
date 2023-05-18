@@ -26,11 +26,11 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
 var LogItemSchema = mongoose.Schema({
-        deviceid : Schema.Types.ObjectId,
-        logtype  : Number,
-        datetime : Date,
-        data     : String
-}); 
+    deviceid: Schema.Types.ObjectId,
+    logtype: Number,
+    datetime: Date,
+    data: String
+});
 var LogItem = module.exports = mongoose.model('LogItem', LogItemSchema);
 
 module.exports.LogTypes = [
@@ -45,85 +45,84 @@ module.exports.LogTypes = [
     'OBJECTTYPE_LOG_PINS',
     'OBJECTTYPE_INFORMATION',
     'OBJECTTYPE_WARNING',
-    'OBJECTTYPE_ERROR'];
+    'OBJECTTYPE_ERROR',
+    'OBJECTTYPE_JSON'
+];
 
 module.exports.logJsonAsText = function logJsonAsText(deviceId, logType, json, callback) {
     var strData = JSON.stringify(json);
     var type = module.exports.LogTypes.indexOf('OBJECTTYPE_INFORMATION');
     var deviceObjectId = new mongoose.mongo.ObjectId(deviceId);
     var newItem = new LogItem ({
-                                        deviceid : deviceObjectId,
-                                        logtype: logType,
-                                        datetime : Date(),
-                                        data     : strData
-                                    });
+                            deviceid : deviceObjectId,
+                            logtype: logType,
+                            datetime : Date(),
+                            data     : strData
+    });
     newItem.save(callback);
 };
 module.exports.isObjectIdStringValid = function (idString) {
-        var ObjectId = mongoose.Types.ObjectId;
-        var ret = ObjectId.isValid(idString);
-        return ret;
+    var ObjectId = mongoose.Types.ObjectId;
+    var ret = ObjectId.isValid(idString);
+    return ret;
 }
 
 module.exports.delete = function (id, callback){
-	
-	LogItem.findByIdAndRemove(id, callback);
+
+    LogItem.findByIdAndRemove(id, callback);
 };
 
 module.exports.modify = function (id, newValues, callback){
-	//$set
-	var val = {$set: newValues};
-	LogItem.update({_id: id}, val, callback);
+    //$set
+    var val = {$set: newValues};
+    LogItem.update({_id: id}, val, callback);
 };
 
 module.exports.createLogItem = function(newLogItem,  callback){
-        newLogItem.save(callback);
+    newLogItem.save(callback);
 };
 module.exports.getById = function(id, callback){
-	LogItem.findById(id, callback);
+    LogItem.findById(id, callback);
 };
 
 module.exports.listByDeviceId = function(deviceId, callback){
-	var query = {deviceid: deviceId};
-	LogItem.find(query, callback);
+    var query = {deviceid: deviceId};
+    LogItem.find(query, callback);
 };
 
 module.exports.deleteAllDeviceRecords = function(deviceId, callback){
-	var query = {deviceid: deviceId};
-	LogItem.deleteMany(query, callback);
+    var query = {deviceid: deviceId};
+    LogItem.deleteMany(query, callback);
 };
 
 module.exports.countLogsByDeviceId = function(deviceId, callback){
-	var query = {deviceid: deviceId};
-	LogItem.find(query).count(callback);
+    var query = {deviceid: deviceId};
+    LogItem.find(query).count(callback);
 };
 
 //lists all devices which have logs
 module.exports.listAllDevices = function(callback){
-	LogItem.find().distinct( 'deviceid', callback);
+    LogItem.find().distinct( 'deviceid', callback);
 };
 
 // Finds all devices with logs and returns their ID 
 // and how many log items belong to them
 module.exports.devicesLogCount = function(callback){
-        // more about aggregate
-        // http://excellencenodejsblog.com/mongoose-aggregation-count-group-match-project/
-        LogItem.aggregate([
-                {
-                    $group: {
-                        _id: '$deviceid',  //$region is the column name in collection
-                        count: {$sum: 1}
-                    }
-                }
-            ], callback);
+    // more about aggregate
+    // http://excellencenodejsblog.com/mongoose-aggregation-count-group-match-project/
+    LogItem.aggregate([{
+        $group:{
+            _id: '$deviceid', //$region is the column name in collection
+            count:{ $sum: 1 }
+        }
+    }], callback);
 };
 
 module.exports.countDeviceOccurrence = function(deviceId, callback){
-        var query = {deviceid : deviceId};
-	LogItem.count(query, callback);
+    var query = {deviceid : deviceId};
+    LogItem.count(query, callback);
 };
 
 module.exports.getById = function(id, callback){
-	Device.findById(id, callback);
+    Device.findById(id, callback);
 };
-

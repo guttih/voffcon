@@ -71,6 +71,14 @@ module.exports.getById = function(id, callback) {
     Device.findById(id, callback);
 };
 
+module.exports.getByIdPromise = function(id) {
+    return new Promise((resolve, reject) => {
+        Device.findById(id, (err, res) => {
+            if (err || !res) { reject(err) } else resolve(res)
+        })
+    })
+};
+
 module.exports.listByOwnerId = function(id, callback) {
     var query = { owners: { $elemMatch: { _id: id } } };
     Device.find(query, callback);

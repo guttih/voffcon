@@ -330,7 +330,7 @@ router.post('/custom/:deviceId', lib.authenticateRequest, function(req, res) {
             if (err) {
                 console.error("error custom posting");
             } else {
-                console.log("succsess custom posting")
+                console.log("success custom posting")
             }
         });
 });
@@ -338,9 +338,9 @@ router.delete('/custom/:deviceId', lib.authenticateRequest, function(req, res) {
     router.jsonRequestToDevice(res, req.params.deviceId, req.body, '/custom', 'DELETE',
         function(err, res, body) {
             if (err) {
-                console.error("error custom posting");
+                console.error("error custom deleteing");
             } else {
-                console.log("succsess custom deleteing")
+                console.log("success custom deleteing")
             }
         });
 });

@@ -98,3 +98,15 @@ the user interface shows him like he can change the access but he cannot change 
 this is because the middleware authenticateControlOwnerUrl reports an error but
 the client javascript does not pick that kind of error, that is req.flash( error.  
 When he removes his own access we need to direct him to the control list page.
+
+## Find the ID running voffcon server
+
+```shell
+PID=$(ps -aux|grep "node "|grep "/voffcon.js"|tr -s ' ' | cut -d' ' -f2);echo $PID
+```
+
+You can kill current server with command
+
+```shell
+PID=$(ps -aux|grep "node "|grep "/voffcon.js"|tr -s ' ' | cut -d' ' -f2);kill $PID
+```

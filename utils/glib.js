@@ -858,8 +858,11 @@ var makeProgramFileWindows = function makeProgramFileWindows(deviceId, whitelist
                     var sip = dotsToCommas(config.serverIp);
                     file = file.replace("VOFFCON_SERVER_IP", sip);
                 }
-                if (config.port !== undefined) {
-                    file = file.replace("VOFFCON_SERVER_PORT", config.port);
+                if (config.http_port !== undefined) {
+                    file = file.replace("VOFFCON_SERVER_PORT", config.http_port);
+                }
+                if (config.https_port !== undefined) {
+                    file = file.replace("VOFFCON_SERVER_SPORT", config.https_port);
                 }
 
                 if (pins !== undefined && pins.length > 0) {
@@ -971,8 +974,11 @@ var makeProgramFileLinux = function makeProgramFileLinux(deviceId, whitelist, de
                     var sip = dotsToCommas(config.serverIp);
                     file = file.replace("VOFFCON_SERVER_IP", sip);
                 }
-                if (config.port !== undefined) {
-                    file = file.replace("VOFFCON_SERVER_PORT", config.port);
+                if (config.http_port !== undefined) {
+                    file = file.replace("VOFFCON_SERVER_PORT", config.http_port);
+                }
+                if (config.https_port !== undefined) {
+                    file = file.replace("VOFFCON_SERVER_SPORT", config.https_port);
                 }
                 if (pins !== undefined && pins.length > 0) {
                     var strSetPinCppCommands = module.exports.makePinSetupString(deviceType, pins);

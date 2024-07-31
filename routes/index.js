@@ -78,7 +78,7 @@ router.get('/settings', lib.authenticateAdminRequest, function(req, res){
 	var config = lib.getConfig(true);
 	
 	if (config !== undefined) {
-		item.port = config.port       === undefined? '' : config.port,
+		item.port = config.http_port       === undefined? '' : config.http_port,
 		item.ssid = config.ssid       === undefined? '' : config.ssid,
 		item.ssidPwd = config.ssidPwd === undefined? '' : config.ssidPwd,
 		item.iftttToken = config.iftttToken === undefined? '' : config.iftttToken
@@ -101,7 +101,7 @@ router.post('/settings', lib.authenticateAdminRequest, function(req, res){
 	}
 
 	var config = lib.getConfig(true);
-	config.port = port;
+	config.http_port = port;
 	config.ssid = ssid;
 	config.ssidPwd = ssidPwd;
 	config.iftttToken = iftttToken;

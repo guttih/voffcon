@@ -32,6 +32,10 @@ var lib              = require('./utils/glib');
 var config           = lib.getConfig();
 var eventQueue       = require('./utils/eventQueue');
 
+var http = require('http');
+var https = require('https');
+var fs = require('fs');
+
 ///////////////////// start mongo /////////////////////////
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
@@ -196,22 +200,75 @@ app.use('/monitors'      , monitors);
 app.use('/triggeractions', triggerActions);
 
 
-app.set('port', config.port);
+app.set('http_port', config.http_port);
 app.set('eventQueue',eventQueue);
 // eventQueue can be accessed from a route like this: req.app.locals.eventQueue;
 
-app.listen(app.get('port'), function () {
-	lib.getFirstDefaultGateWay(function (defaultGateway) {
-		console.log("default gateway : " + defaultGateway);
-	});
+// app.listen(app.get('http_port'), function () {
+// 	lib.getFirstDefaultGateWay(function (defaultGateway) {
+// 		console.log("default gateway : " + defaultGateway);
+// 	});
 
-	//if addresses have the same prefix as the default gateway
-	//then they are more likely to be your lan ip address.
-	addresses.forEach(function (entry) {
-		console.log(" " + entry + ":" + app.get('port'));
-	});
-	subnets.forEach(function (entry) {
-		console.log("subnet: " + entry);
-	});
+// 	//if addresses have the same prefix as the default gateway
+// 	//then they are more likely to be your lan ip address.
+// 	addresses.forEach(function (entry) {
+// 		console.log(" " + entry + ":" + app.get('http_port'));
+// 	});
+// 	subnets.forEach(function (entry) {
+// 		console.log("subnet: " + entry);
+// 	});
 
+// });
+
+// Create an HTTP server
+var httpServer = http.createServer(app);
+httpServer.listen(app.get('http_port'), function() {
+    lib.getFirstDefaultGateWay(function (defaultGateway) {
+        console.log("default gateway : " + defaultGateway);
+    });
+    
+    // If addresses have the same prefix as the default gateway
+    // then they are more likely to be your lan ip address.
+    addresses.forEach(function (entry) {
+        console.log(" " + entry + ":" + app.get('http_port'));
+    });
+    
+    subnets.forEach(function (entry) {
+        console.log("subnet: " + entry);
+    });
+
+    console.log('HTTP Server started on port ' + app.get('http_port'));
+});
+
+
+app.set('https_port', config.https_port);
+
+// Define your certificate directory
+const certDir = '/etc/letsencrypt/live/voff.guttih.com'
+
+// Define your https options
+var httpsOptions = {
+    key: fs.readFileSync(certDir + '/privkey.pem', 'utf8'),
+    cert: fs.readFileSync(certDir + '/cert.pem', 'utf8'),
+    ca: fs.readFileSync(certDir + '/chain.pem', 'utf8')
+};
+
+// Create an HTTPS server
+var httpsServer = https.createServer(httpsOptions, app);
+httpsServer.listen(app.get('https_port'), function() {
+    lib.getFirstDefaultGateWay(function (defaultGateway) {
+        console.log("default gateway : " + defaultGateway);
+    });
+
+    // If addresses have the same prefix as the default gateway
+    // then they are more likely to be your lan ip address.
+    addresses.forEach(function (entry) {
+        console.log(" " + entry + ":" + app.get('https_port'));
+    });
+    
+    subnets.forEach(function (entry) {
+        console.log("subnet: " + entry);
+    });
+
+    console.log('HTTPS Server started on port ' + app.get('https_port'));
 });
